@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>저그랑 3권 Unit 04 단어 음원</title>
+<style>
+  html,body{height:100%;margin:0;}
+  body{font-family:"Malgun Gothic","맑은 고딕",system-ui,-apple-system,sans-serif;
+    display:flex;align-items:center;justify-content:center;background:#f7f7f9;color:#222;
+    text-align:center;padding:24px;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  @media (prefers-color-scheme:dark){body{background:#16171a;color:#eee;}}
+  .box{max-width:440px;width:100%;}
+  h1{font-size:21px;margin:0 0 4px;}
+  .sub{font-size:14px;opacity:.6;margin:0 0 26px;}
+  .btn{width:172px;height:172px;border-radius:50%;border:none;cursor:pointer;
+    margin:0 auto;display:flex;align-items:center;justify-content:center;
+    background:#3a7afe;color:#fff;box-shadow:0 8px 24px rgba(58,122,254,.35);
+    transition:transform .08s ease;-webkit-user-select:none;user-select:none;}
+  .btn:active{transform:scale(.96);}
+  .btn .ico{font-size:64px;line-height:1;}
+  .btn .lbl{position:absolute;transform:translateY(58px);font-size:15px;font-weight:600;opacity:.95;}
+  .bar{height:6px;background:rgba(120,120,120,.25);border-radius:3px;margin:30px auto 0;
+    max-width:320px;overflow:hidden;}
+  .bar > i{display:block;height:100%;width:0;background:#3a7afe;}
+  .tip{font-size:14px;line-height:1.6;opacity:.8;margin-top:22px;}
+  .muted{font-size:12px;opacity:.5;margin-top:24px;}
+</style>
+</head>
+<body>
+<div class="box">
+  <h1>저그랑 3권 · Unit 04</h1>
+  <p class="sub">단어 음원 받아쓰기</p>
+
+  <button class="btn" id="btn" aria-label="재생">
+    <span class="ico" id="ico">▶</span>
+    <span class="lbl" id="lbl">듣기</span>
+  </button>
+  <div class="bar"><i id="prog"></i></div>
+
+  <p class="tip">버튼을 눌러 단어를 듣고,<br>들리는 소리를 <b>한글로</b> 받아써 보세요.</p>
+  <p class="muted">저절로 · 쏠뷰</p>
+
+  <audio id="au" preload="auto" src="u04.mp3"></audio>
+  <noscript><audio controls src="u04.mp3"></audio></noscript>
+</div>
+<script>
+  var au=document.getElementById('au'),btn=document.getElementById('btn'),
+      ico=document.getElementById('ico'),lbl=document.getElementById('lbl'),
+      prog=document.getElementById('prog');
+  function set(i,l){ico.textContent=i;lbl.textContent=l;}
+  btn.addEventListener('click',function(){
+    if(au.paused){au.play();}else{au.pause();}
+  });
+  au.addEventListener('play', function(){set('⏸','듣는 중');});
+  au.addEventListener('pause',function(){ if(!au.ended) set('▶','계속 듣기'); });
+  au.addEventListener('ended',function(){set('↺','다시 듣기');prog.style.width='100%';});
+  au.addEventListener('timeupdate',function(){
+    if(au.duration) prog.style.width=(au.currentTime/au.duration*100)+'%';
+  });
+</script>
+</body>
+</html>
