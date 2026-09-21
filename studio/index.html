@@ -75,6 +75,12 @@
   .atog{ display:inline-flex; gap:4px; background:#e9eefb; border-radius:999px; padding:4px; margin-bottom:18px; }
   .atg{ border:0; background:transparent; color:var(--sub); font:inherit; font-weight:800; font-size:14px; padding:8px 20px; border-radius:999px; cursor:pointer; }
   .atg.on{ background:#fff; color:var(--blue-ink); box-shadow:0 1px 3px rgba(47,107,237,.25); }
+  .orientbox{ background:var(--card); border:1px solid var(--line); border-radius:16px; padding:14px; box-shadow:var(--shadow); margin-bottom:14px; }
+  .orienth{ font-size:14px; font-weight:800; margin:0 0 10px; color:var(--blue-ink); }
+  .orientgrid{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; }
+  .orient{ display:flex; align-items:center; justify-content:center; gap:5px; text-decoration:none;
+    background:var(--blue-soft); color:var(--blue-ink); border-radius:10px; padding:12px 6px; font-weight:800; font-size:13px; }
+  @media (min-width:820px){ .orientgrid{ grid-template-columns:repeat(5,1fr); } }
 
   .wl{ margin-top:26px; }
   .wl h2{ font-size:13px; color:var(--sub); font-weight:800; margin:0 0 6px; }
@@ -138,7 +144,11 @@ function home(){
 function bookView(b){
   document.title=b.short;
   let top='';
-  (b.book_resources||[]).forEach(r=>{ if(r.url) top+='<a class="bigres" href="'+esc(r.url)+'" target="_blank" rel="noopener">🎬 '+esc(r.label||'영상')+'</a>'; });
+  const vids=(b.book_resources||[]).filter(r=>r.type==='video'&&r.url);
+  if(vids.length){
+    const chips=vids.map(r=>'<a class="orient" href="'+esc(r.url)+'" target="_blank" rel="noopener">▶ '+esc(r.label||'영상')+'</a>').join('');
+    top='<div class="orientbox"><h2 class="orienth">🎬 오리엔테이션 영상 (품사)</h2><div class="orientgrid">'+chips+'</div></div>';
+  }
   const cards=b.units.map(un=>{
     const hasA=un.audio&&(un.audio.word||un.audio.sent);
     const a=hasA? '<button class="ubtn audio" data-go="leaf" data-book="'+b.code+'" data-u="'+un.n+'">🔊 음원 듣기</button>'
