@@ -70,6 +70,11 @@
   .spd{ border:1px solid var(--line); background:var(--card); color:var(--ink); border-radius:999px;
     padding:8px 16px; font:inherit; font-size:14px; font-weight:800; cursor:pointer; }
   .spd.on{ background:var(--blue-soft); color:var(--blue-ink); border-color:transparent; }
+  .bigres{ display:flex; align-items:center; justify-content:center; gap:8px; text-decoration:none; margin-bottom:14px;
+    background:linear-gradient(160deg,#5b93ff,#2f6bed 70%); color:#fff; border-radius:14px; padding:16px; font-weight:800; font-size:16px; box-shadow:0 10px 24px -10px rgba(47,107,237,.6); }
+  .atog{ display:inline-flex; gap:4px; background:#e9eefb; border-radius:999px; padding:4px; margin-bottom:18px; }
+  .atg{ border:0; background:transparent; color:var(--sub); font:inherit; font-weight:800; font-size:14px; padding:8px 20px; border-radius:999px; cursor:pointer; }
+  .atg.on{ background:#fff; color:var(--blue-ink); box-shadow:0 1px 3px rgba(47,107,237,.25); }
 
   .wl{ margin-top:26px; }
   .wl h2{ font-size:13px; color:var(--sub); font-weight:800; margin:0 0 6px; }
@@ -132,35 +137,44 @@ function home(){
 
 function bookView(b){
   document.title=b.short;
+  let top='';
+  (b.book_resources||[]).forEach(r=>{ if(r.url) top+='<a class="bigres" href="'+esc(r.url)+'" target="_blank" rel="noopener">🎬 '+esc(r.label||'영상')+'</a>'; });
   const cards=b.units.map(un=>{
-    const vid=un.video? '<a class="ubtn video" href="'+esc(un.video)+'" target="_blank" rel="noopener">🎬 강의 영상</a>'
-                      : '<span class="ubtn off">🎬 강의 준비중</span>';
-    return '<div class="unitcard"><div class="ut">Unit '+un.n+'</div><div class="ubtns">'+
-      '<button class="ubtn audio" data-go="leaf" data-book="'+b.code+'" data-u="'+un.n+'">🔊 단어 음원</button>'+vid+'</div></div>';
+    const hasA=un.audio&&(un.audio.word||un.audio.sent);
+    const a=hasA? '<button class="ubtn audio" data-go="leaf" data-book="'+b.code+'" data-u="'+un.n+'">🔊 음원 듣기</button>'
+                : '<span class="ubtn off">🔊 준비중</span>';
+    const vid=un.video? '<a class="ubtn video" href="'+esc(un.video)+'" target="_blank" rel="noopener">🎬 강의 영상</a>':'';
+    return '<div class="unitcard"><div class="ut">Unit '+un.n+'</div><div class="ubtns">'+a+vid+'</div></div>';
   }).join('');
   app.innerHTML='<div class="topbar"><button class="chipbtn" data-go="home">← 교재 목록</button></div>'+
     '<div class="head"><span class="kicker">'+esc(b.short)+'</span><h1>유닛 선택</h1></div>'+
-    '<div class="grid">'+cards+'</div>'+BRANDLINE;
+    top+'<div class="grid">'+cards+'</div>'+BRANDLINE;
 }
 
 function fmt(s){ s=Math.floor(s||0); return Math.floor(s/60)+':'+String(s%60).padStart(2,'0'); }
 function leaf(b,u){
   const un=b.units[u-1]; document.title=b.short+' · Unit '+u;
-  const words=un.words.map((w,i)=>'<div class="row"><span class="n">'+(i+1)+'</span><span class="w">'+esc(w.w)+'</span><span class="m">'+esc(w.m)+'</span></div>').join('');
+  const A=un.audio||{};
+  const types=[]; if(A.word)types.push({k:'word',l:'단어'}); if(A.sent)types.push({k:'sent',l:'문장'});
+  const words=(un.words||[]).map((w,i)=>'<div class="row"><span class="n">'+(i+1)+'</span><span class="w">'+esc(w.w)+'</span><span class="m">'+esc(w.m)+'</span></div>').join('');
+  const toggle= types.length>1 ? '<div class="atog">'+types.map((t,i)=>'<button class="atg'+(i===0?' on':'')+'" data-t="'+t.k+'">'+t.l+' 음원</button>').join('')+'</div>' : '';
   app.innerHTML='<div class="topbar"><button class="chipbtn" data-go="book" data-book="'+b.code+'">← 유닛 목록</button>'+
     '<div class="nav"><button id="uprev">◀ 이전</button><button id="unext">다음 ▶</button></div></div>'+
-    '<div class="head"><span class="kicker">'+esc(b.short)+'</span><div class="unit">Unit '+u+' · 단어</div></div>'+
-    '<div class="player"><audio id="au" preload="metadata"></audio>'+
+    '<div class="head"><span class="kicker">'+esc(b.short)+'</span><div class="unit">Unit '+u+'</div></div>'+
+    '<div class="player"><audio id="au" preload="metadata"></audio>'+toggle+
       '<div class="btnwrap"><button class="playbig" id="play" aria-label="재생"><span class="ico" id="ico">▶</span><span class="lbl" id="lbl">듣기</span></button></div>'+
       '<div class="seekwrap"><input type="range" id="seek" min="0" max="1000" value="0" aria-label="재생 위치">'+
       '<div class="time"><span id="cur">0:00</span><span id="dur">0:00</span></div></div>'+
       '<div class="spds"><button class="spd" data-s="0.8">0.8×</button><button class="spd on" data-s="1">1.0×</button><button class="spd" data-s="1.2">1.2×</button></div>'+
     '</div>'+
-    '<div class="wl"><h2>단어 '+un.words.length+'개</h2><div class="rows">'+words+'</div></div>'+BRANDLINE;
+    (words? '<div class="wl"><h2>단어 '+un.words.length+'개</h2><div class="rows">'+words+'</div></div>':'')+BRANDLINE;
 
-  const au=document.getElementById('au'); curAudio=au; au.src=un.mp3||'';
+  const au=document.getElementById('au'); curAudio=au;
   const play=document.getElementById('play'), ico=document.getElementById('ico'), lbl=document.getElementById('lbl');
   const seek=document.getElementById('seek'), curEl=document.getElementById('cur'), durEl=document.getElementById('dur');
+  let curSpd=1, curT=(types.length?types[0].k:'word');
+  function loadSrc(){ au.src=A[curT]||''; try{au.load();}catch(e){} au.playbackRate=curSpd;
+    ico.textContent='▶'; lbl.textContent='듣기'; seek.value=0; curEl.textContent='0:00'; durEl.textContent='0:00'; }
   play.onclick=()=>{ au.paused?au.play():au.pause(); };
   au.onplay=()=>{ ico.textContent='⏸'; lbl.textContent='듣는 중'; };
   au.onpause=()=>{ if(!au.ended){ ico.textContent='▶'; lbl.textContent='계속 듣기'; } };
@@ -168,8 +182,11 @@ function leaf(b,u){
   au.ontimeupdate=()=>{ if(au.duration){ seek.value=Math.round(au.currentTime/au.duration*1000); curEl.textContent=fmt(au.currentTime);} };
   au.onloadedmetadata=()=>durEl.textContent=fmt(au.duration);
   seek.oninput=()=>{ if(au.duration) au.currentTime=seek.value/1000*au.duration; };
-  document.querySelectorAll('.spd').forEach(x=>x.onclick=()=>{ au.playbackRate=parseFloat(x.dataset.s);
+  document.querySelectorAll('.spd').forEach(x=>x.onclick=()=>{ curSpd=parseFloat(x.dataset.s); au.playbackRate=curSpd;
     document.querySelectorAll('.spd').forEach(y=>y.classList.remove('on')); x.classList.add('on'); });
+  document.querySelectorAll('.atg').forEach(x=>x.onclick=()=>{ curT=x.dataset.t;
+    document.querySelectorAll('.atg').forEach(y=>y.classList.remove('on')); x.classList.add('on'); loadSrc(); });
+  loadSrc();
   const prev=document.getElementById('uprev'), next=document.getElementById('unext');
   prev.disabled=(u<=1); next.disabled=(u>=b.units.length);
   prev.onclick=()=>{ if(u>1) go({book:b.code,u:u-1}); };
