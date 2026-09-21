@@ -75,6 +75,10 @@
   .atog{ display:inline-flex; gap:4px; background:#e9eefb; border-radius:999px; padding:4px; margin-bottom:18px; }
   .atg{ border:0; background:transparent; color:var(--sub); font:inherit; font-weight:800; font-size:14px; padding:8px 20px; border-radius:999px; cursor:pointer; }
   .atg.on{ background:#fff; color:var(--blue-ink); box-shadow:0 1px 3px rgba(47,107,237,.25); }
+  .srow{ display:flex; flex-direction:column; gap:3px; padding:11px 14px; border-bottom:1px solid var(--line); }
+  .srow:last-child{ border-bottom:0; }
+  .srow .se{ font-weight:800; color:var(--ink); font-size:17px; }
+  .srow .sk{ color:var(--sub); font-size:14px; }
   .orientbox{ background:var(--card); border:1px solid var(--line); border-radius:16px; padding:14px; box-shadow:var(--shadow); margin-bottom:14px; }
   .orienth{ font-size:14px; font-weight:800; margin:0 0 10px; color:var(--blue-ink); }
   .orientgrid{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; }
@@ -167,6 +171,9 @@ function leaf(b,u){
   const A=un.audio||{};
   const types=[]; if(A.word)types.push({k:'word',l:'단어'}); if(A.sent)types.push({k:'sent',l:'문장'});
   const words=(un.words||[]).map((w,i)=>'<div class="row"><span class="n">'+(i+1)+'</span><span class="w">'+esc(w.w)+'</span><span class="m">'+esc(w.m)+'</span></div>').join('');
+  const sents=(un.sents||[]).map(s=>'<div class="srow"><span class="se">'+esc(s.e)+'</span><span class="sk">'+esc(s.k)+'</span></div>').join('');
+  const wordHTML=(un.words&&un.words.length)?'<h2>단어 '+un.words.length+'개</h2><div class="rows">'+words+'</div>':'';
+  const sentHTML=(un.sents&&un.sents.length)?'<h2>문장 '+un.sents.length+'개</h2><div class="rows">'+sents+'</div>':'';
   const toggle= types.length>1 ? '<div class="atog">'+types.map((t,i)=>'<button class="atg'+(i===0?' on':'')+'" data-t="'+t.k+'">'+t.l+' 음원</button>').join('')+'</div>' : '';
   app.innerHTML='<div class="topbar"><button class="chipbtn" data-go="book" data-book="'+b.code+'">← 유닛 목록</button>'+
     '<div class="nav"><button id="uprev">◀ 이전</button><button id="unext">다음 ▶</button></div></div>'+
@@ -177,14 +184,16 @@ function leaf(b,u){
       '<div class="time"><span id="cur">0:00</span><span id="dur">0:00</span></div></div>'+
       '<div class="spds"><button class="spd" data-s="0.8">0.8×</button><button class="spd on" data-s="1">1.0×</button><button class="spd" data-s="1.2">1.2×</button></div>'+
     '</div>'+
-    (words? '<div class="wl"><h2>단어 '+un.words.length+'개</h2><div class="rows">'+words+'</div></div>':'')+BRANDLINE;
+    ((wordHTML||sentHTML)? '<div class="wl" id="listbox"></div>':'')+BRANDLINE;
 
   const au=document.getElementById('au'); curAudio=au;
   const play=document.getElementById('play'), ico=document.getElementById('ico'), lbl=document.getElementById('lbl');
   const seek=document.getElementById('seek'), curEl=document.getElementById('cur'), durEl=document.getElementById('dur');
   let curSpd=1, curT=(types.length?types[0].k:'word');
+  const listbox=document.getElementById('listbox');
+  function renderList(){ if(listbox) listbox.innerHTML=(curT==='sent'&&sentHTML)?sentHTML:(wordHTML||sentHTML); }
   function loadSrc(){ au.src=A[curT]||''; try{au.load();}catch(e){} au.playbackRate=curSpd;
-    ico.textContent='▶'; lbl.textContent='듣기'; seek.value=0; curEl.textContent='0:00'; durEl.textContent='0:00'; }
+    ico.textContent='▶'; lbl.textContent='듣기'; seek.value=0; curEl.textContent='0:00'; durEl.textContent='0:00'; renderList(); }
   play.onclick=()=>{ au.paused?au.play():au.pause(); };
   au.onplay=()=>{ ico.textContent='⏸'; lbl.textContent='듣는 중'; };
   au.onpause=()=>{ if(!au.ended){ ico.textContent='▶'; lbl.textContent='계속 듣기'; } };
