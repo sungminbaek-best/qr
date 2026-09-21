@@ -75,8 +75,10 @@
   .atog{ display:inline-flex; gap:4px; background:#e9eefb; border-radius:999px; padding:4px; margin-bottom:18px; }
   .atg{ border:0; background:transparent; color:var(--sub); font:inherit; font-weight:800; font-size:14px; padding:8px 20px; border-radius:999px; cursor:pointer; }
   .atg.on{ background:#fff; color:var(--blue-ink); box-shadow:0 1px 3px rgba(47,107,237,.25); }
-  .srow{ display:flex; flex-direction:column; gap:3px; padding:11px 14px; border-bottom:1px solid var(--line); }
+  .srow{ display:flex; align-items:baseline; gap:10px; padding:11px 4px; border-bottom:1px solid var(--line); }
   .srow:last-child{ border-bottom:0; }
+  .srow .sn{ width:20px; color:var(--blue2); font-size:12px; font-weight:800; flex:none; text-align:right; }
+  .srow .sc{ display:flex; flex-direction:column; gap:3px; }
   .srow .se{ font-weight:800; color:var(--ink); font-size:17px; }
   .srow .sk{ color:var(--sub); font-size:14px; }
   .orientbox{ background:var(--card); border:1px solid var(--line); border-radius:16px; padding:14px; box-shadow:var(--shadow); margin-bottom:14px; }
@@ -171,7 +173,7 @@ function leaf(b,u){
   const A=un.audio||{};
   const types=[]; if(A.word)types.push({k:'word',l:'단어'}); if(A.sent)types.push({k:'sent',l:'문장'});
   const words=(un.words||[]).map((w,i)=>'<div class="row"><span class="n">'+(i+1)+'</span><span class="w">'+esc(w.w)+'</span><span class="m">'+esc(w.m)+'</span></div>').join('');
-  const sents=(un.sents||[]).map(s=>'<div class="srow"><span class="se">'+esc(s.e)+'</span><span class="sk">'+esc(s.k)+'</span></div>').join('');
+  const sents=(un.sents||[]).map((s,i)=>'<div class="srow"><span class="sn">'+(i+1)+'</span><div class="sc"><span class="se">'+esc(s.e)+'</span><span class="sk">'+esc(s.k)+'</span></div></div>').join('');
   const wordHTML=(un.words&&un.words.length)?'<h2>단어 '+un.words.length+'개</h2><div class="rows">'+words+'</div>':'';
   const sentHTML=(un.sents&&un.sents.length)?'<h2>문장 '+un.sents.length+'개</h2><div class="rows">'+sents+'</div>':'';
   const toggle= types.length>1 ? '<div class="atog">'+types.map((t,i)=>'<button class="atg'+(i===0?' on':'')+'" data-t="'+t.k+'">'+t.l+' 음원</button>').join('')+'</div>' : '';
