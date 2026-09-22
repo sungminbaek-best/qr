@@ -207,9 +207,11 @@ function leaf(b,u){
   let curSpd=1, curT=(types.length?types[0].k:'word');
   const listbox=document.getElementById('listbox');
   let hideMean=false, hideKo=false, repeatOn=false, curIdx=-1, boundEnd=null;
+  const hasKo=(un.sents||[]).some(s=>s.k);   // 해석 있는 책만 해석 토글 표시
   function ctrlBar(){
     if(curT==='sent' && un.sents && un.sents.length){
-      let h='<div class="lctrl"><button class="lbtn'+(hideKo?' on':'')+'" id="tgKo">'+(hideKo?'해석 보기':'해석 숨기기')+'</button>';
+      let h='<div class="lctrl">';
+      if(hasKo) h+='<button class="lbtn'+(hideKo?' on':'')+'" id="tgKo">'+(hideKo?'해석 보기':'해석 숨기기')+'</button>';
       if(ST) h+='<button class="lbtn'+(repeatOn?' on':'')+'" id="tgRep">🔁 한 문장 반복</button>';
       h+='</div>';
       if(ST) h+='<div class="lhint" id="lhint">'+(repeatOn?'반복 켜짐 — 문장을 누르면 그 문장만 계속 반복돼요 (멈추려면 재생버튼)':'문장을 누르면 그 문장만 재생돼요')+'</div>';
