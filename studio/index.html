@@ -189,9 +189,12 @@ function leaf(b,u){
   const wordHTML=(un.words&&un.words.length)?'<h2>단어 '+un.words.length+'개</h2><div class="rows">'+words+'</div>':'';
   const sentHTML=(un.sents&&un.sents.length)?'<h2>문장 '+un.sents.length+'개</h2><div class="rows">'+sents+'</div>':'';
   const toggle= types.length>1 ? '<div class="atog">'+types.map((t,i)=>'<button class="atg'+(i===0?' on':'')+'" data-t="'+t.k+'">'+t.l+' 음원</button>').join('')+'</div>' : '';
+  const vids=(un.videos||[]);
+  const vidHTML= vids.length ? '<div class="orientbox"><h2 class="orienth">🎬 강의 영상</h2><div class="orientgrid">'+vids.map(v=>'<a class="orient" href="'+esc(v.url)+'" target="_blank" rel="noopener">▶ '+esc(v.label)+'</a>').join('')+'</div></div>' : '';
   app.innerHTML='<div class="topbar"><button class="chipbtn" data-go="book" data-book="'+b.code+'">← 유닛 목록</button>'+
     '<div class="nav"><button id="uprev">◀ 이전</button><button id="unext">다음 ▶</button></div></div>'+
     '<div class="head"><span class="kicker">'+esc(b.short)+'</span><div class="unit">Unit '+u+'</div></div>'+
+    vidHTML+
     '<div class="player"><audio id="au" preload="metadata"></audio>'+toggle+
       '<div class="btnwrap"><button class="playbig" id="play" aria-label="재생"><span class="ico" id="ico">▶</span><span class="lbl" id="lbl">듣기</span></button></div>'+
       '<div class="seekwrap"><input type="range" id="seek" min="0" max="1000" value="0" aria-label="재생 위치">'+
