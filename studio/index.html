@@ -153,7 +153,7 @@ function bookView(b){
   const vids=(b.book_resources||[]).filter(r=>r.type==='video'&&r.url);
   if(vids.length){
     const chips=vids.map(r=>'<a class="orient" href="'+esc(r.url)+'" target="_blank" rel="noopener">▶ '+esc(r.label||'영상')+'</a>').join('');
-    top='<div class="orientbox"><h2 class="orienth">🎬 오리엔테이션 영상 (품사)</h2><div class="orientgrid">'+chips+'</div></div>';
+    top='<div class="orientbox"><h2 class="orienth">🎬 '+esc(b.orient_title||'오리엔테이션 영상')+'</h2><div class="orientgrid">'+chips+'</div></div>';
   }
   const cards=b.units.map(un=>{
     const hasA=un.audio&&(un.audio.word||un.audio.sent);
