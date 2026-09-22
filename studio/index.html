@@ -91,6 +91,7 @@
   .lctrl{ display:flex; gap:8px; margin:0 0 10px; flex-wrap:wrap; }
   .lbtn{ border:1px solid var(--line); background:var(--card); color:var(--sub); font:inherit; font-weight:700; font-size:13px; padding:6px 12px; border-radius:999px; cursor:pointer; }
   .lbtn.on{ background:var(--blue); color:#fff; border-color:var(--blue); }
+  .lhint{ color:var(--sub); font-size:12.5px; margin:-4px 0 10px; }
   .orientbox{ background:var(--card); border:1px solid var(--line); border-radius:16px; padding:14px; box-shadow:var(--shadow); margin-bottom:14px; }
   .orienth{ font-size:14px; font-weight:800; margin:0 0 10px; color:var(--blue-ink); }
   .orientgrid{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; }
@@ -186,7 +187,7 @@ function leaf(b,u){
   const words=(un.words||[]).map((w,i)=>'<div class="row selw"><span class="n">'+(i+1)+'</span><span class="w">'+esc(w.w)+'</span><span class="m">'+esc(w.m)+'</span></div>').join('');
   const sents=(un.sents||[]).map((s,i)=>'<div class="srow'+(ST?' play':'')+'"><span class="sn">'+(i+1)+'</span><div class="sc"><span class="se">'+esc(s.e)+'</span><span class="sk">'+esc(s.k)+'</span></div></div>').join('');
   const wordHTML=(un.words&&un.words.length)?'<h2>단어 '+un.words.length+'개</h2><div class="rows">'+words+'</div>':'';
-  const sentHTML=(un.sents&&un.sents.length)?'<h2>문장 '+un.sents.length+'개'+(ST?' <span style="font-weight:600;color:var(--sub);font-size:13px">· 문장을 눌러 개별 재생</span>':'')+'</h2><div class="rows">'+sents+'</div>':'';
+  const sentHTML=(un.sents&&un.sents.length)?'<h2>문장 '+un.sents.length+'개</h2><div class="rows">'+sents+'</div>':'';
   const toggle= types.length>1 ? '<div class="atog">'+types.map((t,i)=>'<button class="atg'+(i===0?' on':'')+'" data-t="'+t.k+'">'+t.l+' 음원</button>').join('')+'</div>' : '';
   app.innerHTML='<div class="topbar"><button class="chipbtn" data-go="book" data-book="'+b.code+'">← 유닛 목록</button>'+
     '<div class="nav"><button id="uprev">◀ 이전</button><button id="unext">다음 ▶</button></div></div>'+
@@ -208,8 +209,10 @@ function leaf(b,u){
   function ctrlBar(){
     if(curT==='sent' && un.sents && un.sents.length){
       let h='<div class="lctrl"><button class="lbtn'+(hideKo?' on':'')+'" id="tgKo">'+(hideKo?'해석 보기':'해석 숨기기')+'</button>';
-      if(ST) h+='<button class="lbtn'+(repeatOn?' on':'')+'" id="tgRep">🔁 문장 반복</button>';
-      return h+'</div>';
+      if(ST) h+='<button class="lbtn'+(repeatOn?' on':'')+'" id="tgRep">🔁 한 문장 반복</button>';
+      h+='</div>';
+      if(ST) h+='<div class="lhint" id="lhint">'+(repeatOn?'반복 켜짐 — 문장을 누르면 그 문장만 계속 반복돼요 (멈추려면 재생버튼)':'문장을 누르면 그 문장만 재생돼요')+'</div>';
+      return h;
     }
     if(curT==='word' && un.words && un.words.length)
       return '<div class="lctrl"><button class="lbtn'+(hideMean?' on':'')+'" id="tgMean">'+(hideMean?'뜻 보기':'뜻 숨기기')+'</button></div>';
@@ -219,7 +222,7 @@ function leaf(b,u){
   function bindList(){
     const km=document.getElementById('tgKo'); if(km) km.onclick=()=>{ hideKo=!hideKo; km.classList.toggle('on',hideKo); km.textContent=hideKo?'해석 보기':'해석 숨기기'; listbox.classList.toggle('hidek',hideKo); listbox.querySelectorAll('.srow.rv').forEach(r=>r.classList.remove('rv')); };
     const mm=document.getElementById('tgMean'); if(mm) mm.onclick=()=>{ hideMean=!hideMean; mm.classList.toggle('on',hideMean); mm.textContent=hideMean?'뜻 보기':'뜻 숨기기'; listbox.classList.toggle('hidem',hideMean); listbox.querySelectorAll('.row.rv').forEach(r=>r.classList.remove('rv')); };
-    const rp=document.getElementById('tgRep'); if(rp) rp.onclick=()=>{ repeatOn=!repeatOn; rp.classList.toggle('on',repeatOn); };
+    const rp=document.getElementById('tgRep'); if(rp) rp.onclick=()=>{ repeatOn=!repeatOn; rp.classList.toggle('on',repeatOn); const lh=document.getElementById('lhint'); if(lh) lh.textContent=repeatOn?'반복 켜짐 — 문장을 누르면 그 문장만 계속 반복돼요 (멈추려면 재생버튼)':'문장을 누르면 그 문장만 재생돼요'; };
     if(curT==='sent') listbox.querySelectorAll('.srow').forEach((r,i)=>r.onclick=()=>{ if(hideKo) r.classList.add('rv'); if(ST) playSent(i); });
     if(curT==='word') listbox.querySelectorAll('.row').forEach(r=>r.onclick=()=>{ if(hideMean) r.classList.toggle('rv'); });
   }
