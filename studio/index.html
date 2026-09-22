@@ -81,6 +81,16 @@
   .srow .sc{ display:flex; flex-direction:column; gap:3px; }
   .srow .se{ font-weight:800; color:var(--ink); font-size:17px; }
   .srow .sk{ color:var(--sub); font-size:14px; }
+  .srow.play{ cursor:pointer; }
+  .srow.cur{ background:var(--blue-soft); border-radius:10px; }
+  .wl.hidek .srow .sk{ visibility:hidden; }
+  .wl.hidek .srow.rv .sk{ visibility:visible; }
+  .wl.hidem .row .m{ visibility:hidden; }
+  .wl.hidem .row.rv .m{ visibility:visible; }
+  .row.selw{ cursor:pointer; }
+  .lctrl{ display:flex; gap:8px; margin:0 0 10px; flex-wrap:wrap; }
+  .lbtn{ border:1px solid var(--line); background:var(--card); color:var(--sub); font:inherit; font-weight:700; font-size:13px; padding:6px 12px; border-radius:999px; cursor:pointer; }
+  .lbtn.on{ background:var(--blue); color:#fff; border-color:var(--blue); }
   .orientbox{ background:var(--card); border:1px solid var(--line); border-radius:16px; padding:14px; box-shadow:var(--shadow); margin-bottom:14px; }
   .orienth{ font-size:14px; font-weight:800; margin:0 0 10px; color:var(--blue-ink); }
   .orientgrid{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; }
@@ -172,10 +182,11 @@ function leaf(b,u){
   const un=b.units[u-1]; document.title=b.short+' · Unit '+u;
   const A=un.audio||{};
   const types=[]; if(A.word)types.push({k:'word',l:'단어'}); if(A.sent)types.push({k:'sent',l:'문장'});
-  const words=(un.words||[]).map((w,i)=>'<div class="row"><span class="n">'+(i+1)+'</span><span class="w">'+esc(w.w)+'</span><span class="m">'+esc(w.m)+'</span></div>').join('');
-  const sents=(un.sents||[]).map((s,i)=>'<div class="srow"><span class="sn">'+(i+1)+'</span><div class="sc"><span class="se">'+esc(s.e)+'</span><span class="sk">'+esc(s.k)+'</span></div></div>').join('');
+  const ST=un.st||null;  // 문장 시작시각(있으면 탭재생/하이라이트/반복 활성)
+  const words=(un.words||[]).map((w,i)=>'<div class="row selw"><span class="n">'+(i+1)+'</span><span class="w">'+esc(w.w)+'</span><span class="m">'+esc(w.m)+'</span></div>').join('');
+  const sents=(un.sents||[]).map((s,i)=>'<div class="srow'+(ST?' play':'')+'"><span class="sn">'+(i+1)+'</span><div class="sc"><span class="se">'+esc(s.e)+'</span><span class="sk">'+esc(s.k)+'</span></div></div>').join('');
   const wordHTML=(un.words&&un.words.length)?'<h2>단어 '+un.words.length+'개</h2><div class="rows">'+words+'</div>':'';
-  const sentHTML=(un.sents&&un.sents.length)?'<h2>문장 '+un.sents.length+'개</h2><div class="rows">'+sents+'</div>':'';
+  const sentHTML=(un.sents&&un.sents.length)?'<h2>문장 '+un.sents.length+'개'+(ST?' <span style="font-weight:600;color:var(--sub);font-size:13px">· 문장을 눌러 개별 재생</span>':'')+'</h2><div class="rows">'+sents+'</div>':'';
   const toggle= types.length>1 ? '<div class="atog">'+types.map((t,i)=>'<button class="atg'+(i===0?' on':'')+'" data-t="'+t.k+'">'+t.l+' 음원</button>').join('')+'</div>' : '';
   app.innerHTML='<div class="topbar"><button class="chipbtn" data-go="book" data-book="'+b.code+'">← 유닛 목록</button>'+
     '<div class="nav"><button id="uprev">◀ 이전</button><button id="unext">다음 ▶</button></div></div>'+
@@ -193,16 +204,44 @@ function leaf(b,u){
   const seek=document.getElementById('seek'), curEl=document.getElementById('cur'), durEl=document.getElementById('dur');
   let curSpd=1, curT=(types.length?types[0].k:'word');
   const listbox=document.getElementById('listbox');
-  function renderList(){ if(listbox) listbox.innerHTML=(curT==='sent'&&sentHTML)?sentHTML:(wordHTML||sentHTML); }
+  let hideMean=false, hideKo=false, repeatOn=false, curIdx=-1, boundEnd=null;
+  function ctrlBar(){
+    if(curT==='sent' && un.sents && un.sents.length){
+      let h='<div class="lctrl"><button class="lbtn'+(hideKo?' on':'')+'" id="tgKo">'+(hideKo?'해석 보기':'해석 숨기기')+'</button>';
+      if(ST) h+='<button class="lbtn'+(repeatOn?' on':'')+'" id="tgRep">🔁 문장 반복</button>';
+      return h+'</div>';
+    }
+    if(curT==='word' && un.words && un.words.length)
+      return '<div class="lctrl"><button class="lbtn'+(hideMean?' on':'')+'" id="tgMean">'+(hideMean?'뜻 보기':'뜻 숨기기')+'</button></div>';
+    return '';
+  }
+  function highlight(){ if(listbox) listbox.querySelectorAll('.srow').forEach((r,i)=>r.classList.toggle('cur', i===curIdx)); }
+  function bindList(){
+    const km=document.getElementById('tgKo'); if(km) km.onclick=()=>{ hideKo=!hideKo; km.classList.toggle('on',hideKo); km.textContent=hideKo?'해석 보기':'해석 숨기기'; listbox.classList.toggle('hidek',hideKo); listbox.querySelectorAll('.srow.rv').forEach(r=>r.classList.remove('rv')); };
+    const mm=document.getElementById('tgMean'); if(mm) mm.onclick=()=>{ hideMean=!hideMean; mm.classList.toggle('on',hideMean); mm.textContent=hideMean?'뜻 보기':'뜻 숨기기'; listbox.classList.toggle('hidem',hideMean); listbox.querySelectorAll('.row.rv').forEach(r=>r.classList.remove('rv')); };
+    const rp=document.getElementById('tgRep'); if(rp) rp.onclick=()=>{ repeatOn=!repeatOn; rp.classList.toggle('on',repeatOn); };
+    if(curT==='sent') listbox.querySelectorAll('.srow').forEach((r,i)=>r.onclick=()=>{ if(hideKo) r.classList.add('rv'); if(ST) playSent(i); });
+    if(curT==='word') listbox.querySelectorAll('.row').forEach(r=>r.onclick=()=>{ if(hideMean) r.classList.toggle('rv'); });
+  }
+  function renderList(){ if(!listbox) return; listbox.innerHTML=ctrlBar()+((curT==='sent'&&sentHTML)?sentHTML:(wordHTML||sentHTML));
+    listbox.classList.toggle('hidem', curT==='word'&&hideMean); listbox.classList.toggle('hidek', curT==='sent'&&hideKo);
+    bindList(); highlight(); }
+  function playSent(i){ curIdx=i; highlight();
+    const go=()=>{ boundEnd=(ST[i+1]!=null?ST[i+1]:(au.duration||1e9)); try{au.currentTime=ST[i];}catch(e){} au.playbackRate=curSpd; au.play(); };
+    if(au.readyState>=1) go(); else au.addEventListener('loadedmetadata',go,{once:true}); }
   function loadSrc(){ au.src=A[curT]||''; try{au.load();}catch(e){} au.playbackRate=curSpd;
-    ico.textContent='▶'; lbl.textContent='듣기'; seek.value=0; curEl.textContent='0:00'; durEl.textContent='0:00'; renderList(); }
-  play.onclick=()=>{ au.paused?au.play():au.pause(); };
+    ico.textContent='▶'; lbl.textContent='듣기'; seek.value=0; curEl.textContent='0:00'; durEl.textContent='0:00'; curIdx=-1; boundEnd=null; renderList(); }
+  play.onclick=()=>{ if(au.paused){ boundEnd=null; au.play(); } else au.pause(); };
   au.onplay=()=>{ ico.textContent='⏸'; lbl.textContent='듣는 중'; };
   au.onpause=()=>{ if(!au.ended){ ico.textContent='▶'; lbl.textContent='계속 듣기'; } };
-  au.onended=()=>{ ico.textContent='↺'; lbl.textContent='다시 듣기'; };
-  au.ontimeupdate=()=>{ if(au.duration){ seek.value=Math.round(au.currentTime/au.duration*1000); curEl.textContent=fmt(au.currentTime);} };
+  au.onended=()=>{ ico.textContent='↺'; lbl.textContent='다시 듣기'; curIdx=-1; highlight(); };
+  au.ontimeupdate=()=>{ if(au.duration){ seek.value=Math.round(au.currentTime/au.duration*1000); curEl.textContent=fmt(au.currentTime);}
+    if(curT==='sent'&&ST){
+      if(boundEnd!=null){ if(au.currentTime>=boundEnd-0.04){ if(repeatOn){ au.currentTime=ST[curIdx]; } else { au.pause(); boundEnd=null; } } }
+      else { let idx=0; for(let j=0;j<ST.length;j++){ if(au.currentTime>=ST[j]-0.02) idx=j; } if(idx!==curIdx){ curIdx=idx; highlight(); } }
+    } };
   au.onloadedmetadata=()=>durEl.textContent=fmt(au.duration);
-  seek.oninput=()=>{ if(au.duration) au.currentTime=seek.value/1000*au.duration; };
+  seek.oninput=()=>{ if(au.duration){ boundEnd=null; au.currentTime=seek.value/1000*au.duration; } };
   document.querySelectorAll('.spd').forEach(x=>x.onclick=()=>{ curSpd=parseFloat(x.dataset.s); au.playbackRate=curSpd;
     document.querySelectorAll('.spd').forEach(y=>y.classList.remove('on')); x.classList.add('on'); });
   document.querySelectorAll('.atg').forEach(x=>x.onclick=()=>{ curT=x.dataset.t;
