@@ -41,6 +41,10 @@
   .bookcard .go{ color:var(--blue2); font-weight:800; font-size:13px; margin-top:10px; }
   .bookcard.off{ opacity:.55; cursor:default; box-shadow:none; background:#f7f9fd; }
   .bookcard.off .soon{ color:var(--sub); font-weight:700; font-size:12px; margin-top:10px; }
+  .bookcard .stepb{ align-self:flex-start; font-size:11px; font-weight:800; color:var(--blue-ink); background:var(--blue-soft); border-radius:999px; padding:3px 9px; margin-bottom:8px; }
+  .bookcard .stepb.gram{ color:#8a5a00; background:#fff3d6; }
+  .seclabel{ font-size:15px; font-weight:800; margin:4px 2px 10px; }
+  .seclabel .secsub{ font-size:12px; font-weight:600; color:var(--sub); margin-left:6px; }
 
   .unitcard{ background:var(--card); border:1px solid var(--line); border-radius:16px; padding:13px; box-shadow:var(--shadow); }
   .unitcard .ut{ font-size:15px; font-weight:800; margin-bottom:10px; }
@@ -153,11 +157,19 @@ function render(){
 
 function home(){
   document.title='쏠뷰 · 저절로 자료';
-  const cards=BOOKS.map(b=> b.active
-    ? '<button class="bookcard" data-go="book" data-book="'+b.code+'"><span class="bk">'+esc(b.short)+'</span><span class="go">열기 ›</span></button>'
-    : '<div class="bookcard off"><span class="bk">'+esc(b.short)+'</span><span class="soon">준비중</span></div>'
-  ).join('');
-  app.innerHTML='<div class="head"><span class="kicker">쏠뷰</span><h1>교재 선택</h1></div><div class="grid">'+cards+'</div>'+BRANDLINE;
+  const card=(b)=>{
+    const badge = b.track==='reading' ? '<span class="stepb">STEP '+b.step+'</span>' : '<span class="stepb gram">문법·쓰기</span>';
+    return b.active
+      ? '<button class="bookcard" data-go="book" data-book="'+b.code+'">'+badge+'<span class="bk">'+esc(b.short)+'</span><span class="go">열기 ›</span></button>'
+      : '<div class="bookcard off">'+badge+'<span class="bk">'+esc(b.short)+'</span><span class="soon">준비중</span></div>';
+  };
+  const reading=BOOKS.filter(b=>b.track!=='grammar').map(card).join('');
+  const grammar=BOOKS.filter(b=>b.track==='grammar').map(card).join('');
+  app.innerHTML='<div class="head"><span class="kicker">쏠뷰</span><h1>교재 선택</h1></div>'+
+    '<div class="seclabel">📚 리딩 <span class="secsub">쉬움 → 어려움 (STEP 1~6)</span></div>'+
+    '<div class="grid">'+reading+'</div>'+
+    (grammar? '<div class="seclabel" style="margin-top:22px">✍️ 문법 · 쓰기 <span class="secsub">저그랑 · 브릿지~기본 단계 병행</span></div><div class="grid">'+grammar+'</div>':'')+
+    BRANDLINE;
 }
 
 function bookView(b){
