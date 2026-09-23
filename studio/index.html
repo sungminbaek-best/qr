@@ -137,7 +137,7 @@
 const BOOKS = window.BOOKS||[];
 const app = document.getElementById('app');
 let curAudio=null;
-const BRANDLINE='<p class="brand"><b>쏠뷰</b> &nbsp;|&nbsp; 저절로 시리즈</p>';
+const BRANDLINE='<p class="brand"><b>쏠뷰(SolveU)</b> &nbsp;|&nbsp; 저절로시리즈</p>';
 
 function esc(s){ return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
 function bookByCode(c){ return BOOKS.find(b=>b.code===c); }
