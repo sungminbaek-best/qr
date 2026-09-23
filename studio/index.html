@@ -166,7 +166,7 @@ function home(){
   };
   const reading=BOOKS.filter(b=>b.track!=='grammar').map(card).join('');
   const grammar=BOOKS.filter(b=>b.track==='grammar').map(card).join('');
-  app.innerHTML='<div class="head"><span class="kicker">쏠뷰</span></div>'+
+  app.innerHTML='<div style="height:8px"></div>'+
     '<div class="seclabel">📚 파닉스 · 리딩</div>'+
     '<div class="grid hgrid">'+reading+'</div>'+
     (grammar? '<div class="seclabel" style="margin-top:22px">✍️ 문법 · 쓰기</div><div class="grid hgrid">'+grammar+'</div>':'')+
