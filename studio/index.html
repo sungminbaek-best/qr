@@ -81,6 +81,12 @@
   .atog{ display:inline-flex; gap:4px; background:#e9eefb; border-radius:999px; padding:4px; margin-bottom:18px; }
   .atg{ border:0; background:transparent; color:var(--sub); font:inherit; font-weight:800; font-size:14px; padding:8px 20px; border-radius:999px; cursor:pointer; }
   .atg.on{ background:#fff; color:var(--blue-ink); box-shadow:0 1px 3px rgba(47,107,237,.25); }
+  .pgtabs{ display:flex; flex-wrap:wrap; gap:8px; margin:2px 0 18px; }
+  .pgtab{ display:inline-flex; flex-direction:column; align-items:center; gap:1px; border:1px solid var(--line); background:var(--card); color:var(--sub); font:inherit; border-radius:12px; padding:7px 14px; cursor:pointer; line-height:1.2; }
+  .pgtab b{ font-weight:800; font-size:14px; }
+  .pgtab span{ font-size:11px; color:var(--muted,#9aa3b2); }
+  .pgtab.on{ background:var(--blue,#2f6bed); border-color:var(--blue,#2f6bed); color:#fff; }
+  .pgtab.on span{ color:#dbe6ff; }
   .srow{ display:flex; align-items:baseline; gap:10px; padding:11px 4px; border-bottom:1px solid var(--line); }
   .srow:last-child{ border-bottom:0; }
   .srow .sn{ width:20px; color:var(--blue2); font-size:12px; font-weight:800; flex:none; text-align:right; }
@@ -183,7 +189,7 @@ function bookView(b){
     top='<div class="orientbox"><h2 class="orienth">🎬 '+esc(b.orient_title||'오리엔테이션 영상')+'</h2><div class="orientgrid">'+chips+'</div></div>';
   }
   const cards=b.units.map(un=>{
-    const hasA=un.audio&&(un.audio.word||un.audio.sent);
+    const hasA=(un.audio&&(un.audio.word||un.audio.sent))||(un.pages&&un.pages.length);
     const a=hasA? '<button class="ubtn audio" data-go="leaf" data-book="'+b.code+'" data-u="'+un.n+'">🔊 음원 듣기</button>'
                 : '<span class="ubtn off">🔊 준비중</span>';
     const vlist=(un.videos&&un.videos.length)? un.videos : (un.video? [{label:'강의 영상',url:un.video}] : []);
@@ -196,20 +202,26 @@ function bookView(b){
 }
 
 function fmt(s){ s=Math.floor(s||0); return Math.floor(s/60)+':'+String(s%60).padStart(2,'0'); }
-function leaf(b,u){
+function leaf(b,u,selP){
   const un=b.units[u-1]; document.title=b.short+' · Unit '+u;
-  const A=un.audio||{};
+  const PAGES=(un.pages&&un.pages.length)?un.pages:null;
+  selP=(PAGES && selP>=0 && selP<PAGES.length)?selP:0;
+  const src=PAGES?PAGES[selP]:un;   // 페이지 있으면 그 페이지가 단어/음원 출처
+  const A=PAGES?{word:src.audio||''}:(un.audio||{});
   const types=[]; if(A.word)types.push({k:'word',l:'단어'}); if(A.sent)types.push({k:'sent',l:'문장'});
-  const ST=un.st||null;  // 문장 시작시각(있으면 탭재생/하이라이트/반복 활성)
-  const WT=un.wt||null;  // 단어 시작시각(파닉스 등: 단어 탭재생)
-  const words=(un.words||[]).map((w,i)=>'<div class="row selw'+(WT?' play':'')+'"><span class="n">'+(i+1)+'</span><span class="w">'+esc(w.w)+'</span><span class="m">'+esc(w.m)+'</span></div>').join('');
+  const ST=PAGES?null:(un.st||null);  // 문장 시작시각(있으면 탭재생/하이라이트/반복 활성)
+  const WT=src.wt||null;  // 단어 시작시각(파닉스 등: 단어 탭재생)
+  const words=(src.words||[]).map((w,i)=>'<div class="row selw'+(WT?' play':'')+'"><span class="n">'+(i+1)+'</span><span class="w">'+esc(w.w)+'</span><span class="m">'+esc(w.m)+'</span></div>').join('');
   const sents=(un.sents||[]).map((s,i)=>'<div class="srow'+(ST?' play':'')+'"><span class="sn">'+(i+1)+'</span><div class="sc"><span class="se">'+esc(s.e)+'</span><span class="sk">'+esc(s.k)+'</span></div></div>').join('');
-  const wordHTML=(un.words&&un.words.length)?'<h2>단어 '+un.words.length+'개</h2><div class="rows">'+words+'</div>':'';
+  const pgtabs=PAGES?('<div class="pgtabs">'+PAGES.map((p,i)=>'<button class="pgtab'+(i===selP?' on':'')+'" data-pg="'+i+'"><b>'+esc(p.label)+'</b><span>p.'+p.p+'</span></button>').join('')+'</div>'):'';
+  const wordHead=PAGES?('교재 '+src.p+'쪽 순서 · '+src.words.length+'개'):('단어 '+(src.words?src.words.length:0)+'개');
+  const wordHTML=(src.words&&src.words.length)?'<h2>'+wordHead+'</h2><div class="rows">'+words+'</div>':'';
   const sentHTML=(un.sents&&un.sents.length)?'<h2>문장 '+un.sents.length+'개</h2><div class="rows">'+sents+'</div>':'';
   const toggle= types.length>1 ? '<div class="atog">'+types.map((t,i)=>'<button class="atg'+(i===0?' on':'')+'" data-t="'+t.k+'">'+t.l+' 음원</button>').join('')+'</div>' : '';
   app.innerHTML='<div class="topbar"><button class="chipbtn" data-go="book" data-book="'+b.code+'">← 유닛 목록</button>'+
     '<div class="nav"><button id="uprev">◀ 이전</button><button id="unext">다음 ▶</button></div></div>'+
     '<div class="head"><span class="kicker">'+esc(b.short)+'</span><div class="unit">Unit '+u+'</div></div>'+
+    pgtabs+
     '<div class="player"><audio id="au" preload="metadata"></audio>'+toggle+
       '<div class="btnwrap"><button class="playbig" id="play" aria-label="재생"><span class="ico" id="ico">▶</span><span class="lbl" id="lbl">듣기</span></button></div>'+
       '<div class="seekwrap"><input type="range" id="seek" min="0" max="1000" value="0" aria-label="재생 위치">'+
@@ -236,8 +248,9 @@ function leaf(b,u){
       if(ST) h+='<div class="lhint" id="lhint">'+(repeatOn?'반복 켜짐 — 문장을 누르면 그 문장만 계속 반복돼요 (멈추려면 재생버튼)':'문장을 누르면 그 문장만 재생돼요')+'</div>';
       return h;
     }
-    if(curT==='word' && un.words && un.words.length){
-      let h='<div class="lctrl"><button class="lbtn'+(hideMean?' on':'')+'" id="tgMean">'+(hideMean?'뜻 보기':'뜻 숨기기')+'</button>';
+    if(curT==='word' && src.words && src.words.length){
+      const mlab=PAGES?(hideMean?'소리 보기':'소리 숨기기'):(hideMean?'뜻 보기':'뜻 숨기기');
+      let h='<div class="lctrl"><button class="lbtn'+(hideMean?' on':'')+'" id="tgMean">'+mlab+'</button>';
       if(WT) h+='<button class="lbtn'+(repeatOn?' on':'')+'" id="tgRep">🔁 한 단어 반복</button>';
       h+='</div>';
       if(WT) h+='<div class="lhint" id="lhint">'+(repeatOn?'반복 켜짐 — 단어를 누르면 그 단어만 계속 반복돼요 (멈추려면 재생버튼)':'단어를 누르면 그 단어만 재생돼요')+'</div>';
@@ -248,7 +261,7 @@ function leaf(b,u){
   function highlight(){ if(listbox) listbox.querySelectorAll(ROWSEL()).forEach((r,i)=>r.classList.toggle('cur', i===curIdx)); }
   function bindList(){
     const km=document.getElementById('tgKo'); if(km) km.onclick=()=>{ hideKo=!hideKo; km.classList.toggle('on',hideKo); km.textContent=hideKo?'해석 보기':'해석 숨기기'; listbox.classList.toggle('hidek',hideKo); listbox.querySelectorAll('.srow.rv').forEach(r=>r.classList.remove('rv')); };
-    const mm=document.getElementById('tgMean'); if(mm) mm.onclick=()=>{ hideMean=!hideMean; mm.classList.toggle('on',hideMean); mm.textContent=hideMean?'뜻 보기':'뜻 숨기기'; listbox.classList.toggle('hidem',hideMean); listbox.querySelectorAll('.row.rv').forEach(r=>r.classList.remove('rv')); };
+    const mm=document.getElementById('tgMean'); if(mm) mm.onclick=()=>{ hideMean=!hideMean; mm.classList.toggle('on',hideMean); mm.textContent=PAGES?(hideMean?'소리 보기':'소리 숨기기'):(hideMean?'뜻 보기':'뜻 숨기기'); listbox.classList.toggle('hidem',hideMean); listbox.querySelectorAll('.row.rv').forEach(r=>r.classList.remove('rv')); };
     const rp=document.getElementById('tgRep'); if(rp) rp.onclick=()=>{ repeatOn=!repeatOn; rp.classList.toggle('on',repeatOn); const lh=document.getElementById('lhint'); const isw=(curT==='word'); if(lh) lh.textContent=repeatOn?('반복 켜짐 — '+(isw?'단어':'문장')+'를 누르면 그 '+(isw?'단어':'문장')+'만 계속 반복돼요 (멈추려면 재생버튼)'):((isw?'단어':'문장')+'를 누르면 그 '+(isw?'단어':'문장')+'만 재생돼요'); };
     if(curT==='sent') listbox.querySelectorAll('.srow').forEach((r,i)=>r.onclick=()=>{ if(hideKo) r.classList.add('rv'); if(ST) playSeg(i); });
     if(curT==='word') listbox.querySelectorAll('.row').forEach((r,i)=>r.onclick=()=>{ if(hideMean) r.classList.toggle('rv'); if(WT) playSeg(i); });
@@ -278,6 +291,7 @@ function leaf(b,u){
   document.querySelectorAll('.atg').forEach(x=>x.onclick=()=>{ curT=x.dataset.t;
     document.querySelectorAll('.atg').forEach(y=>y.classList.remove('on')); x.classList.add('on'); loadSrc(); });
   loadSrc();
+  document.querySelectorAll('.pgtab').forEach(x=>x.onclick=()=>{ const pi=parseInt(x.dataset.pg); if(pi===selP)return; if(curAudio){curAudio.pause();curAudio=null;} leaf(b,u,pi); window.scrollTo(0,0); });
   const prev=document.getElementById('uprev'), next=document.getElementById('unext');
   prev.disabled=(u<=1); next.disabled=(u>=b.units.length);
   prev.onclick=()=>{ if(u>1) go({book:b.code,u:u-1}); };
