@@ -55,6 +55,7 @@
     border:0; border-radius:11px; padding:11px 0; font:inherit; font-weight:800; font-size:13.5px; cursor:pointer; }
   .ubtn.audio{ background:linear-gradient(160deg,#5b93ff,#2f6bed 70%); color:#fff; box-shadow:0 8px 18px -8px rgba(47,107,237,.6); }
   .ubtn.video{ background:var(--card); border:1px solid var(--line); color:var(--blue2); }
+  .ubtn.video.solo{ background:linear-gradient(160deg,#7aa8ff,#2f6bed 75%); border:0; color:#fff; box-shadow:0 8px 18px -8px rgba(47,107,237,.55); }
   .ubtn.off{ background:#eef2f9; color:var(--sub); cursor:default; }
 
   /* leaf player */
@@ -190,10 +191,10 @@ function bookView(b){
   }
   const cards=b.units.map(un=>{
     const hasA=(un.audio&&(un.audio.word||un.audio.sent))||(un.pages&&un.pages.length);
-    const a=hasA? '<button class="ubtn audio" data-go="leaf" data-book="'+b.code+'" data-u="'+un.n+'">🔊 음원 듣기</button>'
-                : '<span class="ubtn off">🔊 준비중</span>';
     const vlist=(un.videos&&un.videos.length)? un.videos : (un.video? [{label:'강의 영상',url:un.video}] : []);
-    const vid=vlist.map(v=>'<a class="ubtn video" href="'+esc(v.url)+'" target="_blank" rel="noopener">🎬 '+esc(v.label)+'</a>').join('');
+    const a=hasA? '<button class="ubtn audio" data-go="leaf" data-book="'+b.code+'" data-u="'+un.n+'">🔊 음원 듣기</button>'
+                : (vlist.length? '' : '<span class="ubtn off">🔊 준비중</span>');
+    const vid=vlist.map(v=>'<a class="ubtn video'+(!hasA?' solo':'')+'" href="'+esc(v.url)+'" target="_blank" rel="noopener">🎬 '+esc(v.label)+'</a>').join('');
     return '<div class="unitcard"><div class="ut">Unit '+un.n+'</div><div class="ubtns">'+a+vid+'</div></div>';
   }).join('');
   app.innerHTML='<div class="topbar"><button class="chipbtn" data-go="home">← 교재 목록</button></div>'+
