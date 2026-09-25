@@ -208,16 +208,19 @@ function leaf(b,u,selP){
   const PAGES=(un.pages&&un.pages.length)?un.pages:null;
   selP=(PAGES && selP>=0 && selP<PAGES.length)?selP:0;
   const src=PAGES?PAGES[selP]:un;   // 페이지 있으면 그 페이지가 단어/음원 출처
-  const A=PAGES?{word:src.audio||''}:(un.audio||{});
+  const isSentPage=!!(PAGES && src.sents && src.sents.length);  // 문장읽기 페이지
+  const A=PAGES?(isSentPage?{sent:src.audio||''}:{word:src.audio||''}):(un.audio||{});
   const types=[]; if(A.word)types.push({k:'word',l:'단어'}); if(A.sent)types.push({k:'sent',l:'문장'});
-  const ST=PAGES?null:(un.st||null);  // 문장 시작시각(있으면 탭재생/하이라이트/반복 활성)
-  const WT=src.wt||null;  // 단어 시작시각(파닉스 등: 단어 탭재생)
-  const words=(src.words||[]).map((w,i)=>'<div class="row selw'+(WT?' play':'')+'"><span class="n">'+(i+1)+'</span><span class="w">'+esc(w.w)+'</span><span class="m">'+esc(w.m)+'</span></div>').join('');
-  const sents=(un.sents||[]).map((s,i)=>'<div class="srow'+(ST?' play':'')+'"><span class="sn">'+(i+1)+'</span><div class="sc"><span class="se">'+esc(s.e)+'</span><span class="sk">'+esc(s.k)+'</span></div></div>').join('');
-  const pgtabs=PAGES?('<div class="pgtabs">'+PAGES.map((p,i)=>'<button class="pgtab'+(i===selP?' on':'')+'" data-pg="'+i+'"><b>'+esc(p.label)+'</b><span>p.'+p.p+'</span></button>').join('')+'</div>'):'';
-  const wordHead=PAGES?('교재 '+src.p+'쪽 순서 · '+src.words.length+'개'):('단어 '+(src.words?src.words.length:0)+'개');
-  const wordHTML=(src.words&&src.words.length)?'<h2>'+wordHead+'</h2><div class="rows">'+words+'</div>':'';
-  const sentHTML=(un.sents&&un.sents.length)?'<h2>문장 '+un.sents.length+'개</h2><div class="rows">'+sents+'</div>':'';
+  const ST=isSentPage?(src.st||null):(PAGES?null:(un.st||null));  // 문장 시작시각(탭재생/하이라이트/반복)
+  const WT=isSentPage?null:(src.wt||null);  // 단어 시작시각(파닉스 등: 단어 탭재생)
+  const SENTSRC=isSentPage?src.sents:(un.sents||[]);
+  const words=(isSentPage?[]:(src.words||[])).map((w,i)=>'<div class="row selw'+(WT?' play':'')+'"><span class="n">'+(i+1)+'</span><span class="w">'+esc(w.w)+'</span><span class="m">'+esc(w.m)+'</span></div>').join('');
+  const sents=SENTSRC.map((s,i)=>'<div class="srow'+(ST?' play':'')+'"><span class="sn">'+(i+1)+'</span><div class="sc"><span class="se">'+esc(s.e)+'</span><span class="sk">'+esc(s.k)+'</span></div></div>').join('');
+  const pgtabs=PAGES?('<div class="pgtabs">'+PAGES.map((p,i)=>{const sub=(p.sub!==undefined?p.sub:(p.p!=null?'p.'+p.p:''));return '<button class="pgtab'+(i===selP?' on':'')+'" data-pg="'+i+'"><b>'+esc(p.label||('세트 '+(i+1)))+'</b>'+(sub?'<span>'+esc(sub)+'</span>':'')+'</button>';}).join('')+'</div>'):'';
+  const wordHead=PAGES?('교재 '+src.p+'쪽 순서 · '+(src.words||[]).length+'개'):('단어 '+(src.words?src.words.length:0)+'개');
+  const wordHTML=(!isSentPage&&src.words&&src.words.length)?'<h2>'+wordHead+'</h2><div class="rows">'+words+'</div>':'';
+  const sentHead=(isSentPage?(esc(src.label||'문장읽기')+' · '):'')+'문장 '+SENTSRC.length+'개';
+  const sentHTML=(SENTSRC.length)?'<h2>'+sentHead+'</h2><div class="rows">'+sents+'</div>':'';
   const toggle= types.length>1 ? '<div class="atog">'+types.map((t,i)=>'<button class="atg'+(i===0?' on':'')+'" data-t="'+t.k+'">'+t.l+' 음원</button>').join('')+'</div>' : '';
   app.innerHTML='<div class="topbar"><button class="chipbtn" data-go="book" data-book="'+b.code+'">← 유닛 목록</button>'+
     '<div class="nav"><button id="uprev">◀ 이전</button><button id="unext">다음 ▶</button></div></div>'+
@@ -237,13 +240,14 @@ function leaf(b,u,selP){
   let curSpd=1, curT=(types.length?types[0].k:'word');
   const listbox=document.getElementById('listbox');
   let hideMean=false, hideKo=false, repeatOn=false, curIdx=-1, boundEnd=null;
-  const hasKo=(un.sents||[]).some(s=>s.k);   // 해석 있는 책만 해석 토글 표시
+  const hasKo=SENTSRC.some(s=>s.k);   // 해석/발음 있으면 토글 표시
+  const koLabel=isSentPage?'발음':'해석';   // 파닉스 문장읽기는 '발음'
   function TIMES(){ return curT==='sent'?ST:(curT==='word'?WT:null); }
   function ROWSEL(){ return curT==='sent'?'.srow':'.row'; }
   function ctrlBar(){
-    if(curT==='sent' && un.sents && un.sents.length){
+    if(curT==='sent' && SENTSRC.length){
       let h='<div class="lctrl">';
-      if(hasKo) h+='<button class="lbtn'+(hideKo?' on':'')+'" id="tgKo">'+(hideKo?'해석 보기':'해석 숨기기')+'</button>';
+      if(hasKo) h+='<button class="lbtn'+(hideKo?' on':'')+'" id="tgKo">'+(hideKo?koLabel+' 보기':koLabel+' 숨기기')+'</button>';
       if(ST) h+='<button class="lbtn'+(repeatOn?' on':'')+'" id="tgRep">🔁 한 문장 반복</button>';
       h+='</div>';
       if(ST) h+='<div class="lhint" id="lhint">'+(repeatOn?'반복 켜짐 — 문장을 누르면 그 문장만 계속 반복돼요 (멈추려면 재생버튼)':'문장을 누르면 그 문장만 재생돼요')+'</div>';
@@ -261,7 +265,7 @@ function leaf(b,u,selP){
   }
   function highlight(){ if(listbox) listbox.querySelectorAll(ROWSEL()).forEach((r,i)=>r.classList.toggle('cur', i===curIdx)); }
   function bindList(){
-    const km=document.getElementById('tgKo'); if(km) km.onclick=()=>{ hideKo=!hideKo; km.classList.toggle('on',hideKo); km.textContent=hideKo?'해석 보기':'해석 숨기기'; listbox.classList.toggle('hidek',hideKo); listbox.querySelectorAll('.srow.rv').forEach(r=>r.classList.remove('rv')); };
+    const km=document.getElementById('tgKo'); if(km) km.onclick=()=>{ hideKo=!hideKo; km.classList.toggle('on',hideKo); km.textContent=hideKo?koLabel+' 보기':koLabel+' 숨기기'; listbox.classList.toggle('hidek',hideKo); listbox.querySelectorAll('.srow.rv').forEach(r=>r.classList.remove('rv')); };
     const mm=document.getElementById('tgMean'); if(mm) mm.onclick=()=>{ hideMean=!hideMean; mm.classList.toggle('on',hideMean); mm.textContent=PAGES?(hideMean?'소리 보기':'소리 숨기기'):(hideMean?'뜻 보기':'뜻 숨기기'); listbox.classList.toggle('hidem',hideMean); listbox.querySelectorAll('.row.rv').forEach(r=>r.classList.remove('rv')); };
     const rp=document.getElementById('tgRep'); if(rp) rp.onclick=()=>{ repeatOn=!repeatOn; rp.classList.toggle('on',repeatOn); const lh=document.getElementById('lhint'); const isw=(curT==='word'); if(lh) lh.textContent=repeatOn?('반복 켜짐 — '+(isw?'단어':'문장')+'를 누르면 그 '+(isw?'단어':'문장')+'만 계속 반복돼요 (멈추려면 재생버튼)'):((isw?'단어':'문장')+'를 누르면 그 '+(isw?'단어':'문장')+'만 재생돼요'); };
     if(curT==='sent') listbox.querySelectorAll('.srow').forEach((r,i)=>r.onclick=()=>{ if(hideKo) r.classList.add('rv'); if(ST) playSeg(i); });
