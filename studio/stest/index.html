@@ -1,0 +1,15 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>발음 후보 듣기</title><style>
+:root{--bg:#f6f7fb;--fg:#1a1d29;--card:#fff;--ac:#3b6fe0}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#15171f;--fg:#e8eaf2;--card:#232633;--ac:#6f95ff}}
+body{background:var(--bg);color:var(--fg);font-family:system-ui,sans-serif;margin:0 auto;padding:20px 16px;max-width:520px}
+h1{font-size:20px}p{opacity:.75;font-size:14px}
+button{display:block;width:100%;margin:10px 0;padding:16px;font-size:18px;border:0;border-radius:12px;background:var(--card);color:var(--fg);box-shadow:0 1px 3px #0002;cursor:pointer;text-align:left}
+button.on{outline:3px solid var(--ac)}
+</style></head><body><h1>"I have a sister." 후보</h1><p>눌러서 들어보시고 가장 자연스러운 번호를 알려주세요. 0번은 지금 배포된 소리(비교용)입니다.</p>
+<button onclick="p('00',this)">현재 배포본(참고용)</button>
+<button onclick="p('01',this)">I have a sister. 1</button>
+<button onclick="p('02',this)">I have a sister. 2</button>
+<button onclick="p('03',this)">I have a sister. 3</button>
+<script>const a=new Audio();function p(t,el){document.querySelectorAll('button').forEach(b=>b.classList.remove('on'));el.classList.add('on');a.src=t+'.mp3?v='+Date.now();a.play()}</script>
+</body></html>
