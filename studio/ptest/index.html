@@ -1,0 +1,18 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>발음 후보 듣기</title><style>
+:root{--bg:#f6f7fb;--fg:#1a1d29;--card:#fff;--ac:#3b6fe0;--mut:#e9ecf5}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#15171f;--fg:#e8eaf2;--card:#232633;--ac:#6f95ff;--mut:#1c1f2a}}
+body{background:var(--bg);color:var(--fg);font-family:system-ui,sans-serif;margin:0 auto;padding:20px 16px;max-width:560px}
+h1{font-size:20px;margin:0 0 6px}p{opacity:.75;font-size:14px;margin:0 0 14px}
+section{background:var(--card);border-radius:14px;padding:14px;margin:12px 0;box-shadow:0 1px 3px #0002}
+h2{font-size:16px;margin:0 0 10px}.row{display:flex;flex-wrap:wrap;gap:8px}
+button{flex:1 1 30%;min-width:90px;padding:14px 8px;font-size:16px;border:0;border-radius:10px;background:var(--mut);color:var(--fg);cursor:pointer}
+button.ref{flex-basis:100%;opacity:.8}button.on{outline:3px solid var(--ac)}
+</style></head><body><h1>발음 후보 듣기</h1><p>단어마다 가장 자연스러운 후보 번호를 알려주세요. (예: eraser 1, watch 2 …)</p>
+<section><h2>스타터1 U7 3번 eraser (이레이썰)</h2><div class="row"><button onclick="p('eraser_0',this)" class="ref">현재 소리 (비교용)</button><button onclick="p('eraser_1',this)">후보 1</button><button onclick="p('eraser_2',this)">후보 2</button></div></section>
+<section><h2>스타터1 U7 8번 watch (와취)</h2><div class="row"><button onclick="p('watch_0',this)" class="ref">현재 소리 (비교용)</button><button onclick="p('watch_1',this)">후보 1</button><button onclick="p('watch_2',this)">후보 2</button><button onclick="p('watch_3',this)">후보 3</button></div></section>
+<section><h2>스타터2 U3 10번 live (리브)</h2><div class="row"><button onclick="p('live_0',this)" class="ref">현재 소리 (비교용)</button><button onclick="p('live_1',this)">후보 1</button><button onclick="p('live_2',this)">후보 2</button></div></section>
+<section><h2>브릿지2 U8 8번 ready (레디)</h2><div class="row"><button onclick="p('ready_0',this)" class="ref">현재 소리 (비교용)</button><button onclick="p('ready_1',this)">후보 1</button><button onclick="p('ready_2',this)">후보 2</button></div></section>
+<section><h2>브릿지2 U8 10번 chef (셰프)</h2><div class="row"><button onclick="p('chef_0',this)" class="ref">현재 소리 (비교용)</button><button onclick="p('chef_1',this)">후보 1</button><button onclick="p('chef_2',this)">후보 2</button><button onclick="p('chef_3',this)">후보 3</button></div></section>
+<script>const a=new Audio();function p(t,el){document.querySelectorAll('button').forEach(b=>b.classList.remove('on'));el.classList.add('on');a.src=t+'.mp3?v='+Date.now();a.play()}</script>
+</body></html>
