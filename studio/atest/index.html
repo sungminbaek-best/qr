@@ -1,0 +1,26 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>a 발음 후보 듣기</title>
+<style>
+ body{font-family:Pretendard,'Malgun Gothic',sans-serif;background:#eef2fb;margin:0;padding:22px;color:#1a2233}
+ h1{font-size:20px;margin:0 0 4px}p.sub{color:#5b6b86;font-size:14px;margin:0 0 18px}
+ .g{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:520px}
+ button{display:flex;align-items:center;justify-content:center;gap:8px;font-size:19px;font-weight:800;
+   padding:20px 10px;border:0;border-radius:14px;background:linear-gradient(160deg,#5b93ff,#2f6bed 70%);
+   color:#fff;box-shadow:0 8px 18px -8px rgba(47,107,237,.6);cursor:pointer}
+ button:active{transform:scale(.97)}
+ .lbl{font-size:13px;color:#5b6b86;text-align:center;margin-top:6px}
+ .note{margin-top:20px;font-size:14px;color:#33415c;max-width:520px;line-height:1.6}
+</style></head><body>
+<h1>🔊 "a"(어) 발음 후보 듣기</h1>
+<p class="sub">버튼을 누르면 소리가 나요. 가장 "어"에 가까운 걸 골라 알려주세요.</p>
+<div class="g" id="g"></div>
+<audio id="au"></audio>
+<p class="note">후보: uh / uhh / um / er / ur / erm / duh / huh / the / unh / ah / eh<br>
+마음에 드는 게 없으면 "더 낮게 / 더 부드럽게" 같은 방향을 말씀해주세요.</p>
+<script>
+const files=[["00_uh","uh"],["01_uhh","uhh"],["03_um","um"],["04_er","er"],["05_ur","ur"],["06_erm","erm"],["07_duh","duh"],["09_huh","huh"],["08_the","the"],["10_unh","unh"],["11_ah","ah"],["12_eh","eh"]];
+const au=document.getElementById('au'),g=document.getElementById('g');
+files.forEach(([f,label])=>{const b=document.createElement('button');b.innerHTML='▶ '+label;
+ b.onclick=()=>{au.src=f+'.mp3?v='+Date.now();au.play();};g.appendChild(b);});
+</script></body></html>
