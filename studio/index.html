@@ -146,7 +146,7 @@
 const BOOKS = window.BOOKS||[];
 const app = document.getElementById('app');
 let curAudio=null;
-const BRANDLINE='<p class="brand"><b>쏠뷰(SolveU)</b> &nbsp;|&nbsp; 저절로시리즈</p>';
+const BRANDLINE='<p class="brand"><a href="/hub/" style="color:var(--blue-ink,#2f6bed);text-decoration:none;font-weight:700">← 쏠뷰 홈</a> &nbsp;·&nbsp; <b>쏠뷰(SolveU)</b> &nbsp;|&nbsp; 저절로시리즈</p>';
 
 function esc(s){ return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
 function bookByCode(c){ return BOOKS.find(b=>b.code===c); }
@@ -176,7 +176,7 @@ function home(){
   };
   const reading=BOOKS.filter(b=>b.track!=='grammar').map(card).join('');
   const grammar=BOOKS.filter(b=>b.track==='grammar').map(card).join('');
-  app.innerHTML='<div style="height:8px"></div>'+
+  app.innerHTML='<div class="topbar"><a class="chipbtn" href="/hub/" style="text-decoration:none">← 쏠뷰 홈</a></div>'+
     '<div class="seclabel">📚 발음 · 독해</div>'+
     '<div class="grid hgrid">'+reading+'</div>'+
     (grammar? '<div class="seclabel" style="margin-top:22px">✍️ 문법 · 쓰기</div><div class="grid ggrid">'+grammar+'</div>':'')+
@@ -199,7 +199,7 @@ function bookView(b){
     const vid=vlist.map(v=>'<a class="ubtn video'+(!hasA?' solo':'')+'" href="'+esc(v.url)+'" target="_blank" rel="noopener">🎬 '+esc(v.label)+'</a>').join('');
     return '<div class="unitcard"><div class="ut">Unit '+un.n+'</div><div class="ubtns">'+a+vid+'</div></div>';
   }).join('');
-  app.innerHTML='<div class="topbar"><button class="chipbtn" data-go="home">← 교재 목록</button></div>'+
+  app.innerHTML='<div class="topbar"><a class="chipbtn" href="/hub/" style="text-decoration:none">← 쏠뷰 홈</a><button class="chipbtn" data-go="home">교재 목록</button></div>'+
     '<div class="head"><span class="kicker">'+esc(b.short)+'</span><h1>유닛 선택</h1></div>'+
     top+'<div class="grid">'+cards+'</div>'+BRANDLINE;
 }
@@ -224,7 +224,7 @@ function leaf(b,u,selP){
   const sentHead=(isSentPage?(esc(src.label||'문장읽기')+' · '):'')+'문장 '+SENTSRC.length+'개';
   const sentHTML=(SENTSRC.length)?'<h2>'+sentHead+'</h2><div class="rows">'+sents+'</div>':'';
   const toggle= types.length>1 ? '<div class="atog">'+types.map((t,i)=>'<button class="atg'+(i===0?' on':'')+'" data-t="'+t.k+'">'+t.l+' 음원</button>').join('')+'</div>' : '';
-  app.innerHTML='<div class="topbar"><button class="chipbtn" data-go="book" data-book="'+b.code+'">← 유닛 목록</button>'+
+  app.innerHTML='<div class="topbar"><button class="chipbtn" data-go="book" data-book="'+b.code+'">← 유닛 목록</button><a class="chipbtn" href="/hub/" style="text-decoration:none">쏠뷰 홈</a>'+
     '<div class="nav"><button id="uprev">◀ 이전</button><button id="unext">다음 ▶</button></div></div>'+
     '<div class="head"><span class="kicker">'+esc(b.short)+'</span><div class="unit">Unit '+u+'</div></div>'+
     pgtabs+
