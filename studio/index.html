@@ -37,7 +37,7 @@
   .bookcard{ display:flex; align-items:center; gap:12px; text-align:left;
     background:var(--card); border:1px solid var(--line); border-radius:16px; padding:14px 15px; box-shadow:var(--shadow);
     font:inherit; color:var(--ink); cursor:pointer; }
-  .bookcard .bk{ font-size:15px; font-weight:800; line-height:1.3; }
+  .bookcard .bk{ font-size:15px; font-weight:800; line-height:1.3; white-space:nowrap; min-width:0; overflow:hidden; text-overflow:ellipsis; }
   .bookcard.off{ opacity:.55; cursor:default; box-shadow:none; background:#f7f9fd; }
   .bookcard.off .soon{ color:var(--sub); font-weight:700; font-size:12px; margin-left:auto; }
   .bookcard .stepnum{ flex:none; width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center;
@@ -47,6 +47,8 @@
   .seclabel .secsub{ font-size:12px; font-weight:600; color:var(--sub); margin-left:6px; }
   @media (min-width:600px){ .grid.hgrid{ grid-template-columns:repeat(3,1fr); } }
   @media (min-width:1040px){ .grid.hgrid{ grid-template-columns:repeat(4,1fr); } }
+  .grid.ggrid{ grid-template-columns:1fr; }   /* 문법·쓰기: 긴 책이름 한 줄 → 모바일 1열 */
+  @media (min-width:600px){ .grid.ggrid{ grid-template-columns:1fr 1fr; } }
 
   .unitcard{ background:var(--card); border:1px solid var(--line); border-radius:16px; padding:13px; box-shadow:var(--shadow); }
   .unitcard .ut{ font-size:15px; font-weight:800; margin-bottom:10px; }
@@ -175,9 +177,9 @@ function home(){
   const reading=BOOKS.filter(b=>b.track!=='grammar').map(card).join('');
   const grammar=BOOKS.filter(b=>b.track==='grammar').map(card).join('');
   app.innerHTML='<div style="height:8px"></div>'+
-    '<div class="seclabel">📚 파닉스 · 리딩</div>'+
+    '<div class="seclabel">📚 발음 · 독해</div>'+
     '<div class="grid hgrid">'+reading+'</div>'+
-    (grammar? '<div class="seclabel" style="margin-top:22px">✍️ 문법 · 쓰기</div><div class="grid hgrid">'+grammar+'</div>':'')+
+    (grammar? '<div class="seclabel" style="margin-top:22px">✍️ 문법 · 쓰기</div><div class="grid ggrid">'+grammar+'</div>':'')+
     BRANDLINE;
 }
 
