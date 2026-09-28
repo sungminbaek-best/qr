@@ -1,0 +1,408 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>저절로 시험지 생성기</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f6f8fb; --card:#fff; --ink:#1f2430; --sub:#67707f; --muted:#9aa3b2;
+    --line:#e6e9f0; --line2:#d6dbe6; --book:#4c6ef5; --bookBg:#eaf0ff;
+    --warn:#c07f12; --warnBg:#fbf1dc; --ok:#2b9d5f; --okBg:#e6f6ec;
+    --shadow:0 6px 24px rgba(31,36,48,.07);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{background:var(--bg); color:var(--ink);
+    font-family:"Pretendard","Malgun Gothic","맑은 고딕",system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased; line-height:1.55;}
+  .wrap{max-width:1180px; margin:0 auto; padding:20px 16px 60px;}
+  header{display:flex; align-items:center; gap:10px; padding:6px 2px 16px;}
+  .logo{font-size:20px; font-weight:800; letter-spacing:-.02em;}
+  .logo b{color:var(--book)}
+  .tag{font-size:13px; color:var(--muted); margin-left:auto}
+  .back{display:inline-flex; align-items:center; gap:6px; font-size:14px; color:var(--sub);
+    text-decoration:none; padding:6px 2px; margin-bottom:8px}
+  .back:hover{color:var(--ink)}
+  h1{font-size:19px; font-weight:700; margin:0 0 4px}
+  .desc{font-size:14px; color:var(--sub); margin:0 0 16px}
+  /* 게이트 */
+  .gate{max-width:420px; margin:40px auto; background:var(--card); border:1px solid var(--line);
+    border-radius:18px; padding:28px 24px; box-shadow:var(--shadow); text-align:center}
+  .gate .lockic{font-size:32px}
+  .gate h2{font-size:18px; margin:10px 0 4px}
+  .gate p{font-size:13.5px; color:var(--sub); margin:0 0 18px}
+  .gate input{width:100%; height:48px; border:1.5px solid var(--line2); border-radius:12px;
+    font-size:16px; text-align:center; letter-spacing:.06em; padding:0 12px; outline:none; font-family:inherit}
+  .gate input:focus{border-color:var(--book)}
+  .gate button.go{width:100%; height:48px; margin-top:12px; border:none; border-radius:12px;
+    background:var(--book); color:#fff; font-size:16px; font-weight:700; cursor:pointer; font-family:inherit}
+  .err{color:#d1435b; font-size:13px; min-height:18px; margin-top:10px}
+  .hint{font-size:12px; color:var(--muted); margin-top:14px}
+  /* 레이아웃 */
+  .layout{display:grid; grid-template-columns:340px 1fr; gap:18px; align-items:start}
+  @media(max-width:860px){.layout{grid-template-columns:1fr}}
+  .panel{background:var(--card); border:1px solid var(--line); border-radius:16px; padding:16px 16px 18px;
+    box-shadow:var(--shadow); position:sticky; top:12px}
+  .fld{margin-bottom:14px}
+  .fld > label{display:block; font-size:12.5px; font-weight:700; color:var(--sub); margin-bottom:6px}
+  select,input[type=text],input[type=number]{width:100%; height:40px; border:1.5px solid var(--line2);
+    border-radius:10px; padding:0 10px; font-size:14px; font-family:inherit; outline:none; background:#fff}
+  select:focus,input:focus{border-color:var(--book)}
+  .units{display:flex; flex-wrap:wrap; gap:6px}
+  .units label{display:inline-flex; align-items:center; gap:4px; font-size:13px; background:#f3f5f9;
+    border:1px solid var(--line); border-radius:8px; padding:4px 9px; cursor:pointer; user-select:none}
+  .units label.on{background:var(--bookBg); border-color:#bcccff; color:#2f52c9; font-weight:700}
+  .units input{display:none}
+  .mini{font-size:12px; color:var(--book); background:none; border:none; cursor:pointer; padding:2px 4px}
+  .types{display:flex; flex-direction:column; gap:7px}
+  .trow{display:flex; align-items:center; gap:8px; font-size:13.5px; background:#f8f9fc;
+    border:1px solid var(--line); border-radius:10px; padding:7px 9px}
+  .trow.on{background:var(--bookBg); border-color:#bcccff}
+  .trow input[type=checkbox]{width:17px; height:17px; accent-color:var(--book); flex:none}
+  .trow .nm{flex:1; cursor:pointer}
+  .trow .cnt{width:56px; height:32px; text-align:center; padding:0}
+  .opts{display:flex; flex-wrap:wrap; gap:10px 14px; font-size:13px}
+  .opts label{display:inline-flex; align-items:center; gap:6px; cursor:pointer}
+  .opts input[type=checkbox]{width:16px; height:16px; accent-color:var(--book)}
+  .row2{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+  .btnbar{display:flex; gap:8px; margin-top:6px}
+  button.act{flex:1; height:46px; border:none; border-radius:12px; font-size:15px; font-weight:700;
+    cursor:pointer; font-family:inherit}
+  button.primary{background:var(--book); color:#fff}
+  button.primary:hover{filter:brightness(1.05)}
+  button.ghost{background:#eef1f6; color:#454e5e}
+  button.ghost:hover{background:#e4e8ef}
+  .toprow{display:flex; align-items:center; gap:10px; margin-bottom:10px; flex-wrap:wrap}
+  .seg{display:inline-flex; background:#eef1f6; border-radius:10px; padding:3px}
+  .seg button{border:none; background:none; font-family:inherit; font-size:13px; font-weight:700; color:var(--sub);
+    padding:6px 14px; border-radius:8px; cursor:pointer}
+  .seg button.on{background:#fff; color:var(--book); box-shadow:0 1px 3px rgba(0,0,0,.08)}
+  .ansToggle{margin-left:auto; font-size:13px; display:inline-flex; align-items:center; gap:6px; color:var(--sub); cursor:pointer}
+  .ansToggle input{width:16px;height:16px;accent-color:var(--book)}
+  .printbtn{height:40px; padding:0 16px; border:none; border-radius:10px; background:var(--ok); color:#fff;
+    font-weight:700; font-size:14px; cursor:pointer; font-family:inherit}
+  .printbtn:hover{filter:brightness(1.04)}
+  /* 시험지 미리보기 */
+  .paperwrap{background:#e9edf3; border-radius:16px; padding:20px; overflow:auto}
+  .paper{background:#fff; width:210mm; min-height:297mm; margin:0 auto 16px; padding:16mm 15mm;
+    box-shadow:0 2px 12px rgba(0,0,0,.12); position:relative; font-size:13px; color:#111}
+  .paper .wm{position:absolute; inset:0; overflow:hidden; pointer-events:none; z-index:0}
+  .paper .wm span{position:absolute; font-size:34px; font-weight:800; color:rgba(76,110,245,.05);
+    white-space:nowrap; transform:rotate(-28deg)}
+  .paper .content{position:relative; z-index:1}
+  .phead{border-bottom:2.5px solid #111; padding-bottom:9px; margin-bottom:6px}
+  .phead .ttl{font-size:19px; font-weight:800; letter-spacing:-.01em}
+  .phead .meta{display:flex; gap:14px; font-size:12px; color:#555; margin-top:5px; flex-wrap:wrap}
+  .pinfo{display:flex; justify-content:flex-end; gap:16px; font-size:12.5px; margin:8px 0 14px}
+  .pinfo b{font-weight:700}
+  .pinfo .box{border:1px solid #999; border-radius:6px; padding:3px 10px; min-width:70px; text-align:center}
+  .sec{margin:0 0 16px; break-inside:avoid}
+  .sec h3{font-size:14px; font-weight:800; margin:0 0 8px; padding:5px 10px; background:#f0f3fa;
+    border-left:4px solid var(--book); border-radius:0 6px 6px 0}
+  .qgrid{display:grid; grid-template-columns:1fr 1fr; gap:4px 28px}
+  .qgrid.one{grid-template-columns:1fr}
+  .q{display:flex; gap:8px; padding:5px 2px; font-size:13.5px; align-items:baseline; break-inside:avoid}
+  .q .n{font-weight:700; color:#444; flex:none; min-width:20px}
+  .q .body{flex:1}
+  .q .prompt{font-weight:600}
+  .q .pos{font-size:11px; color:#888; margin-left:4px}
+  .blank{display:inline-block; border-bottom:1px solid #333; min-width:120px; height:1.1em; vertical-align:baseline; margin-left:6px}
+  .blankline{border-bottom:1px solid #bbb; height:1.5em; margin-top:4px}
+  .choices{display:flex; flex-wrap:wrap; gap:4px 16px; margin-top:4px; font-size:13px; color:#222}
+  .choices span{white-space:nowrap}
+  .ans{color:#d21f3c; font-weight:700}
+  .ansPaper .ttl::after{content:" · 정답지"; color:#d21f3c; font-size:14px}
+  .empty{color:#9aa3b2; text-align:center; padding:60px 20px; font-size:14px}
+  .warnmsg{background:var(--warnBg); color:#8a5a0c; border-radius:10px; padding:10px 12px; font-size:13px; margin-bottom:10px}
+  .hidden{display:none}
+  @media print{
+    body{background:#fff}
+    .wrap{max-width:none; padding:0}
+    header,.back,.panel,.toprow,.paperwrap{all:unset}
+    header,.back,.panel,.toprow{display:none !important}
+    .layout{display:block}
+    .paperwrap{background:none; padding:0; overflow:visible}
+    .paper{width:auto; min-height:auto; margin:0; padding:12mm 12mm; box-shadow:none;
+      page-break-after:always}
+    .paper:last-child{page-break-after:auto}
+    @page{size:A4; margin:0}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <span class="logo">저절로<b>.</b></span>
+    <span class="tag">시험지 생성기</span>
+  </header>
+  <a class="back" href="../index.html">← 교사 포털</a>
+
+  <!-- 게이트 -->
+  <section id="gate" class="hidden">
+    <div class="gate">
+      <div class="lockic">🔒</div>
+      <h2>선생님 코드를 입력하세요</h2>
+      <p>종이책 안쪽에 있는 코드를 한 번만 입력하면 됩니다.</p>
+      <input id="code" type="text" autocomplete="off" placeholder="코드 입력"
+        onkeydown="if(event.key==='Enter')tryUnlock()">
+      <button class="go" onclick="tryUnlock()">열기</button>
+      <div class="err" id="err"></div>
+      <div class="hint">한 번 입력하면 이 기기에서 다음부터 바로 열립니다.</div>
+    </div>
+  </section>
+
+  <!-- 본문 -->
+  <section id="app" class="hidden">
+    <h1>시험지 자동 생성기</h1>
+    <p class="desc">책·유닛·유형을 고르고 <b>시험지 만들기</b>를 누르면 인쇄용 시험지가 나옵니다. (Ctrl+P → PDF로 저장)</p>
+    <div class="layout">
+      <!-- 컨트롤 -->
+      <div class="panel">
+        <div class="fld">
+          <label>교재</label>
+          <select id="book" onchange="onBook()"></select>
+        </div>
+        <div class="fld">
+          <label>유닛 <button class="mini" onclick="allUnits(true)">전체</button><button class="mini" onclick="allUnits(false)">해제</button></label>
+          <div class="units" id="units"></div>
+        </div>
+        <div class="fld">
+          <label>문제 유형 · 문항수</label>
+          <div class="types" id="types"></div>
+        </div>
+        <div class="fld">
+          <label>옵션</label>
+          <div class="opts">
+            <label><input type="checkbox" id="optHint"> 영작 첫글자 힌트</label>
+            <label><input type="checkbox" id="optShuffle" checked> 유닛 섞기</label>
+          </div>
+        </div>
+        <div class="fld row2">
+          <div><label>보기 개수(선택형)</label><input type="number" id="nchoice" value="4" min="3" max="5"></div>
+          <div><label>형(A/B/C)</label>
+            <select id="variant"><option value="1">A형</option><option value="2">B형</option><option value="3">C형</option></select>
+          </div>
+        </div>
+        <div class="fld">
+          <label>시험지 제목</label>
+          <input type="text" id="title" placeholder="예: 단어 시험">
+        </div>
+        <div class="fld">
+          <label>학원명 (시험지 상단 + 워터마크)</label>
+          <input type="text" id="acad" placeholder="예: OO영어학원" oninput="renderAll()">
+        </div>
+        <div class="btnbar">
+          <button class="act primary" onclick="generate()">시험지 만들기</button>
+          <button class="act ghost" onclick="reseed()">다시 섞기</button>
+        </div>
+      </div>
+
+      <!-- 미리보기 -->
+      <div>
+        <div class="toprow">
+          <div class="seg">
+            <button id="tabS" class="on" onclick="showTab('S')">학생용</button>
+            <button id="tabT" onclick="showTab('T')">정답지</button>
+          </div>
+          <button class="printbtn" onclick="window.print()">🖨 인쇄 / PDF 저장</button>
+        </div>
+        <div class="paperwrap" id="preview">
+          <div class="paper"><div class="empty">왼쪽에서 설정을 고르고 <b>시험지 만들기</b>를 눌러 주세요.</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script src="gen_data.js"></script>
+<script>
+/* ===== 설정 ===== */
+const TEACHER_CODES = ["jeol2026"];
+const OK_KEY = "jeol_teacher_ok";
+
+const TYPES = [
+  {id:"w_e2k", grp:"단어", nm:"영단어 → 뜻 쓰기", def:15},
+  {id:"w_k2e", grp:"단어", nm:"뜻 → 영단어 쓰기", def:15},
+  {id:"w_e2k_mc", grp:"단어", nm:"영단어 뜻 고르기(객관식)", def:0},
+  {id:"w_k2e_mc", grp:"단어", nm:"뜻 보고 영단어 고르기(객관식)", def:0},
+  {id:"s_e2k", grp:"문장", nm:"문장 해석 쓰기(영→한)", def:0},
+  {id:"s_k2e", grp:"문장", nm:"문장 영작(한→영)", def:0},
+  {id:"s_dict", grp:"문장", nm:"받아쓰기(빈 줄)", def:0},
+];
+const WORD_TYPES = new Set(["w_e2k","w_k2e","w_e2k_mc","w_k2e_mc"]);
+
+let CUR = null; // 생성된 문제 데이터
+
+/* ===== 게이트 ===== */
+function boot(){
+  if(localStorage.getItem(OK_KEY)==="1"){ openApp(); }
+  else { show("gate"); setTimeout(()=>document.getElementById("code").focus(),80); }
+}
+function show(id){ ["gate","app"].forEach(v=>document.getElementById(v).classList.toggle("hidden", v!==id)); }
+function tryUnlock(){
+  const v=(document.getElementById("code").value||"").trim().toLowerCase();
+  if(TEACHER_CODES.some(c=>c.toLowerCase()===v)){ try{localStorage.setItem(OK_KEY,"1")}catch(e){}; openApp(); }
+  else document.getElementById("err").textContent="코드가 맞지 않습니다. 다시 확인해 주세요.";
+}
+function openApp(){ show("app"); initControls(); }
+
+/* ===== 컨트롤 초기화 ===== */
+function initControls(){
+  const bsel=document.getElementById("book");
+  bsel.innerHTML = GEN_BOOKS.map(b=>`<option value="${b.code}">${b.name}</option>`).join("");
+  const t=document.getElementById("types");
+  t.innerHTML = TYPES.map(ty=>`
+    <div class="trow ${ty.def>0?'on':''}" data-id="${ty.id}">
+      <input type="checkbox" ${ty.def>0?'checked':''} onchange="toggleRow(this)">
+      <span class="nm" onclick="this.previousElementSibling.click()">${ty.nm}</span>
+      <input class="cnt" type="number" min="0" max="99" value="${ty.def}">
+    </div>`).join("");
+  onBook();
+}
+function toggleRow(cb){ cb.closest(".trow").classList.toggle("on", cb.checked); }
+function curBook(){ return GEN_BOOKS.find(b=>b.code===document.getElementById("book").value); }
+function onBook(){
+  const b=curBook();
+  document.getElementById("units").innerHTML = b.units.map(u=>`
+    <label class="on"><input type="checkbox" value="${u.u}" checked onchange="this.closest('label').classList.toggle('on',this.checked)">U${u.u}</label>`).join("");
+}
+function allUnits(on){
+  document.querySelectorAll("#units input").forEach(c=>{c.checked=on; c.closest("label").classList.toggle("on",on);});
+}
+function selectedUnits(){
+  return [...document.querySelectorAll("#units input:checked")].map(c=>+c.value);
+}
+function selectedTypes(){
+  return [...document.querySelectorAll("#types .trow")].filter(r=>r.querySelector("input[type=checkbox]").checked)
+    .map(r=>({id:r.dataset.id, n:Math.max(0,+r.querySelector(".cnt").value||0)})).filter(t=>t.n>0);
+}
+
+/* ===== 랜덤(시드) ===== */
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+function shuffle(arr,rnd){const a=arr.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(rnd()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function seedFrom(str){let h=2166136261;for(let i=0;i<str.length;i++){h^=str.charCodeAt(i);h=Math.imul(h,16777619);}return h>>>0;}
+
+/* ===== 생성 ===== */
+let RESEED=0;
+function reseed(){ RESEED++; if(CUR) generate(); }
+function generate(){
+  const b=curBook(), units=selectedUnits(), types=selectedTypes();
+  const variant=document.getElementById("variant").value;
+  if(!units.length){ alert("유닛을 하나 이상 선택하세요."); return; }
+  if(!types.length){ alert("문제 유형을 하나 이상 선택하세요."); return; }
+
+  const uset=new Set(units);
+  let words=[], sents=[];
+  b.units.filter(u=>uset.has(u.u)).forEach(u=>{ words=words.concat(u.words); sents=sents.concat(u.sents); });
+  // 중복 영단어 제거(첫 등장 유지)
+  const seen=new Set(); words=words.filter(w=>{const k=w.e.toLowerCase(); if(seen.has(k))return false; seen.add(k); return true;});
+
+  const doShuffle=document.getElementById("optShuffle").checked;
+  const hint=document.getElementById("optHint").checked;
+  const nchoice=Math.min(5,Math.max(3,+document.getElementById("nchoice").value||4));
+  const baseSeed=seedFrom(b.code+"|"+units.join(",")+"|"+variant+"|"+RESEED);
+
+  const allK=[...new Set(words.map(w=>w.k))], allE=[...new Set(words.map(w=>w.e))];
+  const sections=[];
+  types.forEach((t,ti)=>{
+    const rnd=mulberry32(baseSeed + ti*7919);
+    const isWord=WORD_TYPES.has(t.id);
+    let pool = isWord ? words : sents;
+    pool = doShuffle ? shuffle(pool,rnd) : pool.slice();
+    const items = pool.slice(0, Math.min(t.n, pool.length));
+    const meta = TYPES.find(x=>x.id===t.id);
+    const qs = items.map(it=>buildQ(t.id, it, {rnd,nchoice,hint,allK,allE}));
+    sections.push({title:meta.nm, id:t.id, isWord, qs});
+  });
+  CUR={book:b, sections, units};
+  renderAll();
+}
+function pickDistractors(correct, pool, n, rnd){
+  const cand=pool.filter(x=>x!==correct);
+  const sh=shuffle(cand,rnd).slice(0,Math.max(0,n-1));
+  return sh;
+}
+function buildQ(type, it, ctx){
+  const {rnd,nchoice,hint,allK,allE}=ctx;
+  if(type==="w_e2k") return {prompt:it.e, pos:it.p, answer:it.k, kind:"write"};
+  if(type==="w_k2e"){
+    const a=it.e; const h=hint?(a.replace(/[A-Za-z]/, m=>m).charAt(0)+" _ _"):"";
+    return {prompt:it.k, answer:a, hint:hint?firstLetterHint(a):"", kind:"write"};
+  }
+  if(type==="w_e2k_mc"){
+    const opts=shuffle([it.k, ...pickDistractors(it.k, allK, nchoice, rnd)], rnd);
+    return {prompt:it.e, pos:it.p, options:opts, answer:it.k, answerIdx:opts.indexOf(it.k), kind:"mc"};
+  }
+  if(type==="w_k2e_mc"){
+    const opts=shuffle([it.e, ...pickDistractors(it.e, allE, nchoice, rnd)], rnd);
+    return {prompt:it.k, options:opts, answer:it.e, answerIdx:opts.indexOf(it.e), kind:"mc"};
+  }
+  if(type==="s_e2k") return {prompt:it.e, answer:it.k, kind:"line"};
+  if(type==="s_k2e") return {prompt:it.k, answer:it.e, kind:"line"};
+  if(type==="s_dict") return {prompt:"", answer:it.e, sub:it.k, kind:"line"};
+  return {prompt:it.e, answer:it.k, kind:"write"};
+}
+function firstLetterHint(s){ const m=s.match(/[A-Za-z]/); return m? m[0]+"…":""; }
+const CIRC=["①","②","③","④","⑤"];
+
+/* ===== 렌더 ===== */
+let TAB="S";
+function showTab(t){ TAB=t; document.getElementById("tabS").classList.toggle("on",t==="S");
+  document.getElementById("tabT").classList.toggle("on",t==="T"); renderAll(); }
+function esc(s){return (s==null?"":String(s)).replace(/[&<>]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[m]));}
+
+function renderAll(){
+  const host=document.getElementById("preview");
+  if(!CUR){ return; }
+  const acad=(document.getElementById("acad").value||"").trim();
+  const title=(document.getElementById("title").value||"").trim() || (CUR.sections.some(s=>s.isWord)&&!CUR.sections.some(s=>!s.isWord)?"단어 시험":"저절로 시험지");
+  const variant=document.getElementById("variant").options[document.getElementById("variant").selectedIndex].text;
+  const uLabel="Unit "+CUR.units.join(", ");
+  const showAns = (TAB==="T");
+  host.innerHTML = paperHTML({title, acad, book:CUR.book.name, uLabel, variant, showAns});
+}
+function paperHTML({title,acad,book,uLabel,variant,showAns}){
+  const wm = acad ? `<div class="wm">${Array.from({length:18}).map((_,i)=>`<span style="top:${(i%6)*52}px;left:${Math.floor(i/6)*360-60}px">${esc(acad)}</span>`).join("")}</div>`:"";
+  let qno=0;
+  const secs = CUR.sections.map(sec=>{
+    const one = !sec.isWord || sec.qs.some(q=>q.kind!=="write"&&q.kind!=="mc") ? true : false;
+    const wide = sec.isWord && sec.qs.every(q=>q.kind==="write");
+    const gridCls = wide ? "qgrid" : "qgrid one";
+    const items = sec.qs.map(q=>{ qno++; return qHTML(qno,q,showAns); }).join("");
+    return `<div class="sec"><h3>${esc(sec.title)} <span style="font-weight:600;color:#888;font-size:12px">(${sec.qs.length}문항)</span></h3>
+      <div class="${gridCls}">${items}</div></div>`;
+  }).join("");
+  return `<div class="paper ${showAns?'ansPaper':''}">${wm}<div class="content">
+    <div class="phead">
+      <div class="ttl">${esc(title)}</div>
+      <div class="meta"><span>📘 ${esc(book)} · ${esc(uLabel)}</span><span>${esc(variant)}</span>${acad?`<span>🏫 ${esc(acad)}</span>`:""}</div>
+    </div>
+    <div class="pinfo"><span>이름 <span class="box"></span></span><span>날짜 <span class="box"></span></span><span>점수 <span class="box"></span></span></div>
+    ${secs}
+  </div></div>`;
+}
+function qHTML(n,q,showAns){
+  if(q.kind==="mc"){
+    const ch=q.options.map((o,i)=>`<span>${CIRC[i]} ${esc(o)}${showAns&&i===q.answerIdx?' <span class="ans">✔</span>':''}</span>`).join("");
+    return `<div class="q"><span class="n">${n}.</span><span class="body"><span class="prompt">${esc(q.prompt)}</span>${q.pos?`<span class="pos">${esc(q.pos)}</span>`:""}
+      <div class="choices">${ch}</div></span></div>`;
+  }
+  if(q.kind==="line"){
+    const prompt = q.prompt ? `<span class="prompt">${esc(q.prompt)}</span>` : `<span style="color:#aaa">( 불러주는 문장 받아쓰기 )</span>`;
+    const ansOrLine = showAns ? `<div class="blankline" style="border:none"><span class="ans">${esc(q.answer)}</span></div>`
+                              : `<div class="blankline"></div>`;
+    return `<div class="q" style="flex-direction:column;align-items:stretch"><div style="display:flex;gap:8px"><span class="n">${n}.</span><span class="body">${prompt}${q.sub&&showAns?`<span class="pos">${esc(q.sub)}</span>`:""}</span></div>${ansOrLine}</div>`;
+  }
+  // write
+  const tail = showAns ? `<span class="blank"><span class="ans">${esc(q.answer)}</span></span>`
+                       : `<span class="blank"></span>${q.hint?`<span class="pos">${esc(q.hint)}</span>`:""}`;
+  return `<div class="q"><span class="n">${n}.</span><span class="body"><span class="prompt">${esc(q.prompt)}</span>${q.pos?`<span class="pos">${esc(q.pos)}</span>`:""}${tail}</span></div>`;
+}
+
+boot();
+</script>
+</body>
+</html>
