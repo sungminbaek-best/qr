@@ -51,7 +51,7 @@ section{padding:84px 0}
 .bk .cv{aspect-ratio:3/4;border-radius:10px;background:var(--panel);display:grid;place-items:center;overflow:hidden}
 .bk .cv img{width:80%;border-radius:4px;box-shadow:0 10px 22px rgba(12,16,32,.18)}
 .bk .nm{font-size:15.5px;font-weight:800;margin-top:11px}
-.bk .gr{font-size:12px;color:var(--sub);margin-top:4px;line-height:1.45}
+.bk .gr{font-size:12px;color:var(--sub);margin-top:4px;line-height:1.45}.bk .lv{font-size:11.5px;color:var(--mute);margin-top:3px;font-weight:600;white-space:nowrap}
 .bk .ch{display:flex;gap:5px;margin-top:auto;padding-top:10px;flex-wrap:wrap}
 .bk .ch span{font-size:10.5px;font-weight:700;padding:4px 8px;border-radius:7px}
 .bk .ch .au{background:#e2e9ff;color:#2b45c4}.bk .ch .vd{background:#efe2ff;color:#7a34c7}
@@ -155,20 +155,20 @@ window.HUB = {
   },
   COVER:c=>`covers/${c}.webp`,
   BOOKS:[
-    {c:"ph1",s:"ph",nm:"파닉스 1",gr:"소리 규칙으로 읽기 완성 · 초1~2",v:1},
-    {c:"ph2",s:"ph",nm:"파닉스 2",gr:"소리 규칙으로 읽기 완성 · 초1~2",v:1},
-    {c:"rst1",s:"rd",nm:"스타터 1",gr:"파닉스 다음, 첫 독해 · 초2~3"},
-    {c:"rst2",s:"rd",nm:"스타터 2",gr:"파닉스 다음, 첫 독해 · 초2~3"},
-    {c:"rbr1",s:"rd",nm:"브릿지 1",gr:"품사·시제로 문장 이해 · 초3~4",v:1},
-    {c:"rbr2",s:"rd",nm:"브릿지 2",gr:"품사·시제로 문장 이해 · 초3~4",v:1},
-    {c:"rin1",s:"rd",nm:"입문 1",gr:"감이 아닌 정확한 해석 · 초4~5"},
-    {c:"rin2",s:"rd",nm:"입문 2",gr:"감이 아닌 정확한 해석 · 초4~5"},
-    {c:"rba1",s:"rd",nm:"기본 1",gr:"문장 구조가 보이는 독해 · 초6~중1",v:1},
-    {c:"rba2",s:"rd",nm:"기본 2",gr:"문장 구조가 보이는 독해 · 초6~중1",v:1},
-    {c:"rmo1",s:"rd",nm:"첫모의고사 1",gr:"고등 모의고사 첫걸음 · 중2~중3",v:1},
-    {c:"rmo2",s:"rd",nm:"첫모의고사 2",gr:"고등 모의고사 첫걸음 · 중2~중3",v:1},
-    {c:"gw1",s:"gw",nm:"그래머&라이팅 1",gr:"쓰면서 익히는 첫 문법 · 초3~4",v:1},
-    {c:"gw2",s:"gw",nm:"그래머&라이팅 2",gr:"쓰면서 익히는 첫 문법 · 초3~4",v:1}
+    {c:"ph1",s:"ph",nm:"파닉스 1",gr:"소리 규칙으로 읽기 완성",lv:"초1~2",v:1},
+    {c:"ph2",s:"ph",nm:"파닉스 2",gr:"소리 규칙으로 읽기 완성",lv:"초1~2",v:1},
+    {c:"rst1",s:"rd",nm:"스타터 1",gr:"파닉스 다음, 첫 독해",lv:"초2~3"},
+    {c:"rst2",s:"rd",nm:"스타터 2",gr:"파닉스 다음, 첫 독해",lv:"초2~3"},
+    {c:"rbr1",s:"rd",nm:"브릿지 1",gr:"품사·시제로 문장 이해",lv:"초3~4",v:1},
+    {c:"rbr2",s:"rd",nm:"브릿지 2",gr:"품사·시제로 문장 이해",lv:"초3~4",v:1},
+    {c:"rin1",s:"rd",nm:"입문 1",gr:"감이 아닌 정확한 해석",lv:"초4~5"},
+    {c:"rin2",s:"rd",nm:"입문 2",gr:"감이 아닌 정확한 해석",lv:"초4~5"},
+    {c:"rba1",s:"rd",nm:"기본 1",gr:"문장 구조가 보이는 독해",lv:"초6~중1",v:1},
+    {c:"rba2",s:"rd",nm:"기본 2",gr:"문장 구조가 보이는 독해",lv:"초6~중1",v:1},
+    {c:"rmo1",s:"rd",nm:"첫모의고사 1",gr:"고등 모의고사 첫걸음",lv:"중2~중3",v:1},
+    {c:"rmo2",s:"rd",nm:"첫모의고사 2",gr:"고등 모의고사 첫걸음",lv:"중2~중3",v:1},
+    {c:"gw1",s:"gw",nm:"그래머&라이팅 1",gr:"쓰면서 익히는 첫 문법",lv:"초3~4",v:1},
+    {c:"gw2",s:"gw",nm:"그래머&라이팅 2",gr:"쓰면서 익히는 첫 문법",lv:"초3~4",v:1}
   ],
   REVIEWS:[
     {r:"영어학원을 운영하고 있습니다. 파닉스가 약한 초등 고학년 친구들은 모두 이 교재를 활용하고 있어요. 확실히 아이들이 이해하는 게 시간이 흐르면서 눈에 보입니다.",role:"원장",book:"파닉스",who:"gogo***"},
@@ -216,7 +216,7 @@ window.HUB = {
 <script>
 const {CFG,BOOKS,REVIEWS,COVER,LIB}=HUB,$=s=>document.querySelector(s);
 const grid=$("#grid");
-function render(f){grid.innerHTML=BOOKS.filter(b=>f==="all"||f===b.s).map(b=>`<a class="bk" href="${CFG.STUDIO}${b.c}"><div class="cv"><img src="${COVER(b.c)}" alt="${b.nm}"></div><div class="nm">${b.nm}</div><div class="gr">${b.gr}</div><div class="ch"><span class="au">🔊 음원</span>${b.v?'<span class="vd">🎬 강의</span>':''}</div></a>`).join("");}
+function render(f){grid.innerHTML=BOOKS.filter(b=>f==="all"||f===b.s).map(b=>`<a class="bk" href="${CFG.STUDIO}${b.c}"><div class="cv"><img src="${COVER(b.c)}" alt="${b.nm}"></div><div class="nm">${b.nm}</div><div class="gr">${b.gr}</div><div class="lv">${b.lv||""}</div><div class="ch"><span class="au">🔊 음원</span>${b.v?'<span class="vd">🎬 강의</span>':''}</div></a>`).join("");}
 render("all");
 $("#seg").addEventListener("click",e=>{const f=e.target.dataset.f;if(!f)return;$("#seg").querySelectorAll("button").forEach(b=>b.classList.toggle("on",b.dataset.f===f));render(f);});
 $("#rvg").innerHTML=REVIEWS.map(v=>`<div class="rv"><div class="st">★★★★★</div><q>${v.r}</q><div class="who"><b>${v.role}</b>${v.book} · ${v.who}</div></div>`).join("");
