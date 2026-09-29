@@ -60,10 +60,11 @@ window.SOLVEU = {
     $$(".store").forEach(function (a) { if (!a.getAttribute("href")) a.href = S.STORE; a.target = "_blank"; a.rel = "noopener"; });
     $$(".biz").forEach(function (e) { e.textContent = S.BIZ; });
     var nav = $("#nav"); if (nav) addEventListener("scroll", function () { nav.classList.toggle("scrolled", scrollY > 8); }, { passive: true });
-    if (!("IntersectionObserver" in window)) { document.documentElement.classList.add("no-io"); return; }
+    /* 첫 화면 아래에 있는 요소만 숨겼다가 보일 때 올라오게 (첫 화면·IO 미지원·숨은 탭에선 항상 보임) */
+    if (!("IntersectionObserver" in window) || matchMedia("(prefers-reduced-motion: reduce)").matches || document.visibilityState === "hidden") return;
     var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }); }, { rootMargin: "0px 0px -6% 0px" });
-    $$(".rev").forEach(function (el) { io.observe(el); });
-    /* 첫 화면에 있는 것은 바로 표시 */
-    requestAnimationFrame(function () { $$(".rev").forEach(function (el) { if (el.getBoundingClientRect().top < innerHeight) el.classList.add("in"); }); });
+    $$(".rev").forEach(function (el) { if (el.getBoundingClientRect().top > innerHeight) { el.classList.add("pre"); io.observe(el); } });
+    /* 안전장치: 어떤 이유로든 3초 뒤엔 모두 표시 */
+    setTimeout(function () { $$(".rev.pre").forEach(function (el) { el.classList.add("in"); }); }, 3000);
   });
 })();
