@@ -11,7 +11,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/site.css?v=0fd825b5">
+<link rel="stylesheet" href="/assets/site.css?v=cbe6213c">
 <style>
 .top{padding:40px 0 72px;background:linear-gradient(180deg,#f7f8ff,#fff)}
 .split{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center;margin-top:28px}
@@ -35,8 +35,13 @@
 .tab[aria-selected=true]{background:var(--ink);border-color:var(--ink);color:#fff}
 .tocimg{margin-top:16px;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;background:#fff;max-width:760px}
 .tocimg img{width:100%}
-.pv{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-top:28px}
-.pv img{border:1px solid var(--line);border-radius:10px}
+.pvp{margin-top:18px}
+.pvstrip{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 2px 14px;-webkit-overflow-scrolling:touch}
+.pvstrip img{flex:none;height:440px;width:auto;border:1px solid var(--line);border-radius:8px;background:#fff;scroll-snap-align:start;box-shadow:0 6px 18px -10px rgba(12,16,32,.25)}
+.pvbar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:8px;font-size:13.5px;color:var(--sub)}
+.pvbar .btn{margin-left:auto}
+.sh h2 .cnt{font-family:var(--mono);font-size:.6em;color:var(--brand);vertical-align:middle;margin-left:4px}
+@media(max-width:600px){.pvstrip img{height:340px}.pvbar .btn{margin-left:0}}
 .alist{display:grid;gap:10px;margin-top:28px;max-width:640px}
 .arow{display:flex;align-items:center;gap:14px;border:1px solid var(--line);border-radius:16px;padding:16px 18px;background:#fff}
 .arow .ic{flex:none;width:40px;height:40px;border-radius:12px;background:var(--soft);color:var(--brand);display:grid;place-items:center}
@@ -94,6 +99,11 @@
   <div class="sh rev"><div class="label">Answers</div><h2>정답 PDF</h2><p>누구나 무료로 받을 수 있어요.</p></div>
   <div class="alist"><div class="arow rev"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 14l2 2 4-4"/></svg></div><div><b>저절로 파닉스 1 정답</b><span>정답 확인용 PDF를 준비하고 있어요</span></div><span class="btn line sm off">준비 중</span></div><div class="arow rev"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 14l2 2 4-4"/></svg></div><div><b>저절로 파닉스 2 정답</b><span>정답 확인용 PDF를 준비하고 있어요</span></div><span class="btn line sm off">준비 중</span></div></div>
 </div></section>
+<section class="sec tight" id="reviews"><div class="wrap">
+  <div class="sh rev"><div class="label">Reviews</div><h2><span class="nw">이 교재 후기&nbsp;<span class="cnt">16</span></span></h2><p>스마트스토어 실제 구매 후기예요.</p></div>
+  <div class="rvg" id="rvg"></div>
+  <div class="more"><button class="btn line sm" id="moreBtn" type="button">후기 더 보기</button></div>
+</div></section>
 <section class="sec tight"><div class="wrap"><div class="sh rev"><div class="label">Next</div><h2>다음 단계</h2></div>
   <a class="next rev" href="/books/starter/"><img src="/assets/covers/rst1.webp" alt=""><div><div class="k">2단계 · 초2~3</div><b>스타터 1·2</b><span>파닉스 다음, 첫 독해</span></div><span class="ar">→</span></a></div></section>
 <section class="sec tight"><div class="wrap"><div class="band rev">
@@ -108,9 +118,15 @@
   <nav><a href="/books/">교재</a><a href="/teacher/">선생님 자료</a><a href="/studio/">음원·강의</a><a href="/contact/">문의</a><a class="store">스마트스토어</a><a class="talk">톡톡</a></nav>
   <span class="biz"></span>
 </div></footer>
-<script src="/assets/site.js?v=0fd825b5"></script>
+<script src="/assets/reviews.js?v=cbe6213c"></script>
+<script src="/assets/site.js?v=cbe6213c"></script>
 <script>
-S=SOLVEU; S.$$(".tab").forEach(function(t){t.onclick=function(){var i=t.dataset.i;S.$$(".tab").forEach(function(x){x.setAttribute("aria-selected",x===t?"true":"false")});S.$$(".tocimg").forEach(function(d){d.hidden=d.dataset.i!==i;});};});
+S=SOLVEU;
+function tabs(tabSel,panSel){S.$$(tabSel).forEach(function(t){t.onclick=function(){var i=t.dataset.i;S.$$(tabSel).forEach(function(x){x.setAttribute("aria-selected",x===t?"true":"false")});S.$$(panSel).forEach(function(d){d.hidden=d.dataset.i!==i;});};});}
+tabs("#toc .tab",".tocimg"); tabs("#preview .ptab",".pvp");
+var RV=S.REVIEWS.filter(function(v){return v.step==="phonics";}), shown=6;
+function drawRv(){var el=S.$("#rvg"); if(!el) return; S.renderReviews(el, RV.slice(0,shown)); var m=S.$("#moreBtn"); m.hidden=RV.length<=shown; m.textContent="후기 더 보기 ("+(RV.length-shown)+"개 더)";}
+var mb=S.$("#moreBtn"); if(mb) mb.onclick=function(){shown+=6;drawRv();}; drawRv();
 </script>
 </body>
 </html>

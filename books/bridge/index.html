@@ -11,7 +11,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/site.css?v=0fd825b5">
+<link rel="stylesheet" href="/assets/site.css?v=cbe6213c">
 <style>
 .top{padding:40px 0 72px;background:linear-gradient(180deg,#f7f8ff,#fff)}
 .split{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center;margin-top:28px}
@@ -35,8 +35,13 @@
 .tab[aria-selected=true]{background:var(--ink);border-color:var(--ink);color:#fff}
 .tocimg{margin-top:16px;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;background:#fff;max-width:760px}
 .tocimg img{width:100%}
-.pv{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-top:28px}
-.pv img{border:1px solid var(--line);border-radius:10px}
+.pvp{margin-top:18px}
+.pvstrip{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 2px 14px;-webkit-overflow-scrolling:touch}
+.pvstrip img{flex:none;height:440px;width:auto;border:1px solid var(--line);border-radius:8px;background:#fff;scroll-snap-align:start;box-shadow:0 6px 18px -10px rgba(12,16,32,.25)}
+.pvbar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:8px;font-size:13.5px;color:var(--sub)}
+.pvbar .btn{margin-left:auto}
+.sh h2 .cnt{font-family:var(--mono);font-size:.6em;color:var(--brand);vertical-align:middle;margin-left:4px}
+@media(max-width:600px){.pvstrip img{height:340px}.pvbar .btn{margin-left:0}}
 .alist{display:grid;gap:10px;margin-top:28px;max-width:640px}
 .arow{display:flex;align-items:center;gap:14px;border:1px solid var(--line);border-radius:16px;padding:16px 18px;background:#fff}
 .arow .ic{flex:none;width:40px;height:40px;border-radius:12px;background:var(--soft);color:var(--brand);display:grid;place-items:center}
@@ -89,10 +94,20 @@
   <div class="tabs rev" role="tablist"><button class="tab" type="button" role="tab" aria-selected="true" data-i="0">1권</button><button class="tab" type="button" role="tab" aria-selected="false" data-i="1">2권</button></div>
   <div class="rev"><div class="tocimg" data-i="0"><img src="/books/img/toc_rbr1.webp" alt="저절로 브릿지 1 목차"></div><div class="tocimg" hidden data-i="1"><img src="/books/img/toc_rbr2.webp" alt="저절로 브릿지 2 목차" loading="lazy"></div></div>
 </div></section>
-
+<section class="sec panel" id="preview"><div class="wrap">
+  <div class="sh rev"><div class="label">Preview · Level Test</div><h2>유닛 미리보기 · 레벨 테스트</h2><p>책의 한 유닛을 그대로 담았어요. <br class="pc">수업 전에 미리 풀어 보고 교재를 골라 보세요.</p></div>
+  
+  <div class="rev"><div class="pvp" data-i="0"><div class="pvstrip"><img src="/books/img/pv/rbr1_01.webp" alt="저절로 브릿지 1 샘플 1쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rbr1_02.webp" alt="저절로 브릿지 1 샘플 2쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rbr1_03.webp" alt="저절로 브릿지 1 샘플 3쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rbr1_04.webp" alt="저절로 브릿지 1 샘플 4쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rbr1_05.webp" alt="저절로 브릿지 1 샘플 5쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rbr1_06.webp" alt="저절로 브릿지 1 샘플 6쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rbr1_07.webp" alt="저절로 브릿지 1 샘플 7쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rbr1_08.webp" alt="저절로 브릿지 1 샘플 8쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rbr1_09.webp" alt="저절로 브릿지 1 샘플 9쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rbr1_10.webp" alt="저절로 브릿지 1 샘플 10쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rbr1_11.webp" alt="저절로 브릿지 1 샘플 11쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rbr1_12.webp" alt="저절로 브릿지 1 샘플 12쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rbr1_13.webp" alt="저절로 브릿지 1 샘플 13쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rbr1_14.webp" alt="저절로 브릿지 1 샘플 14쪽" width="300" height="424" loading="lazy"></div>
+      <div class="pvbar"><span>저절로 브릿지 1 · 14쪽 · 옆으로 넘겨 보세요</span><a class="btn dark sm" href="/books/samples/rbr1.pdf" target="_blank" rel="noopener">샘플 PDF 받기 (출력 가능)</a></div></div></div>
+</div></section>
 <section class="sec tight" id="answers"><div class="wrap">
   <div class="sh rev"><div class="label">Answers</div><h2>정답 PDF</h2><p>누구나 무료로 받을 수 있어요.</p></div>
   <div class="alist"><div class="arow rev"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 14l2 2 4-4"/></svg></div><div><b>저절로 브릿지 1 정답</b><span>PDF · 누구나 무료</span></div><a class="btn line sm" href="/books/answers/rbr1.pdf" target="_blank" rel="noopener">받기</a></div><div class="arow rev"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 14l2 2 4-4"/></svg></div><div><b>저절로 브릿지 2 정답</b><span>PDF · 누구나 무료</span></div><a class="btn line sm" href="/books/answers/rbr2.pdf" target="_blank" rel="noopener">받기</a></div></div>
+</div></section>
+<section class="sec tight" id="reviews"><div class="wrap">
+  <div class="sh rev"><div class="label">Reviews</div><h2><span class="nw">이 교재 후기&nbsp;<span class="cnt">17</span></span></h2><p>스마트스토어 실제 구매 후기예요.</p></div>
+  <div class="rvg" id="rvg"></div>
+  <div class="more"><button class="btn line sm" id="moreBtn" type="button">후기 더 보기</button></div>
 </div></section>
 <section class="sec tight"><div class="wrap"><div class="sh rev"><div class="label">Next</div><h2>다음 단계</h2></div>
   <a class="next rev" href="/books/intro/"><img src="/assets/covers/rin1.webp" alt=""><div><div class="k">4단계 · 초4~5</div><b>입문 1·2</b><span>감이 아닌 정확한 해석</span></div><span class="ar">→</span></a></div></section>
@@ -108,9 +123,15 @@
   <nav><a href="/books/">교재</a><a href="/teacher/">선생님 자료</a><a href="/studio/">음원·강의</a><a href="/contact/">문의</a><a class="store">스마트스토어</a><a class="talk">톡톡</a></nav>
   <span class="biz"></span>
 </div></footer>
-<script src="/assets/site.js?v=0fd825b5"></script>
+<script src="/assets/reviews.js?v=cbe6213c"></script>
+<script src="/assets/site.js?v=cbe6213c"></script>
 <script>
-S=SOLVEU; S.$$(".tab").forEach(function(t){t.onclick=function(){var i=t.dataset.i;S.$$(".tab").forEach(function(x){x.setAttribute("aria-selected",x===t?"true":"false")});S.$$(".tocimg").forEach(function(d){d.hidden=d.dataset.i!==i;});};});
+S=SOLVEU;
+function tabs(tabSel,panSel){S.$$(tabSel).forEach(function(t){t.onclick=function(){var i=t.dataset.i;S.$$(tabSel).forEach(function(x){x.setAttribute("aria-selected",x===t?"true":"false")});S.$$(panSel).forEach(function(d){d.hidden=d.dataset.i!==i;});};});}
+tabs("#toc .tab",".tocimg"); tabs("#preview .ptab",".pvp");
+var RV=S.REVIEWS.filter(function(v){return v.step==="bridge";}), shown=6;
+function drawRv(){var el=S.$("#rvg"); if(!el) return; S.renderReviews(el, RV.slice(0,shown)); var m=S.$("#moreBtn"); m.hidden=RV.length<=shown; m.textContent="후기 더 보기 ("+(RV.length-shown)+"개 더)";}
+var mb=S.$("#moreBtn"); if(mb) mb.onclick=function(){shown+=6;drawRv();}; drawRv();
 </script>
 </body>
 </html>

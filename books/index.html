@@ -11,7 +11,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/site.css?v=0fd825b5">
+<link rel="stylesheet" href="/assets/site.css?v=cbe6213c">
 <style>
 .lane{margin-top:44px}
 .lanehd{display:flex;gap:12px;align-items:baseline;padding-bottom:14px;border-bottom:1px solid var(--line2);margin-bottom:26px}
@@ -64,6 +64,7 @@
 .result .empty{color:var(--mute);font-size:15px;line-height:1.7}
 @media(max-width:860px){.finder{grid-template-columns:1fr}}
 .books{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;margin-top:44px}
+.rvf{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:28px}
 .bk{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;background:#fff;transition:transform .2s,box-shadow .2s,border-color .2s}
 .bk:hover{transform:translateY(-4px);box-shadow:var(--shadow);border-color:var(--line2)}
 .bk .cv{display:flex;gap:10px;justify-content:center;padding:24px 18px 20px;background:var(--panel)}
@@ -154,9 +155,10 @@
 <section class="sec panel" id="reviews"><div class="wrap">
   <div class="sh c rev"><div class="label">Reviews</div><h2>먼저 써 본 분들의 이야기</h2><p>스마트스토어에 남겨 주신 실제 구매 후기예요.</p></div>
   <div class="stats rev"><div><b>276</b><span>구매 후기</span></div><div><b>4.9</b><span>평균 평점</span></div><div><b>300<small>여 명</small></b><span>검토 선생님</span></div></div>
+  <div class="rvf rev" id="rvf"><button class="opt" type="button" aria-pressed="true" data-a="all">전체</button><button class="opt" type="button" aria-pressed="false" data-a="phonics">파닉스</button><button class="opt" type="button" aria-pressed="false" data-a="reading">리딩</button><button class="opt" type="button" aria-pressed="false" data-a="grammar">문법·쓰기</button></div>
   <div class="rvg" id="rvg"></div>
   <div class="more"><button class="btn line sm" id="moreBtn" type="button">후기 더 보기</button></div>
-  <p class="rvfoot">※ 실제 후기에서 맞춤법만 다듬었습니다.</p>
+  <p class="rvfoot">※ 스마트스토어 실제 구매 후기예요. 일부는 띄어쓰기·맞춤법만 다듬었어요.</p>
 </div></section>
 <section class="sec tight"><div class="wrap"><div class="band rev">
   <h2>쏠뷰 교재로 <br class="mo">수업을 시작해 보세요</h2><p>교재 도입 문의는 <br class="mo">톡톡으로 편하게 남겨 주세요.</p>
@@ -170,11 +172,16 @@
   <nav><a href="/books/">교재</a><a href="/teacher/">선생님 자료</a><a href="/studio/">음원·강의</a><a href="/contact/">문의</a><a class="store">스마트스토어</a><a class="talk">톡톡</a></nav>
   <span class="biz"></span>
 </div></footer>
-<script src="/assets/site.js?v=0fd825b5"></script>
+<script src="/assets/reviews.js?v=cbe6213c"></script>
+<script src="/assets/site.js?v=cbe6213c"></script>
 <script>
 var S=SOLVEU, DATA={"phonics": {"name": "파닉스", "grade": "초1~2", "one": "소리 규칙으로 읽기 완성", "covers": ["/assets/covers/ph1.webp", "/assets/covers/ph2.webp"]}, "starter": {"name": "스타터", "grade": "초2~3", "one": "파닉스 다음, 첫 독해", "covers": ["/assets/covers/rst1.webp", "/assets/covers/rst2.webp"]}, "bridge": {"name": "브릿지", "grade": "초3~4", "one": "품사·시제로 문장 이해", "covers": ["/assets/covers/rbr1.webp", "/assets/covers/rbr2.webp"]}, "intro": {"name": "입문", "grade": "초4~5", "one": "감이 아닌 정확한 해석", "covers": ["/assets/covers/rin1.webp", "/assets/covers/rin2.webp"]}, "basic": {"name": "기본", "grade": "초6~중1", "one": "문장 구조가 보이는 독해", "covers": ["/assets/covers/rba1.webp", "/assets/covers/rba2.webp"]}, "mock": {"name": "첫모의고사", "grade": "중2~중3", "one": "고등 모의고사 첫걸음", "covers": ["/assets/covers/rmo1.webp", "/assets/covers/rmo2.webp"]}, "grammar": {"name": "그래머&라이팅", "grade": "초3~4", "one": "쓰면서 익히는 첫 문법", "covers": ["/assets/covers/gw1.webp", "/assets/covers/gw2.webp"]}};
-S.renderReviews(S.$("#rvg"), S.REVIEWS, 6);
-S.$("#moreBtn").onclick=function(){var h=S.$$(".rv.hide");if(h.length){h.forEach(function(e){e.classList.remove("hide")});this.textContent="접기";}else{S.$$(".rv").forEach(function(e,i){if(i>=6)e.classList.add("hide")});this.textContent="후기 더 보기";S.$("#reviews").scrollIntoView();}};
+var AREA={"phonics": "phonics", "starter": "reading", "bridge": "reading", "intro": "reading", "basic": "reading", "mock": "reading", "grammar": "grammar"}, cur="all", shown=9;
+function drawRv(){var list=S.REVIEWS.filter(function(v){return cur==="all"||AREA[v.step]===cur;});
+  S.renderReviews(S.$("#rvg"), list.slice(0,shown)); var m=S.$("#moreBtn"); m.hidden=list.length<=shown; m.textContent="후기 더 보기 ("+(list.length-shown)+"개 더)";}
+S.$$("#rvf .opt").forEach(function(b){b.onclick=function(){S.$$("#rvf .opt").forEach(function(x){x.setAttribute("aria-pressed","false")});b.setAttribute("aria-pressed","true");cur=b.dataset.a;shown=9;drawRv();};});
+S.$("#moreBtn").onclick=function(){shown+=9;drawRv();};
+drawRv();
 var pick={grade:null,read:null};
 function bind(id,key){S.$$("#"+id+" .opt").forEach(function(b){b.onclick=function(){S.$$("#"+id+" .opt").forEach(function(x){x.setAttribute("aria-pressed","false")});b.setAttribute("aria-pressed","true");pick[key]=b.dataset.v;show();};});}
 bind("fGrade","grade");bind("fRead","read");
