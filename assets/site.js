@@ -56,8 +56,10 @@ window.SOLVEU = {
   };
 
   document.addEventListener("DOMContentLoaded", function () {
-    $$(".talk").forEach(function (a) { a.href = S.TALK; a.target = "_blank"; a.rel = "noopener"; });
-    $$(".store").forEach(function (a) { if (!a.getAttribute("href")) a.href = S.STORE; a.target = "_blank"; a.rel = "noopener"; });
+    /* 바깥 사이트(톡톡·스토어)는 새 창 + ↗ 표시 → 쏠뷰 페이지는 원래 창에 그대로 남음 */
+    function ext(a) { a.target = "_blank"; a.rel = "noopener"; a.classList.add("ext"); a.title = "새 창에서 열려요"; }
+    $$(".talk").forEach(function (a) { a.href = S.TALK; ext(a); });
+    $$(".store").forEach(function (a) { if (!a.getAttribute("href")) a.href = S.STORE; ext(a); });
     $$(".biz").forEach(function (e) { e.textContent = S.BIZ; });
     var nav = $("#nav"); if (nav) addEventListener("scroll", function () { nav.classList.toggle("scrolled", scrollY > 8); }, { passive: true });
     /* 첫 화면 아래에 있는 요소만 숨겼다가 보일 때 올라오게 (첫 화면·IO 미지원·숨은 탭에선 항상 보임) */

@@ -11,7 +11,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/site.css?v=3dd88b86">
+<link rel="stylesheet" href="/assets/site.css?v=0fd825b5">
 <style>
 .top{padding:56px 0 24px}
 .top h1{font-size:clamp(32px,4.6vw,50px);font-weight:800;letter-spacing:-.05em;margin-top:14px}
@@ -60,8 +60,8 @@
 <body id="top">
 <header class="nav" id="nav"><div class="wrap">
   <a class="logo" href="/" aria-label="쏠뷰 SolveU 홈"><span class="ko">쏠뷰</span><span class="dv"></span><span class="en">Solve<span class="g">U</span></span></a>
-  <nav aria-label="주 메뉴"><a href="/books/">교재</a><a href="/books/#roadmap">학습 로드맵</a><a href="/teacher/" aria-current=page>선생님</a><a class="talk">문의</a></nav>
-  <a class="nbtn" href="/teacher/">선생님 자료</a>
+  <nav aria-label="주 메뉴"><a href="/books/">교재</a><a href="/books/#roadmap">학습 로드맵</a><a href="/studio/">음원·강의</a><a href="/contact/">문의</a></nav>
+  <a class="nbtn" href="/teacher/" aria-current=page>선생님 자료</a>
 </div></header>
 <main>
 
@@ -71,15 +71,15 @@
   <p class="rev">쏠뷰 교재로 수업하는 선생님을 위한 도구예요. <br>교사 코드로 한 번 입장하면 이 기기에서는 다시 묻지 않아요.</p>
   <div class="tz" id="tz">
     <div class="rev"><div class="gatebox">
-      <b>교사 코드로 입장</b><p>시험지 생성기와 자료실은 교사 코드가 필요해요.</p>
+      <b>교사 코드로 입장</b><p>자료실과 시험지 생성기는 교사 코드가 필요해요.</p>
       <form class="gate"><input id="code" autocomplete="off" placeholder="교사 코드" aria-label="교사 코드"><button type="submit">입장하기</button></form>
       <div class="ok"><i>✓</i>인증되었습니다.<button type="button" class="relock">로그아웃</button></div>
       <div class="err" id="err" role="alert"></div>
       <p class="issue">코드 발급은 <a class="talk">톡톡 문의</a></p>
     </div></div>
     <div class="tlist rev">
-      <a class="tool" data-href="/교사포털/시험지생성기/"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg></div><div class="tx"><b>시험지 생성기</b><span>교재·유닛별 시험지와 정답지를 만들어 인쇄해요.</span></div><div class="lk">인증 필요</div></a>
       <div class="tool lib"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div><div class="tx"><b>자료실</b><span>단어 리스트 · 워크북 등 수업 자료</span><div class="libs"><a data-lib="https://southern-winter-c87.notion.site/15a3cdde2d7e80ddb3e0efd45c6f9fac" target="_blank" rel="noopener">리딩</a><a data-lib="https://southern-winter-c87.notion.site/1-2-8b02a1e094c745cf80a590f34d4db521" target="_blank" rel="noopener">파닉스</a><a data-lib="https://southern-winter-c87.notion.site/1-3a93cdde2d7e8032826dd3d925ed4278" target="_blank" rel="noopener">그래머&amp;라이팅</a></div></div><div class="lk">인증 필요</div></div>
+      <a class="tool" data-href="/교사포털/시험지생성기/"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg></div><div class="tx"><b>시험지 생성기</b><span>교재·유닛별 시험지와 정답지를 만들어 인쇄해요.</span></div><div class="lk">인증 필요</div></a>
       <div class="tool off"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4M7 9l3 3 7-5"/></svg></div><div class="tx"><b>E-Book<small>판서 수업용</small></b><span>전자칠판 판서 · 정답 공개 · 음원</span></div><div class="lk">준비 중</div></div>
     </div>
   </div>
@@ -105,10 +105,10 @@
 <footer><div class="wrap">
   <span class="fl"><span class="ko">쏠뷰</span><span class="en">Solve<span class="g">U</span></span></span>
   <span>현장에서 검증된 영어 교재</span>
-  <nav><a href="/books/">교재</a><a href="/teacher/">선생님 자료</a><a href="/studio/">음원·강의</a><a class="store">스마트스토어</a><a class="talk">톡톡 문의</a></nav>
+  <nav><a href="/books/">교재</a><a href="/teacher/">선생님 자료</a><a href="/studio/">음원·강의</a><a href="/contact/">문의</a><a class="store">스마트스토어</a><a class="talk">톡톡</a></nav>
   <span class="biz"></span>
 </div></footer>
-<script src="/assets/site.js?v=3dd88b86"></script>
+<script src="/assets/site.js?v=0fd825b5"></script>
 <script>SOLVEU.gate(SOLVEU.$("#tz"));</script>
 </body>
 </html>
