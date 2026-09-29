@@ -159,7 +159,7 @@ var LINKS = {
   }
 
   if (!code) {
-    show("저절로 · 쏠뷰", "이 페이지는 교재 QR 전용입니다. 교재의 QR코드를 스캔해 주세요.");
+    location.replace("/home/");   // 주소만 입력(QR 코드 없음) → 쏠뷰 홈페이지
     return;
   }
   if (!(code in LINKS)) {
