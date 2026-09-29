@@ -14,25 +14,19 @@
 <link rel="stylesheet" href="/assets/site.css?v=3dd88b86">
 <style>
 .doors{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:36px}
-.feature{display:grid;grid-template-columns:1.05fr .95fr;margin-top:44px;border:1px solid var(--line);border-radius:28px;overflow:hidden;background:linear-gradient(140deg,#f7f8ff 0%,#fff 55%);box-shadow:var(--shadow)}
-.feature .tx{padding:50px 46px}
-.feature h3{font-size:clamp(28px,3.4vw,40px);font-weight:800;letter-spacing:-.045em;margin-top:20px}
-.feature .tag{font-size:clamp(16px,1.8vw,19px);font-weight:700;margin-top:10px}
-.feature .desc{font-size:15px;color:var(--sub);line-height:1.75;margin-top:16px;max-width:30em}
-.ladder{display:flex;flex-wrap:wrap;gap:6px;margin-top:24px;align-items:center}
-.ladder a{font-size:13px;font-weight:700;padding:7px 11px;border-radius:10px;background:#fff;border:1px solid var(--line);white-space:nowrap;transition:border-color .15s}
-.ladder a:hover{border-color:var(--brand);color:var(--brand)}
-.ladder i{font-style:normal;color:var(--mute);font-size:12px}
-.feature .vis{position:relative;min-height:400px;background:radial-gradient(60% 60% at 55% 50%,#e7eaff 0%,rgba(231,234,255,0) 70%)}
-.cov{position:absolute;width:32%;border-radius:6px;box-shadow:0 24px 48px -16px rgba(12,16,32,.35);transition:transform .45s cubic-bezier(.2,.8,.2,1)}
-.cov.c1{left:8%;top:24%;transform:rotate(-10deg)}.cov.c2{left:25%;top:13%;transform:rotate(-3deg);z-index:2}
-.cov.c3{left:43%;top:19%;transform:rotate(5deg);z-index:3}.cov.c4{left:60%;top:30%;transform:rotate(11deg);z-index:1}
-.feature:hover .cov.c1{transform:rotate(-13deg) translateX(-6px)}.feature:hover .cov.c4{transform:rotate(14deg) translateX(6px)}
-@media(max-width:900px){.feature{grid-template-columns:1fr}.feature .vis{min-height:280px;order:-1}.cov{width:30%}.feature .tx{padding:32px 24px}}
-@media(max-width:560px){.feature .vis{min-height:220px}}
-.soon{display:flex;align-items:center;gap:18px;margin-top:16px;border:1.5px dashed var(--line2);border-radius:22px;padding:24px 26px;background:#fcfcfe}
-.soon .ic{flex:none;width:48px;height:48px;border-radius:14px;background:var(--panel);display:grid;place-items:center;color:var(--mute)}
-.soon b{font-size:16.5px;font-weight:800}.soon span{display:block;font-size:14px;color:var(--sub);margin-top:4px;line-height:1.6}
+.areas{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:44px}
+.area{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:26px;overflow:hidden;background:#fff;transition:transform .2s,box-shadow .2s,border-color .2s}
+.area:hover{transform:translateY(-4px);box-shadow:var(--shadow);border-color:var(--line2)}
+.acov{display:flex;justify-content:center;align-items:flex-end;gap:0;padding:30px 20px 0;height:190px;background:linear-gradient(160deg,#eef1ff,#f7f8ff 60%);overflow:hidden}
+.acov img{width:30%;border-radius:4px;box-shadow:0 14px 28px -12px rgba(12,16,32,.45);margin:0 -4%}
+.acov img:nth-child(odd){transform:translateY(12px) rotate(-4deg)}.acov img:nth-child(even){transform:rotate(4deg)}
+.acov.land img{width:46%;margin:0 -2%}
+.atx{padding:22px 24px 24px;display:flex;flex-direction:column;gap:6px;flex:1}
+.atx b{font-size:22px;font-weight:800;letter-spacing:-.04em;margin-top:6px}
+.atx p{font-size:14.5px;color:var(--sub);line-height:1.6}
+.atx .nm{font-size:13px;color:var(--mute)}
+.atx .go{margin-top:auto;padding-top:12px;font-size:13.5px;font-weight:700;color:var(--brand)}
+@media(max-width:900px){.areas{grid-template-columns:1fr}.acov{height:170px}}
 .trust{display:grid;grid-template-columns:1fr 1.1fr;gap:28px;align-items:center;margin-top:44px}
 .trust .stats{margin-top:0}
 .trust .rv{box-shadow:var(--shadow)}
@@ -43,7 +37,7 @@
 <body id="top">
 <header class="nav" id="nav"><div class="wrap">
   <a class="logo" href="/" aria-label="쏠뷰 SolveU 홈"><span class="ko">쏠뷰</span><span class="dv"></span><span class="en">Solve<span class="g">U</span></span></a>
-  <nav aria-label="주 메뉴"><a href="/#series" aria-current=page>시리즈</a><a href="/jeojeollo/">저절로 시리즈</a><a href="/teacher/">선생님</a><a class="talk">문의</a></nav>
+  <nav aria-label="주 메뉴"><a href="/books/">교재</a><a href="/books/#roadmap">학습 로드맵</a><a href="/teacher/">선생님</a><a class="talk">문의</a></nav>
   <a class="nbtn" href="/teacher/">선생님 자료</a>
 </div></header>
 <main>
@@ -56,29 +50,19 @@
     <p class="lead rev">현장에서 검증된 커리큘럼과 수업 도구까지. <br>가르치는 선생님도, 배우는 학생도 편하게.</p>
     <div class="doors rev">
       <a class="btn dark" href="/teacher/">원장·선생님이세요? <span class="ar">→</span></a>
-      <a class="btn soft" href="/jeojeollo/#finder">학부모님이세요? <span class="ar">→</span></a>
+      <a class="btn soft" href="/books/#finder">학부모님이세요? <span class="ar">→</span></a>
     </div>
     <p class="sub rev"><a class="txtlink" href="/studio/">책에 있는 QR 음원·강의 바로 찾기</a></p>
   </div>
 </section>
 
-<section class="sec tight" id="series"><div class="wrap">
-  <div class="sh rev"><div class="label">Series</div><h2>쏠뷰의 시리즈</h2><p>수업 현장에서 출발한 영어 교재 시리즈입니다. <br>시리즈마다 음원·강의·수업 도구가 함께 제공돼요.</p></div>
-  <article class="feature rev">
-    <div class="tx">
-      <div class="chiprow"><span class="chip k">대표 시리즈</span><span class="chip">14권</span></div>
-      <h3>저절로 시리즈</h3>
-      <p class="tag">파닉스부터 수능까지, 영어가 저절로.</p>
-      <p class="desc">소리 규칙으로 읽기를 완성하고, 품사와 문장 구조로 정확하게 해석해 고등 모의고사까지. 단계마다 이어지는 영어 읽기 커리큘럼이에요.</p>
-      <div class="ladder"><a href="/jeojeollo/phonics/">파닉스</a><i>→</i><a href="/jeojeollo/starter/">스타터</a><i>→</i><a href="/jeojeollo/bridge/">브릿지</a><i>→</i><a href="/jeojeollo/intro/">입문</a><i>→</i><a href="/jeojeollo/basic/">기본</a><i>→</i><a href="/jeojeollo/mock/">첫모의고사</a></div>
-      <div class="cta"><a class="btn dark" href="/jeojeollo/">저절로 시리즈 보기 <span class="ar">→</span></a></div>
-    </div>
-    <div class="vis" aria-hidden="true"><img class="cov c1" src="/assets/covers/ph1.webp" alt="" loading="lazy"><img class="cov c2" src="/assets/covers/rbr1.webp" alt="" loading="lazy"><img class="cov c3" src="/assets/covers/rba1.webp" alt="" loading="lazy"><img class="cov c4" src="/assets/covers/rmo1.webp" alt="" loading="lazy"></div>
-  </article>
-  <div class="soon rev">
-    <div class="ic"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></div>
-    <div><b>다음 시리즈를 준비하고 있어요</b><span>새 시리즈도 같은 곳에서, 같은 방식으로 음원·강의·수업 도구와 함께 만나실 수 있어요.</span></div>
-  </div>
+<section class="sec tight" id="books"><div class="wrap">
+  <div class="sh rev"><div class="label">Books</div><h2>쏠뷰의 교재</h2><p>파닉스부터 고등 모의고사까지 영역별로 이어져요. <br>모든 교재에 음원·강의·정답이 함께 있어요.</p></div>
+  <div class="areas"><a class="area rev" href="/books/#phonics"><div class="acov"><img src="/assets/covers/ph1.webp" alt="" loading="lazy"><img src="/assets/covers/ph2.webp" alt="" loading="lazy"></div>
+      <div class="atx"><div class="chiprow"><span class="chip">초1~2</span><span class="chip gray">2권</span></div><b>파닉스</b><p>알파벳 소리부터 스스로 읽기까지</p><span class="nm">파닉스</span><span class="go">보기 →</span></div></a><a class="area rev" href="/books/#reading"><div class="acov"><img src="/assets/covers/rst1.webp" alt="" loading="lazy"><img src="/assets/covers/rbr1.webp" alt="" loading="lazy"><img src="/assets/covers/rin1.webp" alt="" loading="lazy"><img src="/assets/covers/rba1.webp" alt="" loading="lazy"></div>
+      <div class="atx"><div class="chiprow"><span class="chip">초2~중3</span><span class="chip gray">10권</span></div><b>리딩</b><p>첫 독해부터 고등 모의고사까지</p><span class="nm">스타터 · 브릿지 · 입문 · 기본 · 첫모의고사</span><span class="go">보기 →</span></div></a><a class="area rev" href="/books/#grammar"><div class="acov land"><img src="/assets/covers/gw1.webp" alt="" loading="lazy"><img src="/assets/covers/gw2.webp" alt="" loading="lazy"></div>
+      <div class="atx"><div class="chiprow"><span class="chip">초3~4</span><span class="chip gray">2권</span></div><b>문법·쓰기</b><p>문장 규칙을 쓰면서 익혀요</p><span class="nm">그래머&amp;라이팅</span><span class="go">보기 →</span></div></a></div>
+  <div class="cta rev"><a class="btn dark" href="/books/">교재 모두 보기 <span class="ar">→</span></a><a class="btn line" href="/books/#roadmap">학습 로드맵</a></div>
 </div></section>
 
 <section class="sec panel" id="why"><div class="wrap">
@@ -95,7 +79,7 @@
   <div class="sh rev"><div class="label">Reviews</div><h2>먼저 써 본 분들의 이야기</h2></div>
   <div class="trust">
     <div class="stats rev"><div><b>276</b><span>구매 후기</span></div><div><b>4.9</b><span>평균 평점</span></div><div><b>300<small>여 명</small></b><span>검토 선생님</span></div></div>
-    <div class="rev"><div id="featured"></div><div class="more"><a class="txtlink" href="/jeojeollo/#reviews">후기 더 보기 →</a></div></div>
+    <div class="rev"><div id="featured"></div><div class="more"><a class="txtlink" href="/books/#reviews">후기 더 보기 →</a></div></div>
   </div>
 </div></section>
 
@@ -117,7 +101,7 @@
 <footer><div class="wrap">
   <span class="fl"><span class="ko">쏠뷰</span><span class="en">Solve<span class="g">U</span></span></span>
   <span>현장에서 검증된 영어 교재</span>
-  <nav><a href="/jeojeollo/">저절로 시리즈</a><a href="/teacher/">선생님 자료</a><a href="/studio/">음원·강의</a><a class="store">스마트스토어</a><a class="talk">톡톡 문의</a></nav>
+  <nav><a href="/books/">교재</a><a href="/teacher/">선생님 자료</a><a href="/studio/">음원·강의</a><a class="store">스마트스토어</a><a class="talk">톡톡 문의</a></nav>
   <span class="biz"></span>
 </div></footer>
 <script src="/assets/site.js?v=3dd88b86"></script>
