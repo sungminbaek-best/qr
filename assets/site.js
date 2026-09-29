@@ -43,6 +43,19 @@ window.SOLVEU = {
     paint();
   };
 
+  /* 교사 인증(문자 인증 → 개인별 입장권). 서버 = solveu-auth Worker (_QR제작/teacher-auth) */
+  S.AUTH = "https://solveu-auth.tjdals85200.workers.dev";
+  S.PASS_KEY = "solveu_pass";
+  S.pass = function (v) {
+    try { if (v === undefined) return localStorage.getItem(S.PASS_KEY) || ""; v ? localStorage.setItem(S.PASS_KEY, v) : localStorage.removeItem(S.PASS_KEY); } catch (e) { return ""; }
+  };
+  S.api = function (path, body) {
+    var h = { "Content-Type": "application/json" }, p = S.pass(); if (p) h.Authorization = "Bearer " + p;
+    return fetch(S.AUTH + path, { method: body ? "POST" : "GET", headers: h, body: body ? JSON.stringify(body) : undefined })
+      .then(function (r) { return r.json().then(function (j) { j.status = r.status; return j; }); })
+      .catch(function () { return { error: "net", msg: "인터넷 연결을 확인해 주세요." }; });
+  };
+
   document.addEventListener("DOMContentLoaded", function () {
     /* 바깥 사이트(톡톡·스토어)는 새 창 + ↗ 표시 → 쏠뷰 페이지는 원래 창에 그대로 남음 */
     function ext(a) { a.target = "_blank"; a.rel = "noopener"; a.classList.add("ext"); a.title = "새 창에서 열려요"; }
