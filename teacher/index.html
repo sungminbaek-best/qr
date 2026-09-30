@@ -14,7 +14,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/site.css?v=aedf5b38">
+<link rel="stylesheet" href="/assets/site.css?v=635c4ed4">
 <style>
 .top{padding:56px 0 24px}
 .top h1{font-size:clamp(32px,4.6vw,50px);font-weight:800;letter-spacing:-.05em;margin-top:14px}
@@ -33,6 +33,16 @@
 .gatebox b{font-size:17px;font-weight:800}
 .gatebox p{font-size:14px;color:var(--sub);line-height:1.65;margin:8px 0 18px}
 .issue{font-size:13.5px;color:var(--sub);margin-top:14px}
+.perkbox{margin-top:18px;border-top:1px solid var(--line2);padding-top:16px;display:grid;gap:10px}
+.perkbox>b{font-size:15.5px}
+.perkbox .perks{list-style:none;display:grid;gap:5px;padding:12px 14px;border-radius:11px;background:#fff}
+.perkbox .perks li{font-size:13px;font-weight:600;padding-left:18px;position:relative;line-height:1.5}
+.perkbox .perks li:before{content:"✓";position:absolute;left:0;color:var(--brand);font-weight:800}
+.perkbox input{height:44px;border:1px solid var(--line2);border-radius:10px;padding:0 13px;font:inherit;font-size:14.5px;outline:none}
+.perkbox input:focus{border-color:var(--ink)}
+.perkbox .btn{justify-content:center}
+.perkbox details{font-size:12.5px;color:var(--mute);line-height:1.65}.perkbox summary{cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.perkon{font-size:13px;color:var(--sub);margin-top:14px}.perkon button{color:var(--mute);text-decoration:underline;margin-left:4px}
 .issue a{color:var(--ink);font-weight:700;text-decoration:underline;text-underline-offset:3px}
 .tlist{border-top:1px solid var(--line)}
 .tool{display:flex;align-items:center;gap:18px;padding:24px 4px;border-bottom:1px solid var(--line)}
@@ -79,6 +89,14 @@
       <div class="ok"><i>✓</i><span class="tname">인증되었어요.</span><button type="button" class="relock">로그아웃</button></div>
       <div class="err" id="err" role="alert"></div>
       <p class="issue">처음이면 번호 인증 뒤 간단한 신청서만 쓰면 돼요.</p>
+      <div class="perkbox" hidden>
+        <b>🎁 선생님 혜택 받기</b>
+        <ul class="perks"><li>학부모 상담·설명회 자료</li><li>레벨테스트 시험지</li><li>신간 출시 할인 쿠폰</li><li>체험단·서평단 우선 선정</li><li>저자 직강 온라인 설명회 초대 (새 로드맵·교재 활용법)</li><li>티칭 가이드 (유닛별 수업 흐름·판서 예시·자주 틀리는 포인트)</li></ul>
+        <input type="text" class="pmail" inputmode="email" maxlength="100" autocomplete="email" placeholder="이메일 (선택)">
+        <button type="button" class="btn dark sm pon">혜택 받기</button>
+        <details><summary>광고성 정보 수신 동의 · 자세히</summary><b>목적</b> 선생님 혜택 자료와 신간·할인·체험단·설명회 등 광고성 정보 전송 · <b>방법</b> 문자, 이메일(적은 경우) · <b>항목</b> 이름, 휴대폰 번호, 이메일 · <b>보관</b> 동의를 끄거나 탈퇴할 때까지 · 동의를 거부할 권리가 있으며, 거부해도 선생님 자료 이용에는 제한이 없어요(혜택 안내만 받지 않아요). 언제든 선생님 자료 화면에서 끌 수 있어요.</details>
+      </div>
+      <p class="perkon" hidden>🎁 선생님 혜택을 받고 있어요. <button type="button" class="poff">받지 않기</button></p>
     </div></div>
     <div class="tlist rev">
       <div class="tool lib"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div><div class="tx"><b>자료실</b><span>단어 리스트 · 워크북 등 수업 자료</span><div class="libs"><a data-lib="https://southern-winter-c87.notion.site/15a3cdde2d7e80ddb3e0efd45c6f9fac" target="_blank" rel="noopener">리딩</a><a data-lib="https://southern-winter-c87.notion.site/1-2-8b02a1e094c745cf80a590f34d4db521" target="_blank" rel="noopener">파닉스</a><a data-lib="https://southern-winter-c87.notion.site/1-3a93cdde2d7e8032826dd3d925ed4278" target="_blank" rel="noopener">그래머&amp;라이팅</a></div></div><div class="lk">인증 필요</div></div>
@@ -111,8 +129,8 @@
   <nav><a href="/books/">교재</a><a href="/teacher/">선생님 자료</a><a href="/studio/">음원·강의</a><a href="/contact/">문의</a><a class="store">스마트스토어</a><a class="talk">톡톡</a><a href="/privacy/">개인정보처리방침</a></nav>
   <span class="biz"></span>
 </div></footer>
-<script src="/assets/reviews.js?v=aedf5b38"></script>
-<script src="/assets/site.js?v=aedf5b38"></script>
+<script src="/assets/reviews.js?v=635c4ed4"></script>
+<script src="/assets/site.js?v=635c4ed4"></script>
 <script>SOLVEU.gate(SOLVEU.$("#tz"));</script>
 </body>
 </html>

@@ -14,7 +14,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/site.css?v=aedf5b38">
+<link rel="stylesheet" href="/assets/site.css?v=635c4ed4">
 <style>
 .top{padding:56px 0 96px}
 .top h1{font-size:clamp(30px,4.2vw,44px);font-weight:800;letter-spacing:-.05em;margin-top:14px}
@@ -41,8 +41,13 @@
 .agree{margin-top:22px;border-top:1px solid var(--line);padding-top:16px;display:grid;gap:12px}
 .agree label{display:flex;gap:10px;align-items:flex-start;font-size:14.5px;line-height:1.5;cursor:pointer}
 .agree input{width:18px;height:18px;margin-top:2px;flex:none;accent-color:var(--ink)}
-.agree b{font-weight:700;color:var(--brand)}.agree .opt b{color:var(--mute)}
+.agree b{font-weight:700;color:var(--brand)}
 .agree details{font-size:13px;color:var(--sub);line-height:1.7;margin:-4px 0 0 28px}
+.agree .all{font-size:15.5px;padding-bottom:12px;border-bottom:1px dashed var(--line2)}.agree .all small{font-weight:500;color:var(--mute)}
+.agree .opt b{color:var(--brand)}.agree .opt small{font-size:12.5px;color:var(--mute)}
+.perks{list-style:none;margin:-4px 0 0 28px;display:grid;gap:5px;padding:12px 14px;border-radius:11px;background:var(--soft)}
+.perks li{font-size:13.5px;font-weight:600;color:var(--ink2);padding-left:20px;position:relative;line-height:1.5}
+.perks li:before{content:"✓";position:absolute;left:0;color:var(--brand);font-weight:800}
 .agree summary{cursor:pointer;color:var(--mute);text-decoration:underline;text-underline-offset:3px}
 .agree details a{color:var(--ink);font-weight:700;text-decoration:underline}
 .jerr{font-size:13.5px;color:#d93025;min-height:19px;margin-top:10px}
@@ -98,8 +103,8 @@
   <nav><a href="/books/">교재</a><a href="/teacher/">선생님 자료</a><a href="/studio/">음원·강의</a><a href="/contact/">문의</a><a class="store">스마트스토어</a><a class="talk">톡톡</a><a href="/privacy/">개인정보처리방침</a></nav>
   <span class="biz"></span>
 </div></footer>
-<script src="/assets/reviews.js?v=aedf5b38"></script>
-<script src="/assets/site.js?v=aedf5b38"></script>
+<script src="/assets/reviews.js?v=635c4ed4"></script>
+<script src="/assets/site.js?v=635c4ed4"></script>
 <script>
 var S=SOLVEU,$=S.$,f=$("#rf"),q=new URLSearchParams(location.search);
 if(q.get("book"))f.book.value=q.get("book");if(q.get("page"))f.page.value=q.get("page").slice(0,30);

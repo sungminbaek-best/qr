@@ -49,8 +49,20 @@ window.SOLVEU = {
     $$(".libs a,.tool[data-href]", root).forEach(function (a) { a.addEventListener("click", function (ev) {
       if (!S.isOK()) { ev.preventDefault(); err.textContent = "먼저 ‘휴대폰으로 입장하기’를 눌러 인증해 주세요."; } }); });
     paint();
+    /* 선생님 혜택(광고성 정보 수신 동의): 안 받는 중이면 권하는 상자, 받는 중이면 끄기 링크 */
+    var pbox = $(".perkbox", root), pon = $(".perkon", root);
+    function perks(on) { if (!pbox) return; pbox.hidden = !S.isOK() || on; pon.hidden = !S.isOK() || !on; }
+    function setPerk(on, email) {
+      return S.api("/api/marketing", { on: on, email: email || "" }).then(function (j) {
+        if (j.ok) { err.textContent = ""; perks(j.marketing); } else err.textContent = j.msg || "잠시 뒤 다시 시도해 주세요."; });
+    }
+    if (pbox) {
+      $(".pon", pbox).addEventListener("click", function () { setPerk(true, ($(".pmail", pbox).value || "").trim()); });
+      $(".poff", pon).addEventListener("click", function () { if (confirm("선생님 혜택 안내를 더 받지 않을까요?")) setPerk(false); });
+      if (out) out.addEventListener("click", function () { perks(false); });
+    }
     if (S.isOK()) S.api("/api/me").then(function (j) {
-      if (j.ok) { if (who) who.textContent = j.teacher.name + " 선생님, 반가워요."; }
+      if (j.ok) { if (who) who.textContent = j.teacher.name + " 선생님, 반가워요."; perks(j.teacher.marketing); }
       else if (j.status === 401) { S.pass(null); paint(); }   /* 탈퇴·차단·로그아웃된 입장권 */
     });
   };

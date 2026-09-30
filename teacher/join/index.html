@@ -14,7 +14,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/site.css?v=aedf5b38">
+<link rel="stylesheet" href="/assets/site.css?v=635c4ed4">
 <style>
 .top{padding:56px 0 96px}
 .top h1{font-size:clamp(30px,4.2vw,44px);font-weight:800;letter-spacing:-.05em;margin-top:14px}
@@ -41,8 +41,13 @@
 .agree{margin-top:22px;border-top:1px solid var(--line);padding-top:16px;display:grid;gap:12px}
 .agree label{display:flex;gap:10px;align-items:flex-start;font-size:14.5px;line-height:1.5;cursor:pointer}
 .agree input{width:18px;height:18px;margin-top:2px;flex:none;accent-color:var(--ink)}
-.agree b{font-weight:700;color:var(--brand)}.agree .opt b{color:var(--mute)}
+.agree b{font-weight:700;color:var(--brand)}
 .agree details{font-size:13px;color:var(--sub);line-height:1.7;margin:-4px 0 0 28px}
+.agree .all{font-size:15.5px;padding-bottom:12px;border-bottom:1px dashed var(--line2)}.agree .all small{font-weight:500;color:var(--mute)}
+.agree .opt b{color:var(--brand)}.agree .opt small{font-size:12.5px;color:var(--mute)}
+.perks{list-style:none;margin:-4px 0 0 28px;display:grid;gap:5px;padding:12px 14px;border-radius:11px;background:var(--soft)}
+.perks li{font-size:13.5px;font-weight:600;color:var(--ink2);padding-left:20px;position:relative;line-height:1.5}
+.perks li:before{content:"✓";position:absolute;left:0;color:var(--brand);font-weight:800}
 .agree summary{cursor:pointer;color:var(--mute);text-decoration:underline;text-underline-offset:3px}
 .agree details a{color:var(--ink);font-weight:700;text-decoration:underline}
 .jerr{font-size:13.5px;color:#d93025;min-height:19px;margin-top:10px}
@@ -93,16 +98,20 @@
 
   <form class="jbox" id="s3" hidden novalidate>
     <h2><small>처음 오셨네요</small>선생님 신청서</h2>
-    <p>한 번만 적으면 돼요. 입력한 내용은 선생님 자료 제공과 문의 응대에만 써요.</p>
+    <p>한 번만 적으면 돼요.</p>
     <label class="fld"><span>이름</span><input type="text" name="name" maxlength="20" autocomplete="name"></label>
     <label class="fld"><span>학원·학교 이름</span><input type="text" name="academy" maxlength="40" autocomplete="organization" placeholder="예: 쏠뷰영어학원"></label>
     <label class="fld"><span>지역</span><select name="region"><option value="">선택해 주세요</option><option>서울</option><option>부산</option><option>대구</option><option>인천</option><option>광주</option><option>대전</option><option>울산</option><option>세종</option><option>경기</option><option>강원</option><option>충북</option><option>충남</option><option>전북</option><option>전남</option><option>경북</option><option>경남</option><option>제주</option><option>해외</option></select></label>
     <div class="fld"><span>직책</span><div class="opts"><label><input type="radio" name="role" value="원장"><span>원장</span></label><label><input type="radio" name="role" value="강사"><span>강사</span></label><label><input type="radio" name="role" value="공부방"><span>공부방</span></label><label><input type="radio" name="role" value="학교"><span>학교</span></label><label><input type="radio" name="role" value="기타"><span>기타</span></label></div></div>
     <div class="fld"><span>쓰고 있거나 볼 예정인 교재<em>선택 · 여러 개 가능</em></span><div class="opts"><label><input type="checkbox" name="books" value="phonics"><span>파닉스</span></label><label><input type="checkbox" name="books" value="starter"><span>스타터</span></label><label><input type="checkbox" name="books" value="bridge"><span>브릿지</span></label><label><input type="checkbox" name="books" value="intro"><span>입문</span></label><label><input type="checkbox" name="books" value="basic"><span>기본</span></label><label><input type="checkbox" name="books" value="mock"><span>첫모의고사</span></label><label><input type="checkbox" name="books" value="grammar"><span>그래머&amp;라이팅</span></label></div></div>
+    <label class="fld"><span>이메일<em>선택 · 혜택 자료를 메일로도 받아요</em></span><input type="text" name="email" inputmode="email" maxlength="100" autocomplete="email" placeholder="teacher@example.com"></label>
     <div class="agree">
+      <label class="all"><input type="checkbox" id="agall"><span><b>전체 동의</b> <small>(선택 항목 포함)</small></span></label>
       <label><input type="checkbox" name="privacy"><span><b>[필수]</b> 개인정보 수집·이용에 동의해요.</span></label>
       <details><summary>자세히 보기</summary>휴대폰 번호·이름·학원 이름·지역·직책(선택: 쓰는 교재)을 선생님 본인 확인과 교사 자료 제공, 문의 응대를 위해 모아요. 탈퇴할 때까지 보관하고, 탈퇴하면 바로 지워요. 동의하지 않을 수 있지만, 그러면 선생님 자료를 이용할 수 없어요. <a href="/privacy/" target="_blank" rel="noopener">개인정보처리방침 전문</a></details>
-      <label class="opt"><input type="checkbox" name="marketing"><span><b>[선택]</b> 새 교재·수업 자료 소식을 문자로 받을게요.</span></label>
+      <label class="opt"><input type="checkbox" name="marketing"><span><b>[선택]</b> 선생님 혜택 받기 <small>(광고성 정보 문자·이메일 수신 동의)</small></span></label>
+      <ul class="perks"><li>학부모 상담·설명회 자료</li><li>레벨테스트 시험지</li><li>신간 출시 할인 쿠폰</li><li>체험단·서평단 우선 선정</li><li>저자 직강 온라인 설명회 초대 (새 로드맵·교재 활용법)</li><li>티칭 가이드 (유닛별 수업 흐름·판서 예시·자주 틀리는 포인트)</li></ul>
+      <details><summary>자세히 보기</summary><b>목적</b> 선생님 혜택 자료와 신간·할인·체험단·설명회 등 광고성 정보 전송 · <b>방법</b> 문자, 이메일(적은 경우) · <b>항목</b> 이름, 휴대폰 번호, 이메일 · <b>보관</b> 동의를 끄거나 탈퇴할 때까지 · 동의를 거부할 권리가 있으며, 거부해도 선생님 자료 이용에는 제한이 없어요(혜택 안내만 받지 않아요). 언제든 선생님 자료 화면에서 끌 수 있어요.</details>
     </div>
     <button class="go1 full" type="submit">신청하고 입장하기</button>
     <div class="jerr" id="e3" role="alert"></div>
@@ -121,8 +130,8 @@
   <nav><a href="/books/">교재</a><a href="/teacher/">선생님 자료</a><a href="/studio/">음원·강의</a><a href="/contact/">문의</a><a class="store">스마트스토어</a><a class="talk">톡톡</a><a href="/privacy/">개인정보처리방침</a></nav>
   <span class="biz"></span>
 </div></footer>
-<script src="/assets/reviews.js?v=aedf5b38"></script>
-<script src="/assets/site.js?v=aedf5b38"></script>
+<script src="/assets/reviews.js?v=635c4ed4"></script>
+<script src="/assets/site.js?v=635c4ed4"></script>
 <script>
 var S=SOLVEU,$=S.$,st={phone:"",ticket:"",left:0,t:null};
 function show(id){["#s0","#s1","#s2","#s3","#s4"].forEach(function(k){$(k).hidden=k!==id;});var f=$(id+" input");if(f&&id!=="#s0")f.focus();}
@@ -155,11 +164,14 @@ $("#s2").addEventListener("submit",function(e){e.preventDefault();var b=$("#s2 .
 $("#s3").addEventListener("submit",function(e){e.preventDefault();var f=e.target,b=$("#s3 .go1");
   var v={ticket:st.ticket,name:f.name.value.trim(),academy:f.academy.value.trim(),region:f.region.value,
     role:(f.querySelector("[name=role]:checked")||{}).value,books:[].map.call(f.querySelectorAll("[name=books]:checked"),function(x){return x.value;}),
-    privacy:f.privacy.checked,marketing:f.marketing.checked};
+    email:(f.email.value||"").trim(),privacy:f.privacy.checked,marketing:f.marketing.checked};
   if(!v.name||!v.academy||!v.region||!v.role){msg("#e3","이름·학원·지역·직책을 모두 입력해 주세요.");return;}
   if(!v.privacy){msg("#e3","개인정보 수집·이용에 동의해 주셔야 입장할 수 있어요.");return;}
   busy(b,true);msg("#e3");S.api("/api/signup",v).then(function(j){busy(b,false);
     if(j.pass)done(j);else{msg("#e3",j.msg||"다시 시도해 주세요.");if(j.error==="ticket")setTimeout(function(){show("#s1");},1500);}});});
+(function(){var all=$("#agall"),f=$("#s3"),bx=[f.privacy,f.marketing];
+  all.addEventListener("change",function(){bx.forEach(function(b){b.checked=all.checked;});});
+  bx.forEach(function(b){b.addEventListener("change",function(){all.checked=bx.every(function(x){return x.checked;});});});})();
 $("#out").addEventListener("click",function(){S.api("/api/logout",{}).then(function(){S.pass(null);show("#s1");});});
 $("#bye").addEventListener("click",function(){if(!confirm("선생님 명단에서 삭제할까요?\n모든 기기에서 로그아웃되고, 다시 쓰려면 새로 신청해야 해요."))return;
   S.api("/api/withdraw",{}).then(function(j){if(j.ok){S.pass(null);alert("삭제했어요. 그동안 이용해 주셔서 감사합니다.");show("#s1");}else alert(j.msg||"다시 시도해 주세요.");});});
