@@ -2,8 +2,6 @@
 window.SOLVEU = {
   STORE: "https://smartstore.naver.com/solveu",
   TALK: "https://talk.naver.com/ct/wfk779v",
-  CODES: ["jeol2026"],
-  OK_KEY: "jeol_teacher_ok",
   BIZ: "상호 쏠뷰(SolveYou) · 대표 백성민",
     REVIEWS: window.SOLVEU_REVIEWS || []   /* /assets/reviews.js (build_site.py가 site_src/reviews.json에서 생성) */
 };
@@ -21,28 +19,6 @@ window.SOLVEU = {
     }).join("");
   };
 
-  /* 교사 게이트: 같은 키를 모든 페이지가 공유 */
-  S.isOK = function () { try { return localStorage.getItem(S.OK_KEY) === "1"; } catch (e) { return false; } };
-  S.gate = function (root) {
-    if (!root) return;
-    function paint() {
-      var ok = S.isOK(); root.classList.toggle("unlocked", ok);
-      $$(".libs a", root).forEach(function (a) { ok ? a.setAttribute("href", a.dataset.lib) : a.removeAttribute("href"); });
-      var ll = $(".tool.lib .lk", root); if (ll) ll.textContent = ok ? "노션에서 열림 →" : "인증 필요";
-      $$(".tool[data-href]", root).forEach(function (t) { var lk = $(".lk", t);
-        if (ok) { t.setAttribute("href", t.dataset.href); lk.textContent = "열기 →"; } else { t.removeAttribute("href"); lk.textContent = "인증 필요"; } });
-    }
-    var form = $(".gate", root), code = $("#code", root), err = $("#err", root);
-    if (form) form.addEventListener("submit", function (e) { e.preventDefault();
-      var v = (code.value || "").trim().toLowerCase();
-      if (S.CODES.indexOf(v) >= 0) { try { localStorage.setItem(S.OK_KEY, "1"); } catch (_) {} err.textContent = ""; paint(); }
-      else { err.textContent = "코드가 맞지 않아요. 다시 확인해 주세요."; code.select(); } });
-    var out = $(".relock", root); if (out) out.addEventListener("click", function () { try { localStorage.removeItem(S.OK_KEY); } catch (_) {} paint(); });
-    $$(".libs a,.tool[data-href]", root).forEach(function (a) { a.addEventListener("click", function (ev) {
-      if (!S.isOK()) { ev.preventDefault(); code.focus(); err.textContent = "교사 코드를 먼저 입력해 주세요."; } }); });
-    paint();
-  };
-
   /* 교사 인증(문자 인증 → 개인별 입장권). 서버 = solveu-auth Worker (_QR제작/teacher-auth) */
   S.AUTH = "https://solveu-auth.tjdals85200.workers.dev";
   S.PASS_KEY = "solveu_pass";
@@ -54,6 +30,29 @@ window.SOLVEU = {
     return fetch(S.AUTH + path, { method: body ? "POST" : "GET", headers: h, body: body ? JSON.stringify(body) : undefined })
       .then(function (r) { return r.json().then(function (j) { j.status = r.status; return j; }); })
       .catch(function () { return { error: "net", msg: "인터넷 연결을 확인해 주세요." }; });
+  };
+  try { localStorage.removeItem("jeol_teacher_ok"); } catch (e) {}   /* 옛 교사 코드 입장 흔적(2026-09-30 폐지) */
+
+  /* 교사 게이트: 입장권이 있으면 열고, 서버에서 확인해 무효면 다시 잠금 */
+  S.isOK = function () { return !!S.pass(); };
+  S.gate = function (root) {
+    if (!root) return;
+    var err = $("#err", root), who = $(".tname", root);
+    function paint() {
+      var ok = S.isOK(); root.classList.toggle("unlocked", ok);
+      $$(".libs a", root).forEach(function (a) { ok ? a.setAttribute("href", a.dataset.lib) : a.removeAttribute("href"); });
+      var ll = $(".tool.lib .lk", root); if (ll) ll.textContent = ok ? "노션에서 열림 →" : "인증 필요";
+      $$(".tool[data-href]", root).forEach(function (t) { var lk = $(".lk", t);
+        if (ok) { t.setAttribute("href", t.dataset.href); lk.textContent = "열기 →"; } else { t.removeAttribute("href"); lk.textContent = "인증 필요"; } });
+    }
+    var out = $(".relock", root); if (out) out.addEventListener("click", function () { S.api("/api/logout", {}); S.pass(null); paint(); });
+    $$(".libs a,.tool[data-href]", root).forEach(function (a) { a.addEventListener("click", function (ev) {
+      if (!S.isOK()) { ev.preventDefault(); err.textContent = "먼저 ‘휴대폰으로 입장하기’를 눌러 인증해 주세요."; } }); });
+    paint();
+    if (S.isOK()) S.api("/api/me").then(function (j) {
+      if (j.ok) { if (who) who.textContent = j.teacher.name + " 선생님, 반가워요."; }
+      else if (j.status === 401) { S.pass(null); paint(); }   /* 탈퇴·차단·로그아웃된 입장권 */
+    });
   };
 
   document.addEventListener("DOMContentLoaded", function () {

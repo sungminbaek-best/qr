@@ -144,13 +144,11 @@
   <section id="gate" class="hidden">
     <div class="gate">
       <div class="lockic">🔒</div>
-      <h2>선생님 코드를 입력하세요</h2>
-      <p>종이책 안쪽에 있는 코드를 한 번만 입력하면 됩니다.</p>
-      <input id="code" type="text" autocomplete="off" placeholder="코드 입력"
-        onkeydown="if(event.key==='Enter')tryUnlock()">
-      <button class="go" onclick="tryUnlock()">열기</button>
+      <h2>선생님 인증이 필요해요</h2>
+      <p>휴대폰 문자로 1분이면 돼요. 처음이면 간단한 신청서만 쓰면 돼요.</p>
+      <button class="go" onclick="location.href='/teacher/join/?next='+encodeURIComponent(location.pathname)">휴대폰으로 입장하기</button>
       <div class="err" id="err"></div>
-      <div class="hint">한 번 입력하면 이 기기에서 다음부터 바로 열립니다.</div>
+      <div class="hint">한 번 인증하면 이 기기에서 다음부터 바로 열려요.</div>
     </div>
   </section>
 
@@ -220,8 +218,8 @@
 <script src="gen_data.js"></script>
 <script>
 /* ===== 설정 ===== */
-const TEACHER_CODES = ["jeol2026"];
-const OK_KEY = "jeol_teacher_ok";
+const AUTH = "https://solveu-auth.tjdals85200.workers.dev";   // 선생님 인증 서버(_QR제작/teacher-auth)
+const PASS_KEY = "solveu_pass";                                // 사이트 공통 입장권(site.js 와 같은 키)
 
 const TYPES = [
   {id:"w_e2k", grp:"단어", nm:"영단어 → 뜻 쓰기", def:15},
@@ -237,16 +235,17 @@ const WORD_TYPES = new Set(["w_e2k","w_k2e","w_e2k_mc","w_k2e_mc"]);
 let CUR = null; // 생성된 문제 데이터
 
 /* ===== 게이트 ===== */
+function getPass(){ try{ return localStorage.getItem(PASS_KEY)||""; }catch(e){ return ""; } }
 function boot(){
-  if(localStorage.getItem(OK_KEY)==="1"){ openApp(); }
-  else { show("gate"); setTimeout(()=>document.getElementById("code").focus(),80); }
+  try{ localStorage.removeItem("jeol_teacher_ok"); }catch(e){}   // 옛 교사 코드(2026-09-30 폐지)
+  const p=getPass();
+  if(!p){ show("gate"); return; }
+  openApp();   // 입장권이 있으면 바로 열고, 서버 확인에서 무효면 다시 잠금
+  fetch(AUTH+"/api/me",{headers:{Authorization:"Bearer "+p}}).then(r=>{
+    if(r.status===401){ try{localStorage.removeItem(PASS_KEY)}catch(e){}; show("gate"); }
+  }).catch(()=>{});
 }
 function show(id){ ["gate","app"].forEach(v=>document.getElementById(v).classList.toggle("hidden", v!==id)); }
-function tryUnlock(){
-  const v=(document.getElementById("code").value||"").trim().toLowerCase();
-  if(TEACHER_CODES.some(c=>c.toLowerCase()===v)){ try{localStorage.setItem(OK_KEY,"1")}catch(e){}; openApp(); }
-  else document.getElementById("err").textContent="코드가 맞지 않습니다. 다시 확인해 주세요.";
-}
 function openApp(){ show("app"); initControls(); }
 
 /* ===== 컨트롤 초기화 ===== */
