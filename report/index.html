@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>오류 신고 · 쏠뷰</title>
+<meta name="description" content="쏠뷰 교재의 오타·정답 오류를 알려 주세요. 다음 인쇄 때 고쳐요.">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:title" content="오류 신고 · 쏠뷰"><meta property="og:description" content="쏠뷰 교재의 오타·정답 오류를 알려 주세요. 다음 인쇄 때 고쳐요."><meta property="og:type" content="website">
+<meta property="og:site_name" content="쏠뷰 SolveU"><meta property="og:locale" content="ko_KR"><meta property="og:url" content="https://solveu.co.kr/report/">
+<meta property="og:image" content="https://solveu.co.kr/assets/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://solveu.co.kr/report/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22%3E%3Crect width=%2264%22 height=%2264%22 rx=%2216%22 fill=%22%230c1020%22/%3E%3Ctext x=%2232%22 y=%2244%22 font-size=%2234%22 font-family=%22Arial%22 font-weight=%22700%22 text-anchor=%22middle%22 fill=%22%236b7dff%22%3EU%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css?v=aedf5b38">
+<style>
+.top{padding:56px 0 96px}
+.top h1{font-size:clamp(30px,4.2vw,44px);font-weight:800;letter-spacing:-.05em;margin-top:14px}
+.top>.wrap>p{font-size:clamp(15px,1.7vw,17px);color:var(--sub);line-height:1.7;margin-top:12px;max-width:34em}
+.jbox{max-width:520px;margin-top:30px;border:1px solid var(--line);border-radius:var(--r);padding:30px 28px;background:#fff;box-shadow:var(--shadow)}
+.jbox h2{font-size:19px;font-weight:800;letter-spacing:-.03em}
+.jbox h2 small{display:block;font-size:13px;font-weight:700;color:var(--brand);margin-bottom:6px}
+.jbox>p,.jbox form>p{font-size:14px;color:var(--sub);line-height:1.65;margin-top:8px}
+.fld{display:flex;flex-direction:column;gap:7px;margin-top:18px}
+.fld>span{font-size:13.5px;font-weight:700}.fld>span em{font-style:normal;color:var(--mute);font-weight:500;margin-left:4px}
+.jbox input[type=text],.jbox input[type=tel],.jbox select{width:100%;height:48px;border:1px solid var(--line2);border-radius:11px;padding:0 14px;font:inherit;font-size:15px;outline:none;background:#fff;transition:border-color .15s}
+.jbox input:focus,.jbox select:focus{border-color:var(--ink)}
+.row{display:flex;gap:8px}.row input{flex:1;min-width:0}
+.go1{height:48px;padding:0 18px;border-radius:11px;background:var(--ink);color:#fff;font-weight:700;font-size:15px;white-space:nowrap}
+.go1:disabled{opacity:.45;cursor:default}
+.go1.full{width:100%;margin-top:22px}
+.go2{font-size:13.5px;color:var(--mute);text-decoration:underline;text-underline-offset:3px;margin-top:12px}
+.go2:disabled{text-decoration:none;cursor:default}
+.opts{display:flex;flex-wrap:wrap;gap:7px}
+.opts label{cursor:pointer}.opts input{position:absolute;opacity:0;pointer-events:none}
+.opts span{display:inline-block;font-size:14px;font-weight:600;padding:9px 14px;border-radius:10px;border:1px solid var(--line2);color:var(--sub);transition:all .15s}
+.opts input:checked+span{background:var(--ink);border-color:var(--ink);color:#fff}
+.opts input:focus-visible+span{outline:2px solid var(--brand);outline-offset:2px}
+.agree{margin-top:22px;border-top:1px solid var(--line);padding-top:16px;display:grid;gap:12px}
+.agree label{display:flex;gap:10px;align-items:flex-start;font-size:14.5px;line-height:1.5;cursor:pointer}
+.agree input{width:18px;height:18px;margin-top:2px;flex:none;accent-color:var(--ink)}
+.agree b{font-weight:700;color:var(--brand)}.agree .opt b{color:var(--mute)}
+.agree details{font-size:13px;color:var(--sub);line-height:1.7;margin:-4px 0 0 28px}
+.agree summary{cursor:pointer;color:var(--mute);text-decoration:underline;text-underline-offset:3px}
+.agree details a{color:var(--ink);font-weight:700;text-decoration:underline}
+.jerr{font-size:13.5px;color:#d93025;min-height:19px;margin-top:10px}
+.timer{font-size:13px;color:var(--brand);font-weight:700;margin-top:8px}
+.dev{font-size:13px;background:#fff7e0;color:#8a5a00;border-radius:9px;padding:8px 12px;margin-top:12px}
+.dev:empty{display:none}
+.okc{width:52px;height:52px;border-radius:50%;background:#1e8e3e;color:#fff;display:grid;place-items:center;font-size:24px;margin-bottom:16px}
+.acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:22px}
+.small{font-size:13px;color:var(--mute);margin-top:18px}.small button{text-decoration:underline;text-underline-offset:3px;color:var(--mute)}
+[hidden]{display:none!important}
+
+.jbox textarea{width:100%;min-height:130px;border:1px solid var(--line2);border-radius:11px;padding:12px 14px;font:inherit;font-size:15px;line-height:1.6;outline:none;resize:vertical}
+.jbox textarea:focus{border-color:var(--ink)}
+.cnt{font-size:12px;color:var(--mute);text-align:right;margin-top:4px}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+</style>
+</head>
+<body id="top">
+<header class="nav" id="nav"><div class="wrap">
+  <a class="logo" href="/" aria-label="쏠뷰 SolveU 홈"><span class="ko">쏠뷰</span><span class="dv"></span><span class="en">Solve<span class="g">U</span></span></a>
+  <nav aria-label="주 메뉴"><a href="/books/">교재</a><a href="/books/#roadmap">학습 로드맵</a><a href="/studio/">음원·강의</a><a href="/contact/" aria-current=page>문의</a></nav>
+  <a class="nbtn" href="/teacher/">선생님 자료</a>
+</div></header>
+<main>
+
+<section class="top"><div class="wrap">
+  <div class="label">Report</div>
+  <h1>오류 신고</h1>
+  <p>교재에서 틀린 곳을 찾으셨나요? 알려 주시면 확인해서 다음 인쇄 때 바로 고칠게요. <br>이름이나 연락처는 받지 않아요.</p>
+
+  <form class="jbox" id="rf" novalidate>
+    <label class="fld"><span>교재</span><select name="book"><option value="">선택해 주세요</option><optgroup label="파닉스"><option value="ph1">저절로 파닉스 1</option><option value="ph2">저절로 파닉스 2</option></optgroup><optgroup label="스타터"><option value="rst1">저절로 스타터 1</option><option value="rst2">저절로 스타터 2</option></optgroup><optgroup label="브릿지"><option value="rbr1">저절로 브릿지 1</option><option value="rbr2">저절로 브릿지 2</option></optgroup><optgroup label="입문"><option value="rin1">저절로 입문 1</option><option value="rin2">저절로 입문 2</option></optgroup><optgroup label="기본"><option value="rba1">저절로 기본 1</option><option value="rba2">저절로 기본 2</option></optgroup><optgroup label="첫모의고사"><option value="rmo1">저절로 첫모의고사 1</option><option value="rmo2">저절로 첫모의고사 2</option></optgroup><optgroup label="그래머&amp;라이팅"><option value="gw1">저절로 그래머&amp;라이팅 1</option><option value="gw2">저절로 그래머&amp;라이팅 2</option></optgroup><option value="etc">기타 · 잘 모르겠어요</option></select></label>
+    <label class="fld"><span>쪽·위치<em>선택</em></span><input type="text" name="page" maxlength="30" placeholder="예: 44쪽 3번, 유닛 5 단어"></label>
+    <div class="fld"><span>어떤 오류인가요?</span><div class="opts"><label><input type="radio" name="kind" value="오타·맞춤법"><span>오타·맞춤법</span></label><label><input type="radio" name="kind" value="정답 오류"><span>정답 오류</span></label><label><input type="radio" name="kind" value="해석·뜻 오류"><span>해석·뜻 오류</span></label><label><input type="radio" name="kind" value="음원·QR"><span>음원·QR</span></label><label><input type="radio" name="kind" value="기타"><span>기타</span></label></div></div>
+    <label class="fld"><span>내용</span><textarea name="body" maxlength="1000" placeholder="예: 3번 문제 정답이 ②로 되어 있는데 ③이 맞는 것 같아요."></textarea></label>
+    <div class="cnt" id="cnt">0 / 1000</div>
+    <label class="hp" aria-hidden="true">비워 두세요<input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+    <button class="go1 full" type="submit">신고 보내기</button>
+    <div class="jerr" id="re" role="alert"></div>
+    <p class="small">답변이 필요한 문의는 <a class="talk">톡톡</a>으로 보내 주세요.</p>
+  </form>
+
+  <div class="jbox" id="rdone" hidden>
+    <div class="okc">✓</div><h2>고마워요!</h2><p>잘 받았어요. 확인해서 다음 인쇄 때 고칠게요.</p>
+    <div class="acts"><button class="btn dark sm" type="button" id="again">하나 더 신고하기</button><a class="btn line sm" href="/contact/">문의 페이지로</a></div>
+  </div>
+</div></section>
+
+</main>
+<footer><div class="wrap">
+  <span class="fl"><span class="ko">쏠뷰</span><span class="en">Solve<span class="g">U</span></span></span>
+  <span>현장에서 검증된 영어 교재</span>
+  <nav><a href="/books/">교재</a><a href="/teacher/">선생님 자료</a><a href="/studio/">음원·강의</a><a href="/contact/">문의</a><a class="store">스마트스토어</a><a class="talk">톡톡</a><a href="/privacy/">개인정보처리방침</a></nav>
+  <span class="biz"></span>
+</div></footer>
+<script src="/assets/reviews.js?v=aedf5b38"></script>
+<script src="/assets/site.js?v=aedf5b38"></script>
+<script>
+var S=SOLVEU,$=S.$,f=$("#rf"),q=new URLSearchParams(location.search);
+if(q.get("book"))f.book.value=q.get("book");if(q.get("page"))f.page.value=q.get("page").slice(0,30);
+f.body.addEventListener("input",function(){$("#cnt").textContent=f.body.value.length+" / 1000";});
+function show(id){["#rf","#rdone"].forEach(function(k){$(k).hidden=k!==id;});}
+f.addEventListener("submit",function(e){e.preventDefault();var b=$("#rf .go1");
+  var kind=(f.querySelector("[name=kind]:checked")||{}).value;
+  var v={book:f.book.value,page:f.page.value.trim(),kind:kind,body:f.body.value.trim(),website:f.website.value};
+  if(!v.book||!v.kind||v.body.length<2){$("#re").textContent="교재·종류·내용을 입력해 주세요.";return;}
+  b.disabled=true;$("#re").textContent="";
+  S.api("/api/report",v).then(function(j){b.disabled=false;
+    if(j.ok){f.page.value="";f.body.value="";$("#cnt").textContent="0 / 1000";show("#rdone");scrollTo(0,0);}
+    else $("#re").textContent=j.msg||"잠시 뒤 다시 보내 주세요.";});});
+$("#again").addEventListener("click",function(){show("#rf");});
+</script>
+</body>
+</html>
