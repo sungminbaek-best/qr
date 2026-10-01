@@ -304,11 +304,6 @@
         <label class="fld"><span>받는 분 연락처</span><input type="tel" id="b-rphone" maxlength="13" inputmode="tel" placeholder="010-0000-0000"></label>
       </div>
       <h3>몇 가지만 더</h3>
-      <div class="fld"><span>카페 회원이신가요?</span><div class="opts" id="b-cafe"><label><input type="radio" name="cafe" value="yes"><span>예</span></label><label><input type="radio" name="cafe" value="no"><span>아니오</span></label></div></div>
-      <div class="cafebox" id="cafebox" hidden>
-        <label class="fld" style="margin-top:6px"><span>카페 닉네임</span><input type="text" id="b-nick" maxlength="30"></label>
-        <div class="agree" style="margin-top:0;border:0;padding:0"><label><input type="checkbox" id="b-cafeok"><span><b>[필수]</b> 카페 회원 확인을 위해 카페 운영자에게 닉네임과 주문 권수를 확인할 수 있어요.</span></label></div>
-      </div>
       <div class="fld"><span>저절로를 어디서 처음 알게 되셨나요?</span><div class="opts" id="b-heard"><label><input type="radio" name="heard" value="카페"><span>카페</span></label><label><input type="radio" name="heard" value="인터넷 검색"><span>인터넷 검색</span></label><label><input type="radio" name="heard" value="지인 추천"><span>지인 추천</span></label><label><input type="radio" name="heard" value="세미나"><span>세미나</span></label><label><input type="radio" name="heard" value="기타"><span>기타</span></label></div></div>
       <div class="fld"><span>저절로를 처음 도입하시나요?</span><div class="opts" id="b-first"><label><input type="radio" name="first" value="yes"><span>네, 처음이에요</span></label><label><input type="radio" name="first" value="no"><span>이미 쓰고 있어요</span></label></div></div>
       <label class="fld"><span>요청사항 <em>선택</em></span><textarea id="b-req" maxlength="500"></textarea></label>
@@ -346,8 +341,9 @@
 <script src="/assets/site.js?v=1d55ec82"></script>
 <script>
 var S=SOLVEU,$=S.$,P={"ph1": 14000, "ph2": 14000, "rst1": 14000, "rst2": 14000, "rbr1": 15000, "rbr2": 16000, "rin1": 14000, "rin2": 14000, "rba1": 15000, "rba2": 15000, "rmo1": 15000, "rmo2": 16000, "gw1": 16000, "gw2": 16000},T=[[100, null], [50, 0.8], [30, 0.85]];
-/* 카페 공지 링크(?from=cafe) 같은 유입 표시는 이 탭에 기억했다가 신청 때 함께 보냄 */
-try{var fr=new URLSearchParams(location.search).get("from");if(fr)sessionStorage.setItem("solveu_from",fr.slice(0,30));}catch(e){}
+/* 카페 공지 링크(?from=cafe)로 들어오면 30일 동안 기억 → 그 사이 신청하면 카페 주문(수수료 대상)으로 표시 */
+try{var fr=new URLSearchParams(location.search).get("from");if(fr){sessionStorage.setItem("solveu_from",fr.slice(0,30));if(fr==="cafe")localStorage.setItem("solveu_cafe",String(Date.now()));}}catch(e){}
+function srcNow(){var s="";try{s=sessionStorage.getItem("solveu_from")||"";var c=+localStorage.getItem("solveu_cafe")||0;if(!s&&c&&Date.now()-c<30*864e5)s="cafe";}catch(e){}return s;}
 function won(n){return n.toLocaleString("ko-KR")+"원";}
 function qty(){var o={},n=0,l=0;S.$$(".qt input").forEach(function(i){var v=Math.max(0,Math.min(999,parseInt(i.value,10)||0));if(v){o[i.dataset.c]=v;n+=v;l+=v*P[i.dataset.c];}});return {o:o,n:n,l:l};}
 function tier(n){for(var i=0;i<T.length;i++)if(n>=T[i][0])return T[i];return null;}
@@ -361,7 +357,6 @@ function calc(){var q=qty(),t=tier(q.n),m="";
     if(t[0]===30&&q.n>=40)m=(50-q.n)+"권 더 담으면 정가의 80%가 적용돼요.";}
   $("#c-m").textContent=m;}
 S.$$(".qt input").forEach(function(i){i.addEventListener("input",calc);});
-S.$$("#b-cafe input").forEach(function(r){r.addEventListener("change",function(){$("#cafebox").hidden=r.value!=="yes";});});
 function val(id){return ($(id).value||"").trim();}
 function radio(name){var r=document.querySelector('input[name="'+name+'"]:checked');return r?r.value:"";}
 function show(){var ok=S.isOK();$("#needAuth").hidden=ok;$("#bf").hidden=!ok;}
@@ -377,20 +372,17 @@ if(S.isOK())fetch(S.AUTH+"/api/b2b/last",{headers:{Authorization:"Bearer "+S.pas
 if(S.isOK())S.api("/api/me").then(function(j){if(j.ok){var t=j.teacher;if(!val("#b-academy"))$("#b-academy").value=t.academy||"";if(!val("#b-manager"))$("#b-manager").value=t.name||"";if(!val("#b-email"))$("#b-email").value=t.email||"";}
   else if(j.status===401){S.pass(null);show();}});
 $("#bf").addEventListener("submit",function(e){e.preventDefault();var err=$("#berr"),q=qty();err.textContent="";
-  var cafe=radio("cafe"),need=[["#b-academy","학원 이름"],["#b-manager","대표자·담당자"],["#b-biz","사업자등록번호"],["#b-email","계산서 받을 이메일"],["#b-addr","배송지 주소"],["#b-rname","받는 분"],["#b-rphone","받는 분 연락처"]];
+  var need=[["#b-academy","학원 이름"],["#b-manager","대표자·담당자"],["#b-biz","사업자등록번호"],["#b-email","계산서 받을 이메일"],["#b-addr","배송지 주소"],["#b-rname","받는 분"],["#b-rphone","받는 분 연락처"]];
   for(var i=0;i<need.length;i++)if(!val(need[i][0])){err.textContent=need[i][1]+"을(를) 입력해 주세요.";$(need[i][0]).focus();return;}
   if(val("#b-biz").replace(/\D/g,"").length!==10){err.textContent="사업자등록번호 10자리를 확인해 주세요.";return;}
   if(q.n<30){err.textContent="30권부터 신청할 수 있어요. 여러 교재를 합쳐서 30권이면 돼요.";return;}
-  if(!cafe){err.textContent="카페 회원인지 골라 주세요.";return;}
-  if(cafe==="yes"&&!val("#b-nick")){err.textContent="카페 닉네임을 입력해 주세요.";$("#b-nick").focus();return;}
-  if(cafe==="yes"&&!$("#b-cafeok").checked){err.textContent="카페 회원 확인 안내에 동의해 주세요.";return;}
   if(!radio("heard")){err.textContent="저절로를 처음 알게 된 곳을 골라 주세요.";return;}
   if(!radio("first")){err.textContent="처음 도입하시는지 골라 주세요.";return;}
   if(!$("#b-return").checked||!$("#b-privacy").checked){err.textContent="필수 항목에 동의해 주세요.";return;}
-  var src="";try{src=sessionStorage.getItem("solveu_from")||"";}catch(x){}
+  var src=srcNow();
   var b=$("#bsend");b.disabled=true;b.textContent="보내는 중…";
   S.api("/api/b2b",{academy:val("#b-academy"),manager:val("#b-manager"),biz:val("#b-biz"),email:val("#b-email"),qty:q.o,addr:val("#b-addr"),rname:val("#b-rname"),rphone:val("#b-rphone"),
-    cafe:cafe==="yes",nick:cafe==="yes"?val("#b-nick"):"",cafe_ok:cafe==="yes"&&$("#b-cafeok").checked,heard:radio("heard"),first:radio("first")==="yes",req:val("#b-req"),src:src,
+    heard:radio("heard"),first:radio("first")==="yes",req:val("#b-req"),src:src,
     returns:true,privacy:true,website:val("#b-website")}).then(function(j){b.disabled=false;b.textContent="도입 신청하기";
     if(j.ok){$("#bf").hidden=true;$("#bdone").hidden=false;$("#apply").scrollIntoView();}
     else if(j.status===401){S.pass(null);show();}
