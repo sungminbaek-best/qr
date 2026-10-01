@@ -77,6 +77,14 @@
 .next b{display:block;font-size:17px;font-weight:800;margin-top:2px}
 .next span{font-size:13.5px;color:var(--sub)}
 .next .ar{margin-left:auto;font-weight:700;color:var(--mute)}
+.pitch{padding:80px 0;border-bottom:1px solid var(--line);background:var(--panel)}
+.pitch h2{font-size:clamp(26px,3.6vw,40px);font-weight:800;letter-spacing:-.05em;line-height:1.3}
+.pitch .sub{font-size:16.5px;color:var(--sub);line-height:1.75;margin-top:16px;max-width:640px}
+.pts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:36px}
+.pts div{background:#fff;border:1px solid var(--line);border-radius:16px;padding:20px 22px}
+.pts b{display:block;font-size:17px;font-weight:800;letter-spacing:-.03em}
+.pts span{display:block;font-size:14px;color:var(--sub);margin-top:6px;line-height:1.6}
+@media(max-width:760px){.pitch{padding:56px 0}.pts{grid-template-columns:1fr;gap:10px}}
 .b2brow{display:flex;align-items:center;gap:14px;flex-wrap:wrap;border:1px solid var(--line);border-radius:16px;padding:18px 22px;max-width:640px;margin-top:20px}
 .b2brow b{font-size:15.5px}.b2brow span{font-size:14px;color:var(--sub)}.b2brow .ar{margin-left:auto;color:var(--brand);font-weight:700}
 </style>
@@ -102,6 +110,7 @@
     <div class="covs2 rev"><img src="/assets/covers/rba1.webp" alt="저절로 기본 1 표지"><img src="/assets/covers/rba2.webp" alt="저절로 기본 2 표지"></div>
   </div>
 </div></section>
+
 <nav class="bk-nav" aria-label="이 페이지"><div class="wrap"><a href="#about">구성·자료</a><a href="#toc">목차</a><a href="#preview">미리보기</a><a href="#reviews">후기</a></div></nav>
 
 <section class="bk-sec" id="about"><div class="wrap">
