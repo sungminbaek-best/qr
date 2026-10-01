@@ -81,7 +81,7 @@ window.SOLVEU = {
       if (out) out.addEventListener("click", function () { perks(false); });
     }
     if (S.isOK()) S.api("/api/me").then(function (j) {
-      if (j.ok) { if (who) who.textContent = j.teacher.name + " 선생님 · 인증됨"; perks(j.teacher.marketing); if (j.teacher.need_buy) S.askBuy($(".gatebox", root)); }
+      if (j.ok) { if (who) who.textContent = j.teacher.name + " 선생님"; perks(j.teacher.marketing); if (j.teacher.need_buy) S.askBuy($(".gatebox", root)); }
       else if (j.status === 401) { S.pass(null); paint(); }   /* 탈퇴·차단·로그아웃된 입장권 */
     });
   };

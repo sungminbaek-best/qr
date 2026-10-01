@@ -14,7 +14,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/site.css?v=a80ec4b4">
+<link rel="stylesheet" href="/assets/site.css?v=480b6107">
 <style>
 .top{padding:56px 0 24px}
 .top h1{font-size:clamp(32px,4.6vw,50px);font-weight:800;letter-spacing:-.05em;margin-top:14px}
@@ -90,6 +90,58 @@
 @media(max-width:860px){.ans{grid-template-columns:1fr}}
 @media(max-width:420px){.ag{gap:14px;padding:16px}.ag .cv{padding:10px}.ag .cv img{width:40px}.ag .cv.land img{width:46px}.ag .vl b{width:100%}}
 #books .sh h2,#teacher .sh h2{font-size:clamp(22px,2.6vw,28px)}
+/* 자료실: 선생님 전용 — 그라데이션 테두리 고급 구역 */
+.tp{position:relative;margin-top:28px;border-radius:28px;padding:2px;background:linear-gradient(135deg,#4361ff,#8a5cff 55%,#c6b8ff)}
+.tp .in{position:relative;border-radius:26px;background:radial-gradient(120% 90% at 100% 0%,#f3efff 0%,#fff 46%),#fff;padding:40px 40px 34px;overflow:hidden}
+.tp .badge{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:800;color:var(--brand);background:#fff;border:1px solid #dfe4ff;border-radius:999px;padding:5px 11px}
+.tp .badge i{display:grid;font-style:normal}.tp .badge svg{width:12px;height:12px}.tp .badge em{font-style:normal}
+.tp h2{font-size:clamp(26px,3.4vw,38px);font-weight:800;letter-spacing:-.05em;line-height:1.25;margin-top:14px}
+.tp .gt{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.tp .lead{font-size:16px;color:var(--sub);margin-top:10px}
+.tg4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-top:30px}
+.tf{position:relative;border-radius:20px;background:#fff;border:1px solid #e8eaf6;padding:18px 18px 20px;box-shadow:0 14px 34px -24px rgba(67,97,255,.45);display:flex;flex-direction:column}
+.tf .art{height:118px;border-radius:14px;background:linear-gradient(160deg,#f5f6ff,#eef0ff);position:relative;overflow:hidden;margin-bottom:16px}
+.tf>b{font-size:17px;font-weight:800;letter-spacing:-.03em}
+.tf>span{font-size:13.5px;color:var(--sub);line-height:1.55;margin-top:5px}
+.tf .go{display:none;margin-top:auto;padding-top:14px;font-size:13.5px;font-weight:800;color:var(--brand);border:0;background:none}
+.tf .go.off{color:var(--mute)}
+.sheet{position:absolute;left:50%;top:16px;width:92px;height:118px;margin-left:-46px;background:#fff;border-radius:6px;box-shadow:0 10px 20px -10px rgba(12,16,32,.35);padding:12px 10px}
+.sheet i{display:block;height:5px;border-radius:3px;background:#e3e6f3;margin-bottom:7px}
+.sheet i.h{width:60%;background:#c9d0ff}.sheet i.s{width:75%}
+.sheet.b2{transform:rotate(-8deg) translate(-26px,8px);opacity:.7}.sheet.b3{transform:rotate(7deg) translate(26px,8px);opacity:.85}
+.sheet.l{transform:translateX(-30px) rotate(-4deg)}.sheet.r{transform:translateX(30px) rotate(4deg)}
+.chk{position:absolute;right:16px;bottom:12px;width:30px;height:30px;border-radius:50%;background:var(--grad);display:grid;place-items:center;color:#fff;box-shadow:0 8px 16px -6px rgba(67,97,255,.7)}
+.chk svg{width:14px;height:14px}
+.scr{position:absolute;left:50%;top:14px;width:150px;height:92px;margin-left:-75px;background:#fff;border-radius:8px;border:5px solid #d9ddf5;box-shadow:0 10px 20px -12px rgba(12,16,32,.35);padding:10px 12px}
+.scr i{display:block;height:5px;border-radius:3px;background:#e3e6f3;margin-bottom:7px}
+.scr i.h{width:55%;background:#c9d0ff}
+.scr .hl{position:absolute;left:12px;top:30px;width:70px;height:9px;background:rgba(255,213,74,.55);border-radius:3px}
+.scr .cir{position:absolute;right:14px;top:40px;width:38px;height:22px;border:2.5px solid #8a5cff;border-radius:50%;transform:rotate(-8deg)}
+.stand{position:absolute;left:50%;top:104px;width:40px;height:8px;margin-left:-20px;background:#d9ddf5;border-radius:0 0 6px 6px}
+.gift{position:absolute;left:50%;top:50%;width:64px;height:54px;margin:-20px 0 0 -32px;border-radius:8px;background:var(--grad);box-shadow:0 12px 22px -10px rgba(138,92,255,.7)}
+.gift:before{content:"";position:absolute;left:-6px;right:-6px;top:-14px;height:16px;border-radius:6px;background:#7b6bff}
+.gift:after{content:"";position:absolute;left:28px;top:-14px;width:8px;bottom:0;background:#fff;opacity:.85}
+.tag{position:absolute;font-size:10.5px;font-weight:800;background:#fff;border-radius:999px;padding:3px 8px;color:var(--brand);box-shadow:0 6px 12px -8px rgba(12,16,32,.4)}
+.tcta{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:28px}
+.tcta .big{display:inline-flex;align-items:center;gap:8px;padding:16px 26px;border-radius:999px;background:var(--grad);color:#fff;font-size:16px;font-weight:800;box-shadow:0 16px 30px -14px rgba(67,97,255,.85)}
+.tcta small{font-size:13.5px;color:var(--mute);font-weight:600}
+.tp .ok{display:none!important;align-items:center;gap:12px;flex-wrap:wrap;margin-top:24px}
+.tp .ok small{font-size:13.5px;color:var(--mute)}
+.tp .ok button{font-size:13px;font-weight:700;padding:8px 14px;border-radius:999px;border:1px solid var(--line2);background:#fff;color:var(--sub);text-decoration:none;margin:0}
+.tp .t-post,.tp .b-post,.tp .badge i.okk{display:none}
+.tf .go.tbtn{border:0;border-radius:0;padding:14px 0 0;background:none;color:var(--brand);font-size:13.5px;font-weight:800}
+.libcap{font-size:20px;font-weight:800;letter-spacing:-.03em;margin-top:48px}
+/* 인증 후 */
+.unlocked .tp .in{background:radial-gradient(120% 90% at 100% 0%,#eefbf3 0%,#fff 46%),#fff}
+.unlocked .tp .t-pre,.unlocked .tp .b-pre,.unlocked .tp .lk,.unlocked .tcta{display:none}
+.unlocked .tp h2.t-post{display:block}.unlocked .tp p.t-post{display:block}.unlocked .tp .b-post{display:inline}.unlocked .tp .badge i.okk{display:grid;color:#1e8e3e}.unlocked .tp .badge i.lk{display:none}
+.unlocked .tp .ok{display:flex!important}
+.unlocked .tf .go{display:block}
+/* 교재 카드의 선생님 줄은 인증 뒤에만 */
+.tch{display:none!important}.unlocked .tch{display:flex!important}
+@media(max-width:900px){.tg4{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.tp .in{padding:28px 18px 24px}.tg4{gap:10px}.tf{padding:12px}.tf .art{height:88px}.tf .art>*{transform-origin:center top}.sheet,.scr,.gift{scale:.78}.tf>b{font-size:15px}.tf>span{font-size:12.5px}.tcta .big{width:100%;justify-content:center}}
+
 /* 자료실: 인증 막대 + 교재 카드 하나에 공개·선생님 자료 */
 .auth{display:flex;align-items:center;gap:14px;margin-top:26px;padding:16px 20px;border-radius:16px;background:var(--soft);flex-wrap:wrap}
 .auth .aic{width:38px;height:38px;border-radius:50%;background:#fff;color:var(--brand);display:grid;place-items:center;flex:none}
@@ -132,22 +184,37 @@
   <h1 class="rev">자료실</h1>
   <p class="rev">교재마다 정답·음원은 누구나, <br class="mo">수업 자료는 선생님 인증 뒤에 열려요.</p>
   <div id="tz">
-    <div class="auth gatebox rev" id="teacher">
-      <span class="aic"><i class="lk"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2.5" fill="currentColor"/><path d="M8 11V8a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="2.2"/></svg></i><i class="okk"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="M5 12l5 5 9-10"/></svg></i></span>
-      <div class="atx"><b class="tname">선생님이세요?</b><span class="asub">휴대폰 문자로 한 번 인증하면 🔒 자료가 모두 열려요.</span></div>
-      <a class="go gobtn" href="/library/join/?next=/library/%23teacher">휴대폰으로 입장 →</a>
-      <div class="ok"><button type="button" class="relock">로그아웃</button></div>
-    </div>
+    <div class="tp gatebox rev" id="teacher"><div class="in">
+      <span class="badge"><i class="lk"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2.5" fill="currentColor"/><path d="M8 11V8a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="2.2"/></svg></i><i class="okk"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="M5 12l5 5 9-10"/></svg></i><em class="b-pre">선생님 전용</em><em class="b-post">인증됨</em></span>
+      <h2 class="t-pre">선생님 인증 한 번이면,<br><span class="gt">수업 준비가 끝나요.</span></h2>
+      <h2 class="t-post"><span class="tname">선생님</span>,<br><span class="gt">모든 자료가 열렸어요.</span></h2>
+      <p class="lead t-pre">시험지부터 판서까지, 저절로로 수업하는 데 필요한 것을 모두 드려요.</p>
+      <p class="lead t-post">필요한 도구를 바로 여세요. 교재별 자료는 아래 카드에서 받을 수 있어요.</p>
+      <div class="tg4">
+        <div class="tf"><div class="art"><div class="sheet b2"><i class="h"></i><i></i><i class="s"></i><i></i></div><div class="sheet b3"><i class="h"></i><i></i><i class="s"></i><i></i></div><div class="sheet"><i class="h"></i><i></i><i class="s"></i><i></i><i></i><i class="s"></i></div><span class="chk"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="M5 12l5 5 9-10"/></svg></span></div>
+          <b>1분 만에 시험지</b><span>유닛만 고르면 누적 단어 시험·빙고·십자말풀이까지 바로 나와요</span><a class="go tbtn" data-href="/교사포털/시험지생성기/">열기 →</a></div>
+        <div class="tf"><div class="art"><div class="sheet l"><i class="h"></i><i></i><i></i><i class="s"></i></div><div class="sheet r"><i class="h"></i><i class="s"></i><i></i><i></i></div><span class="tag" style="left:12px;bottom:10px">단어 리스트</span><span class="tag" style="right:12px;top:10px">워크북</span></div>
+          <b>인쇄만 하면 되는 수업 자료</b><span>수업에 바로 쓰는 여러 유형의 워크북 완성본</span><a class="go" href="#books">교재별로 받기 ↓</a></div>
+        <div class="tf"><div class="art"><div class="scr"><i class="h"></i><i></i><i style="width:70%"></i><i></i><span class="hl"></span><span class="cir"></span></div><span class="stand"></span></div>
+          <b>교재 그대로, 전자칠판에</b><span>화면에 띄워 판서하고 정답을 하나씩 공개해요</span><span class="go off">곧 열려요</span></div>
+        <div class="tf"><div class="art"><span class="gift"></span><span class="tag" style="left:10px;top:12px">설명회</span><span class="tag" style="right:10px;bottom:12px">티칭 가이드</span></div>
+          <b>선생님만 받는 혜택</b><span>저자 직강 설명회 · 티칭 가이드 · 신간 샘플 우선</span><a class="go" href="#perk">혜택 받기 →</a></div>
+      </div>
+      <div class="tcta"><a class="big gobtn" href="/library/join/?next=/library/%23teacher">무료로 시작하기 →</a><small>휴대폰 문자로 1분 · 한 번만 인증하면 계속 써요</small></div>
+      <div class="ok"><small>다른 기기에서도 같은 번호로 다시 들어올 수 있어요.</small><button type="button" class="relock">로그아웃</button></div>
+    </div></div>
+    <span id="perk"></span>
     <div class="err" id="err" role="alert"></div>
     <div class="perkbox" hidden>
       <b>🎁 선생님 혜택 받기</b>
-      <ul class="perks"><li>학부모 상담·설명회 자료</li><li>레벨테스트 시험지</li><li>신간 출시 알림·샘플 우선 제공</li><li>체험단·서평단 우선 선정</li><li>저자 직강 온라인 설명회 초대 (새 로드맵·교재 활용법)</li><li>티칭 가이드 (유닛별 수업 흐름·판서 예시·자주 틀리는 포인트)</li></ul>
+      <ul class="perks"><li>학부모 상담·설명회 자료</li><li>신간 출시 알림·샘플 우선 제공</li><li>체험단·서평단 우선 선정</li><li>저자 직강 온라인 설명회 초대 (새 로드맵·교재 활용법)</li><li>티칭 가이드 (유닛별 수업 흐름·판서 예시·자주 틀리는 포인트)</li></ul>
       <input type="text" class="pmail" inputmode="email" maxlength="100" autocomplete="email" placeholder="이메일 (선택)">
       <button type="button" class="btn dark sm pon">혜택 받기</button>
       <details><summary>광고성 정보 수신 동의 · 자세히</summary><b>목적</b> 선생님 혜택 자료와 신간·샘플·체험단·설명회 등 광고성 정보 전송 · <b>방법</b> 문자, 이메일(적은 경우) · <b>항목</b> 이름, 휴대폰 번호, 이메일 · <b>보관</b> 동의를 끄거나 탈퇴할 때까지 · 동의를 거부할 권리가 있으며, 거부해도 선생님 전용 자료 이용에는 제한이 없어요(혜택 안내만 받지 않아요). 언제든 자료실 화면에서 끌 수 있어요.</details>
     </div>
     <p class="perkon" hidden>🎁 선생님 혜택을 받고 있어요. <button type="button" class="poff">받지 않기</button></p>
     
+    <h2 class="libcap rev">교재별 자료</h2>
     <div class="ans" id="books"><div class="ag rev"><div class="hd"><div class="cv"><img src="/assets/covers/ph1.webp" alt="저절로 파닉스 1 표지" loading="lazy"><img src="/assets/covers/ph2.webp" alt="저절로 파닉스 2 표지" loading="lazy"></div><div class="tx"><h3>파닉스 <span class="chip gray">초1~2</span></h3><div class="vl"><b>1권</b><a class="pill a" href="/books/answers/ph1.pdf" target="_blank" rel="noopener" aria-label="저절로 파닉스 1 정답 PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 20h14"/></svg>정답 PDF</a><a class="pill b" href="/studio/?book=ph1" aria-label="저절로 파닉스 1 음원·강의"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" d="M4 15v-3a8 8 0 0 1 16 0v3"/><rect x="3" y="14" width="5" height="7" rx="2" fill="currentColor"/><rect x="16" y="14" width="5" height="7" rx="2" fill="currentColor"/></svg>음원·강의</a></div><div class="vl"><b>2권</b><a class="pill a" href="/books/answers/ph2.pdf" target="_blank" rel="noopener" aria-label="저절로 파닉스 2 정답 PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 20h14"/></svg>정답 PDF</a><a class="pill b" href="/studio/?book=ph2" aria-label="저절로 파닉스 2 음원·강의"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" d="M4 15v-3a8 8 0 0 1 16 0v3"/><rect x="3" y="14" width="5" height="7" rx="2" fill="currentColor"/><rect x="16" y="14" width="5" height="7" rx="2" fill="currentColor"/></svg>음원·강의</a></div></div></div>
       <div class="tch"><span class="lab"><i class="lk"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2.5" fill="currentColor"/><path d="M8 11V8a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="2.2"/></svg></i>선생님</span><a class="tbtn" data-href="https://southern-winter-c87.notion.site/1-2-8b02a1e094c745cf80a590f34d4db521" target="_blank" rel="noopener">바로 쓰는 자료</a><a class="tbtn" data-href="/교사포털/시험지생성기/?book=ph1">시험지 만들기</a></div></div><div class="ag rev"><div class="hd"><div class="cv"><img src="/assets/covers/rst1.webp" alt="저절로 스타터 1 표지" loading="lazy"><img src="/assets/covers/rst2.webp" alt="저절로 스타터 2 표지" loading="lazy"></div><div class="tx"><h3>스타터 <span class="chip gray">초2~3</span></h3><div class="vl"><b>1권</b><a class="pill a" href="/books/answers/rst1.pdf" target="_blank" rel="noopener" aria-label="저절로 스타터 1 정답 PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 20h14"/></svg>정답 PDF</a><a class="pill b" href="/studio/?book=rst1" aria-label="저절로 스타터 1 음원"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" d="M4 15v-3a8 8 0 0 1 16 0v3"/><rect x="3" y="14" width="5" height="7" rx="2" fill="currentColor"/><rect x="16" y="14" width="5" height="7" rx="2" fill="currentColor"/></svg>음원</a></div><div class="vl"><b>2권</b><a class="pill a" href="/books/answers/rst2.pdf" target="_blank" rel="noopener" aria-label="저절로 스타터 2 정답 PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 20h14"/></svg>정답 PDF</a><a class="pill b" href="/studio/?book=rst2" aria-label="저절로 스타터 2 음원"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" d="M4 15v-3a8 8 0 0 1 16 0v3"/><rect x="3" y="14" width="5" height="7" rx="2" fill="currentColor"/><rect x="16" y="14" width="5" height="7" rx="2" fill="currentColor"/></svg>음원</a></div></div></div>
       <div class="tch"><span class="lab"><i class="lk"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2.5" fill="currentColor"/><path d="M8 11V8a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="2.2"/></svg></i>선생님</span><a class="tbtn" data-href="https://southern-winter-c87.notion.site/15a3cdde2d7e80ddb3e0efd45c6f9fac" target="_blank" rel="noopener">바로 쓰는 자료</a><a class="tbtn" data-href="/교사포털/시험지생성기/?book=rst1">시험지 만들기</a></div></div><div class="ag rev"><div class="hd"><div class="cv"><img src="/assets/covers/rbr1.webp" alt="저절로 브릿지 1 표지" loading="lazy"><img src="/assets/covers/rbr2.webp" alt="저절로 브릿지 2 표지" loading="lazy"></div><div class="tx"><h3>브릿지 <span class="chip gray">초3~4</span></h3><div class="vl"><b>1권</b><a class="pill a" href="/books/answers/rbr1.pdf" target="_blank" rel="noopener" aria-label="저절로 브릿지 1 정답 PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 20h14"/></svg>정답 PDF</a><a class="pill b" href="/studio/?book=rbr1" aria-label="저절로 브릿지 1 음원·강의"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" d="M4 15v-3a8 8 0 0 1 16 0v3"/><rect x="3" y="14" width="5" height="7" rx="2" fill="currentColor"/><rect x="16" y="14" width="5" height="7" rx="2" fill="currentColor"/></svg>음원·강의</a></div><div class="vl"><b>2권</b><a class="pill a" href="/books/answers/rbr2.pdf" target="_blank" rel="noopener" aria-label="저절로 브릿지 2 정답 PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 20h14"/></svg>정답 PDF</a><a class="pill b" href="/studio/?book=rbr2" aria-label="저절로 브릿지 2 음원·강의"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" d="M4 15v-3a8 8 0 0 1 16 0v3"/><rect x="3" y="14" width="5" height="7" rx="2" fill="currentColor"/><rect x="16" y="14" width="5" height="7" rx="2" fill="currentColor"/></svg>음원·강의</a></div></div></div>
@@ -167,8 +234,8 @@
   <nav><a href="/home/#books">교재</a><a href="/studio/">음원·강의</a><a href="/library/">자료실</a><a href="/contact/">문의</a><a href="/report/">오류 신고</a><a class="store">스마트스토어</a><a class="talk">톡톡</a><a href="/privacy/">개인정보처리방침</a></nav>
   <span class="biz"></span>
 </div></footer>
-<script src="/assets/reviews.js?v=a80ec4b4"></script>
-<script src="/assets/site.js?v=a80ec4b4"></script>
+<script src="/assets/reviews.js?v=480b6107"></script>
+<script src="/assets/site.js?v=480b6107"></script>
 <script>SOLVEU.gate(SOLVEU.$("#tz"));</script>
 </body>
 </html>
