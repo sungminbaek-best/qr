@@ -40,12 +40,15 @@
 .bhead .lk{font-size:14px;font-weight:700;color:var(--sub);text-decoration:underline;text-underline-offset:4px}
 .bhead .lk:hover{color:var(--ink)}
 .ugrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:28px}
-.ucard{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px}
+.ucard{display:flex;flex-direction:column;background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px}
 .ucard .ut{font-family:var(--mono);font-size:15px;font-weight:700;margin-bottom:10px}
-.ubtns{display:flex;flex-direction:column;gap:6px}
-.ubtn{display:flex;align-items:center;justify-content:center;border-radius:10px;padding:10px 0;font-size:13.5px;font-weight:700;border:1px solid var(--line2);background:#fff;color:var(--ink);text-align:center}
+.ubtns{flex:1;display:flex;flex-direction:column;gap:6px}
+.ubtns a.ubtn:first-child{margin-top:auto}  /* 음원 없이 강의만 있는 유닛: 강의는 늘 아래 칸 */
+.ubtn{display:flex;align-items:center;justify-content:center;gap:7px;border-radius:10px;padding:10px 0;font-size:13.5px;font-weight:700;border:1px solid var(--line2);background:#fff;color:var(--ink);text-align:center;transition:background .15s,color .15s,border-color .15s}
 .ubtn:hover{border-color:var(--ink)}
-.ubtn.main{background:var(--ink);border-color:var(--ink);color:#fff}.ubtn.main:hover{background:var(--ink2)}
+.ubtn.main{background:var(--soft);border-color:var(--soft);color:var(--brand)}
+.ubtn.main:before{content:"";width:0;height:0;border-left:8px solid currentColor;border-top:5px solid transparent;border-bottom:5px solid transparent}
+.ubtn.main:hover{background:var(--brand);border-color:var(--brand);color:#fff}
 .ubtn.off{color:var(--mute);background:var(--panel);border-color:var(--panel);cursor:default}
 @media(max-width:860px){.ugrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .orientbox{margin-top:28px;border:1px solid var(--line);border-radius:16px;padding:16px;background:var(--panel)}
@@ -181,12 +184,12 @@ function bookView(b){
     const vlist=(un.videos&&un.videos.length)? un.videos : (un.video? [{label:'강의 영상',url:un.video}] : []);
     const a=hasA? '<button class="ubtn main" type="button" data-go="leaf" data-book="'+b.code+'" data-u="'+un.n+'">음원 듣기</button>'
                 : (vlist.length? '' : '<span class="ubtn off">준비 중</span>');
-    const vid=vlist.map(v=>'<a class="ubtn'+(!hasA?' main':'')+'" href="'+esc(v.url)+'" target="_blank" rel="noopener">'+esc(v.label)+' ↗</a>').join('');
+    const vid=vlist.map(v=>'<a class="ubtn" href="'+esc(v.url)+'" target="_blank" rel="noopener">'+esc(v.label)+' ↗</a>').join('');
     return '<div class="ucard"><div class="ut">Unit '+un.n+'</div><div class="ubtns">'+a+vid+'</div></div>';
   }).join('');
   const sl=slugOf(b.code);
   app.innerHTML='<nav class="crumb" aria-label="위치"><button type="button" data-go="home">음원·강의</button><span>›</span><span>'+esc(nm(b))+'</span></nav>'+
-    '<div class="bhead">'+cover(b)+'<div class="tx"><h1>'+esc(nm(b))+'</h1></div>'+(sl?'<a class="lk" href="/books/'+sl+'/">교재 소개 보기</a>':'')+'</div>'+
+    '<div class="bhead">'+cover(b)+'<div class="tx"><h1>'+esc(nm(b))+'</h1></div>'+(sl?'<a class="btn line sm" href="/books/'+sl+'/">교재 소개 →</a>':'')+'</div>'+
     top+'<div class="ugrid">'+cards+'</div>';
 }
 
