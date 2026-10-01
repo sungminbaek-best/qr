@@ -149,3 +149,6 @@ footer .biz{width:100%;font-size:12.5px}
 .rev.pre.in{opacity:1;transform:none}
 @media(prefers-reduced-motion:reduce){.rev,.rev.pre{opacity:1;transform:none;transition:none}*{scroll-behavior:auto!important}}
 @media(max-width:600px){.wrap{padding:0 18px}.sec{padding:72px 0}}
+
+/* hidden 속성은 항상 숨김(.btn 등 display 지정보다 우선) */
+[hidden]{display:none!important}
