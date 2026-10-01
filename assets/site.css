@@ -36,17 +36,15 @@ br.pc{display:inline}br.mo{display:none}
 .logo .ko{font-weight:800;font-size:19px;letter-spacing:-.03em}
 .logo .dv{width:1px;height:16px;background:var(--line2)}
 .logo .en{font-family:var(--mono);font-weight:700;font-size:18px;letter-spacing:-.01em}
-.nav nav{margin-left:auto;display:flex;gap:26px;font-size:14.5px;font-weight:600;color:var(--sub)}
-.nav nav a{transition:color .15s}.nav nav a:hover,.nav nav a[aria-current]{color:var(--ink)}
-.nbtn{font-size:13.5px;font-weight:700;padding:9px 16px;border-radius:10px;background:var(--ink);color:#fff;transition:background .15s;white-space:nowrap}
-.nbtn:hover{background:var(--ink2)}
+.nav nav{margin-left:auto;display:flex;gap:30px;font-size:15.5px;font-weight:700;color:var(--ink)}
+.nav nav a{transition:color .15s}.nav nav a:hover,.nav nav a[aria-current]{color:var(--brand)}
+.nbtn{display:inline-flex;align-items:center;gap:4px;font-size:14px;font-weight:700;padding:9px 16px;border-radius:999px;background:var(--soft);color:var(--brand);transition:background .15s,color .15s;white-space:nowrap}
+.nbtn:hover{background:var(--brand);color:#fff}
 @media(max-width:760px){
-  .nav .wrap{flex-wrap:wrap;height:auto;padding-top:10px;row-gap:0}
-  .nbtn{margin-left:auto;padding:8px 13px}
-  .nav nav{order:3;width:100%;margin:0;gap:20px;overflow-x:auto;scrollbar-width:none;padding:10px 0 11px;font-size:14px;white-space:nowrap}
-  .nav nav::-webkit-scrollbar{display:none}
-  .nav nav a[aria-current]{color:var(--ink);box-shadow:inset 0 -2px 0 var(--ink)}
-  html{scroll-padding-top:108px}
+  .nav .wrap{gap:14px}
+  .nav nav{gap:16px;font-size:15px;white-space:nowrap}
+  .nbtn{padding:7px 12px;font-size:13px}
+  html{scroll-padding-top:72px}
 }
 
 /* buttons */
@@ -152,3 +150,4 @@ footer .biz{width:100%;font-size:12.5px}
 
 /* hidden 속성은 항상 숨김(.btn 등 display 지정보다 우선) */
 [hidden]{display:none!important}
+@media(max-width:370px){.logo .dv,.logo .en{display:none}.nav nav{gap:13px}}
