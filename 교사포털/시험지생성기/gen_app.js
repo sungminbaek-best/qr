@@ -106,10 +106,15 @@ function make(){
 }
 // 문장 가운데에 대문자로 나오는 낱말 = 고유명사(섞을 때 소문자로 바꾸지 않음)
 function properNouns(b){
-  const set=new Set(["I"]);
-  b.units.forEach(u=>u.sents.forEach(s=>s.e.split(/\s+/).slice(1).forEach(w=>{
-    const x=w.replace(/[^A-Za-z'’]/g,""); if(/^[A-Z]/.test(x)) set.add(x);
+  // 문장 중간에서 대문자로 쓰이고, 책 어디에서도 소문자로는 안 쓰이는 낱말만(This·When 등 인용문 첫 단어 제외)
+  const cap=new Set(), low=new Set();
+  b.units.forEach(u=>u.sents.forEach(s=>s.e.split(/\s+/).forEach((w,i)=>{
+    const x=w.replace(/[^A-Za-z'’]/g,""); if(!x) return;
+    if(/^[a-z]/.test(x)) low.add(x.toLowerCase());
+    else if(i>0) cap.add(x);
   })));
+  const set=new Set(["I"]);
+  cap.forEach(x=>{ if(!low.has(x.toLowerCase())) set.add(x); });
   return set;
 }
 // 어순 배열: 문장부호를 떼고 소문자로(고유명사·I 제외) 섞어 " / "로 잇기 — C&S 초상세2 방식
