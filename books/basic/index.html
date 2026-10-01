@@ -16,6 +16,15 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/site.css?v=635c4ed4">
 <style>
+.buy{position:relative}
+.buy summary{list-style:none;cursor:pointer}
+.buy summary::-webkit-details-marker{display:none}
+.buy[open] summary .ar{transform:rotate(180deg)}
+.buy .menu{position:absolute;top:calc(100% + 8px);left:0;z-index:5;min-width:240px;background:#fff;border:1px solid var(--line2);border-radius:14px;box-shadow:var(--shadow);padding:6px;display:grid}
+.buy .menu a{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 14px;border-radius:10px;font-size:14.5px;font-weight:700}
+.buy .menu a:hover{background:var(--panel)}
+.b2brow{display:flex;align-items:center;gap:14px;flex-wrap:wrap;border:1px solid var(--line);border-radius:16px;padding:18px 22px;max-width:640px}
+.b2brow b{font-size:15.5px}.b2brow span{font-size:14px;color:var(--sub)}.b2brow .ar{margin-left:auto;color:var(--brand);font-weight:700}
 .top{padding:40px 0 72px;background:linear-gradient(180deg,#f7f8ff,#fff)}
 .split{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center;margin-top:28px}
 .split h1{font-size:clamp(34px,5vw,56px);font-weight:800;letter-spacing:-.05em;line-height:1.12;margin-top:16px}
@@ -63,68 +72,65 @@
 <body id="top">
 <header class="nav" id="nav"><div class="wrap">
   <a class="logo" href="/" aria-label="쏠뷰 SolveU 홈"><span class="ko">쏠뷰</span><span class="dv"></span><span class="en">Solve<span class="g">U</span></span></a>
-  <nav aria-label="주 메뉴"><a href="/books/" aria-current=page>교재</a><a href="/books/#roadmap">학습 로드맵</a><a href="/studio/">음원·강의</a><a href="/contact/">문의</a></nav>
-  <a class="nbtn" href="/teacher/">선생님 자료</a>
+  <nav aria-label="주 메뉴"><a href="/home/#books" aria-current=page>교재</a><a href="/studio/">음원·강의</a><a href="/contact/">문의</a></nav>
+  <a class="nbtn" href="/library/">자료실</a>
 </div></header>
 <main>
 
 <section class="top"><div class="wrap">
-  <nav class="crumb rev" aria-label="위치"><a href="/books/">교재</a><span>›</span><a href="/books/#reading">리딩</a><span>›</span><span>기본</span></nav>
+  <nav class="crumb rev" aria-label="위치"><a href="/home/">홈</a><span>›</span><a href="/home/#books">교재</a><span>›</span><span>기본</span></nav>
   <div class="split">
     <div class="rev">
       <div class="chiprow"><span class="chip k">읽기 5단계</span><span class="chip">초6~중1</span></div>
       <h1>저절로 기본 <span class="nw">1·2</span></h1>
       <p class="one">문장 구조가 보이는 독해</p>
-      <div class="cta"><a class="btn dark store" href="https://smartstore.naver.com/solveu/products/13172197180">1권 구매</a><a class="btn line store" href="https://smartstore.naver.com/solveu/products/13172197181">2권 구매</a><a class="btn line store" href="https://smartstore.naver.com/solveu/products/13172314683">1·2권 세트</a><a class="btn soft" href="#answers">정답 PDF</a></div>
+      <div class="cta"><details class="buy"><summary class="btn dark">스마트스토어에서 구매 <span class="ar">▾</span></summary><div class="menu"><a class="store" href="https://smartstore.naver.com/solveu/products/13172197180">저절로 기본 1</a><a class="store" href="https://smartstore.naver.com/solveu/products/13172197181">저절로 기본 2</a><a class="store" href="https://smartstore.naver.com/solveu/products/13172314683">저절로 기본 1·2권 세트</a></div></details><a class="btn line" href="#preview">유닛 미리보기 <span class="ar">↓</span></a></div>
     </div>
     <div class="covpair rev"><img src="/assets/covers/rba1.webp" alt="저절로 기본 1 표지"><img src="/assets/covers/rba2.webp" alt="저절로 기본 2 표지"></div>
   </div>
 </div></section>
 
 <section class="sec tight" id="about"><div class="wrap">
-  <div class="sh rev"><div class="label">Books</div><h2>구성</h2></div>
+  <div class="sh rev"><h2>구성</h2></div>
   <div class="facts"><div class="fact rev"><b>저절로 기본 1</b><dl>
       <dt>대상</dt><dd>초6~중1 (권장)</dd><dt>구성</dt><dd>8개 유닛</dd>
       <dt>함께 제공</dt><dd>음원·강의 QR, 정답 PDF</dd></dl>
-      <div class="cta"><a class="btn soft sm" href="/studio/?book=rba1">음원·강의 맛보기 <span class="ar">→</span></a></div></div><div class="fact rev"><b>저절로 기본 2</b><dl>
+      <div class="cta"><a class="btn line sm" href="/studio/?book=rba1">이 책 음원·강의 <span class="ar">→</span></a></div></div><div class="fact rev"><b>저절로 기본 2</b><dl>
       <dt>대상</dt><dd>초6~중1 (권장)</dd><dt>구성</dt><dd>8개 유닛</dd>
       <dt>함께 제공</dt><dd>음원·강의 QR, 정답 PDF</dd></dl>
-      <div class="cta"><a class="btn soft sm" href="/studio/?book=rba2">음원·강의 맛보기 <span class="ar">→</span></a></div></div></div>
+      <div class="cta"><a class="btn line sm" href="/studio/?book=rba2">이 책 음원·강의 <span class="ar">→</span></a></div></div></div>
 </div></section>
 
 <section class="sec" id="toc"><div class="wrap">
-  <div class="sh rev"><div class="label">Contents</div><h2>목차</h2><p>책에 실린 목차 그대로예요.</p></div>
+  <div class="sh rev"><h2>목차</h2><p>책에 실린 목차 그대로예요.</p></div>
   <div class="tabs rev" role="tablist"><button class="tab" type="button" role="tab" aria-selected="true" data-i="0">1권</button><button class="tab" type="button" role="tab" aria-selected="false" data-i="1">2권</button></div>
   <div class="rev"><div class="tocimg" data-i="0"><img src="/books/img/toc_rba1.webp" alt="저절로 기본 1 목차"></div><div class="tocimg" hidden data-i="1"><img src="/books/img/toc_rba2.webp" alt="저절로 기본 2 목차" loading="lazy"></div></div>
 </div></section>
 <section class="sec panel" id="preview"><div class="wrap">
-  <div class="sh rev"><div class="label">Preview · Level Test</div><h2>유닛 미리보기 · 레벨 테스트</h2><p>책의 한 유닛을 그대로 담았어요. <br class="pc">수업 전에 미리 풀어 보고 교재를 골라 보세요.</p></div>
+  <div class="sh rev"><h2>유닛 미리보기 · 레벨 테스트</h2><p>책의 한 유닛을 그대로 담았어요. <br class="pc">수업 전에 미리 풀어 보고 교재를 골라 보세요.</p></div>
   <div class="tabs rev" role="tablist"><button class="tab ptab" type="button" role="tab" aria-selected="true" data-i="0">기본 1</button><button class="tab ptab" type="button" role="tab" aria-selected="false" data-i="1">기본 2</button></div>
   <div class="rev"><div class="pvp" data-i="0"><div class="pvstrip"><img src="/books/img/pv/rba1_01.webp" alt="저절로 기본 1 샘플 1쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rba1_02.webp" alt="저절로 기본 1 샘플 2쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rba1_03.webp" alt="저절로 기본 1 샘플 3쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rba1_04.webp" alt="저절로 기본 1 샘플 4쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rba1_05.webp" alt="저절로 기본 1 샘플 5쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rba1_06.webp" alt="저절로 기본 1 샘플 6쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rba1_07.webp" alt="저절로 기본 1 샘플 7쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rba1_08.webp" alt="저절로 기본 1 샘플 8쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rba1_09.webp" alt="저절로 기본 1 샘플 9쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rba1_10.webp" alt="저절로 기본 1 샘플 10쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rba1_11.webp" alt="저절로 기본 1 샘플 11쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rba1_12.webp" alt="저절로 기본 1 샘플 12쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rba1_13.webp" alt="저절로 기본 1 샘플 13쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rba1_14.webp" alt="저절로 기본 1 샘플 14쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rba1_15.webp" alt="저절로 기본 1 샘플 15쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rba1_16.webp" alt="저절로 기본 1 샘플 16쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rba1_17.webp" alt="저절로 기본 1 샘플 17쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rba1_18.webp" alt="저절로 기본 1 샘플 18쪽" width="300" height="424" loading="lazy"></div>
       <div class="pvbar"><span>저절로 기본 1 · 18쪽 · 옆으로 넘겨 보세요</span><a class="btn dark sm" href="/books/samples/rba1.pdf" target="_blank" rel="noopener">샘플 PDF 받기 (출력 가능)</a></div></div><div class="pvp" hidden data-i="1"><div class="pvstrip"><img src="/books/img/pv/rba2_01.webp" alt="저절로 기본 2 샘플 1쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rba2_02.webp" alt="저절로 기본 2 샘플 2쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rba2_03.webp" alt="저절로 기본 2 샘플 3쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rba2_04.webp" alt="저절로 기본 2 샘플 4쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rba2_05.webp" alt="저절로 기본 2 샘플 5쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rba2_06.webp" alt="저절로 기본 2 샘플 6쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rba2_07.webp" alt="저절로 기본 2 샘플 7쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rba2_08.webp" alt="저절로 기본 2 샘플 8쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rba2_09.webp" alt="저절로 기본 2 샘플 9쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rba2_10.webp" alt="저절로 기본 2 샘플 10쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rba2_11.webp" alt="저절로 기본 2 샘플 11쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rba2_12.webp" alt="저절로 기본 2 샘플 12쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rba2_13.webp" alt="저절로 기본 2 샘플 13쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rba2_14.webp" alt="저절로 기본 2 샘플 14쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rba2_15.webp" alt="저절로 기본 2 샘플 15쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rba2_16.webp" alt="저절로 기본 2 샘플 16쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rba2_17.webp" alt="저절로 기본 2 샘플 17쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rba2_18.webp" alt="저절로 기본 2 샘플 18쪽" width="300" height="424" loading="lazy"></div>
       <div class="pvbar"><span>저절로 기본 2 · 18쪽 · 옆으로 넘겨 보세요</span><a class="btn dark sm" href="/books/samples/rba2.pdf" target="_blank" rel="noopener">샘플 PDF 받기 (출력 가능)</a></div></div></div>
 </div></section>
 <section class="sec tight" id="answers"><div class="wrap">
-  <div class="sh rev"><div class="label">Answers</div><h2>정답 PDF</h2><p>누구나 무료로 받을 수 있어요.</p></div>
+  <div class="sh rev"><h2>정답 PDF</h2><p>누구나 무료로 받을 수 있어요.</p></div>
   <div class="alist"><div class="arow rev"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 14l2 2 4-4"/></svg></div><div><b>저절로 기본 1 정답</b><span>PDF · 누구나 무료</span></div><a class="btn line sm" href="/books/answers/rba1.pdf" target="_blank" rel="noopener">받기</a></div><div class="arow rev"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 14l2 2 4-4"/></svg></div><div><b>저절로 기본 2 정답</b><span>PDF · 누구나 무료</span></div><a class="btn line sm" href="/books/answers/rba2.pdf" target="_blank" rel="noopener">받기</a></div></div>
 </div></section>
 <section class="sec tight" id="reviews"><div class="wrap">
-  <div class="sh rev"><div class="label">Reviews</div><h2><span class="nw">이 교재 후기&nbsp;<span class="cnt">3</span></span></h2><p>스마트스토어 실제 구매 후기예요.</p></div>
+  <div class="sh rev"><h2><span class="nw">이 교재 후기&nbsp;<span class="cnt">3</span></span></h2><p>스마트스토어 실제 구매 후기예요.</p></div>
   <div class="rvg" id="rvg"></div>
   <div class="more"><button class="btn line sm" id="moreBtn" type="button">후기 더 보기</button></div>
 </div></section>
-<section class="sec tight"><div class="wrap"><div class="sh rev"><div class="label">Next</div><h2>다음 단계</h2></div>
+<section class="sec tight"><div class="wrap"><div class="sh rev"><h2>다음 단계</h2></div>
   <a class="next rev" href="/books/mock/"><img src="/assets/covers/rmo1.webp" alt=""><div><div class="k">6단계 · 중2~중3</div><b>첫모의고사 1·2</b><span>고등 모의고사 첫걸음</span></div><span class="ar">→</span></a></div></section>
-<section class="sec tight"><div class="wrap"><div class="band rev">
-  <h2>저절로 기본로 <br class="mo">수업을 시작해 보세요</h2><p>교재 도입 문의는 <br class="mo">톡톡으로 편하게 남겨 주세요.</p>
-  <div class="cta"><a class="btn white talk">톡톡 문의하기 <span class="ar">→</span></a><a class="btn ghost store">스마트스토어 보기</a></div>
-</div></div></section>
+
 
 </main>
 <footer><div class="wrap">
   <span class="fl"><span class="ko">쏠뷰</span><span class="en">Solve<span class="g">U</span></span></span>
   <span>현장에서 검증된 영어 교재</span>
-  <nav><a href="/books/">교재</a><a href="/teacher/">선생님 자료</a><a href="/studio/">음원·강의</a><a href="/contact/">문의</a><a class="store">스마트스토어</a><a class="talk">톡톡</a><a href="/privacy/">개인정보처리방침</a></nav>
+  <nav><a href="/home/#books">교재</a><a href="/studio/">음원·강의</a><a href="/library/">자료실</a><a href="/contact/">문의</a><a href="/report/">오류 신고</a><a class="store">스마트스토어</a><a class="talk">톡톡</a><a href="/privacy/">개인정보처리방침</a></nav>
   <span class="biz"></span>
 </div></footer>
 <script src="/assets/reviews.js?v=635c4ed4"></script>

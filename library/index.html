@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>자료실 · 쏠뷰</title>
+<meta name="description" content="쏠뷰 교재의 정답 PDF와 음원·강의, 선생님 전용 수업 자료와 시험지 생성기.">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:title" content="자료실 · 쏠뷰"><meta property="og:description" content="쏠뷰 교재의 정답 PDF와 음원·강의, 선생님 전용 수업 자료와 시험지 생성기."><meta property="og:type" content="website">
+<meta property="og:site_name" content="쏠뷰 SolveU"><meta property="og:locale" content="ko_KR"><meta property="og:url" content="https://solveu.co.kr/library/">
+<meta property="og:image" content="https://solveu.co.kr/assets/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://solveu.co.kr/library/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22%3E%3Crect width=%2264%22 height=%2264%22 rx=%2216%22 fill=%22%230c1020%22/%3E%3Ctext x=%2232%22 y=%2244%22 font-size=%2234%22 font-family=%22Arial%22 font-weight=%22700%22 text-anchor=%22middle%22 fill=%22%236b7dff%22%3EU%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css?v=635c4ed4">
+<style>
+.top{padding:56px 0 24px}
+.top h1{font-size:clamp(32px,4.6vw,50px);font-weight:800;letter-spacing:-.05em;margin-top:14px}
+.top p{font-size:clamp(15px,1.7vw,17px);color:var(--sub);line-height:1.7;margin-top:12px;max-width:36em}
+.tz{display:grid;grid-template-columns:320px 1fr;gap:56px}
+.gate{display:flex;flex-direction:column;gap:8px;max-width:280px;margin-top:8px}
+.gate input{height:48px;border:1px solid var(--line2);border-radius:11px;padding:0 15px;font:inherit;font-size:15px;outline:none;transition:border-color .15s}
+.gate input:focus{border-color:var(--ink)}
+.gate button{height:48px;border-radius:11px;background:var(--ink);color:#fff;font-weight:700;font-size:15px}
+.err{font-size:13px;color:#d93025;min-height:18px;margin-top:6px}
+.ok{display:none;align-items:center;gap:9px;margin-top:8px;font-size:14.5px;color:var(--sub)}
+.ok i{font-style:normal;width:22px;height:22px;border-radius:50%;background:#1e8e3e;color:#fff;display:grid;place-items:center;font-size:12px}
+.ok button{margin-left:auto;font-size:13px;color:var(--mute);text-decoration:underline}
+.unlocked .gobtn,.unlocked .issue{display:none}.unlocked .ok{display:flex}
+.gatebox{border:1px solid var(--line);border-radius:var(--r);padding:26px;background:var(--panel)}
+.gatebox b{font-size:17px;font-weight:800}
+.gatebox p{font-size:14px;color:var(--sub);line-height:1.65;margin:8px 0 18px}
+.issue{font-size:13.5px;color:var(--sub);margin-top:14px}
+.perkbox{margin-top:18px;border-top:1px solid var(--line2);padding-top:16px;display:grid;gap:10px}
+.perkbox>b{font-size:15.5px}
+.perkbox .perks{list-style:none;display:grid;gap:5px;padding:12px 14px;border-radius:11px;background:#fff}
+.perkbox .perks li{font-size:13px;font-weight:600;padding-left:18px;position:relative;line-height:1.5}
+.perkbox .perks li:before{content:"✓";position:absolute;left:0;color:var(--brand);font-weight:800}
+.perkbox input{height:44px;border:1px solid var(--line2);border-radius:10px;padding:0 13px;font:inherit;font-size:14.5px;outline:none}
+.perkbox input:focus{border-color:var(--ink)}
+.perkbox .btn{justify-content:center}
+.perkbox details{font-size:12.5px;color:var(--mute);line-height:1.65}.perkbox summary{cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.perkon{font-size:13px;color:var(--sub);margin-top:14px}.perkon button{color:var(--mute);text-decoration:underline;margin-left:4px}
+.issue a{color:var(--ink);font-weight:700;text-decoration:underline;text-underline-offset:3px}
+.tlist{border-top:1px solid var(--line)}
+.tool{display:flex;align-items:center;gap:18px;padding:24px 4px;border-bottom:1px solid var(--line)}
+.tool.lib{align-items:flex-start}
+.tool .ic{flex:none;width:44px;height:44px;border-radius:13px;background:var(--soft);color:var(--brand);display:grid;place-items:center}
+.tool .ic svg{width:21px;height:21px}
+.tool .tx{flex:1;min-width:0}
+.tool b{font-size:17px;font-weight:800}
+.tool b small{font-size:12.5px;font-weight:600;color:var(--mute);margin-left:5px}
+.tool .tx>span{display:block;font-size:14px;color:var(--sub);margin-top:4px}
+.tool .lk{font-size:13px;font-weight:700;color:var(--mute);white-space:nowrap}
+.tool.off{opacity:.55}
+.libs{display:flex;gap:7px;margin-top:12px;flex-wrap:wrap}
+.libs a{font-size:13px;font-weight:700;padding:6px 12px;border-radius:9px;border:1px solid var(--line);color:var(--mute)}
+.unlocked .libs a{color:var(--ink);cursor:pointer}.unlocked .libs a:hover{border-color:var(--ink)}
+.unlocked .tool[data-href]{cursor:pointer}.unlocked .tool[data-href]:hover b{color:var(--brand)}
+.unlocked .tool[data-href] .lk{color:var(--brand)}
+@media(max-width:860px){.tz{grid-template-columns:1fr;gap:28px}}
+.ans{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px;margin-top:28px}
+.jump{display:flex;gap:8px;flex-wrap:wrap;margin-top:24px}
+.jump a{font-size:14px;font-weight:700;padding:9px 14px;border-radius:11px;border:1px solid var(--line2);background:#fff}
+.jump a:hover{border-color:var(--ink)}
+.tz{margin-top:28px}
+.arow{display:flex;align-items:center;gap:14px;border:1px solid var(--line);border-radius:16px;padding:16px 18px;background:#fff;margin-top:28px;max-width:640px;transition:border-color .15s}
+.arow:hover{border-color:var(--ink)}
+.arow .ic{flex:none;width:40px;height:40px;border-radius:12px;background:var(--soft);color:var(--brand);display:grid;place-items:center}
+.arow .ic svg{width:20px;height:20px}
+.arow b{font-size:15.5px;font-weight:800}.arow span{display:block;font-size:13px;color:var(--mute);margin-top:2px}
+.arow .btn{margin-left:auto;flex:none;display:inline-flex;color:var(--ink);font-size:14px;margin-top:0}
+.ag{border:1px solid var(--line);border-radius:var(--r);padding:20px 22px;background:#fff}
+.ag h3{font-size:16px;font-weight:800;display:flex;gap:8px;align-items:center}
+.ag ul{list-style:none;margin-top:12px;display:grid;gap:8px}
+.ag li{display:flex;align-items:center;gap:10px;font-size:14.5px}
+.ag li a{margin-left:auto;font-size:13px;font-weight:700;color:var(--brand)}
+.ag li em{margin-left:auto;font-style:normal;font-size:12.5px;color:var(--mute)}
+</style>
+</head>
+<body id="top">
+<header class="nav" id="nav"><div class="wrap">
+  <a class="logo" href="/" aria-label="쏠뷰 SolveU 홈"><span class="ko">쏠뷰</span><span class="dv"></span><span class="en">Solve<span class="g">U</span></span></a>
+  <nav aria-label="주 메뉴"><a href="/home/#books">교재</a><a href="/studio/">음원·강의</a><a href="/contact/">문의</a></nav>
+  <a class="nbtn" href="/library/" aria-current=page>자료실</a>
+</div></header>
+<main>
+
+<section class="top"><div class="wrap">
+  <h1 class="rev">자료실</h1>
+  <p class="rev">정답과 음원·강의는 누구나 바로 쓸 수 있어요. <br class="pc">수업 자료와 시험지 생성기는 선생님 인증 뒤에 열려요.</p>
+  <nav class="jump rev" aria-label="바로 가기"><a href="#answers">정답 PDF</a><a href="#audio">음원·강의</a><a href="#teacher">선생님 전용 자료 🔒</a></nav>
+</div></section>
+
+<section class="sec tight" id="answers"><div class="wrap">
+  <div class="sh rev"><h2>정답 PDF</h2><p>누구나 무료로 받을 수 있어요.</p></div>
+  <div class="ans"><div class="ag rev"><h3>파닉스 <span class="chip gray">초1~2</span></h3><ul><li>저절로 파닉스 1<small> 확인용</small><a href="/books/answers/ph1.pdf" target="_blank" rel="noopener">PDF 받기</a></li><li>저절로 파닉스 2<small> 확인용</small><a href="/books/answers/ph2.pdf" target="_blank" rel="noopener">PDF 받기</a></li></ul></div><div class="ag rev"><h3>스타터 <span class="chip gray">초2~3</span></h3><ul><li>저절로 스타터 1<a href="/books/answers/rst1.pdf" target="_blank" rel="noopener">PDF 받기</a></li><li>저절로 스타터 2<a href="/books/answers/rst2.pdf" target="_blank" rel="noopener">PDF 받기</a></li></ul></div><div class="ag rev"><h3>브릿지 <span class="chip gray">초3~4</span></h3><ul><li>저절로 브릿지 1<a href="/books/answers/rbr1.pdf" target="_blank" rel="noopener">PDF 받기</a></li><li>저절로 브릿지 2<a href="/books/answers/rbr2.pdf" target="_blank" rel="noopener">PDF 받기</a></li></ul></div><div class="ag rev"><h3>입문 <span class="chip gray">초4~5</span></h3><ul><li>저절로 입문 1<a href="/books/answers/rin1.pdf" target="_blank" rel="noopener">PDF 받기</a></li><li>저절로 입문 2<a href="/books/answers/rin2.pdf" target="_blank" rel="noopener">PDF 받기</a></li></ul></div><div class="ag rev"><h3>기본 <span class="chip gray">초6~중1</span></h3><ul><li>저절로 기본 1<a href="/books/answers/rba1.pdf" target="_blank" rel="noopener">PDF 받기</a></li><li>저절로 기본 2<a href="/books/answers/rba2.pdf" target="_blank" rel="noopener">PDF 받기</a></li></ul></div><div class="ag rev"><h3>첫모의고사 <span class="chip gray">중2~중3</span></h3><ul><li>저절로 첫모의고사 1<a href="/books/answers/rmo1.pdf" target="_blank" rel="noopener">PDF 받기</a></li><li>저절로 첫모의고사 2<a href="/books/answers/rmo2.pdf" target="_blank" rel="noopener">PDF 받기</a></li></ul></div><div class="ag rev"><h3>그래머&amp;라이팅 <span class="chip gray">초3~4</span></h3><ul><li>저절로 그래머&amp;라이팅 1<a href="/books/answers/gw1.pdf" target="_blank" rel="noopener">PDF 받기</a></li><li>저절로 그래머&amp;라이팅 2<a href="/books/answers/gw2.pdf" target="_blank" rel="noopener">PDF 받기</a></li></ul></div></div>
+</div></section>
+
+<section class="sec tight" id="audio"><div class="wrap">
+  <div class="sh rev"><h2>음원·강의</h2><p>책의 QR로 듣던 단어·문장 음원과 강의를 교재별로 열어요.</p></div>
+  <a class="arow rev" href="/studio/"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg></div><div><b>음원·강의 열기</b><span>교재와 유닛을 고르면 바로 들을 수 있어요.</span></div><span class="btn line sm">열기 <span class="ar">→</span></span></a>
+</div></section>
+
+<section class="sec" id="teacher"><div class="wrap">
+  <div class="sh rev"><h2>선생님 전용 자료</h2><p>휴대폰 문자로 한 번 인증하면 이 기기에서는 다시 묻지 않아요.</p></div>
+  <div class="tz" id="tz">
+    <div class="rev"><div class="gatebox">
+      <b>선생님 인증</b><p>수업 자료·시험지 생성기·E-Book은 선생님 인증이 필요해요. 휴대폰 문자로 1분이면 돼요.</p>
+      <a class="btn dark sm gobtn" href="/library/join/?next=/library/%23teacher">휴대폰으로 입장하기 <span class="ar">→</span></a>
+      <div class="ok"><i>✓</i><span class="tname">인증되었어요.</span><button type="button" class="relock">로그아웃</button></div>
+      <div class="err" id="err" role="alert"></div>
+      <p class="issue">처음이면 번호 인증 뒤 간단한 신청서만 쓰면 돼요.</p>
+      <div class="perkbox" hidden>
+        <b>🎁 선생님 혜택 받기</b>
+        <ul class="perks"><li>학부모 상담·설명회 자료</li><li>레벨테스트 시험지</li><li>신간 출시 할인 쿠폰</li><li>체험단·서평단 우선 선정</li><li>저자 직강 온라인 설명회 초대 (새 로드맵·교재 활용법)</li><li>티칭 가이드 (유닛별 수업 흐름·판서 예시·자주 틀리는 포인트)</li></ul>
+        <input type="text" class="pmail" inputmode="email" maxlength="100" autocomplete="email" placeholder="이메일 (선택)">
+        <button type="button" class="btn dark sm pon">혜택 받기</button>
+        <details><summary>광고성 정보 수신 동의 · 자세히</summary><b>목적</b> 선생님 혜택 자료와 신간·할인·체험단·설명회 등 광고성 정보 전송 · <b>방법</b> 문자, 이메일(적은 경우) · <b>항목</b> 이름, 휴대폰 번호, 이메일 · <b>보관</b> 동의를 끄거나 탈퇴할 때까지 · 동의를 거부할 권리가 있으며, 거부해도 선생님 전용 자료 이용에는 제한이 없어요(혜택 안내만 받지 않아요). 언제든 자료실 화면에서 끌 수 있어요.</details>
+      </div>
+      <p class="perkon" hidden>🎁 선생님 혜택을 받고 있어요. <button type="button" class="poff">받지 않기</button></p>
+    </div></div>
+    <div class="tlist rev">
+      <div class="tool lib"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div><div class="tx"><b>수업 자료</b><span>단어 리스트 · 워크북 등</span><div class="libs"><a data-lib="https://southern-winter-c87.notion.site/15a3cdde2d7e80ddb3e0efd45c6f9fac" target="_blank" rel="noopener">리딩</a><a data-lib="https://southern-winter-c87.notion.site/1-2-8b02a1e094c745cf80a590f34d4db521" target="_blank" rel="noopener">파닉스</a><a data-lib="https://southern-winter-c87.notion.site/1-3a93cdde2d7e8032826dd3d925ed4278" target="_blank" rel="noopener">그래머&amp;라이팅</a></div></div><div class="lk">인증 필요</div></div>
+      <a class="tool" data-href="/교사포털/시험지생성기/"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg></div><div class="tx"><b>시험지 생성기</b><span>교재·유닛별 시험지와 정답지를 만들어 인쇄해요.</span></div><div class="lk">인증 필요</div></a>
+      <div class="tool off"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4M7 9l3 3 7-5"/></svg></div><div class="tx"><b>E-Book<small>판서 수업용</small></b><span>전자칠판 판서 · 정답 공개 · 음원</span></div><div class="lk">준비 중</div></div>
+    </div>
+  </div>
+</div></section>
+
+</main>
+<footer><div class="wrap">
+  <span class="fl"><span class="ko">쏠뷰</span><span class="en">Solve<span class="g">U</span></span></span>
+  <span>현장에서 검증된 영어 교재</span>
+  <nav><a href="/home/#books">교재</a><a href="/studio/">음원·강의</a><a href="/library/">자료실</a><a href="/contact/">문의</a><a href="/report/">오류 신고</a><a class="store">스마트스토어</a><a class="talk">톡톡</a><a href="/privacy/">개인정보처리방침</a></nav>
+  <span class="biz"></span>
+</div></footer>
+<script src="/assets/reviews.js?v=635c4ed4"></script>
+<script src="/assets/site.js?v=635c4ed4"></script>
+<script>SOLVEU.gate(SOLVEU.$("#tz"));</script>
+</body>
+</html>

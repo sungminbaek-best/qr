@@ -2,163 +2,139 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="robots" content="noindex">
-<title>쏠뷰 · 저절로 자료</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>음원·강의 · 쏠뷰</title>
+<meta name="description" content="쏠뷰 교재의 단어·문장 음원과 강의 영상. 책의 QR과 같은 자료를 교재·유닛별로 열어요.">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:title" content="음원·강의 · 쏠뷰"><meta property="og:description" content="쏠뷰 교재의 단어·문장 음원과 강의 영상. 책의 QR과 같은 자료를 교재·유닛별로 열어요."><meta property="og:type" content="website">
+<meta property="og:site_name" content="쏠뷰 SolveU"><meta property="og:locale" content="ko_KR"><meta property="og:url" content="https://solveu.co.kr/studio/">
+<meta property="og:image" content="https://solveu.co.kr/assets/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://solveu.co.kr/studio/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22%3E%3Crect width=%2264%22 height=%2264%22 rx=%2216%22 fill=%22%230c1020%22/%3E%3Ctext x=%2232%22 y=%2244%22 font-size=%2234%22 font-family=%22Arial%22 font-weight=%22700%22 text-anchor=%22middle%22 fill=%22%236b7dff%22%3EU%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css?v=635c4ed4">
 <style>
-  :root{
-    --ink:#16233a; --sub:#5b6b85; --card:#ffffff; --line:#e2e8f4;
-    --blue:#2f6bed; --blue2:#3f6fe0; --blue-soft:#e5edff; --blue-ink:#245ad6;
-    --shadow:0 1px 2px rgba(22,35,58,.05), 0 10px 30px -12px rgba(47,107,237,.28);
-  }
-  *{ box-sizing:border-box; }
-  html,body{ margin:0; min-height:100%; }
-  body{ font-family:"Pretendard","Malgun Gothic","맑은 고딕",system-ui,-apple-system,"Segoe UI",sans-serif;
-    color:var(--ink); -webkit-text-size-adjust:100%; line-height:1.5; -webkit-tap-highlight-color:transparent;
-    background:radial-gradient(120% 70% at 50% -8%, #eaf1ff 0%, #f5f8ff 42%, #eef2f9 100%) fixed; }
-  .wrap{ max-width:560px; margin:0 auto; padding:18px 16px 52px; }
-
-  .topbar{ display:flex; align-items:center; gap:10px; margin-bottom:10px; }
-  .chipbtn{ border:1px solid var(--line); background:var(--card); color:var(--ink); border-radius:999px;
-    padding:8px 14px; font:inherit; font-weight:700; font-size:13.5px; cursor:pointer; box-shadow:var(--shadow); }
-  .nav{ margin-left:auto; display:flex; gap:6px; }
-  .nav button{ border:1px solid var(--line); background:var(--card); color:var(--blue2); border-radius:999px;
-    padding:8px 13px; font:inherit; font-weight:800; font-size:13.5px; cursor:pointer; box-shadow:var(--shadow); }
-  .nav button:disabled{ opacity:.4; color:var(--sub); cursor:default; }
-
-  .kicker{ display:inline-block; font-size:12px; font-weight:800; letter-spacing:.1em;
-    color:var(--blue2); background:var(--blue-soft); border-radius:999px; padding:6px 13px; }
-  h1{ font-size:23px; font-weight:800; letter-spacing:-.02em; margin:10px 0 0; }
-  .unit{ display:inline-block; margin-top:9px; background:var(--blue-soft); color:var(--blue-ink);
-    font-weight:800; font-size:15px; padding:5px 13px; border-radius:999px; }
-  .head{ margin-bottom:18px; }
-
-  .grid{ display:grid; grid-template-columns:1fr 1fr; gap:11px; }
-  .bookcard{ display:flex; align-items:center; gap:12px; text-align:left;
-    background:var(--card); border:1px solid var(--line); border-radius:16px; padding:14px 15px; box-shadow:var(--shadow);
-    font:inherit; color:var(--ink); cursor:pointer; }
-  .bookcard .bk{ font-size:15px; font-weight:800; line-height:1.3; white-space:nowrap; min-width:0; overflow:hidden; text-overflow:ellipsis; }
-  .bookcard.off{ opacity:.55; cursor:default; box-shadow:none; background:#f7f9fd; }
-  .bookcard.off .soon{ color:var(--sub); font-weight:700; font-size:12px; margin-left:auto; }
-  .bookcard .stepnum{ flex:none; width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center;
-    font-size:15px; font-weight:800; color:#fff; background:linear-gradient(160deg,#5b93ff,#2f6bed 70%); }
-  .bookcard .stepnum.gram{ background:linear-gradient(160deg,#ffc95b,#f4a01e 70%); }
-  .seclabel{ font-size:15px; font-weight:800; margin:4px 2px 10px; }
-  .seclabel .secsub{ font-size:12px; font-weight:600; color:var(--sub); margin-left:6px; }
-  @media (min-width:600px){ .grid.hgrid{ grid-template-columns:repeat(3,1fr); } }
-  @media (min-width:1040px){ .grid.hgrid{ grid-template-columns:repeat(4,1fr); } }
-  .grid.ggrid{ grid-template-columns:1fr; }   /* 문법·쓰기: 긴 책이름 한 줄 → 모바일 1열 */
-  @media (min-width:600px){ .grid.ggrid{ grid-template-columns:1fr 1fr; } }
-
-  .unitcard{ background:var(--card); border:1px solid var(--line); border-radius:16px; padding:13px; box-shadow:var(--shadow); }
-  .unitcard .ut{ font-size:15px; font-weight:800; margin-bottom:10px; }
-  .ubtns{ display:flex; flex-direction:column; gap:7px; }
-  .ubtn{ display:flex; align-items:center; justify-content:center; gap:6px; text-decoration:none;
-    border:0; border-radius:11px; padding:11px 0; font:inherit; font-weight:800; font-size:13.5px; cursor:pointer; }
-  .ubtn.audio{ background:linear-gradient(160deg,#5b93ff,#2f6bed 70%); color:#fff; box-shadow:0 8px 18px -8px rgba(47,107,237,.6); }
-  .ubtn.video{ background:var(--card); border:1px solid var(--line); color:var(--blue2); }
-  .ubtn.video.solo{ background:linear-gradient(160deg,#7aa8ff,#2f6bed 75%); border:0; color:#fff; box-shadow:0 8px 18px -8px rgba(47,107,237,.55); }
-  .ubtn.off{ background:#eef2f9; color:var(--sub); cursor:default; }
-
-  /* leaf player */
-  .player{ text-align:center; padding:14px 6px 6px; }
-  .btnwrap{ position:relative; display:inline-block; }
-  .btnwrap::before{ content:""; position:absolute; inset:-16px; border-radius:50%;
-    background:radial-gradient(closest-side,rgba(63,111,224,.26),transparent); filter:blur(6px); }
-  .playbig{ position:relative; width:148px; height:148px; border-radius:50%; border:none; cursor:pointer;
-    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px;
-    background:linear-gradient(160deg,#5b93ff 0%,#2f6bed 60%,#245ad6 100%); color:#fff;
-    box-shadow:0 18px 40px -10px rgba(47,107,237,.6),inset 0 2px 3px rgba(255,255,255,.35);
-    transition:transform .1s ease; user-select:none; }
-  .playbig:active{ transform:scale(.96); }
-  .playbig .ico{ font-size:46px; line-height:1; } .playbig .lbl{ font-size:14px; font-weight:800; letter-spacing:.02em; }
-  .seekwrap{ max-width:340px; margin:22px auto 0; }
-  input[type=range]{ width:100%; accent-color:var(--blue); height:20px; }
-  .time{ display:flex; justify-content:space-between; font-size:12px; color:var(--sub); }
-  .spds{ display:flex; gap:8px; justify-content:center; margin-top:16px; }
-  .spd{ border:1px solid var(--line); background:var(--card); color:var(--ink); border-radius:999px;
-    padding:8px 16px; font:inherit; font-size:14px; font-weight:800; cursor:pointer; }
-  .spd.on{ background:var(--blue-soft); color:var(--blue-ink); border-color:transparent; }
-  .bigres{ display:flex; align-items:center; justify-content:center; gap:8px; text-decoration:none; margin-bottom:14px;
-    background:linear-gradient(160deg,#5b93ff,#2f6bed 70%); color:#fff; border-radius:14px; padding:16px; font-weight:800; font-size:16px; box-shadow:0 10px 24px -10px rgba(47,107,237,.6); }
-  .atog{ display:inline-flex; gap:4px; background:#e9eefb; border-radius:999px; padding:4px; margin-bottom:18px; }
-  .atg{ border:0; background:transparent; color:var(--sub); font:inherit; font-weight:800; font-size:14px; padding:8px 20px; border-radius:999px; cursor:pointer; }
-  .atg.on{ background:#fff; color:var(--blue-ink); box-shadow:0 1px 3px rgba(47,107,237,.25); }
-  .pgtabs{ display:flex; flex-wrap:wrap; gap:8px; margin:2px 0 18px; }
-  .pgtab{ display:inline-flex; flex-direction:column; align-items:center; gap:1px; border:1px solid var(--line); background:var(--card); color:var(--sub); font:inherit; border-radius:12px; padding:7px 14px; cursor:pointer; line-height:1.2; }
-  .pgtab b{ font-weight:800; font-size:14px; }
-  .pgtab span{ font-size:11px; color:var(--muted,#9aa3b2); }
-  .pgtab.on{ background:var(--blue,#2f6bed); border-color:var(--blue,#2f6bed); color:#fff; }
-  .pgtab.on span{ color:#dbe6ff; }
-  .srow{ display:flex; align-items:baseline; gap:10px; padding:11px 4px; border-bottom:1px solid var(--line); }
-  .srow:last-child{ border-bottom:0; }
-  .srow .sn{ width:20px; color:var(--blue2); font-size:12px; font-weight:800; flex:none; text-align:right; }
-  .srow .sc{ display:flex; flex-direction:column; gap:3px; }
-  .srow .se{ font-weight:800; color:var(--ink); font-size:17px; }
-  .srow .sk{ color:var(--sub); font-size:14px; }
-  .srow.play{ cursor:pointer; }
-  .srow.cur{ background:var(--blue-soft); border-radius:10px; }
-  .row.play{ cursor:pointer; }
-  .row.cur{ background:var(--blue-soft); border-radius:10px; }
-  .wl.hidek .srow .sk{ visibility:hidden; }
-  .wl.hidek .srow.rv .sk{ visibility:visible; }
-  .wl.hidem .row .m{ visibility:hidden; }
-  .wl.hidem .row.rv .m{ visibility:visible; }
-  .row.selw{ cursor:pointer; }
-  .lctrl{ display:flex; gap:8px; margin:0 0 10px; flex-wrap:wrap; }
-  .lbtn{ border:1px solid var(--line); background:var(--card); color:var(--sub); font:inherit; font-weight:700; font-size:13px; padding:6px 12px; border-radius:999px; cursor:pointer; }
-  .lbtn.on{ background:var(--blue); color:#fff; border-color:var(--blue); }
-  .lhint{ color:var(--sub); font-size:12.5px; margin:-4px 0 10px; }
-  .orientbox{ background:var(--card); border:1px solid var(--line); border-radius:16px; padding:14px; box-shadow:var(--shadow); margin-bottom:14px; }
-  .orienth{ font-size:14px; font-weight:800; margin:0 0 10px; color:var(--blue-ink); }
-  .orientgrid{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; }
-  .orient{ display:flex; align-items:center; justify-content:center; gap:5px; text-decoration:none;
-    background:var(--blue-soft); color:var(--blue-ink); border-radius:10px; padding:12px 6px; font-weight:800; font-size:13px; }
-  @media (min-width:820px){ .orientgrid{ grid-template-columns:repeat(5,1fr); } }
-
-  .wl{ margin-top:26px; }
-  .wl h2{ font-size:13px; color:var(--sub); font-weight:800; margin:0 0 6px; }
-  .rows{ display:grid; grid-template-columns:1fr; }
-  .row{ display:flex; align-items:baseline; gap:10px; padding:11px 4px; border-bottom:1px solid var(--line); }
-  .row .n{ width:20px; color:var(--blue2); font-size:12px; font-weight:800; flex:none; text-align:right; }
-  .row .w{ font-size:18px; font-weight:800; }
-  .row .m{ color:var(--sub); font-size:15px; margin-left:auto; text-align:right; }
-
-  .brand{ margin-top:30px; text-align:center; font-size:12.5px; font-weight:600; letter-spacing:.05em; color:#8a97ad; }
-  .brand b{ color:var(--blue2); }
-
-  @media (min-width:820px){
-    .wrap{ max-width:900px; padding:26px; }
-    h1{ font-size:30px; }
-    .grid{ grid-template-columns:1fr 1fr 1fr; }
-    .playbig{ width:184px; height:184px; } .playbig .ico{ font-size:58px; }
-    .spd{ font-size:17px; padding:10px 22px; }
-    .rows{ grid-template-columns:1fr 1fr; column-gap:40px; }
-    .row .w{ font-size:22px; } .row .m{ font-size:18px; }
-  }
+.st{max-width:960px;margin:0 auto;padding:44px 24px 24px;min-height:60vh}
+.st h1{font-size:clamp(30px,4.4vw,46px);font-weight:800;letter-spacing:-.05em;line-height:1.15}
+.st .lead{font-size:clamp(15px,1.6vw,17px);color:var(--sub);line-height:1.7;margin-top:10px}
+.st .crumb{margin-bottom:14px}
+.st .crumb button{font:inherit;color:inherit}.st .crumb button:hover{color:var(--ink)}
+.st h2.gh{font-size:15px;font-weight:800;margin:36px 0 12px;display:flex;gap:10px;align-items:baseline}
+.st h2.gh span{font-size:13px;font-weight:600;color:var(--mute)}
+.bgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.bcard{display:flex;align-items:center;gap:12px;text-align:left;background:#fff;border:1px solid var(--line);border-radius:14px;padding:10px 12px;transition:border-color .15s;min-width:0}
+.bcard:hover{border-color:var(--ink)}
+.bcard img{flex:none;width:34px;border-radius:3px;box-shadow:0 6px 12px -8px rgba(12,16,32,.5)}
+.bcard img.land{width:46px}
+.bcard .t{min-width:0}
+.bcard b{display:block;font-size:14.5px;font-weight:800;letter-spacing:-.03em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bcard small{display:block;font-size:12px;font-weight:600;color:var(--mute);margin-top:1px}
+.bcard.off{opacity:.5;cursor:default}.bcard.off:hover{border-color:var(--line)}
+@media(max-width:860px){.bgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.bhead{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.bhead img{width:64px;border-radius:4px;box-shadow:0 12px 24px -12px rgba(12,16,32,.45)}
+.bhead img.land{width:96px}
+.bhead .tx{flex:1;min-width:0}
+.bhead .lk{font-size:14px;font-weight:700;color:var(--sub);text-decoration:underline;text-underline-offset:4px}
+.bhead .lk:hover{color:var(--ink)}
+.ugrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:28px}
+.ucard{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px}
+.ucard .ut{font-family:var(--mono);font-size:15px;font-weight:700;margin-bottom:10px}
+.ubtns{display:flex;flex-direction:column;gap:6px}
+.ubtn{display:flex;align-items:center;justify-content:center;border-radius:10px;padding:10px 0;font-size:13.5px;font-weight:700;border:1px solid var(--line2);background:#fff;color:var(--ink);text-align:center}
+.ubtn:hover{border-color:var(--ink)}
+.ubtn.main{background:var(--ink);border-color:var(--ink);color:#fff}.ubtn.main:hover{background:var(--ink2)}
+.ubtn.off{color:var(--mute);background:var(--panel);border-color:var(--panel);cursor:default}
+@media(max-width:860px){.ugrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.orientbox{margin-top:28px;border:1px solid var(--line);border-radius:16px;padding:16px;background:var(--panel)}
+.orientbox h2{font-size:14.5px;font-weight:800;margin-bottom:10px}
+.orientgrid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.orient{display:flex;align-items:center;justify-content:center;background:#fff;border:1px solid var(--line);border-radius:10px;padding:11px 6px;font-weight:700;font-size:13px;text-align:center}
+.orient:hover{border-color:var(--ink)}
+@media(max-width:700px){.orientgrid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+/* 플레이어 */
+.ltop{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.ltop .unav{margin-left:auto;display:flex;gap:6px}
+.ltop .unav button{font-size:13.5px;font-weight:700;padding:8px 13px;border-radius:10px;border:1px solid var(--line2);background:#fff}
+.ltop .unav button:disabled{opacity:.4;cursor:default}
+.ltop .ut{font-family:var(--mono);font-weight:700;font-size:15px;color:var(--brand);margin-left:4px}
+.player{text-align:center;padding:26px 6px 6px}
+.atog{display:inline-flex;gap:4px;background:var(--panel);border-radius:12px;padding:4px;margin-bottom:22px}
+.atg{color:var(--sub);font-weight:700;font-size:14px;padding:8px 20px;border-radius:9px}
+.atg.on{background:#fff;color:var(--ink);box-shadow:0 1px 3px rgba(12,16,32,.12)}
+.playbig{width:132px;height:132px;border-radius:50%;background:var(--ink);color:#fff;display:inline-flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;transition:transform .1s,background .15s;user-select:none}
+.playbig:hover{background:var(--ink2)}.playbig:active{transform:scale(.96)}
+.playbig .ico{font-size:40px;line-height:1}.playbig .lbl{font-size:13.5px;font-weight:700}
+.seekwrap{max-width:360px;margin:22px auto 0}
+.seekwrap input[type=range]{width:100%;accent-color:var(--ink);height:20px}
+.time{display:flex;justify-content:space-between;font-size:12px;color:var(--mute);font-variant-numeric:tabular-nums}
+.spds{display:flex;gap:8px;justify-content:center;margin-top:14px}
+.spd{border:1px solid var(--line2);background:#fff;border-radius:10px;padding:8px 16px;font-size:14px;font-weight:700;font-family:var(--mono)}
+.spd.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.pgtabs{display:flex;flex-wrap:wrap;gap:8px;margin:20px 0 4px}
+.pgtab{display:inline-flex;flex-direction:column;align-items:center;gap:1px;border:1px solid var(--line2);background:#fff;color:var(--sub);border-radius:10px;padding:7px 14px;line-height:1.2}
+.pgtab b{font-weight:800;font-size:14px}.pgtab span{font-size:11px;color:var(--mute)}
+.pgtab.on{background:var(--ink);border-color:var(--ink);color:#fff}.pgtab.on span{color:#c9cfe0}
+.wl{margin-top:30px}
+.wl h2{font-size:13px;color:var(--mute);font-weight:700;margin:0 0 6px}
+.rows{display:grid;grid-template-columns:1fr 1fr;column-gap:40px}
+.row,.srow{display:flex;align-items:baseline;gap:10px;padding:11px 6px;border-bottom:1px solid var(--line)}
+.row .n,.srow .sn{width:20px;color:var(--mute);font-size:12px;font-weight:700;flex:none;text-align:right;font-family:var(--mono)}
+.row .w{font-size:20px;font-weight:800;letter-spacing:-.02em}
+.row .m{color:var(--sub);font-size:16px;margin-left:auto;text-align:right}
+.srow .sc{display:flex;flex-direction:column;gap:3px}
+.srow .se{font-weight:800;font-size:17px}.srow .sk{color:var(--sub);font-size:14px}
+.row.play,.srow.play,.row.selw{cursor:pointer}
+.row.cur,.srow.cur{background:var(--soft);border-radius:10px}
+.wl.hidek .srow .sk{visibility:hidden}.wl.hidek .srow.rv .sk{visibility:visible}
+.wl.hidem .row .m{visibility:hidden}.wl.hidem .row.rv .m{visibility:visible}
+.lctrl{display:flex;gap:8px;margin:0 0 10px;flex-wrap:wrap}
+.lbtn{border:1px solid var(--line2);background:#fff;color:var(--sub);font-weight:700;font-size:13px;padding:6px 12px;border-radius:9px}
+.lbtn.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.lhint{color:var(--mute);font-size:12.5px;margin:-4px 0 10px}
+.msg{color:var(--mute);text-align:center;padding:64px 0}
+@media(max-width:700px){.st{padding:28px 18px 16px}.rows{grid-template-columns:1fr}.row .w{font-size:18px}.row .m{font-size:15px}}
 </style>
 </head>
-<body>
-<div class="wrap" id="app"></div>
-
-<script src="data_index.js?v=834cb58f"></script>
+<body id="top">
+<header class="nav" id="nav"><div class="wrap">
+  <a class="logo" href="/" aria-label="쏠뷰 SolveU 홈"><span class="ko">쏠뷰</span><span class="dv"></span><span class="en">Solve<span class="g">U</span></span></a>
+  <nav aria-label="주 메뉴"><a href="/home/#books">교재</a><a href="/studio/" aria-current=page>음원·강의</a><a href="/contact/">문의</a></nav>
+  <a class="nbtn" href="/library/">자료실</a>
+</div></header>
+<main>
+<div class="st" id="app"><p class="msg">불러오는 중…</p></div>
+<script src="/studio/data_index.js?v=834cb58f"></script>
+</main>
+<footer><div class="wrap">
+  <span class="fl"><span class="ko">쏠뷰</span><span class="en">Solve<span class="g">U</span></span></span>
+  <span>현장에서 검증된 영어 교재</span>
+  <nav><a href="/home/#books">교재</a><a href="/studio/">음원·강의</a><a href="/library/">자료실</a><a href="/contact/">문의</a><a href="/report/">오류 신고</a><a class="store">스마트스토어</a><a class="talk">톡톡</a><a href="/privacy/">개인정보처리방침</a></nav>
+  <span class="biz"></span>
+</div></footer>
+<script src="/assets/reviews.js?v=635c4ed4"></script>
+<script src="/assets/site.js?v=635c4ed4"></script>
 <script>
 const BOOKS = window.BOOKS||[];
+const NAME = {"ph1": "저절로 파닉스 1", "ph2": "저절로 파닉스 2", "rst1": "저절로 스타터 1", "rst2": "저절로 스타터 2", "rbr1": "저절로 브릿지 1", "rbr2": "저절로 브릿지 2", "rin1": "저절로 입문 1", "rin2": "저절로 입문 2", "rba1": "저절로 기본 1", "rba2": "저절로 기본 2", "rmo1": "저절로 첫모의고사 1", "rmo2": "저절로 첫모의고사 2", "gw1": "저절로 그래머&라이팅 1", "gw2": "저절로 그래머&라이팅 2"}, SLUG = {"ph": "phonics", "rst": "starter", "rbr": "bridge", "rin": "intro", "rba": "basic", "rmo": "mock", "gw": "grammar"};
+const app = document.getElementById('app');
+let curAudio=null;
+function nm(b){ return NAME[b.code]||b.short; }
+function slugOf(c){ return SLUG[c.replace(/\d+$/,'')]||''; }
+function cover(b){ return '<img src="/assets/covers/'+b.code+'.webp" alt=""'+(b.code.indexOf('gw')===0?' class="land"':'')+'>'; }
 /* 책별 전체 데이터(단어·문장·시각)는 필요할 때 그 책 것만 받음 */
 function loadFull(b, cb){
   const put=()=>{ const f=(window.__BOOKFULL||{})[b.code]; if(f){ b.units=f; b._full=true; } cb(); };
   if((window.__BOOKFULL||{})[b.code]) return put();
-  app.innerHTML='<p class="brand" style="text-align:center;padding:48px 0">불러오는 중…</p>';
+  app.innerHTML='<p class="msg">불러오는 중…</p>';
   const s=document.createElement('script');
-  s.src='data/'+b.code+'.js?v='+((window.BOOKVER||{})[b.code]||'');
+  s.src='/studio/data/'+b.code+'.js?v='+((window.BOOKVER||{})[b.code]||'');
   s.onload=put;
-  s.onerror=()=>{ app.innerHTML='<p class="brand" style="text-align:center;padding:48px 0">연결이 불안정해요. 새로고침해 주세요.</p>'; };
+  s.onerror=()=>{ app.innerHTML='<p class="msg">연결이 불안정해요. 새로고침해 주세요.</p>'; };
   document.head.appendChild(s);
 }
-const app = document.getElementById('app');
-let curAudio=null;
-const BRANDLINE='<p class="brand"><a href="/books/" style="color:var(--blue-ink,#2f6bed);text-decoration:none;font-weight:700">← 쏠뷰 교재</a> &nbsp;·&nbsp; <b>쏠뷰(SolveU)</b> &nbsp;|&nbsp; 저절로시리즈</p>';
-
 function esc(s){ return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
 function bookByCode(c){ return BOOKS.find(b=>b.code===c); }
 function parse(){ const q=new URLSearchParams(location.search); let book=q.get('book'), u=parseInt(q.get('u'));
@@ -178,46 +154,45 @@ function render(){
 }
 
 function home(){
-  document.title='쏠뷰 · 저절로 자료';
+  document.title='음원·강의 · 쏠뷰';
   const card=(b)=>{
-    const badge = b.track==='reading' ? '<span class="stepnum">'+b.step+'</span>' : '<span class="stepnum gram">3</span>';
-    return b.active
-      ? '<button class="bookcard" data-go="book" data-book="'+b.code+'">'+badge+'<span class="bk">'+esc(b.short)+'</span></button>'
-      : '<div class="bookcard off">'+badge+'<span class="bk">'+esc(b.short)+'</span><span class="soon">준비중</span></div>';
+    const sub=b.track==='grammar'?'문법·쓰기':(b.step+'단계 · '+esc(b.stepname||''));
+    const inner=cover(b)+'<span class="t"><b>'+esc(nm(b))+'</b><small>'+sub+'</small></span>';
+    return b.active ? '<button class="bcard" type="button" data-go="book" data-book="'+b.code+'">'+inner+'</button>'
+                    : '<div class="bcard off">'+inner+'</div>';
   };
   const reading=BOOKS.filter(b=>b.track!=='grammar').map(card).join('');
   const grammar=BOOKS.filter(b=>b.track==='grammar').map(card).join('');
-  app.innerHTML='<div class="topbar"><a class="chipbtn" href="/books/" style="text-decoration:none">← 쏠뷰 교재</a></div>'+
-    '<div class="seclabel">📚 발음 · 독해</div>'+
-    '<div class="grid hgrid">'+reading+'</div>'+
-    (grammar? '<div class="seclabel" style="margin-top:22px">✍️ 문법 · 쓰기</div><div class="grid ggrid">'+grammar+'</div>':'')+
-    BRANDLINE;
+  app.innerHTML='<h1>음원·강의</h1><p class="lead">책의 QR로 듣던 단어·문장 음원과 강의예요. 교재를 고르면 유닛별로 열 수 있어요.</p>'+
+    '<h2 class="gh">읽기 <span>파닉스에서 첫모의고사까지</span></h2><div class="bgrid">'+reading+'</div>'+
+    (grammar?'<h2 class="gh">문법·쓰기</h2><div class="bgrid">'+grammar+'</div>':'');
 }
 
 function bookView(b){
-  document.title=b.short;
+  document.title=nm(b)+' 음원·강의 · 쏠뷰';
   let top='';
   const vids=(b.book_resources||[]).filter(r=>r.type==='video'&&r.url);
   if(vids.length){
-    const chips=vids.map(r=>'<a class="orient" href="'+esc(r.url)+'" target="_blank" rel="noopener">▶ '+esc(r.label||'영상')+'</a>').join('');
-    top='<div class="orientbox"><h2 class="orienth">🎬 '+esc(b.orient_title||'오리엔테이션 영상')+'</h2><div class="orientgrid">'+chips+'</div></div>';
+    const chips=vids.map(r=>'<a class="orient" href="'+esc(r.url)+'" target="_blank" rel="noopener">'+esc(r.label||'영상')+' ↗</a>').join('');
+    top='<div class="orientbox"><h2>'+esc(b.orient_title||'오리엔테이션 영상')+'</h2><div class="orientgrid">'+chips+'</div></div>';
   }
   const cards=b.units.map(un=>{
     const hasA=(un.audio&&(un.audio.word||un.audio.sent))||(un.pages&&un.pages.length)||un.np;
     const vlist=(un.videos&&un.videos.length)? un.videos : (un.video? [{label:'강의 영상',url:un.video}] : []);
-    const a=hasA? '<button class="ubtn audio" data-go="leaf" data-book="'+b.code+'" data-u="'+un.n+'">🔊 음원 듣기</button>'
-                : (vlist.length? '' : '<span class="ubtn off">🔊 준비중</span>');
-    const vid=vlist.map(v=>'<a class="ubtn video'+(!hasA?' solo':'')+'" href="'+esc(v.url)+'" target="_blank" rel="noopener">🎬 '+esc(v.label)+'</a>').join('');
-    return '<div class="unitcard"><div class="ut">Unit '+un.n+'</div><div class="ubtns">'+a+vid+'</div></div>';
+    const a=hasA? '<button class="ubtn main" type="button" data-go="leaf" data-book="'+b.code+'" data-u="'+un.n+'">음원 듣기</button>'
+                : (vlist.length? '' : '<span class="ubtn off">준비 중</span>');
+    const vid=vlist.map(v=>'<a class="ubtn'+(!hasA?' main':'')+'" href="'+esc(v.url)+'" target="_blank" rel="noopener">'+esc(v.label)+' ↗</a>').join('');
+    return '<div class="ucard"><div class="ut">Unit '+un.n+'</div><div class="ubtns">'+a+vid+'</div></div>';
   }).join('');
-  app.innerHTML='<div class="topbar"><a class="chipbtn" href="/books/" style="text-decoration:none">← 쏠뷰 교재</a><button class="chipbtn" data-go="home">교재 목록</button></div>'+
-    '<div class="head"><span class="kicker">'+esc(b.short)+'</span><h1>유닛 선택</h1></div>'+
-    top+'<div class="grid">'+cards+'</div>'+BRANDLINE;
+  const sl=slugOf(b.code);
+  app.innerHTML='<nav class="crumb" aria-label="위치"><button type="button" data-go="home">음원·강의</button><span>›</span><span>'+esc(nm(b))+'</span></nav>'+
+    '<div class="bhead">'+cover(b)+'<div class="tx"><h1>'+esc(nm(b))+'</h1></div>'+(sl?'<a class="lk" href="/books/'+sl+'/">교재 소개 보기</a>':'')+'</div>'+
+    top+'<div class="ugrid">'+cards+'</div>';
 }
 
 function fmt(s){ s=Math.floor(s||0); return Math.floor(s/60)+':'+String(s%60).padStart(2,'0'); }
 function leaf(b,u,selP){
-  const un=b.units[u-1]; document.title=b.short+' · Unit '+u;
+  const un=b.units[u-1]; document.title=nm(b)+' Unit '+u+' · 쏠뷰';
   const PAGES=(un.pages&&un.pages.length)?un.pages:null;
   selP=(PAGES && selP>=0 && selP<PAGES.length)?selP:0;
   const src=PAGES?PAGES[selP]:un;   // 페이지 있으면 그 페이지가 단어/음원 출처
@@ -229,23 +204,23 @@ function leaf(b,u,selP){
   const SENTSRC=isSentPage?src.sents:(un.sents||[]);
   const words=(isSentPage?[]:(src.words||[])).map((w,i)=>'<div class="row selw'+(WT?' play':'')+'"><span class="n">'+(i+1)+'</span><span class="w">'+esc(w.w)+'</span><span class="m">'+esc(w.m)+'</span></div>').join('');
   const sents=SENTSRC.map((s,i)=>'<div class="srow'+(ST?' play':'')+'"><span class="sn">'+(i+1)+'</span><div class="sc"><span class="se">'+esc(s.e)+'</span><span class="sk">'+esc(s.k)+'</span></div></div>').join('');
-  const pgtabs=PAGES?('<div class="pgtabs">'+PAGES.map((p,i)=>{const sub=(p.sub!==undefined?p.sub:(p.p!=null?'p.'+p.p:''));return '<button class="pgtab'+(i===selP?' on':'')+'" data-pg="'+i+'"><b>'+esc(p.label||('세트 '+(i+1)))+'</b>'+(sub?'<span>'+esc(sub)+'</span>':'')+'</button>';}).join('')+'</div>'):'';
+  const pgtabs=PAGES?('<div class="pgtabs">'+PAGES.map((p,i)=>{const sub=(p.sub!==undefined?p.sub:(p.p!=null?'p.'+p.p:''));return '<button class="pgtab'+(i===selP?' on':'')+'" type="button" data-pg="'+i+'"><b>'+esc(p.label||('세트 '+(i+1)))+'</b>'+(sub?'<span>'+esc(sub)+'</span>':'')+'</button>';}).join('')+'</div>'):'';
   const wordHead=PAGES?('교재 '+src.p+'쪽 순서 · '+(src.words||[]).length+'개'):('단어 '+(src.words?src.words.length:0)+'개');
   const wordHTML=(!isSentPage&&src.words&&src.words.length)?'<h2>'+wordHead+'</h2><div class="rows">'+words+'</div>':'';
   const sentHead=(isSentPage?(esc(src.label||'문장읽기')+' · '):'')+'문장 '+SENTSRC.length+'개';
   const sentHTML=(SENTSRC.length)?'<h2>'+sentHead+'</h2><div class="rows">'+sents+'</div>':'';
-  const toggle= types.length>1 ? '<div class="atog">'+types.map((t,i)=>'<button class="atg'+(i===0?' on':'')+'" data-t="'+t.k+'">'+t.l+' 음원</button>').join('')+'</div>' : '';
-  app.innerHTML='<div class="topbar"><button class="chipbtn" data-go="book" data-book="'+b.code+'">← 유닛 목록</button><a class="chipbtn" href="/books/" style="text-decoration:none">쏠뷰 교재</a>'+
-    '<div class="nav"><button id="uprev">◀ 이전</button><button id="unext">다음 ▶</button></div></div>'+
-    '<div class="head"><span class="kicker">'+esc(b.short)+'</span><div class="unit">Unit '+u+'</div></div>'+
+  const toggle= types.length>1 ? '<div class="atog">'+types.map((t,i)=>'<button class="atg'+(i===0?' on':'')+'" type="button" data-t="'+t.k+'">'+t.l+' 음원</button>').join('')+'</div><br>' : '';
+  app.innerHTML='<nav class="crumb" aria-label="위치"><button type="button" data-go="home">음원·강의</button><span>›</span><button type="button" data-go="book" data-book="'+b.code+'">'+esc(nm(b))+'</button></nav>'+
+    '<div class="ltop"><h1>'+esc(nm(b))+'</h1><span class="ut">Unit '+u+'</span>'+
+    '<div class="unav"><button type="button" id="uprev">이전 유닛</button><button type="button" id="unext">다음 유닛</button></div></div>'+
     pgtabs+
     '<div class="player"><audio id="au" preload="metadata"></audio>'+toggle+
-      '<div class="btnwrap"><button class="playbig" id="play" aria-label="재생"><span class="ico" id="ico">▶</span><span class="lbl" id="lbl">듣기</span></button></div>'+
+      '<button class="playbig" type="button" id="play" aria-label="재생"><span class="ico" id="ico">▶</span><span class="lbl" id="lbl">듣기</span></button>'+
       '<div class="seekwrap"><input type="range" id="seek" min="0" max="1000" value="0" aria-label="재생 위치">'+
       '<div class="time"><span id="cur">0:00</span><span id="dur">0:00</span></div></div>'+
-      '<div class="spds"><button class="spd" data-s="0.8">0.8×</button><button class="spd on" data-s="1">1.0×</button><button class="spd" data-s="1.2">1.2×</button></div>'+
+      '<div class="spds"><button class="spd" type="button" data-s="0.8">0.8×</button><button class="spd on" type="button" data-s="1">1.0×</button><button class="spd" type="button" data-s="1.2">1.2×</button></div>'+
     '</div>'+
-    ((wordHTML||sentHTML)? '<div class="wl" id="listbox"></div>':'')+BRANDLINE;
+    ((wordHTML||sentHTML)? '<div class="wl" id="listbox"></div>':'');
 
   const au=document.getElementById('au'); curAudio=au;
   const play=document.getElementById('play'), ico=document.getElementById('ico'), lbl=document.getElementById('lbl');
@@ -260,18 +235,18 @@ function leaf(b,u,selP){
   function ctrlBar(){
     if(curT==='sent' && SENTSRC.length){
       let h='<div class="lctrl">';
-      if(hasKo) h+='<button class="lbtn'+(hideKo?' on':'')+'" id="tgKo">'+(hideKo?koLabel+' 보기':koLabel+' 숨기기')+'</button>';
-      if(ST) h+='<button class="lbtn'+(repeatOn?' on':'')+'" id="tgRep">🔁 한 문장 반복</button>';
+      if(hasKo) h+='<button class="lbtn'+(hideKo?' on':'')+'" type="button" id="tgKo">'+(hideKo?koLabel+' 보기':koLabel+' 숨기기')+'</button>';
+      if(ST) h+='<button class="lbtn'+(repeatOn?' on':'')+'" type="button" id="tgRep">한 문장 반복</button>';
       h+='</div>';
-      if(ST) h+='<div class="lhint" id="lhint">'+(repeatOn?'반복 켜짐 — 문장을 누르면 그 문장만 계속 반복돼요 (멈추려면 재생버튼)':'문장을 누르면 그 문장만 재생돼요')+'</div>';
+      if(ST) h+='<div class="lhint" id="lhint">'+(repeatOn?'반복 켜짐 — 문장을 누르면 그 문장만 계속 반복돼요 (멈추려면 재생 버튼)':'문장을 누르면 그 문장만 재생돼요')+'</div>';
       return h;
     }
     if(curT==='word' && src.words && src.words.length){
       const mlab=PAGES?(hideMean?'소리 보기':'소리 숨기기'):(hideMean?'뜻 보기':'뜻 숨기기');
-      let h='<div class="lctrl"><button class="lbtn'+(hideMean?' on':'')+'" id="tgMean">'+mlab+'</button>';
-      if(WT) h+='<button class="lbtn'+(repeatOn?' on':'')+'" id="tgRep">🔁 한 단어 반복</button>';
+      let h='<div class="lctrl"><button class="lbtn'+(hideMean?' on':'')+'" type="button" id="tgMean">'+mlab+'</button>';
+      if(WT) h+='<button class="lbtn'+(repeatOn?' on':'')+'" type="button" id="tgRep">한 단어 반복</button>';
       h+='</div>';
-      if(WT) h+='<div class="lhint" id="lhint">'+(repeatOn?'반복 켜짐 — 단어를 누르면 그 단어만 계속 반복돼요 (멈추려면 재생버튼)':'단어를 누르면 그 단어만 재생돼요')+'</div>';
+      if(WT) h+='<div class="lhint" id="lhint">'+(repeatOn?'반복 켜짐 — 단어를 누르면 그 단어만 계속 반복돼요 (멈추려면 재생 버튼)':'단어를 누르면 그 단어만 재생돼요')+'</div>';
       return h;
     }
     return '';
@@ -280,7 +255,7 @@ function leaf(b,u,selP){
   function bindList(){
     const km=document.getElementById('tgKo'); if(km) km.onclick=()=>{ hideKo=!hideKo; km.classList.toggle('on',hideKo); km.textContent=hideKo?koLabel+' 보기':koLabel+' 숨기기'; listbox.classList.toggle('hidek',hideKo); listbox.querySelectorAll('.srow.rv').forEach(r=>r.classList.remove('rv')); };
     const mm=document.getElementById('tgMean'); if(mm) mm.onclick=()=>{ hideMean=!hideMean; mm.classList.toggle('on',hideMean); mm.textContent=PAGES?(hideMean?'소리 보기':'소리 숨기기'):(hideMean?'뜻 보기':'뜻 숨기기'); listbox.classList.toggle('hidem',hideMean); listbox.querySelectorAll('.row.rv').forEach(r=>r.classList.remove('rv')); };
-    const rp=document.getElementById('tgRep'); if(rp) rp.onclick=()=>{ repeatOn=!repeatOn; rp.classList.toggle('on',repeatOn); const lh=document.getElementById('lhint'); const isw=(curT==='word'); if(lh) lh.textContent=repeatOn?('반복 켜짐 — '+(isw?'단어':'문장')+'를 누르면 그 '+(isw?'단어':'문장')+'만 계속 반복돼요 (멈추려면 재생버튼)'):((isw?'단어':'문장')+'를 누르면 그 '+(isw?'단어':'문장')+'만 재생돼요'); };
+    const rp=document.getElementById('tgRep'); if(rp) rp.onclick=()=>{ repeatOn=!repeatOn; rp.classList.toggle('on',repeatOn); const lh=document.getElementById('lhint'); const isw=(curT==='word'); if(lh) lh.textContent=repeatOn?('반복 켜짐 — '+(isw?'단어':'문장')+'를 누르면 그 '+(isw?'단어':'문장')+'만 계속 반복돼요 (멈추려면 재생 버튼)'):((isw?'단어':'문장')+'를 누르면 그 '+(isw?'단어':'문장')+'만 재생돼요'); };
     if(curT==='sent') listbox.querySelectorAll('.srow').forEach((r,i)=>r.onclick=()=>{ if(hideKo) r.classList.add('rv'); if(ST) playSeg(i); });
     if(curT==='word') listbox.querySelectorAll('.row').forEach((r,i)=>r.onclick=()=>{ if(hideMean) r.classList.toggle('rv'); if(WT) playSeg(i); });
   }
@@ -293,7 +268,7 @@ function leaf(b,u,selP){
   function loadSrc(){ au.src=A[curT]||''; try{au.load();}catch(e){} au.playbackRate=curSpd;
     ico.textContent='▶'; lbl.textContent='듣기'; seek.value=0; curEl.textContent='0:00'; durEl.textContent='0:00'; curIdx=-1; boundEnd=null; renderList(); }
   play.onclick=()=>{ if(au.paused){ boundEnd=null; au.play(); } else au.pause(); };
-  au.onplay=()=>{ ico.textContent='⏸'; lbl.textContent='듣는 중'; };
+  au.onplay=()=>{ ico.textContent='❚❚'; lbl.textContent='듣는 중'; };
   au.onpause=()=>{ if(!au.ended){ ico.textContent='▶'; lbl.textContent='계속 듣기'; } };
   au.onended=()=>{ ico.textContent='↺'; lbl.textContent='다시 듣기'; curIdx=-1; highlight(); };
   au.ontimeupdate=()=>{ if(au.duration){ seek.value=Math.round(au.currentTime/au.duration*1000); curEl.textContent=fmt(au.currentTime);}
