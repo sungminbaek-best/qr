@@ -5,7 +5,6 @@
 const AUTH = "https://solveu-auth.tjdals85200.workers.dev";   // 선생님 인증 서버(_QR제작/teacher-auth)
 const PASS_KEY = "solveu_pass";                                // 사이트 공통 입장권(site.js 와 같은 키)
 const SAVE_KEY = "solveu_wb_v1";                               // 이 기기에 기억하는 것(교재·유형·학원 이름)
-const PH_MAX = 30;                                             // 파닉스는 유닛 단어가 많아 유형마다 30개만
 
 // [id, 이름, 예시(화면 안내용), 기본 선택]
 const TYPES_R = [
@@ -14,14 +13,9 @@ const TYPES_R = [
   ["s_trans", "문장 해석",     "영어 문장 → (우리말)",             false],
   ["s_order", "어순 배열",     "우리말 + 섞인 단어 → (영어 문장)", false],
 ];
-const TYPES_P = [
-  ["p_sound", "소리 쓰기",      "cat → (캩)",                    true],
-  ["p_gap",   "빠진 소리 쓰기", "c _ t [캩] → (a)",              true],
-  ["p_dict",  "받아쓰기",       "선생님이 불러 주는 단어 쓰기",   false],
-];
-const TNAME = Object.fromEntries(TYPES_R.concat(TYPES_P).map(t=>[t[0],t[1]]));
+const TNAME = Object.fromEntries(TYPES_R.map(t=>[t[0],t[1]]));
 // 유형별 단 수(C&S 워크북처럼 짧은 것은 여러 단, 문장은 1단, 어순배열은 2단)
-const COLS = {w_mean:2, w_spell:2, s_trans:1, s_order:2, p_sound:3, p_gap:3, p_dict:3};
+const COLS = {w_mean:2, w_spell:2, s_trans:1, s_order:2};
 
 let CUR=null, TAB="Q";
 
@@ -68,12 +62,11 @@ function initControls(){
   if(qbook && qu && qbook.units.some(x=>x.u===qu)) setUnits([qu]);
 }
 function onBook(){
-  const b=curBook(), ph=b.kind==="phonics", sv=load();
+  const b=curBook(), sv=load();
   $("units").innerHTML = b.units.map(u=>`<label title="${esc(u.label||"")}"><input type="checkbox" value="${u.u}" onchange="this.parentNode.classList.toggle('on',this.checked)">${u.u}</label>`).join("");
-  $("ulegend").innerHTML = ph ? b.units.map(u=>`<div><b>${u.u}</b> ${esc(u.label||"")}</div>`).join("") : "";
   setUnits([b.units[0].u]);
   const chosen = sv.types && sv.types[b.kind];
-  $("types").innerHTML = (ph?TYPES_P:TYPES_R).map(([id,nm,ex,def])=>{
+  $("types").innerHTML = TYPES_R.map(([id,nm,ex,def])=>{
     const on = chosen ? chosen.includes(id) : def;
     return `<label class="ty ${on?"on":""}"><input type="checkbox" value="${id}" ${on?"checked":""} onchange="this.parentNode.classList.toggle('on',this.checked)">
       <span><b>${nm}</b><small>${esc(ex)}</small></span></label>`; }).join("");
@@ -105,9 +98,6 @@ function make(){
     if(t==="w_spell") items=shuffle(W.filter(w=>w.k),rnd).map(w=>({q:w.k, a:w.e}));
     if(t==="s_trans") items=S.map(s=>({q:s.e, a:s.k}));
     if(t==="s_order") items=S.map(s=>({q:s.ck&&s.ck.length>1?s.ck.join(" / "):s.k, mix:scramble(s.e,rnd,pn), a:s.e}));
-    if(t==="p_sound") items=shuffle(W,rnd).slice(0,PH_MAX).map(w=>({q:w.e, a:w.s}));
-    if(t==="p_gap")   items=shuffle(W.filter(w=>w.b),rnd).slice(0,PH_MAX).map(w=>({q:w.b, snd:w.s, a:w.ba, full:w.e}));
-    if(t==="p_dict")  items=shuffle(W.filter(w=>!w.alpha),rnd).slice(0,PH_MAX).map(w=>({a:w.e}));
     if(items.length) sets.push({t, items});
   });
   if(!sets.length){ alert("고른 유닛에는 이 유형으로 만들 문제가 없어요. 유닛이나 유형을 바꿔 주세요."); return; }
@@ -137,7 +127,7 @@ function unitLabel(us){
   const run=s.every((v,i)=>i===0||v===s[i-1]+1);
   return "Unit "+(s.length===1?s[0]: run? s[0]+"–"+s[s.length-1] : s.join(", "));
 }
-const NOTE={p_dict:"※ 선생님이 불러 주는 단어를 쓰세요.", s_order:"※ 주어진 단어를 바르게 배열하여 문장을 쓰세요."};
+const NOTE={s_order:"※ 주어진 단어를 바르게 배열하여 문장을 쓰세요."};
 function fitZoom(){   // A4(794px)가 미리보기 칸보다 넓으면 줄여 보이기
   const w=$("preview").clientWidth-40;
   $("preview").style.setProperty("--z", Math.min(1, Math.max(.35, w/794)).toFixed(3));
@@ -186,14 +176,9 @@ function itemHTML(t,it,n,ans){
   const N=`<span class="n">${n}</span>`;
   const line=a=>`<div class="ln">${ans?`<span class="a">${esc(a)}</span>`:""}</div>`;
   switch(t){
-    case "p_dict":
-      return `<div class="row">${N}<div class="ln in">${ans?`<span class="a">${esc(it.a)}</span>`:""}</div></div>`;
-    case "p_gap":
-      return `<div class="row">${N}<span class="q gapw">${esc(it.q).replace(/_/g,'<i class="gp"></i>')}</span><span class="snd">[${esc(it.snd)}]</span></div>`+
-        `<div class="ln">${ans?`<span class="a">${esc(it.a)}</span><span class="full">${esc(it.full)}</span>`:""}</div>`;
     case "s_order":
       return `<div class="row">${N}<span class="q">${esc(it.q)}</span></div><div class="mix">${esc(it.mix)}</div>${line(it.a)}`;
-    default:   // w_mean · w_spell · s_trans · p_sound
+    default:   // w_mean · w_spell · s_trans
       return `<div class="row">${N}<span class="q">${esc(it.q)}</span></div>${line(it.a)}`;
   }
 }

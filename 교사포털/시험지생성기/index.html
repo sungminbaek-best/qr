@@ -43,8 +43,6 @@
   .units label{min-width:38px; height:34px; display:inline-flex; align-items:center; justify-content:center; font-size:14px; border:1.5px solid #d5d9e0; border-radius:8px; cursor:pointer; user-select:none; background:#fff}
   .units label.on{background:var(--navy); border-color:var(--navy); color:#fff; font-weight:700}
   .units input{display:none}
-  .ulegend{margin-top:8px; font-size:12px; color:var(--sub); line-height:1.65}
-  .ulegend b{display:inline-block; min-width:16px; color:var(--ink)}
   .types{display:flex; flex-direction:column; gap:6px}
   .ty{display:flex; align-items:center; gap:10px; border:1.5px solid #d5d9e0; border-radius:9px; padding:8px 10px; cursor:pointer; background:#fff}
   .ty.on{border-color:var(--navy); background:var(--navyBg)}
@@ -87,14 +85,8 @@
   .ln{height:20pt; border-bottom:0.6pt solid #cfd3d9; margin-left:19pt; display:flex; align-items:flex-end; gap:8pt; padding-bottom:2pt}
   .ln .a{font-size:10pt; font-weight:700; color:var(--orange); line-height:1.35}
   .pg.ans .ln{height:auto; min-height:20pt}            /* 정답이 길면 줄이 늘어남(위 글자와 안 겹치게) */
-  .ln .full{font-size:9pt; color:#8a8f98}
-  .row .ln.in{flex:1; margin-left:0; height:16pt}
   .s_trans .ln, .s_order .ln{height:22pt}
   .mix{margin:3pt 0 0 19pt; font-size:8.6pt; color:#8a8f98; word-break:keep-all}
-  .gapw{letter-spacing:.5pt}
-  .gp{display:inline-block; width:9pt; height:11pt; border-bottom:1pt solid #1a1a1a; margin:0 1.5pt; vertical-align:baseline}
-  .snd{font-size:9pt; color:#8a8f98; margin-left:4pt}
-  .p_gap .ln{height:14pt}
 
   @media print{
     @page{size:A4; margin:0}
@@ -136,7 +128,6 @@
         <div class="step">
           <div class="lb"><span class="no">2</span>유닛 <button class="mini" onclick="allUnits(true)">전체</button><button class="mini" onclick="allUnits(false)">해제</button></div>
           <div class="units" id="units"></div>
-          <div class="ulegend" id="ulegend"></div>
         </div>
         <div class="step">
           <div class="lb"><span class="no">3</span>유형</div>
