@@ -229,8 +229,8 @@
     <h1>저절로를 <span class="gt">학원 교재로</span><br>도입하세요</h1>
     <p class="lead">여러 교재를 합쳐 30권부터, 사업자 학원에 학원 공급가로 드려요.</p>
     <div class="astat">
-      <div><small>30권 이상</small><b><em>정가의 85%</em></b></div>
-      <div><small>50권 이상</small><b><em>정가의 80%</em></b></div>
+      <div><small>신청 조건</small><b><em>30권 이상</em></b></div>
+      <div><small>견적</small><b>1영업일 안에 문자</b></div>
       <div><small>배송 · 결제</small><b>무료 배송 · 계산서</b></div>
     </div>
     <div class="tcta"><a class="big" href="#apply">도입 신청하기 ↓</a><a class="line2" href="#terms">공급 조건 보기</a></div>
@@ -250,7 +250,7 @@
 
 <section class="sec panel" id="terms"><div class="wrap">
   <div class="sh rev"><h2>학원 공급 조건</h2><p>사업자 대상 · 계산서 발행. 1회 주문 기준이에요.</p></div>
-  <table class="tbl"><tr><th>주문 권수</th><th>학원 공급가</th></tr><tr><td><b>30권 이상</b></td><td>정가의 85%</td></tr><tr><td><b>50권 이상</b></td><td>정가의 80%</td></tr><tr><td><b>100권 이상·여러 지점</b></td><td>별도 문의</td></tr></table>
+  <table class="tbl"><tr><th>주문 권수</th><th>조건</th></tr><tr><td><b>30권 이상</b></td><td>학원 공급가 · 견적으로 안내</td></tr><tr><td><b>100권 이상 · 여러 지점</b></td><td>별도 문의</td></tr></table>
   <ul class="ul">
     <li>여러 교재를 <b>합쳐서</b> 권수를 세요.</li>
     <li><b>한 곳으로 한 번에</b> 보내 드리고, 배송비는 무료예요.</li>
@@ -317,10 +317,10 @@
       <button type="submit" class="go1 full" id="bsend">도입 신청하기</button>
     </div>
     <aside class="calc" aria-live="polite">
-      <h3>공급가 계산</h3>
-      <dl><dt>총 권수</dt><dd id="c-n">0권</dd><dt>적용 구간</dt><dd id="c-t">-</dd><dt>정가 합계</dt><dd id="c-l">0원</dd><dt>공급가 합계</dt><dd class="big" id="c-s">-</dd><dt>정가보다</dt><dd id="c-d">-</dd></dl>
-      <p class="msg" id="c-m">교재별 수량을 넣으면 바로 계산해 드려요.</p>
-      <p class="note">사업자 대상 · 계산서 발행 · 무료 배송. 최종 금액은 견적 문자로 확정해 드려요.</p>
+      <h3>주문 요약</h3>
+      <dl><dt>총 권수</dt><dd class="big" id="c-n">0권</dd><dt>정가 합계</dt><dd id="c-l">0원</dd></dl>
+      <p class="msg" id="c-m">교재별 수량을 넣어 주세요. 30권부터 신청할 수 있어요.</p>
+      <p class="note">학원 공급가는 신청 후 1영업일 안에 견적 문자로 안내해 드려요. 사업자 대상 · 계산서 발행 · 무료 배송.</p>
     </aside>
   </form>
   <div class="jbox" id="bdone" hidden style="max-width:560px;margin-top:28px">
@@ -340,21 +340,18 @@
 <script src="/assets/reviews.js?v=dd7a662b"></script>
 <script src="/assets/site.js?v=dd7a662b"></script>
 <script>
-var S=SOLVEU,$=S.$,P={"ph1": 14000, "ph2": 14000, "rst1": 14000, "rst2": 14000, "rbr1": 15000, "rbr2": 16000, "rin1": 14000, "rin2": 14000, "rba1": 15000, "rba2": 15000, "rmo1": 15000, "rmo2": 16000, "gw1": 16000, "gw2": 16000},T=[[100, null], [50, 0.8], [30, 0.85]];
+var S=SOLVEU,$=S.$,P={"ph1": 14000, "ph2": 14000, "rst1": 14000, "rst2": 14000, "rbr1": 15000, "rbr2": 16000, "rin1": 14000, "rin2": 14000, "rba1": 15000, "rba2": 15000, "rmo1": 15000, "rmo2": 16000, "gw1": 16000, "gw2": 16000};
 /* 카페 공지 링크(?from=cafe)로 들어오면 30일 동안 기억 → 그 사이 신청하면 카페 주문(수수료 대상)으로 표시 */
 try{var fr=new URLSearchParams(location.search).get("from");if(fr){sessionStorage.setItem("solveu_from",fr.slice(0,30));if(fr==="cafe")localStorage.setItem("solveu_cafe",String(Date.now()));}}catch(e){}
 function srcNow(){var s="";try{s=sessionStorage.getItem("solveu_from")||"";var c=+localStorage.getItem("solveu_cafe")||0;if(!s&&c&&Date.now()-c<30*864e5)s="cafe";}catch(e){}return s;}
 function won(n){return n.toLocaleString("ko-KR")+"원";}
 function qty(){var o={},n=0,l=0;S.$$(".qt input").forEach(function(i){var v=Math.max(0,Math.min(999,parseInt(i.value,10)||0));if(v){o[i.dataset.c]=v;n+=v;l+=v*P[i.dataset.c];}});return {o:o,n:n,l:l};}
-function tier(n){for(var i=0;i<T.length;i++)if(n>=T[i][0])return T[i];return null;}
-function supply(o,rate){var s=0;for(var c in o)s+=Math.round(P[c]*rate)*o[c];return s;}
-function calc(){var q=qty(),t=tier(q.n),m="";
+function calc(){var q=qty(),m;
   $("#c-n").textContent=q.n+"권";$("#c-l").textContent=won(q.l);
-  if(!q.n){$("#c-t").textContent="-";$("#c-s").textContent="-";$("#c-d").textContent="-";m="교재별 수량을 넣으면 바로 계산해 드려요.";}
-  else if(!t){$("#c-t").textContent="해당 없음";$("#c-s").textContent="-";$("#c-d").textContent="-";m="30권부터 학원 공급가가 적용돼요. "+(30-q.n)+"권 더 담거나, 29권 이하는 스마트스토어에서 주문해 주세요.";}
-  else if(t[1]===null){$("#c-t").textContent="별도 문의";$("#c-s").textContent="별도 안내";$("#c-d").textContent="-";m="100권 이상은 별도로 연락드려 조건을 안내해 드릴게요.";}
-  else{var s=supply(q.o,t[1]);$("#c-t").textContent="정가의 "+Math.round(t[1]*100)+"%";$("#c-s").textContent=won(s);$("#c-d").textContent=won(q.l-s)+" 적게";
-    if(t[0]===30&&q.n>=40)m=(50-q.n)+"권 더 담으면 정가의 80%가 적용돼요.";}
+  if(!q.n)m="교재별 수량을 넣어 주세요. 30권부터 신청할 수 있어요.";
+  else if(q.n<30)m=(30-q.n)+"권 더 담으면 신청할 수 있어요. 29권 이하는 스마트스토어에서 주문해 주세요.";
+  else if(q.n>=100)m="100권 이상은 별도로 연락드려 조건을 안내해 드릴게요.";
+  else m="신청할 수 있어요. 학원 공급가는 견적 문자로 안내해 드려요.";
   $("#c-m").textContent=m;}
 S.$$(".qt input").forEach(function(i){i.addEventListener("input",calc);});
 function val(id){return ($(id).value||"").trim();}
