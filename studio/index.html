@@ -219,7 +219,7 @@ function teacherLine(b,u){
   const dest=GEN.indexOf(b.code)>=0 ? '/교사포털/시험지생성기/?book='+b.code+'&u='+u : '/library/#teacher';
   const ok=window.SOLVEU&&SOLVEU.isOK&&SOLVEU.isOK();
   const href=ok? dest : '/library/join/?from='+(QRC?'qr':'studio')+'&code='+encodeURIComponent(QRC||(b.code+'u'+u))+'&next='+encodeURIComponent(dest);
-  return '<a class="tline" href="'+href+'"><b>선생님이세요?</b><span>이 유닛 시험지 · 수업 자료 무료</span><i>→</i></a>';
+  return '<a class="tline" href="'+href+'"><b>선생님이세요?</b><span>이 유닛 워크북 · 수업 자료 무료</span><i>→</i></a>';
 }
 function fmt(s){ s=Math.floor(s||0); return Math.floor(s/60)+':'+String(s%60).padStart(2,'0'); }
 function leaf(b,u,selP){
