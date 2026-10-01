@@ -3,448 +3,166 @@
 <head>
 <meta charset="utf-8"><meta name="robots" content="noindex, nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>저절로 시험지 생성기</title>
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<title>저절로 워크북 만들기</title>
 <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" rel="stylesheet">
-<style id="pageCss">@page{size:A4 portrait;margin:12mm 0}</style>
 <style>
   :root{
-    --bg:#f6f8fb; --card:#fff; --ink:#1f2430; --sub:#67707f; --muted:#9aa3b2;
-    --line:#e6e9f0; --line2:#d6dbe6; --book:#4c6ef5; --bookBg:#eaf0ff;
-    --warn:#c07f12; --warnBg:#fbf1dc; --ok:#2b9d5f; --okBg:#e6f6ec;
-    --shadow:0 6px 24px rgba(31,36,48,.07);
+    --bg:#f5f6f8; --card:#fff; --ink:#1f2430; --sub:#5f6775; --muted:#9aa1ad; --line:#e3e6eb;
+    --navy:#223A5E; --orange:#E65C21; --navyBg:#eef2f8;
   }
   *{box-sizing:border-box}
   html,body{margin:0}
-  body{background:var(--bg); color:var(--ink);
-    font-family:"Pretendard","Malgun Gothic","맑은 고딕",system-ui,sans-serif;
-    -webkit-font-smoothing:antialiased; line-height:1.55;}
-  .wrap{max-width:1180px; margin:0 auto; padding:20px 16px 60px;}
-  header{display:flex; align-items:center; gap:10px; padding:6px 2px 16px;}
-  .logo{font-size:20px; font-weight:800; letter-spacing:-.02em;}
-  .logo b{color:var(--book)}
-  .tag{font-size:13px; color:var(--muted); margin-left:auto}
-  .back{display:inline-flex; align-items:center; gap:6px; font-size:14px; color:var(--sub);
-    text-decoration:none; padding:6px 2px; margin-bottom:8px}
-  .back:hover{color:var(--ink)}
-  h1{font-size:19px; font-weight:700; margin:0 0 4px}
-  .desc{font-size:14px; color:var(--sub); margin:0 0 16px}
-  /* 게이트 */
-  .gate{max-width:420px; margin:40px auto; background:var(--card); border:1px solid var(--line);
-    border-radius:18px; padding:28px 24px; box-shadow:var(--shadow); text-align:center}
-  .gate .lockic{font-size:32px}
-  .gate h2{font-size:18px; margin:10px 0 4px}
-  .gate p{font-size:13.5px; color:var(--sub); margin:0 0 18px}
-  .gate button.go{width:100%; height:48px; margin-top:12px; border:none; border-radius:12px;
-    background:var(--book); color:#fff; font-size:16px; font-weight:700; cursor:pointer; font-family:inherit}
-  .err{color:#d1435b; font-size:13px; min-height:18px; margin-top:10px}
-  .hint{font-size:12px; color:var(--muted); margin-top:14px}
-  /* 레이아웃 */
-  .layout{display:grid; grid-template-columns:340px minmax(0,1fr); gap:18px; align-items:start}
-  @media(max-width:860px){.layout{grid-template-columns:1fr}}
-  .panel{background:var(--card); border:1px solid var(--line); border-radius:16px; padding:16px 16px 18px;
-    box-shadow:var(--shadow); position:sticky; top:12px; max-height:calc(100vh - 24px); overflow:auto}
-  @media(max-width:860px){.panel{position:static; max-height:none}}
-  .fld{margin-bottom:14px}
-  .fld > label{display:block; font-size:12.5px; font-weight:700; color:var(--sub); margin-bottom:6px}
-  .fld .help{font-size:11.5px; color:var(--muted); margin-top:4px}
-  select,input[type=text],input[type=number],textarea{width:100%; height:40px; border:1.5px solid var(--line2);
-    border-radius:10px; padding:0 10px; font-size:14px; font-family:inherit; outline:none; background:#fff}
-  textarea{height:auto; padding:8px 10px; line-height:1.5; resize:vertical}
-  select:focus,input:focus,textarea:focus{border-color:var(--book)}
-  select.modesel{height:44px; font-weight:700; font-size:15px; border-color:#bcccff; background:var(--bookBg); color:#2f52c9}
-  .units{display:flex; flex-wrap:wrap; gap:6px}
-  .units label{display:inline-flex; align-items:center; gap:4px; font-size:13px; background:#f3f5f9;
-    border:1px solid var(--line); border-radius:8px; padding:4px 9px; cursor:pointer; user-select:none}
-  .units label.on{background:var(--bookBg); border-color:#bcccff; color:#2f52c9; font-weight:700}
-  .units input{display:none}
-  .ulegend{margin-top:8px; font-size:11.5px; color:var(--sub); line-height:1.6}
-  .ulegend b{color:var(--ink)}
-  .mini{font-size:12px; color:var(--book); background:none; border:none; cursor:pointer; padding:2px 4px}
-  .types{display:flex; flex-direction:column; gap:6px}
-  .trow{display:flex; align-items:center; gap:8px; font-size:13.5px; background:#f8f9fc;
-    border:1px solid var(--line); border-radius:10px; padding:6px 9px}
-  .trow.on{background:var(--bookBg); border-color:#bcccff}
-  .trow input[type=checkbox]{width:17px; height:17px; accent-color:var(--book); flex:none}
-  .trow .nm{flex:1; cursor:pointer}
-  .trow .cnt{width:56px; height:30px; text-align:center; padding:0}
-  .opts{display:flex; flex-direction:column; gap:7px; font-size:13px}
-  .opts label{display:flex; align-items:center; gap:7px; cursor:pointer}
-  .opts input[type=checkbox]{width:16px; height:16px; accent-color:var(--book); flex:none}
-  .opts input[type=number]{width:52px; height:28px; text-align:center; padding:0}
-  .row2{display:grid; grid-template-columns:1fr 1fr; gap:10px}
-  .btnbar{display:flex; gap:8px; margin-top:6px}
-  button.act{flex:1; height:46px; border:none; border-radius:12px; font-size:15px; font-weight:700;
-    cursor:pointer; font-family:inherit}
-  button.primary{background:var(--book); color:#fff}
-  button.primary:hover{filter:brightness(1.05)}
-  button.ghost{background:#eef1f6; color:#454e5e}
-  button.ghost:hover{background:#e4e8ef}
-  .retest{margin-top:14px; padding-top:12px; border-top:1px dashed var(--line2)}
-  .retest .inl{display:flex; gap:6px}
-  .retest button{flex:none; height:40px; padding:0 12px; border:none; border-radius:10px; background:#fdecef; color:#b3243f;
-    font-weight:700; font-family:inherit; cursor:pointer}
-  .toprow{display:flex; align-items:center; gap:10px; margin-bottom:10px; flex-wrap:wrap}
-  .seg{display:inline-flex; background:#eef1f6; border-radius:10px; padding:3px}
-  .seg button{border:none; background:none; font-family:inherit; font-size:13px; font-weight:700; color:var(--sub);
-    padding:6px 14px; border-radius:8px; cursor:pointer}
-  .seg button.on{background:#fff; color:var(--book); box-shadow:0 1px 3px rgba(0,0,0,.08)}
-  .printbtn{height:40px; padding:0 16px; border:none; border-radius:10px; background:var(--ok); color:#fff;
-    font-weight:700; font-size:14px; cursor:pointer; font-family:inherit}
-  .printbtn:hover{filter:brightness(1.04)}
-  .hidden,.opts label.hidden{display:none !important}
+  body{background:var(--bg); color:var(--ink); font-family:"Pretendard","Malgun Gothic","맑은 고딕",sans-serif; line-height:1.5}
+  .wrap{max-width:1180px; margin:0 auto; padding:18px 16px 60px}
+  .top{display:flex; align-items:center; gap:12px; margin-bottom:14px}
+  .top a{font-size:14px; color:var(--sub); text-decoration:none}
+  .top a:hover{color:var(--ink)}
+  .top h1{font-size:18px; margin:0 0 0 auto; color:var(--navy)}
+  .hidden{display:none !important}
 
-  /* ===== 시험지 ===== */
-  .paperwrap{background:#e9edf3; border-radius:16px; padding:20px; overflow:auto}
-  .paper{background:#fff; width:210mm; min-height:297mm; margin:0 auto 16px; padding:15mm 14mm;
-    box-shadow:0 2px 12px rgba(0,0,0,.12); position:relative; font-size:13px; color:#111; overflow:hidden}
-  .paper .wm{position:absolute; inset:0; overflow:hidden; pointer-events:none; z-index:0}
-  .paper .wm span{position:absolute; font-size:34px; font-weight:800; color:rgba(76,110,245,.05);
-    white-space:nowrap; transform:rotate(-28deg)}
-  .paper .content{position:relative; z-index:1}
-  .phead{display:flex; align-items:flex-end; gap:12px; border-bottom:2.5px solid #111; padding-bottom:9px; margin-bottom:6px}
-  .ph-l{flex:1; min-width:0}
-  .phead .ttl{font-size:19px; font-weight:800; letter-spacing:-.01em}
-  .phead .meta{display:flex; gap:14px; font-size:12px; color:#555; margin-top:5px; flex-wrap:wrap}
-  .qrs{display:flex; gap:8px; flex:none}
-  .qr{display:flex; flex-direction:column; align-items:center; gap:2px}
-  .qr svg{width:19mm; height:19mm; display:block}
-  .qr small{font-size:9.5px; color:#555; white-space:nowrap}
-  .qrfail{font-size:9px; color:#555; max-width:40mm; word-break:break-all}
-  .pinfo{display:flex; justify-content:flex-end; gap:16px; font-size:12.5px; margin:8px 0 14px}
-  .box{display:inline-block; border:1px solid #999; border-radius:6px; min-width:70px; height:22px; vertical-align:middle}
-  .box.wide{min-width:180px; height:34px}
-  .sec{margin:0 0 16px}
-  .sechead{break-inside:avoid; page-break-inside:avoid}
-  .sec h3{font-size:14px; font-weight:800; margin:0 0 8px; padding:5px 10px; background:#f0f3fa;
-    border-left:4px solid var(--book); border-radius:0 6px 6px 0; break-after:avoid}
-  .sec h3 .cnt{font-weight:600; color:#888; font-size:12px}
-  .secnote{font-size:12px; color:#555; margin:-2px 0 8px 2px}
-  .wbox{display:flex; flex-wrap:wrap; gap:6px 8px; border:1.5px dashed #9aa3b2; border-radius:8px; padding:7px 10px; margin:0 0 10px; font-size:13px}
-  .wbox span{background:#f6f7fa; border-radius:5px; padding:1px 8px}
-  .qgrid{display:grid; grid-template-columns:1fr 1fr; gap:4px 28px}
-  .qgrid.one{grid-template-columns:1fr}
-  .q{display:flex; gap:8px; padding:5px 2px; font-size:13.5px; align-items:baseline; break-inside:avoid}
-  .q.col .body{display:block}
-  .q .n{font-weight:700; color:#444; flex:none; min-width:20px}
-  .q .body{flex:1; min-width:0}
-  .q .prompt{font-weight:600}
-  .q .pos{font-size:11px; color:#888; margin-left:6px}
-  .blank{display:inline-block; border-bottom:1px solid #333; min-width:120px; height:1.1em; vertical-align:baseline; margin-left:6px}
-  .blankline{display:block; border-bottom:1px solid #bbb; height:1.6em; margin-top:4px; flex:1}
-  .ansline{margin-top:4px; min-height:1.6em}
-  .choices{display:flex; flex-wrap:wrap; gap:4px 16px; margin-top:4px; font-size:13px; color:#222}
-  .choices span{white-space:nowrap}
-  .ans{color:#d21f3c; font-weight:700}
-  .ansPaper .ttl::after{content:" · 정답"; color:#d21f3c; font-size:14px}
-  .gapword{font-weight:600; font-size:15px; letter-spacing:.04em}
-  .gap{display:inline-block; width:15px; height:1.05em; border-bottom:1.5px solid #222; margin:0 2px; vertical-align:baseline}
-  .sndcue{font-size:12.5px; color:#555; margin-left:8px}
-  .q.oral{align-items:center}
-  .oralbox{display:inline-flex; gap:4px; flex:none; margin-left:auto}
-  .oralbox span{width:22px; height:22px; border:1px solid #aaa; border-radius:5px; font-size:11px; color:#999;
-    display:inline-flex; align-items:center; justify-content:center}
-  .chunks{display:flex; flex-wrap:wrap; gap:6px; margin-top:6px}
-  .chunk{border:1px solid #9aa3b2; border-radius:6px; padding:1px 9px; font-size:13px; background:#fafbfd}
-  .orderline{display:flex; align-items:flex-end; gap:4px; margin-top:6px}
-  .bsent{font-size:14px; line-height:2.1}
-  .cb{display:inline-block; border-bottom:1.3px solid #222; min-height:1.2em; line-height:1.2; padding:0 4px; text-align:left; color:#999}
-  .cb.ans{color:#d21f3c; border-bottom-color:#d21f3c}
-  .sub{font-size:12px; color:#777; margin-top:-2px}
-  .letters{font-weight:700; letter-spacing:.06em; font-size:14px}
-  .slashs{font-size:15px; word-spacing:.5em; line-height:2.2}
-  .ckrow{display:flex; flex-wrap:wrap; align-items:flex-start; gap:6px; margin-top:2px}
-  .ckb{min-width:80px}
-  .cke{font-weight:600; font-size:13.5px; padding:0 2px}
-  .ckk{border-bottom:1px solid #bbb; min-height:1.6em; margin-top:2px; font-size:12.5px}
-  .cksep{color:#aaa; padding-top:1px}
-  .sorttb{border-collapse:collapse; margin-top:4px; width:100%}
-  .sorttb th,.sorttb td{border:1px solid #bbb; padding:5px 8px; text-align:center; height:30px; font-size:13.5px}
-  .sorttb th{background:#f0f3fa}
-  .sorttb small{font-weight:500; color:#777}
-  .strip{break-inside:avoid; page-break-inside:avoid; margin-top:18px; border-top:1.5px dashed #999; padding-top:4px; font-size:11px; color:#444}
-  .strip .cut{font-size:10.5px; color:#999; margin-bottom:3px}
-  .stripin{display:flex; flex-wrap:wrap; gap:2px 12px}
-  .stripin b{color:#888; font-weight:700}
-  .empty{color:#9aa3b2; text-align:center; padding:60px 20px; font-size:14px}
-  .warnmsg{background:var(--warnBg); color:#8a5a0c; border-radius:10px; padding:10px 12px; font-size:13px; margin-bottom:10px}
-  /* A5 두 장 */
-  .sheet2{display:flex; width:297mm; margin:0 auto 16px; background:#fff; box-shadow:0 2px 12px rgba(0,0,0,.12)}
-  .paper.a5{width:148.5mm; min-height:0; height:210mm; margin:0; padding:9mm 8mm; box-shadow:none; border-right:1px dashed #ccc}
-  .paper.a5:last-child{border-right:none}
-  .paper.a5 .content{zoom:.78}
-  /* 빙고 */
-  .bingopage{display:flex; flex-direction:column; gap:12mm}
-  .bingo{break-inside:avoid}
-  .bhead{display:flex; align-items:center; gap:14px; font-size:12.5px; margin-bottom:6px; color:#444}
-  .bhead b{font-size:16px; color:#111}
-  .bhead .bno{margin-left:auto; color:#aaa}
-  .btb{border-collapse:collapse; width:100%; table-layout:fixed}
-  .btb td{border:1.5px solid #333; text-align:center; vertical-align:middle; padding:4px; font-weight:600; word-break:keep-all}
-  .btb.b3 td{height:36mm; font-size:19px} .btb.b4 td{height:27mm; font-size:16px} .btb.b5 td{height:22mm; font-size:14px}
-  .btb td b{color:var(--book)}
-  .calltb{border-collapse:collapse; width:100%; font-size:13px}
-  .calltb th,.calltb td{border-bottom:1px solid #e3e6ec; padding:5px 6px; text-align:left}
-  .calltb th{font-size:11.5px; color:#777}
-  .calltb td.ck{width:22px; color:#999}
-  /* 워드서치 */
-  .srtb{border-collapse:collapse; margin:6px auto 12px}
-  .srtb td{width:9.5mm; height:9.5mm; text-align:center; font-size:16px; font-weight:600; border:1px solid #e1e4ea; font-family:"Pretendard",monospace}
-  .srtb.n15 td{width:8.6mm; height:8.6mm; font-size:14.5px}
-  .srtb td.hit{background:#ffe1e6; color:#c0183a}
-  .srlist{display:grid; grid-template-columns:repeat(3,1fr); gap:5px 14px; font-size:13.5px; margin-top:6px}
-  .srlist i{font-style:normal; color:#aaa; margin-right:4px}
-  .srlist small{color:#888}
-  /* 십자말풀이 */
-  .crwrap{display:flex; justify-content:center; margin:6px 0 14px}
-  .crtb{border-collapse:collapse}
-  .crtb td{width:8.2mm; height:8.2mm; padding:0; position:relative; text-align:center; font-weight:700; font-size:15px}
-  .crtb td.on{border:1.5px solid #333; background:#fff}
-  .crtb sup{position:absolute; left:1.5px; top:0; font-size:8.5px; font-weight:600; color:#444; line-height:1}
-  .clues{display:grid; grid-template-columns:1fr 1fr; gap:18px; font-size:13px}
-  .clues h4{margin:0 0 6px; font-size:13.5px}
-  .clues div div{padding:2px 0}
-  .clues small{color:#999}
-  /* 단어 카드 */
-  .paper.cardpage{padding:8mm}
-  .cards{display:grid; grid-template-columns:repeat(3,1fr); grid-auto-rows:64mm; border-top:1px dashed #bbb; border-left:1px dashed #bbb}
-  .card{border-right:1px dashed #bbb; border-bottom:1px dashed #bbb; display:flex; flex-direction:column}
-  .card .cf{flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; font-size:26px; font-weight:800; position:relative; padding:6px; text-align:center; word-break:keep-all}
-  .card .cf.k{font-size:21px; font-weight:700}
-  .ctag{position:absolute; bottom:5px; left:0; right:0; font-size:9.5px; font-weight:500; color:#aaa}
-  .cards.fold .card .cf{border-bottom:1px dotted #ccc}
-  .cards.fold .cb2{flex:1; display:flex; align-items:center; justify-content:center; font-size:19px; font-weight:700; transform:rotate(180deg); color:#333; padding:6px; text-align:center}
-  /* 숙제 안내지 */
-  .hw h4{font-size:14px; margin:16px 0 6px}
-  .hwtb{border-collapse:collapse; width:100%; font-size:13.5px}
-  .hwtb th,.hwtb td{border:1px solid #c9ced8; padding:7px 8px}
-  .hwtb th{background:#f0f3fa; font-size:12.5px}
-  .hwtb td.ck,.hwtb th:not(:first-child){width:12mm; text-align:center; color:#999}
-  .hwqr{display:flex; align-items:center; gap:14px; margin-top:14px; padding:10px 12px; border:1px solid #e1e4ea; border-radius:10px; font-size:13px; color:#444}
-  .hwqr .qr svg{width:24mm; height:24mm}
-  .hwwords{display:grid; grid-template-columns:1fr 1fr; gap:3px 24px; font-size:13px}
-  .hwwords div{display:flex; gap:10px; border-bottom:1px solid #eef0f4; padding:3px 0}
-  .hwwords b{min-width:34mm}
-  .hwwords span{color:#555}
-  .hwmsg{border:1px solid #e1e4ea; border-radius:10px; padding:10px 12px; font-size:13.5px}
-  .hwsign{display:flex; align-items:center; justify-content:flex-end; gap:10px; margin-top:22px; font-size:13px}
+  /* 인증 */
+  .gate{max-width:400px; margin:48px auto; background:var(--card); border:1px solid var(--line); border-radius:14px; padding:28px 24px; text-align:center}
+  .gate h2{font-size:18px; margin:0 0 6px}
+  .gate p{font-size:14px; color:var(--sub); margin:0 0 18px}
+  .gate button{width:100%; height:48px; border:none; border-radius:10px; background:var(--navy); color:#fff; font-size:16px; font-weight:700; cursor:pointer; font-family:inherit}
+  .gate .hint{font-size:12px; color:var(--muted); margin-top:12px}
+
+  /* 왼쪽 고르기 */
+  .layout{display:grid; grid-template-columns:300px minmax(0,1fr); gap:18px; align-items:start}
+  @media(max-width:880px){.layout{grid-template-columns:1fr}}
+  .panel{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:18px; position:sticky; top:12px}
+  @media(max-width:880px){.panel{position:static}}
+  .step{margin-bottom:18px}
+  .step > label, .step > .lb{display:flex; align-items:center; gap:8px; font-size:14px; font-weight:700; margin-bottom:8px}
+  .step .no{display:inline-flex; width:20px; height:20px; border-radius:6px; background:var(--navy); color:#fff; font-size:12px; align-items:center; justify-content:center}
+  .step .lb .mini + .mini{margin-left:0}
+  .step .lb .mini{margin-left:auto; font-size:12px; color:var(--sub); background:none; border:none; cursor:pointer; font-family:inherit; padding:0 2px}
+  select,input[type=text]{width:100%; height:42px; border:1.5px solid #d5d9e0; border-radius:9px; padding:0 10px; font-size:15px; font-family:inherit; outline:none; background:#fff}
+  select:focus,input:focus{border-color:var(--navy)}
+  .units{display:flex; flex-wrap:wrap; gap:6px}
+  .units label{min-width:38px; height:34px; display:inline-flex; align-items:center; justify-content:center; font-size:14px; border:1.5px solid #d5d9e0; border-radius:8px; cursor:pointer; user-select:none; background:#fff}
+  .units label.on{background:var(--navy); border-color:var(--navy); color:#fff; font-weight:700}
+  .units input{display:none}
+  .ulegend{margin-top:8px; font-size:12px; color:var(--sub); line-height:1.65}
+  .ulegend b{display:inline-block; min-width:16px; color:var(--ink)}
+  .types{display:flex; flex-direction:column; gap:6px}
+  .ty{display:flex; align-items:center; gap:10px; border:1.5px solid #d5d9e0; border-radius:9px; padding:8px 10px; cursor:pointer; background:#fff}
+  .ty.on{border-color:var(--navy); background:var(--navyBg)}
+  .ty input{width:17px; height:17px; accent-color:var(--navy); flex:none}
+  .ty b{display:block; font-size:14.5px}
+  .ty small{display:block; font-size:12px; color:var(--sub)}
+  .step .help{font-size:12px; color:var(--muted); margin-top:5px}
+  .go{width:100%; height:48px; border:none; border-radius:10px; background:var(--orange); color:#fff; font-size:16px; font-weight:700; cursor:pointer; font-family:inherit}
+  .go:hover{filter:brightness(1.05)}
+
+  /* 오른쪽 미리보기 */
+  .bar{display:flex; align-items:center; gap:10px; margin-bottom:10px}
+  .seg{display:inline-flex; background:#e8ebf0; border-radius:9px; padding:3px}
+  .seg button{border:none; background:none; font-family:inherit; font-size:14px; font-weight:700; color:var(--sub); padding:7px 16px; border-radius:7px; cursor:pointer}
+  .seg button.on{background:#fff; color:var(--navy); box-shadow:0 1px 2px rgba(0,0,0,.08)}
+  .print{margin-left:auto; height:40px; padding:0 18px; border:none; border-radius:9px; background:var(--navy); color:#fff; font-weight:700; font-size:14px; cursor:pointer; font-family:inherit}
+  .preview{background:#e3e6eb; border-radius:14px; padding:20px; overflow:auto; min-height:400px}
+  .empty{text-align:center; color:var(--muted); padding:120px 20px; font-size:15px}
+
+  /* ===== 워크북 쪽 (C&S 규격: A4, 좌우 42pt) ===== */
+  .preview .pg{zoom:var(--z,1)}                          /* 미리보기 칸 너비에 맞춰 축소(인쇄는 원래 크기) */
+  .pg{width:210mm; height:297mm; margin:0 auto 18px; background:#fff; box-shadow:0 1px 8px rgba(0,0,0,.12);
+    padding:28pt 42pt 26pt; display:flex; flex-direction:column;
+    font-family:"Malgun Gothic","맑은 고딕","Pretendard",sans-serif; color:#1a1a1a}
+  .hd{display:flex; align-items:center; gap:9pt; padding-bottom:9pt; border-bottom:1pt solid var(--navy)}
+  .bd{flex:none; width:20pt; height:20pt; border-radius:6.4pt; background:var(--navy); color:#fff; font-size:11pt; font-weight:700;
+    display:flex; align-items:center; justify-content:center}
+  .tt{font-size:12.5pt; font-weight:700; white-space:pre; overflow:hidden; text-overflow:ellipsis}
+  .ac{margin-left:auto; font-size:9pt; color:#8a8f98; white-space:nowrap}
+  .note{font-size:9pt; font-weight:700; color:var(--navy); margin-top:8pt}
+  .bodyc{flex:1; min-height:0; display:flex; gap:18pt; margin-top:10pt}
+  .col{flex:1; min-width:0; overflow:hidden; padding-bottom:6pt}
+  .bodyc.c2 .col + .col, .bodyc.c3 .col + .col{border-left:0.6pt solid #e6e8ec; padding-left:12pt}
+  .ft{border-top:1pt solid var(--navy); padding-top:5pt; text-align:center; font-size:8.5pt; color:#777}
+  .it{break-inside:avoid; padding-top:8pt}
+  .row{display:flex; gap:6pt; align-items:baseline}
+  .n{flex:none; min-width:13pt; font-size:9pt; font-weight:700; color:var(--orange)}
+  .pg.ans .n{color:var(--navy)}
+  .q{font-size:10.2pt; font-weight:700; word-break:keep-all}
+  .ln{height:20pt; border-bottom:0.6pt solid #cfd3d9; margin-left:19pt; display:flex; align-items:flex-end; gap:8pt; padding-bottom:2pt}
+  .ln .a{font-size:10pt; font-weight:700; color:var(--orange); line-height:1.35}
+  .pg.ans .ln{height:auto; min-height:20pt}            /* 정답이 길면 줄이 늘어남(위 글자와 안 겹치게) */
+  .ln .full{font-size:9pt; color:#8a8f98}
+  .row .ln.in{flex:1; margin-left:0; height:16pt}
+  .s_trans .ln, .s_order .ln{height:22pt}
+  .mix{margin:3pt 0 0 19pt; font-size:8.6pt; color:#8a8f98; word-break:keep-all}
+  .gapw{letter-spacing:.5pt}
+  .gp{display:inline-block; width:9pt; height:11pt; border-bottom:1pt solid #1a1a1a; margin:0 1.5pt; vertical-align:baseline}
+  .snd{font-size:9pt; color:#8a8f98; margin-left:4pt}
+  .p_gap .ln{height:14pt}
 
   @media print{
+    @page{size:A4; margin:0}
     body{background:#fff}
     .wrap{max-width:none; padding:0}
-    header,.back,.panel,.toprow,.warnmsg,h1,.desc{display:none !important}
+    .top,.panel,.bar{display:none !important}
     .layout{display:block}
-    .paperwrap{background:none; padding:0; overflow:visible; border-radius:0}
-    .paper{width:210mm; min-height:0; height:auto; margin:0; box-shadow:none; overflow:visible; page-break-after:always; break-after:page}
-    .paper .wm{overflow:hidden}
-    .paper:not(.a5){padding:0 14mm}          /* 위아래 여백은 @page 가 쪽마다 줌(여러 쪽 시험지) */
-    .paper.cardpage{padding:0 8mm}
-    .paper:not(.a5):last-child{page-break-after:auto}
-    .sheet2{box-shadow:none; margin:0; height:210mm; page-break-after:always}
-    .paper.a5{height:210mm; page-break-after:auto}
+    .preview{background:none; padding:0; border-radius:0; overflow:visible; min-height:0}
+    .preview .pg{zoom:1}
+    .pg{margin:0; box-shadow:none; page-break-after:always; break-after:page}
+    .pg:last-child{page-break-after:auto; break-after:auto}
   }
 </style>
 </head>
 <body>
 <div class="wrap">
-  <header>
-    <span class="logo">저절로<b>.</b></span>
-    <span class="tag">시험지 생성기</span>
-  </header>
-  <a class="back" href="/teacher/">← 선생님 자료</a>
+  <div class="top">
+    <a href="/library/">← 자료실</a>
+    <h1>워크북 만들기</h1>
+  </div>
 
-  <!-- 게이트 -->
+  <!-- 인증 -->
   <section id="gate" class="hidden">
     <div class="gate">
-      <div class="lockic">🔒</div>
       <h2>선생님 인증이 필요해요</h2>
       <p>휴대폰 문자로 1분이면 돼요. 처음이면 간단한 신청서만 쓰면 돼요.</p>
-      <button class="go" onclick="location.href='/library/join/?next='+encodeURIComponent(location.pathname+location.search)">휴대폰으로 입장하기</button>
-      <div class="err" id="err"></div>
+      <button onclick="location.href='/library/join/?next='+encodeURIComponent(location.pathname+location.search)">휴대폰으로 입장하기</button>
       <div class="hint">한 번 인증하면 이 기기에서 다음부터 바로 열려요.</div>
     </div>
   </section>
 
-  <!-- 본문 -->
   <section id="app" class="hidden">
-    <h1>시험지 · 활동지 생성기</h1>
-    <p class="desc">만들 것과 책·유닛을 고르고 <b>만들기</b>를 누르면 인쇄용 종이가 나옵니다. (인쇄 → PDF로 저장도 돼요)</p>
     <div class="layout">
-      <!-- 컨트롤 -->
       <div class="panel">
-        <div class="fld">
-          <label>만들기</label>
-          <select id="mode" class="modesel" onchange="onMode()">
-            <option value="test">📝 시험지 · 연습지</option>
-            <option value="bingo">🎯 단어 빙고</option>
-            <option value="search">🔍 워드서치</option>
-            <option value="cross">✏️ 십자말풀이</option>
-            <option value="cards">🃏 단어 카드</option>
-            <option value="hw">📋 숙제 안내지</option>
-          </select>
-        </div>
-        <div class="fld">
-          <label>교재</label>
+        <div class="step">
+          <label for="book"><span class="no">1</span>교재</label>
           <select id="book" onchange="onBook()"></select>
         </div>
-        <div class="fld">
-          <label>유닛 <button class="mini" onclick="allUnits(true)">전체</button><button class="mini" onclick="allUnits(false)">해제</button></label>
+        <div class="step">
+          <div class="lb"><span class="no">2</span>유닛 <button class="mini" onclick="allUnits(true)">전체</button><button class="mini" onclick="allUnits(false)">해제</button></div>
           <div class="units" id="units"></div>
           <div class="ulegend" id="ulegend"></div>
         </div>
-
-        <!-- 시험지 · 연습지 -->
-        <div data-for="test">
-          <div class="fld">
-            <label>종류</label>
-            <div class="seg" id="kindSeg">
-              <button data-v="test" class="on" onclick="setKind('test')">시험지</button>
-              <button data-v="practice" onclick="setKind('practice')">연습지</button>
-            </div>
-            <div class="help">연습지는 단어 상자·첫 글자 힌트·잘라 쓰는 정답이 기본으로 켜져요.</div>
-          </div>
-          <div class="fld">
-            <label>문제 유형 · 문항수</label>
-            <div class="types" id="types"></div>
-          </div>
-          <div class="fld">
-            <label>복습 섞기</label>
-            <select id="review">
-              <option value="0">안 섞음</option>
-              <option value="20">앞 유닛 문제 20%</option>
-              <option value="30">앞 유닛 문제 30%</option>
-              <option value="50">앞 유닛 문제 50%</option>
-            </select>
-            <div class="help">고른 유닛보다 앞 유닛에서 문제를 섞어 누적 복습 시험을 만들어요.</div>
-          </div>
-          <div class="fld">
-            <label>옵션</label>
-            <div class="opts">
-              <label><input type="checkbox" id="optBox" onchange="renderAllIfTest()"> 빈칸 문제에 단어 상자 주기</label>
-              <label>　└ 함정 단어 <input type="number" id="trapN" value="2" min="0" max="6"> 개 더 넣기</label>
-              <label><input type="checkbox" id="optQR" checked> 음원 QR 넣기 (듣기 문제·연습지)</label>
-              <label><input type="checkbox" id="optHint"> 첫 글자 힌트</label>
-              <label class="ph-only"><input type="checkbox" id="optSnd" checked onchange="renderAll()"> 빠진 소리 문제에 한글소리 보이기</label>
-              <label><input type="checkbox" id="optStrip" onchange="renderAll()"> 아래에 잘라 쓰는 정답 띠</label>
-              <label><input type="checkbox" id="optShuffle" checked> 문제 섞기</label>
-            </div>
-          </div>
-          <div class="fld row2">
-            <div><label>보기 개수(선택형)</label><input type="number" id="nchoice" value="4" min="3" max="5"></div>
-            <div><label>형(A/B/C)</label>
-              <select id="variant"><option value="1">A형</option><option value="2">B형</option><option value="3">C형</option></select>
-            </div>
-          </div>
-          <div class="fld">
-            <label>인쇄 크기</label>
-            <select id="paper" onchange="renderAll()">
-              <option value="a4">A4 한 장</option>
-              <option value="a5">A5 두 장 (가로 A4에 같은 시험지 2개)</option>
-            </select>
-          </div>
+        <div class="step">
+          <div class="lb"><span class="no">3</span>유형</div>
+          <div class="types" id="types"></div>
         </div>
-
-        <!-- 빙고 -->
-        <div data-for="bingo">
-          <div class="fld row2">
-            <div><label>칸</label><select id="bingoN"><option value="3">3 × 3</option><option value="4" selected>4 × 4</option><option value="5">5 × 5</option></select></div>
-            <div><label>장 수(학생 수)</label><input type="number" id="bingoCnt" value="10" min="1" max="40"></div>
-          </div>
-          <div class="fld">
-            <label>칸에 쓰는 것</label>
-            <select id="bingoFace"><option value="e">영단어 (선생님이 뜻을 불러요)</option><option value="k">뜻 (선생님이 영단어를 불러요)</option></select>
-          </div>
-          <div class="fld opts"><label><input type="checkbox" id="bingoFree" checked> 5×5는 가운데 FREE 칸</label></div>
+        <div class="step">
+          <label for="acad">학원 이름</label>
+          <input type="text" id="acad" placeholder="비워 두면 인쇄되지 않아요" oninput="render()">
         </div>
-
-        <!-- 워드서치 -->
-        <div data-for="search">
-          <div class="fld row2">
-            <div><label>크기</label><select id="srN"><option value="10">10 × 10</option><option value="12" selected>12 × 12</option><option value="15">15 × 15</option></select></div>
-            <div><label>단어 수</label><input type="number" id="srWords" value="10" min="4" max="20"></div>
-          </div>
-          <div class="fld">
-            <label>난이도</label>
-            <select id="srLevel"><option value="easy">쉬움 · 가로 세로</option><option value="mid" selected>보통 · 대각선 포함</option><option value="hard">어려움 · 거꾸로 포함</option></select>
-          </div>
-          <div class="fld">
-            <label>찾을 단어 목록</label>
-            <select id="srClue"><option value="e">영단어로 보여 주기</option><option value="both">영단어 + 뜻</option><option value="k">뜻만 (영단어를 떠올려 찾기)</option></select>
-          </div>
-        </div>
-
-        <!-- 십자말풀이 -->
-        <div data-for="cross">
-          <div class="fld">
-            <label>단어 수</label><input type="number" id="crWords" value="10" min="4" max="16">
-            <div class="help">힌트는 우리말 뜻(파닉스는 한글소리)으로 나와요.</div>
-          </div>
-        </div>
-
-        <!-- 단어 카드 -->
-        <div data-for="cards">
-          <div class="fld">
-            <label>카드 모양</label>
-            <select id="cardStyle"><option value="duplex">양면 (앞: 영단어 · 뒤: 뜻)</option><option value="fold">한 면 · 반으로 접기</option></select>
-            <div class="help">A4 한 장에 12장. 파닉스는 뒷면이 한글소리예요.</div>
-          </div>
-        </div>
-
-        <!-- 숙제 안내지 -->
-        <div data-for="hw">
-          <div class="fld"><label>기간</label><input type="text" id="hwPeriod" placeholder="예: 10월 6일 ~ 10월 10일"></div>
-          <div class="fld"><label>할 일 (한 줄에 하나)</label>
-            <textarea id="hwTasks" rows="4">음원 듣고 따라 읽기 (3번)
-단어 외우기
-교재 복습하기</textarea></div>
-          <div class="fld"><label>선생님 한마디</label><textarea id="hwMsg" rows="2" placeholder="예: 이번 주는 매일 10분씩 소리 내어 읽어요!"></textarea></div>
-          <div class="fld opts">
-            <label><input type="checkbox" id="hwWords" checked> 이번 단어 목록 넣기</label>
-            <label><input type="checkbox" id="hwQR" checked> 음원·강의 QR 넣기</label>
-          </div>
-        </div>
-
-        <div class="fld">
-          <label>제목</label>
-          <input type="text" id="title" placeholder="비우면 알아서 붙여요">
-        </div>
-        <div class="fld">
-          <label>학원명 (상단 + 워터마크)</label>
-          <input type="text" id="acad" placeholder="예: OO영어학원" oninput="renderAll()">
-        </div>
-        <div class="btnbar">
-          <button class="act primary" id="goBtn" onclick="make()">시험지 만들기</button>
-          <button class="act ghost" onclick="reseed()">다시 섞기</button>
-        </div>
-        <div class="retest" data-for="test">
-          <div class="fld" style="margin:0">
-            <label>오답 재시험지</label>
-            <div class="inl"><input type="text" id="wrongNos" placeholder="틀린 번호 예: 3, 7, 12"><button onclick="retest()">만들기</button></div>
-            <div class="help">지금 시험지에서 틀린 문항만 순서를 바꿔 다시 냅니다.</div>
-          </div>
-        </div>
+        <button class="go" onclick="make()">만들기</button>
       </div>
 
-      <!-- 미리보기 -->
       <div>
-        <div class="toprow">
-          <div class="seg" id="tabSeg">
-            <button id="tabS" class="on" onclick="showTab('S')">학생용</button>
-            <button id="tabT" onclick="showTab('T')">정답지</button>
+        <div class="bar">
+          <div class="seg">
+            <button id="tabQ" class="on" onclick="showTab('Q')">문제지</button>
+            <button id="tabA" onclick="showTab('A')">정답지</button>
           </div>
-          <button class="printbtn" onclick="window.print()">🖨 인쇄 / PDF 저장</button>
+          <button class="print" onclick="window.print()">인쇄하기</button>
         </div>
-        <div class="paperwrap" id="preview">
-          <div class="paper"><div class="empty">왼쪽에서 설정을 고르고 <b>만들기</b>를 눌러 주세요.</div></div>
-        </div>
+        <div class="preview" id="preview"><div class="empty">유닛과 유형을 고르고 <b>만들기</b>를 눌러 주세요.</div></div>
       </div>
     </div>
   </section>
 </div>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
 <script src="gen_data.js"></script>
-<script>function renderAllIfTest(){ if(CUR&&CUR.mode==="test") make(); }</script>
 <script src="gen_app.js"></script>
 </body>
 </html>
