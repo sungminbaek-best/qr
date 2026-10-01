@@ -40,19 +40,16 @@
 .bhead .lk{font-size:14px;font-weight:700;color:var(--sub);text-decoration:underline;text-underline-offset:4px}
 .bhead .lk:hover{color:var(--ink)}
 .ugrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:28px}
-.ucard{display:flex;flex-direction:column;background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px 16px 4px}
-.ucard .ut{display:flex;align-items:baseline;gap:6px;padding-bottom:8px}
-.ucard .ut small{font-size:12px;font-weight:700;color:var(--mute)}
-.ucard .ut b{font-family:var(--mono);font-size:26px;font-weight:700;line-height:1;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
-.urow{display:flex;align-items:center;gap:10px;width:100%;padding:11px 0;border:0;border-top:1px solid var(--line);background:none;font-size:14px;font-weight:700;color:var(--ink);text-align:left;cursor:pointer}
-.urow i{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;flex:none;transition:background .15s,color .15s}
-.urow i svg{width:15px;height:15px}
-.urow.au i{background:var(--soft);color:var(--brand)}
-.urow.vd i{background:#f3eeff;color:var(--brand2)}
-.urow .ar{margin-left:auto;color:var(--mute);font-weight:600}
-.urow.au:hover i{background:var(--brand);color:#fff}.urow.vd:hover i{background:var(--brand2);color:#fff}
-.urow:hover{color:var(--brand)}
-.urow.empty{color:var(--line2);cursor:default}.urow.empty i{border:1px dashed var(--line2)}.urow.empty:hover{color:var(--line2)}
+.ucard{display:flex;flex-direction:column;background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px}
+.ucard .ut{font-family:var(--mono);font-size:15px;font-weight:700;margin-bottom:10px}
+.ubtns{flex:1;display:flex;flex-direction:column;gap:6px}
+.ubtns a.ubtn:first-child{margin-top:auto}  /* 음원 없이 강의만 있는 유닛: 강의는 늘 아래 칸 */
+.ubtn{display:flex;align-items:center;justify-content:center;gap:7px;border-radius:10px;padding:10px 0;font-size:13.5px;font-weight:700;border:1px solid var(--line2);background:#fff;color:var(--ink);text-align:center;transition:background .15s,color .15s,border-color .15s}
+.ubtn:hover{border-color:var(--ink)}
+.ubtn svg{width:15px;height:15px;flex:none}
+.ubtn.main{background:var(--grad);border:0;color:#fff;box-shadow:0 8px 18px -10px rgba(67,97,255,.7)}
+.ubtn.main:hover{filter:brightness(1.06);box-shadow:0 10px 22px -10px rgba(67,97,255,.85)}
+.ubtn.off{color:var(--mute);background:var(--panel);border-color:var(--panel);cursor:default}
 @media(max-width:860px){.ugrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .orientbox{margin-top:28px;border:1px solid var(--line);border-radius:16px;padding:16px;background:var(--panel)}
 .orientbox h2{font-size:14.5px;font-weight:800;margin-bottom:10px}
@@ -182,19 +179,13 @@ function bookView(b){
     const chips=vids.map(r=>'<a class="orient" href="'+esc(r.url)+'" target="_blank" rel="noopener">'+esc(r.label||'영상')+' ↗</a>').join('');
     top='<div class="orientbox"><h2>'+esc(b.orient_title||'오리엔테이션 영상')+'</h2><div class="orientgrid">'+chips+'</div></div>';
   }
-  // 책 전체에 음원(또는 강의)이 하나도 없으면 그 줄은 아예 안 보여 줌(빈 줄만 반복되지 않게)
-  const hasAud=un=>(un.audio&&(un.audio.word||un.audio.sent))||(un.pages&&un.pages.length)||un.np;
-  const hasVid=un=>(un.videos&&un.videos.length)||un.video;
-  const anyA=b.units.some(hasAud), anyV=b.units.some(hasVid);
   const cards=b.units.map(un=>{
     const hasA=(un.audio&&(un.audio.word||un.audio.sent))||(un.pages&&un.pages.length)||un.np;
     const vlist=(un.videos&&un.videos.length)? un.videos : (un.video? [{label:'강의 영상',url:un.video}] : []);
-    // 카드: 큰 번호(U색) + 음원 줄 + 강의 줄. 없는 것도 흐린 줄로 자리를 지켜 카드 높이가 같게
-    const a=hasA? '<button class="urow au" type="button" data-go="leaf" data-book="'+b.code+'" data-u="'+un.n+'"><i>'+IC_HP+'</i>음원 듣기<span class="ar">›</span></button>'
-                : (anyA? '<span class="urow empty"><i></i>음원 없음</span>' : '');
-    const vid=vlist.length? vlist.map(v=>'<a class="urow vd" href="'+esc(v.url)+'" target="_blank" rel="noopener"><i>'+IC_PL+'</i>'+esc(v.label)+'<span class="ar">↗</span></a>').join('')
-                : (anyV? '<span class="urow empty"><i></i>강의 없음</span>' : '');
-    return '<div class="ucard"><div class="ut"><small>Unit</small><b>'+String(un.n).padStart(2,'0')+'</b></div>'+a+vid+'</div>';
+    const a=hasA? '<button class="ubtn main" type="button" data-go="leaf" data-book="'+b.code+'" data-u="'+un.n+'">'+IC_HP+'음원 듣기</button>'
+                : (vlist.length? '' : '<span class="ubtn off">준비 중</span>');
+    const vid=vlist.map(v=>'<a class="ubtn" href="'+esc(v.url)+'" target="_blank" rel="noopener">'+IC_PL+esc(v.label)+' ↗</a>').join('');
+    return '<div class="ucard"><div class="ut">Unit '+un.n+'</div><div class="ubtns">'+a+vid+'</div></div>';
   }).join('');
   const sl=slugOf(b.code);
   app.innerHTML='<nav class="crumb" aria-label="위치"><button type="button" data-go="home">음원·강의</button><span>›</span><span>'+esc(nm(b))+'</span></nav>'+
