@@ -36,6 +36,22 @@ window.SOLVEU = {
   /* 교사 게이트: 입장권이 있으면 열고, 서버에서 확인해 무효면 다시 잠금 */
   S.isOK = function () { return !!S.pass(); };
   var LOCK = '<span class="lock" aria-label="인증 필요"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2.5" fill="currentColor"/><path d="M8 11V8a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="2.2"/></svg></span>';
+  /* 들어온 경로: ?from=qr&code=… 을 이 탭 동안 기억(선생님 신청·학원 신청 때 함께 보냄) */
+  S.ss = function (k) { try { return sessionStorage.getItem(k) || ""; } catch (e) { return ""; } };
+  (function () { try { var q = new URLSearchParams(location.search);
+    if (q.get("from")) sessionStorage.setItem("solveu_from", q.get("from").slice(0, 20));
+    if (q.get("code")) sessionStorage.setItem("solveu_code", q.get("code").slice(0, 30)); } catch (e) {} })();
+  var BUYS = ["네이버 스마트스토어", "학원 공급(직거래)", "쿠팡", "온라인 서점", "오프라인 서점·총판", "아직 구매 전"];
+  /* 기존 가입자: 구매처를 한 번만 묻는 작은 상자(답하면 다시 안 물음) */
+  S.askBuy = function (box) {
+    if (!box || box.querySelector(".askbuy")) return;
+    var d = document.createElement("div"); d.className = "askbuy";
+    d.innerHTML = "<b>한 가지만 여쭤볼게요</b><span>교재를 주로 어디서 구매하시나요?</span><div class=\"bo\">" +
+      BUYS.map(function (b) { return "<button type=\"button\">" + S.esc(b) + "</button>"; }).join("") + "</div>";
+    $$("button", d).forEach(function (b) { b.addEventListener("click", function () {
+      S.api("/api/buy", { buy: b.textContent }).then(function (j) { if (j.ok) d.innerHTML = "<span>감사합니다! 🙂</span>"; }); }); });
+    box.appendChild(d);
+  };
   S.gate = function (root) {
     if (!root) return;
     var err = $("#err", root), who = $(".tname", root);
@@ -63,7 +79,7 @@ window.SOLVEU = {
       if (out) out.addEventListener("click", function () { perks(false); });
     }
     if (S.isOK()) S.api("/api/me").then(function (j) {
-      if (j.ok) { if (who) who.textContent = j.teacher.name + " 선생님, 반가워요."; perks(j.teacher.marketing); }
+      if (j.ok) { if (who) who.textContent = j.teacher.name + " 선생님, 반가워요."; perks(j.teacher.marketing); if (j.teacher.need_buy) S.askBuy($(".gatebox", root)); }
       else if (j.status === 401) { S.pass(null); paint(); }   /* 탈퇴·차단·로그아웃된 입장권 */
     });
   };
