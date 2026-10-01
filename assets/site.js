@@ -35,15 +35,16 @@ window.SOLVEU = {
 
   /* 교사 게이트: 입장권이 있으면 열고, 서버에서 확인해 무효면 다시 잠금 */
   S.isOK = function () { return !!S.pass(); };
+  var LOCK = '<span class="lock" aria-label="인증 필요"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2.5" fill="currentColor"/><path d="M8 11V8a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="2.2"/></svg></span>';
   S.gate = function (root) {
     if (!root) return;
     var err = $("#err", root), who = $(".tname", root);
     function paint() {
       var ok = S.isOK(); root.classList.toggle("unlocked", ok);
       $$(".libs a", root).forEach(function (a) { ok ? a.setAttribute("href", a.dataset.lib) : a.removeAttribute("href"); });
-      var ll = $(".tool.lib .lk", root); if (ll) ll.textContent = ok ? "노션에서 열림 →" : "인증 필요";
+      var ll = $(".tool.lib .lk", root); if (ll) { if (ok) ll.textContent = "노션에서 열림 →"; else ll.innerHTML = LOCK; }
       $$(".tool[data-href]", root).forEach(function (t) { var lk = $(".lk", t);
-        if (ok) { t.setAttribute("href", t.dataset.href); lk.textContent = "열기 →"; } else { t.removeAttribute("href"); lk.textContent = "인증 필요"; } });
+        if (ok) { t.setAttribute("href", t.dataset.href); lk.textContent = "열기 →"; } else { t.removeAttribute("href"); lk.innerHTML = LOCK; } });
     }
     var out = $(".relock", root); if (out) out.addEventListener("click", function () { S.api("/api/logout", {}); S.pass(null); paint(); });
     $$(".libs a,.tool[data-href]", root).forEach(function (a) { a.addEventListener("click", function (ev) {

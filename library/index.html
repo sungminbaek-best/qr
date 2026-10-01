@@ -14,7 +14,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/site.css?v=817b7dfa">
+<link rel="stylesheet" href="/assets/site.css?v=0668bac9">
 <style>
 .top{padding:56px 0 24px}
 .top h1{font-size:clamp(32px,4.6vw,50px);font-weight:800;letter-spacing:-.05em;margin-top:14px}
@@ -76,9 +76,15 @@
 .ag{border:1px solid var(--line);border-radius:var(--r);padding:20px 22px;background:#fff}
 .ag h3{font-size:16px;font-weight:800;display:flex;gap:8px;align-items:center}
 .ag ul{list-style:none;margin-top:12px;display:grid;gap:8px}
-.ag li{display:flex;align-items:center;gap:10px;font-size:14.5px}
-.ag li a{margin-left:auto;font-size:13px;font-weight:700;color:var(--brand)}
-.ag li em{margin-left:auto;font-style:normal;font-size:12.5px;color:var(--mute)}
+.ag li{display:flex;align-items:center;gap:14px;font-size:14.5px}
+.ag li .nm{flex:1;min-width:0}
+.ag li a{font-size:13px;font-weight:700;color:var(--brand);white-space:nowrap}
+.ag li a+a{color:var(--sub)}.ag li a:hover{color:var(--ink)}
+.ag li em{font-style:normal;font-size:12.5px;color:var(--mute);white-space:nowrap}
+#books .sh h2,#teacher .sh h2{font-size:clamp(22px,2.6vw,28px)}
+.tool .lk .lock{display:inline-grid;width:28px;height:28px;border-radius:50%;background:var(--panel);color:var(--mute);place-items:center}
+.tool .lk .lock svg{width:13px;height:13px}
+.unlocked .tool .lk .lock{display:none}
 </style>
 </head>
 <body id="top">
@@ -91,18 +97,12 @@
 
 <section class="top"><div class="wrap">
   <h1 class="rev">자료실</h1>
-  <p class="rev">정답과 음원·강의는 누구나 바로 쓸 수 있어요. <br class="pc">수업 자료와 시험지 생성기는 선생님 인증 뒤에 열려요.</p>
-  <nav class="jump rev" aria-label="바로 가기"><a href="#answers">정답 PDF</a><a href="#audio">음원·강의</a><a href="#teacher">선생님 전용 자료 🔒</a></nav>
+  <p class="rev">교재별 정답과 음원은 누구나, <br class="mo">수업 자료는 선생님 인증 뒤에 열려요.</p>
 </div></section>
 
-<section class="sec tight" id="answers"><div class="wrap">
-  <div class="sh rev"><h2>정답 PDF</h2><p>누구나 무료로 받을 수 있어요.</p></div>
-  <div class="ans"><div class="ag rev"><h3>파닉스 <span class="chip gray">초1~2</span></h3><ul><li>저절로 파닉스 1<small> 확인용</small><a href="/books/answers/ph1.pdf" target="_blank" rel="noopener">PDF 받기</a></li><li>저절로 파닉스 2<small> 확인용</small><a href="/books/answers/ph2.pdf" target="_blank" rel="noopener">PDF 받기</a></li></ul></div><div class="ag rev"><h3>스타터 <span class="chip gray">초2~3</span></h3><ul><li>저절로 스타터 1<a href="/books/answers/rst1.pdf" target="_blank" rel="noopener">PDF 받기</a></li><li>저절로 스타터 2<a href="/books/answers/rst2.pdf" target="_blank" rel="noopener">PDF 받기</a></li></ul></div><div class="ag rev"><h3>브릿지 <span class="chip gray">초3~4</span></h3><ul><li>저절로 브릿지 1<a href="/books/answers/rbr1.pdf" target="_blank" rel="noopener">PDF 받기</a></li><li>저절로 브릿지 2<a href="/books/answers/rbr2.pdf" target="_blank" rel="noopener">PDF 받기</a></li></ul></div><div class="ag rev"><h3>입문 <span class="chip gray">초4~5</span></h3><ul><li>저절로 입문 1<a href="/books/answers/rin1.pdf" target="_blank" rel="noopener">PDF 받기</a></li><li>저절로 입문 2<a href="/books/answers/rin2.pdf" target="_blank" rel="noopener">PDF 받기</a></li></ul></div><div class="ag rev"><h3>기본 <span class="chip gray">초6~중1</span></h3><ul><li>저절로 기본 1<a href="/books/answers/rba1.pdf" target="_blank" rel="noopener">PDF 받기</a></li><li>저절로 기본 2<a href="/books/answers/rba2.pdf" target="_blank" rel="noopener">PDF 받기</a></li></ul></div><div class="ag rev"><h3>첫모의고사 <span class="chip gray">중2~중3</span></h3><ul><li>저절로 첫모의고사 1<a href="/books/answers/rmo1.pdf" target="_blank" rel="noopener">PDF 받기</a></li><li>저절로 첫모의고사 2<a href="/books/answers/rmo2.pdf" target="_blank" rel="noopener">PDF 받기</a></li></ul></div><div class="ag rev"><h3>그래머&amp;라이팅 <span class="chip gray">초3~4</span></h3><ul><li>저절로 그래머&amp;라이팅 1<a href="/books/answers/gw1.pdf" target="_blank" rel="noopener">PDF 받기</a></li><li>저절로 그래머&amp;라이팅 2<a href="/books/answers/gw2.pdf" target="_blank" rel="noopener">PDF 받기</a></li></ul></div></div>
-</div></section>
-
-<section class="sec tight" id="audio"><div class="wrap">
-  <div class="sh rev"><h2>음원·강의</h2><p>책의 QR로 듣던 단어·문장 음원과 강의를 교재별로 열어요.</p></div>
-  <a class="arow rev" href="/studio/"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg></div><div><b>음원·강의 열기</b><span>교재와 유닛을 고르면 바로 들을 수 있어요.</span></div><span class="btn line sm">열기 <span class="ar">→</span></span></a>
+<section class="sec tight" id="books"><div class="wrap">
+  <div class="sh rev"><h2>교재별 자료</h2><p>정답 PDF와 음원·강의를 누구나 무료로 쓸 수 있어요.</p></div>
+  <div class="ans"><div class="ag rev"><h3>파닉스 <span class="chip gray">초1~2</span></h3><ul><li><span class="nm">저절로 파닉스 1</span><a href="/books/answers/ph1.pdf" target="_blank" rel="noopener">정답 PDF ↗</a><a href="/studio/?book=ph1">음원·강의 →</a></li><li><span class="nm">저절로 파닉스 2</span><a href="/books/answers/ph2.pdf" target="_blank" rel="noopener">정답 PDF ↗</a><a href="/studio/?book=ph2">음원·강의 →</a></li></ul></div><div class="ag rev"><h3>스타터 <span class="chip gray">초2~3</span></h3><ul><li><span class="nm">저절로 스타터 1</span><a href="/books/answers/rst1.pdf" target="_blank" rel="noopener">정답 PDF ↗</a><a href="/studio/?book=rst1">음원·강의 →</a></li><li><span class="nm">저절로 스타터 2</span><a href="/books/answers/rst2.pdf" target="_blank" rel="noopener">정답 PDF ↗</a><a href="/studio/?book=rst2">음원·강의 →</a></li></ul></div><div class="ag rev"><h3>브릿지 <span class="chip gray">초3~4</span></h3><ul><li><span class="nm">저절로 브릿지 1</span><a href="/books/answers/rbr1.pdf" target="_blank" rel="noopener">정답 PDF ↗</a><a href="/studio/?book=rbr1">음원·강의 →</a></li><li><span class="nm">저절로 브릿지 2</span><a href="/books/answers/rbr2.pdf" target="_blank" rel="noopener">정답 PDF ↗</a><a href="/studio/?book=rbr2">음원·강의 →</a></li></ul></div><div class="ag rev"><h3>입문 <span class="chip gray">초4~5</span></h3><ul><li><span class="nm">저절로 입문 1</span><a href="/books/answers/rin1.pdf" target="_blank" rel="noopener">정답 PDF ↗</a><a href="/studio/?book=rin1">음원·강의 →</a></li><li><span class="nm">저절로 입문 2</span><a href="/books/answers/rin2.pdf" target="_blank" rel="noopener">정답 PDF ↗</a><a href="/studio/?book=rin2">음원·강의 →</a></li></ul></div><div class="ag rev"><h3>기본 <span class="chip gray">초6~중1</span></h3><ul><li><span class="nm">저절로 기본 1</span><a href="/books/answers/rba1.pdf" target="_blank" rel="noopener">정답 PDF ↗</a><a href="/studio/?book=rba1">음원·강의 →</a></li><li><span class="nm">저절로 기본 2</span><a href="/books/answers/rba2.pdf" target="_blank" rel="noopener">정답 PDF ↗</a><a href="/studio/?book=rba2">음원·강의 →</a></li></ul></div><div class="ag rev"><h3>첫모의고사 <span class="chip gray">중2~중3</span></h3><ul><li><span class="nm">저절로 첫모의고사 1</span><a href="/books/answers/rmo1.pdf" target="_blank" rel="noopener">정답 PDF ↗</a><a href="/studio/?book=rmo1">음원·강의 →</a></li><li><span class="nm">저절로 첫모의고사 2</span><a href="/books/answers/rmo2.pdf" target="_blank" rel="noopener">정답 PDF ↗</a><a href="/studio/?book=rmo2">음원·강의 →</a></li></ul></div><div class="ag rev"><h3>그래머&amp;라이팅 <span class="chip gray">초3~4</span></h3><ul><li><span class="nm">저절로 그래머&amp;라이팅 1</span><a href="/books/answers/gw1.pdf" target="_blank" rel="noopener">정답 PDF ↗</a><a href="/studio/?book=gw1">음원·강의 →</a></li><li><span class="nm">저절로 그래머&amp;라이팅 2</span><a href="/books/answers/gw2.pdf" target="_blank" rel="noopener">정답 PDF ↗</a><a href="/studio/?book=gw2">음원·강의 →</a></li></ul></div></div>
 </div></section>
 
 <section class="sec tight" id="teacher" style="padding-bottom:104px"><div class="wrap">
@@ -124,8 +124,8 @@
       <p class="perkon" hidden>🎁 선생님 혜택을 받고 있어요. <button type="button" class="poff">받지 않기</button></p>
     </div></div>
     <div class="tlist rev">
-      <div class="tool lib"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div><div class="tx"><b>수업 자료</b><span>단어 리스트 · 워크북 등</span><div class="libs"><a data-lib="https://southern-winter-c87.notion.site/15a3cdde2d7e80ddb3e0efd45c6f9fac" target="_blank" rel="noopener">리딩</a><a data-lib="https://southern-winter-c87.notion.site/1-2-8b02a1e094c745cf80a590f34d4db521" target="_blank" rel="noopener">파닉스</a><a data-lib="https://southern-winter-c87.notion.site/1-3a93cdde2d7e8032826dd3d925ed4278" target="_blank" rel="noopener">그래머&amp;라이팅</a></div></div><div class="lk">인증 필요</div></div>
-      <a class="tool" data-href="/교사포털/시험지생성기/"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg></div><div class="tx"><b>시험지 생성기</b><span>교재·유닛별 시험지와 정답지를 만들어 인쇄해요.</span></div><div class="lk">인증 필요</div></a>
+      <div class="tool lib"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div><div class="tx"><b>수업 자료</b><span>단어 리스트 · 워크북 등</span><div class="libs"><a data-lib="https://southern-winter-c87.notion.site/15a3cdde2d7e80ddb3e0efd45c6f9fac" target="_blank" rel="noopener">리딩</a><a data-lib="https://southern-winter-c87.notion.site/1-2-8b02a1e094c745cf80a590f34d4db521" target="_blank" rel="noopener">파닉스</a><a data-lib="https://southern-winter-c87.notion.site/1-3a93cdde2d7e8032826dd3d925ed4278" target="_blank" rel="noopener">그래머&amp;라이팅</a></div></div><div class="lk"><span class="lock" aria-label="인증 필요"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2.5" fill="currentColor"/><path d="M8 11V8a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="2.2"/></svg></span></div></div>
+      <a class="tool" data-href="/교사포털/시험지생성기/"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg></div><div class="tx"><b>시험지 생성기</b><span>교재·유닛별 시험지와 정답지를 만들어 인쇄해요.</span></div><div class="lk"><span class="lock" aria-label="인증 필요"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2.5" fill="currentColor"/><path d="M8 11V8a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="2.2"/></svg></span></div></a>
       <div class="tool off"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4M7 9l3 3 7-5"/></svg></div><div class="tx"><b>E-Book<small>판서 수업용</small></b><span>전자칠판 판서 · 정답 공개 · 음원</span></div><div class="lk">준비 중</div></div>
       
     </div>
@@ -139,8 +139,8 @@
   <nav><a href="/home/#books">교재</a><a href="/studio/">음원·강의</a><a href="/library/">자료실</a><a href="/contact/">문의</a><a href="/report/">오류 신고</a><a class="store">스마트스토어</a><a class="talk">톡톡</a><a href="/privacy/">개인정보처리방침</a></nav>
   <span class="biz"></span>
 </div></footer>
-<script src="/assets/reviews.js?v=817b7dfa"></script>
-<script src="/assets/site.js?v=817b7dfa"></script>
+<script src="/assets/reviews.js?v=0668bac9"></script>
+<script src="/assets/site.js?v=0668bac9"></script>
 <script>SOLVEU.gate(SOLVEU.$("#tz"));</script>
 </body>
 </html>
