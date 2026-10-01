@@ -89,7 +89,7 @@ function make(){
     u.words.forEach(w=>{ const k=w.e.toLowerCase(); if(!seen.has(k)){ seen.add(k); W.push(w); } });
     u.sents.forEach(s=>S.push(s));
   });
-  const pn=properNouns(b);
+  const pn=allProper();
   const sets=[];
   types.forEach(t=>{
     const rnd=mulberry32(seedFrom(b.code+"|"+units.join(",")+"|"+t));
@@ -105,23 +105,57 @@ function make(){
   render();
 }
 // 문장 가운데에 대문자로 나오는 낱말 = 고유명사(섞을 때 소문자로 바꾸지 않음)
+// 시리즈 전체(모든 책의 문장·단어)에서 소문자로 한 번이라도 쓰인 낱말 = 일반 단어
+let LOWER=null;
+function lowerWords(){
+  if(LOWER) return LOWER;
+  LOWER=new Set();
+  const add=t=>t.split(/\s+/).forEach(w=>{ const x=w.replace(/[^A-Za-z'’]/g,""); if(/^[a-z]/.test(x)) LOWER.add(x.toLowerCase()); });
+  GEN_BOOKS.forEach(b=>b.units.forEach(u=>{ u.sents.forEach(s=>add(s.e)); u.words.forEach(w=>add(w.e)); }));
+  return LOWER;
+}
+function isCommon(x){   // 소문자로 쓰인 적 있는 일반 단어인가(복수·-ing·-ed·소유격·축약 꼴도 기본형으로 확인)
+  const low=lowerWords(), w=x.toLowerCase().replace(/’/g,"'");
+  const base=w.replace(/'(s|re|ll|ve|d|m|t)$/,"").replace(/n't$/,"");
+  const cands=[w, base, base.replace(/ies$/,"y"), base.replace(/es$/,""), base.replace(/s$/,""),
+    base.replace(/ing$/,""), base.replace(/ing$/,"e"), base.replace(/([a-z])\1ing$/,"$1"), base.replace(/ed$/,""), base.replace(/ed$/,"e"), base.replace(/ly$/,"")];
+  return cands.some(c=>c && low.has(c));
+}
+const TITLES=new Set(["Mr","Mrs","Ms","Dr","St"]);
+const INTERJ=new Set(["Oh","Okay","OK","Hi","Hello","Yes","No","Wow","Thanks","Please","Sorry","Well","Hey","Bye"]);   // 대화 속 대문자지만 일반 단어
+const NAMES=new Set(["Jim","Cindy"]);   // 문장 맨 앞에만 나와 규칙으로 못 잡는 이름(스타터2·기본1)
+let ALLPN=null;
+function allProper(){   // 시리즈 전체 고유명사(한 책에서 문장 맨 앞에만 나와도 다른 책 문장 가운데에서 잡힘)
+  if(!ALLPN){ ALLPN=new Set(); GEN_BOOKS.forEach(b=>properNouns(b).forEach(x=>ALLPN.add(x))); NAMES.forEach(x=>ALLPN.add(x)); }
+  return ALLPN;
+}
 function properNouns(b){
-  // 문장 중간에서 대문자로 쓰이고, 책 어디에서도 소문자로는 안 쓰이는 낱말만(This·When 등 인용문 첫 단어 제외)
-  const cap=new Set(), low=new Set();
-  b.units.forEach(u=>u.sents.forEach(s=>s.e.split(/\s+/).forEach((w,i)=>{
-    const x=w.replace(/[^A-Za-z'’]/g,""); if(!x) return;
-    if(/^[a-z]/.test(x)) low.add(x.toLowerCase());
-    else if(i>0) cap.add(x);
-  })));
+  // 문장 가운데에서 대문자로 쓰였고(인용부호 뒤 첫 단어 제외) 일반 단어가 아닌 것만 고유명사(Seoul·Edison 등).
+  // 문장 맨 앞 단어는 이 목록에 있을 때만 대문자로 남김
   const set=new Set(["I"]);
-  cap.forEach(x=>{ if(!low.has(x.toLowerCase())) set.add(x); });
+  b.units.forEach(u=>u.sents.forEach(s=>s.e.split(/\s+/).forEach((w,i)=>{
+    if(i===0 || /^[“"‘']/.test(w)) return;
+    const x=w.replace(/[^A-Za-z'’]/g,"").replace(/['’]s$/,"");
+    if(/^[A-Z]/.test(x) && !isCommon(x) && !INTERJ.has(x)) set.add(x);
+  })));
   return set;
 }
 // 어순 배열: 문장부호를 떼고 소문자로(고유명사·I 제외) 섞어 " / "로 잇기 — C&S 초상세2 방식
 function scramble(e, rnd, pn){
-  const ws=e.replace(/[“”"]/g,"").split(/\s+/)
-    .map(w=>w.replace(/^[^A-Za-z0-9'’]+|[^A-Za-z0-9'’]+$/g,"")).filter(Boolean)
-    .map(w=>pn.has(w)||/^I['’]/.test(w) ? w : w.toLowerCase());
+  const toks=e.replace(/[“”"]/g,"").split(/\s+/).map(o=>({o, w:o.replace(/^[^A-Za-z0-9'’]+|[^A-Za-z0-9'’]+$/g,"")})).filter(t=>t.w);
+  const raw=toks.map(t=>t.w);
+  const brk=k=>/[.!?,;:]$/.test(toks[k].o);   // 이 낱말 뒤에 문장부호가 있으면 다음 낱말과 이어진 이름이 아님
+  const isPN=w=>{ const x=w.replace(/['’]s$/,""); return pn.has(x) || TITLES.has(x); };
+  const ws=raw.map((w,i)=>{
+    if(/^I(['’]|$)/.test(w) || isPN(w)) return w;
+    // 문장 가운데 대문자 낱말이 이어지면 한 덩어리 고유명사(Boxing Day·New Year·World Cup)
+    const cap=k=>k>0 && raw[k] && /^[A-Z]/.test(raw[k]) && raw[k]!=="I" && !INTERJ.has(raw[k]);
+    if(cap(i) && ((cap(i-1) && !brk(i-1)) || (cap(i+1) && !brk(i)))) return w;
+    // 이름 + 성(Thomas Edison·Warren Harding): 바로 뒤가 고유명사이고 이 낱말도 일반 단어가 아니면 이름
+    const nx=raw[i+1];
+    if(/^[A-Z]/.test(w) && !INTERJ.has(w) && nx && nx!=="I" && /^[A-Z]/.test(nx) && isPN(nx) && !isCommon(w)) return w;
+    return w.toLowerCase();
+  });
   let mix=ws; for(let k=0;k<6 && mix.join(" ")===ws.join(" ");k++) mix=shuffle(ws,rnd);
   return mix.join(" / ");
 }
