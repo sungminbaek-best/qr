@@ -14,7 +14,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/site.css?v=52f4ba01">
+<link rel="stylesheet" href="/assets/site.css?v=a78b6938">
 <style>
 .hero{padding:120px 0 64px;border-bottom:1px solid var(--line)}
 .hero .kicker{display:inline-block;font-size:14.5px;font-weight:700;color:var(--mute)}
@@ -32,6 +32,16 @@
 .pnum b{display:block;font-family:var(--mono);font-size:30px;font-weight:700;letter-spacing:-.03em;line-height:1;color:var(--ink)}
 .pnum b small{font-size:14px;font-weight:700;margin-left:2px}
 .pnum div>span{display:block;font-size:13.5px;font-weight:600;color:var(--mute);margin-top:9px}
+/* 수업 도구 4칸 */
+#tools{padding-top:24px}
+.tg{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-top:36px}
+.tl{display:flex;flex-direction:column;gap:6px;border:1px solid var(--line);border-radius:20px;padding:26px 24px;background:#fff;transition:border-color .15s,transform .2s}
+.tl:hover{border-color:var(--ink);transform:translateY(-3px)}
+.tl i{width:48px;height:48px;border-radius:14px;background:var(--soft);color:var(--brand);display:grid;place-items:center;margin-bottom:12px}
+.tl i svg{width:23px;height:23px}
+.tl b{font-size:18px;font-weight:800;letter-spacing:-.03em}
+.tl span{font-size:14px;color:var(--mute);font-weight:600}
+@media(max-width:860px){.tg{grid-template-columns:1fr 1fr;gap:10px}.tl{padding:20px}}
 /* 선생님 후기: 옆으로 천천히 흐르는 띠(마우스 올리면 멈춤) */
 .rvq{margin-top:36px;overflow:hidden;-webkit-mask:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);mask:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
 .rvq .tr{display:flex;gap:16px;width:max-content;animation:rvq 80s linear infinite}
@@ -139,6 +149,11 @@
   </div>
 </div></section>
 
+<section class="sec" id="tools"><div class="wrap">
+  <div class="sh rev"><h2>책 한 권에 수업 도구까지</h2></div>
+  <div class="tg"><a class="tl rev" href="/studio/"><i><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4z"/><path fill="currentColor" d="M14 14h3v3h-3zM17 17h3v3h-3z"/></svg></i><b>QR 음원·강의</b><span>책의 QR로 바로</span></a><a class="tl rev" href="/library/#books"><i><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M6 3h8l4 4v14H6zM14 3v4h4M9 13h6M9 17h6"/></svg></i><b>정답 PDF</b><span>누구나 무료</span></a><a class="tl rev" href="/library/#teacher"><i><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M3 7h7l2 2h9v10H3z"/></svg></i><b>수업 자료</b><span>단어 리스트 · 워크북</span></a><a class="tl rev" href="/library/#teacher"><i><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M5 4h14v16H5zM8 9h8M8 13h8M8 17h5"/></svg></i><b>시험지 생성기</b><span>유닛별로 바로 인쇄</span></a></div>
+</div></section>
+
 <section class="sec panel" id="reviews"><div class="wrap">
   <div class="sh rev"><h2>선생님들이 먼저 알아봤어요</h2><p>스마트스토어 실제 구매 후기예요. 맞춤법만 다듬었어요.</p></div>
 </div>
@@ -146,7 +161,7 @@
 </section>
 
 <section class="sec tight"><div class="wrap"><div class="band rev">
-  <h2>교재 도입 · 상담은 톡톡으로</h2>
+  <span class="bic"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M4 5h16v11H9l-5 4z"/></svg></span><div class="bt"><h2>교재 도입 · 상담은 톡톡으로</h2><p>샘플 · 수업 활용 · 학원 수량까지 편하게 물어보세요.</p></div>
   <div class="bps"><a class="bp main talk">톡톡 문의</a><a class="bp store">스토어</a></div>
 </div></div></section>
 
@@ -157,8 +172,8 @@
   <nav><a href="/home/#books">교재</a><a href="/studio/">음원·강의</a><a href="/library/">자료실</a><a href="/contact/">문의</a><a href="/report/">오류 신고</a><a class="store">스마트스토어</a><a class="talk">톡톡</a><a href="/privacy/">개인정보처리방침</a></nav>
   <span class="biz"></span>
 </div></footer>
-<script src="/assets/reviews.js?v=52f4ba01"></script>
-<script src="/assets/site.js?v=52f4ba01"></script>
+<script src="/assets/reviews.js?v=a78b6938"></script>
+<script src="/assets/site.js?v=a78b6938"></script>
 <script>
 var S=SOLVEU;
 /* 첫 화면 숫자: 처음 한 번 0부터 올라감 */
