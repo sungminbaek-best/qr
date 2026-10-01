@@ -55,6 +55,7 @@
 /* 교재: 로드맵과 목록을 하나로 */
 .stps{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px}
 .sh+.lane{margin-top:40px}
+#finder+.sec{padding-top:72px}
 .stp{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:18px;background:#fff;padding:18px 16px 16px;transition:border-color .15s,transform .2s;min-width:0}
 .stp:hover{border-color:var(--ink);transform:translateY(-3px)}
 .stp .no{display:flex;align-items:center;justify-content:space-between;gap:8px}
@@ -174,26 +175,6 @@
   </div>
 </div></section>
 
-<section class="sec" id="why"><div class="wrap">
-  <div class="sh rev"><h2>수업이 쉬워지는 이유</h2><p>쏠뷰의 모든 교재는 같은 원칙으로 만들어요.</p></div>
-  <div class="icards">
-    <div class="icard rev"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 4.5-3 7.6-7 9-4-1.4-7-4.5-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg></div><b>현장에서 검증</b><p>27년 수업 현장에서 다듬은 커리큘럼을 교재에 그대로 담았어요.</p></div>
-    <div class="icard rev"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.5C4.5 4.5 7.5 4.5 12 6.5c4.5-2 7.5-2 10-1V19c-2.5-1-5.5-1-10 1-4.5-2-7.5-2-10-1z"/><path d="M12 6.5V20"/></svg></div><b>스스로 이해하는 구성</b><p>설명을 따라가면 학생이 원리를 스스로 이해하도록 설계했어요.</p></div>
-    <div class="icard rev"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4M7 9l3 3 7-5"/></svg></div><b>수업 도구까지 한곳에</b><p>음원·강의 영상·정답·시험지 생성기를 교재별로 함께 드려요.</p></div>
-    <div class="icard rev"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><path d="M16 4.5a3 3 0 0 1 0 6M21 20c0-2.6-1.6-4.8-4-5.6"/></svg></div><b>출간 전 전국 검토</b><p>전국 300여 명 선생님의 검토를 거쳐 교재를 내놓아요.</p></div>
-  </div>
-  <div class="rvopen rev" id="reviews"><button class="btn line" type="button" id="rvToggle" aria-expanded="false">구매 후기 모두 보기 <span class="ar">↓</span></button></div>
-  <div class="rvbox" id="rvBox" hidden>
-    <div class="rvf" id="rvf"><button class="opt" type="button" aria-pressed="true" data-a="all">전체</button><button class="opt" type="button" aria-pressed="false" data-a="phonics">파닉스</button><button class="opt" type="button" aria-pressed="false" data-a="reading">리딩</button><button class="opt" type="button" aria-pressed="false" data-a="grammar">문법·쓰기</button></div>
-    <div class="rvg" id="rvg"></div>
-    <div class="more"><button class="btn line sm" id="moreBtn" type="button">후기 더 보기</button></div>
-    <p class="rvfoot">※ 스마트스토어 실제 구매 후기에서 골랐어요. 내용은 그대로 두고 띄어쓰기·맞춤법만 다듬었어요.</p>
-  </div>
-</div></section>
-
-<section class="sec tight"><div class="wrap">
-  <a class="libline rev" href="/library/"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div><div class="tx"><b>정답 · 음원 · 수업 자료는 자료실에</b><span>정답 PDF와 음원·강의는 누구나, 수업 자료와 시험지 생성기는 선생님 인증 뒤에 열려요.</span></div><span class="btn line sm">자료실 <span class="ar">→</span></span></a>
-</div></section>
 <section class="sec tight"><div class="wrap"><div class="band rev">
   <h2>쏠뷰 교재로 <br class="mo">수업을 시작해 보세요</h2><p>교재 도입 문의는 <br class="mo">톡톡으로 편하게 해 주세요.</p>
   <div class="cta"><a class="btn white talk">톡톡 문의하기 <span class="ar">→</span></a><a class="btn ghost store">스마트스토어 보기</a></div>
@@ -226,14 +207,6 @@ function f(t){if(!t0)t0=t;var p=Math.min(1,(t-t0)/1100),e=1-Math.pow(1-p,3);el.t
   S.$("#bPrev").onclick=function(){go(p-1);play();};S.$("#bNext").onclick=function(){go(p+1);play();};
   var box=S.$("#best");box.addEventListener("mouseenter",stop);box.addEventListener("mouseleave",play);box.addEventListener("focusin",stop);
   addEventListener("resize",function(){go(Math.min(p,pages()-1));});go(0);play();})();
-/* 후기 모두 보기 */
-function drawRv(){var list=S.REVIEWS.filter(function(v){return cur==="all"||AREA[v.step]===cur;});
-  S.renderReviews(S.$("#rvg"), list.slice(0,shown)); var m=S.$("#moreBtn"); m.hidden=list.length<=shown; m.textContent="후기 더 보기 ("+(list.length-shown)+"개 더)";}
-S.$$("#rvf .opt").forEach(function(b){b.onclick=function(){S.$$("#rvf .opt").forEach(function(x){x.setAttribute("aria-pressed","false")});b.setAttribute("aria-pressed","true");cur=b.dataset.a;shown=9;drawRv();};});
-S.$("#moreBtn").onclick=function(){shown+=9;drawRv();};
-S.$("#rvToggle").onclick=function(){var box=S.$("#rvBox"),open=box.hidden;box.hidden=!open;this.setAttribute("aria-expanded",open);
-  this.innerHTML=open?'후기 접기 <span class="ar">↑</span>':'구매 후기 모두 보기 <span class="ar">↓</span>';if(open)drawRv();};
-if(location.hash==="#reviews")S.$("#rvToggle").click();
 /* 시작 단계 찾기 */
 var pick={grade:null,read:null};
 function bind(id,key){S.$$("#"+id+" .opt").forEach(function(b){b.onclick=function(){S.$$("#"+id+" .opt").forEach(function(x){x.setAttribute("aria-pressed","false")});b.setAttribute("aria-pressed","true");pick[key]=b.dataset.v;show();};});}
