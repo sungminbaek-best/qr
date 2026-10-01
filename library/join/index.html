@@ -14,7 +14,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/site.css?v=480b6107">
+<link rel="stylesheet" href="/assets/site.css?v=1d55ec82">
 <style>
 .top{padding:56px 0 96px}
 .top h1{font-size:clamp(30px,4.2vw,44px);font-weight:800;letter-spacing:-.05em;margin-top:14px}
@@ -104,14 +104,13 @@
     <div class="fld"><span>직책</span><div class="opts"><label><input type="radio" name="role" value="원장"><span>원장</span></label><label><input type="radio" name="role" value="강사"><span>강사</span></label><label><input type="radio" name="role" value="공부방"><span>공부방</span></label><label><input type="radio" name="role" value="학교"><span>학교</span></label><label><input type="radio" name="role" value="기타"><span>기타</span></label></div></div>
     <div class="fld"><span>교재를 주로 어디서 구매하시나요?</span><div class="opts"><label><input type="radio" name="buy" value="네이버 스마트스토어"><span>네이버 스마트스토어</span></label><label><input type="radio" name="buy" value="학원 공급(직거래)"><span>학원 공급(직거래)</span></label><label><input type="radio" name="buy" value="쿠팡"><span>쿠팡</span></label><label><input type="radio" name="buy" value="온라인 서점"><span>온라인 서점</span></label><label><input type="radio" name="buy" value="오프라인 서점·총판"><span>오프라인 서점·총판</span></label><label><input type="radio" name="buy" value="아직 구매 전"><span>아직 구매 전</span></label></div></div>
     <div class="fld"><span>쓰고 있거나 볼 예정인 교재<em>선택 · 여러 개 가능</em></span><div class="opts"><label><input type="checkbox" name="books" value="phonics"><span>파닉스</span></label><label><input type="checkbox" name="books" value="starter"><span>스타터</span></label><label><input type="checkbox" name="books" value="bridge"><span>브릿지</span></label><label><input type="checkbox" name="books" value="intro"><span>입문</span></label><label><input type="checkbox" name="books" value="basic"><span>기본</span></label><label><input type="checkbox" name="books" value="mock"><span>첫모의고사</span></label><label><input type="checkbox" name="books" value="grammar"><span>그래머&amp;라이팅</span></label></div></div>
-    <label class="fld"><span>이메일<em>선택 · 혜택 자료를 메일로도 받아요</em></span><input type="text" name="email" inputmode="email" maxlength="100" autocomplete="email" placeholder="teacher@example.com"></label>
     <div class="agree">
       <label class="all"><input type="checkbox" id="agall"><span><b>전체 동의</b> <small>(선택 항목 포함)</small></span></label>
       <label><input type="checkbox" name="privacy"><span><b>[필수]</b> 개인정보 수집·이용에 동의해요.</span></label>
-      <details><summary>자세히 보기</summary>휴대폰 번호·이름·학원 이름·지역·직책(선택: 쓰는 교재)을 선생님 본인 확인과 선생님 전용 자료 제공, 문의 응대를 위해 모아요. 탈퇴할 때까지 보관하고, 탈퇴하면 바로 지워요. 동의하지 않을 수 있지만, 그러면 선생님 전용 자료를 이용할 수 없어요. <a href="/privacy/" target="_blank" rel="noopener">개인정보처리방침 전문</a></details>
-      <label class="opt"><input type="checkbox" name="marketing"><span><b>[선택]</b> 선생님 혜택 받기 <small>(광고성 정보 문자·이메일 수신 동의)</small></span></label>
-      <ul class="perks"><li>학부모 상담·설명회 자료</li><li>신간 출시 알림·샘플 우선 제공</li><li>체험단·서평단 우선 선정</li><li>저자 직강 온라인 설명회 초대 (새 로드맵·교재 활용법)</li><li>티칭 가이드 (유닛별 수업 흐름·판서 예시·자주 틀리는 포인트)</li></ul>
-      <details><summary>자세히 보기</summary><b>목적</b> 선생님 혜택 자료와 신간·샘플·체험단·설명회 등 광고성 정보 전송 · <b>방법</b> 문자, 이메일(적은 경우) · <b>항목</b> 이름, 휴대폰 번호, 이메일 · <b>보관</b> 동의를 끄거나 탈퇴할 때까지 · 동의를 거부할 권리가 있으며, 거부해도 선생님 전용 자료 이용에는 제한이 없어요(혜택 안내만 받지 않아요). 언제든 자료실 화면에서 끌 수 있어요.</details>
+      <details><summary>자세히 보기</summary>휴대폰 번호·이름·학원 이름·지역·직책·주 구매처(선택: 쓰는 교재)을 선생님 본인 확인과 선생님 전용 자료 제공, 문의 응대를 위해 모아요. 탈퇴할 때까지 보관하고, 탈퇴하면 바로 지워요. 동의하지 않을 수 있지만, 그러면 선생님 전용 자료를 이용할 수 없어요. <a href="/privacy/" target="_blank" rel="noopener">개인정보처리방침 전문</a></details>
+      <label class="opt"><input type="checkbox" name="marketing"><span><b>[선택]</b> 선생님 혜택 받기 <small>(광고성 정보 문자 수신 동의)</small></span></label>
+      <ul class="perks"><li>학부모 상담·설명회 자료</li><li>저자 직강 온라인 설명회 초대 (새 로드맵·교재 활용법)</li><li>티칭 가이드 (유닛별 수업 흐름·판서 예시·자주 틀리는 포인트)</li><li>신간 출시 알림·샘플 우선 제공</li><li>체험단·서평단 우선 선정</li></ul>
+      <details><summary>자세히 보기</summary><b>목적</b> 선생님 혜택 자료와 신간·샘플·체험단·설명회 등 광고성 정보 전송 · <b>방법</b> 문자 · <b>항목</b> 이름, 휴대폰 번호 · <b>보관</b> 동의를 끄거나 탈퇴할 때까지 · 동의를 거부할 권리가 있으며, 거부해도 선생님 전용 자료 이용에는 제한이 없어요(혜택 안내만 받지 않아요). 언제든 자료실 화면에서 끌 수 있어요.</details>
     </div>
     <button class="go1 full" type="submit">신청하고 입장하기</button>
     <div class="jerr" id="e3" role="alert"></div>
@@ -130,8 +129,8 @@
   <nav><a href="/home/#books">교재</a><a href="/studio/">음원·강의</a><a href="/library/">자료실</a><a href="/contact/">문의</a><a href="/report/">오류 신고</a><a class="store">스마트스토어</a><a class="talk">톡톡</a><a href="/privacy/">개인정보처리방침</a></nav>
   <span class="biz"></span>
 </div></footer>
-<script src="/assets/reviews.js?v=480b6107"></script>
-<script src="/assets/site.js?v=480b6107"></script>
+<script src="/assets/reviews.js?v=1d55ec82"></script>
+<script src="/assets/site.js?v=1d55ec82"></script>
 <script>
 var S=SOLVEU,$=S.$,st={phone:"",ticket:"",left:0,t:null};
 function show(id){["#s0","#s1","#s2","#s3","#s4"].forEach(function(k){$(k).hidden=k!==id;});var f=$(id+" input");if(f&&id!=="#s0")f.focus();}
@@ -164,7 +163,7 @@ $("#s2").addEventListener("submit",function(e){e.preventDefault();var b=$("#s2 .
 $("#s3").addEventListener("submit",function(e){e.preventDefault();var f=e.target,b=$("#s3 .go1");
   var v={ticket:st.ticket,name:f.name.value.trim(),academy:f.academy.value.trim(),region:f.region.value,
     role:(f.querySelector("[name=role]:checked")||{}).value,books:[].map.call(f.querySelectorAll("[name=books]:checked"),function(x){return x.value;}),
-    email:(f.email.value||"").trim(),privacy:f.privacy.checked,marketing:f.marketing.checked,
+    privacy:f.privacy.checked,marketing:f.marketing.checked,
     buy:(f.querySelector("[name=buy]:checked")||{}).value,src:S.ss("solveu_from"),src_code:S.ss("solveu_code")};
   if(!v.name||!v.academy||!v.region||!v.role||!v.buy){msg("#e3","이름·학원·지역·직책·구매처를 모두 입력해 주세요.");return;}
   if(!v.privacy){msg("#e3","개인정보 수집·이용에 동의해 주셔야 입장할 수 있어요.");return;}

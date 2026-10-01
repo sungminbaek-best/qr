@@ -76,7 +76,7 @@ window.SOLVEU = {
         if (j.ok) { err.textContent = ""; perks(j.marketing); } else err.textContent = j.msg || "잠시 뒤 다시 시도해 주세요."; });
     }
     if (pbox) {
-      $(".pon", pbox).addEventListener("click", function () { setPerk(true, ($(".pmail", pbox).value || "").trim()); });
+      $(".pon", pbox).addEventListener("click", function () { var pm = $(".pmail", pbox); setPerk(true, pm ? (pm.value || "").trim() : ""); });
       $(".poff", pon).addEventListener("click", function () { if (confirm("선생님 혜택 안내를 더 받지 않을까요?")) setPerk(false); });
       if (out) out.addEventListener("click", function () { perks(false); });
     }
