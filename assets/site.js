@@ -59,12 +59,14 @@ window.SOLVEU = {
       var ok = S.isOK(); root.classList.toggle("unlocked", ok);
       $$(".libs a", root).forEach(function (a) { ok ? a.setAttribute("href", a.dataset.lib) : a.removeAttribute("href"); });
       var ll = $(".tool.lib .lk", root); if (ll) { if (ok) ll.textContent = "노션에서 열림 →"; else ll.innerHTML = LOCK; }
+      $$(".tbtn[data-href]", root).forEach(function (a) { ok ? a.setAttribute("href", a.dataset.href) : a.removeAttribute("href"); });
       $$(".tool[data-href]", root).forEach(function (t) { var lk = $(".lk", t);
         if (ok) { t.setAttribute("href", t.dataset.href); lk.textContent = "열기 →"; } else { t.removeAttribute("href"); lk.innerHTML = LOCK; } });
     }
     var out = $(".relock", root); if (out) out.addEventListener("click", function () { S.api("/api/logout", {}); S.pass(null); paint(); });
-    $$(".libs a,.tool[data-href]", root).forEach(function (a) { a.addEventListener("click", function (ev) {
-      if (!S.isOK()) { ev.preventDefault(); err.textContent = "먼저 ‘휴대폰으로 입장하기’를 눌러 인증해 주세요."; } }); });
+    $$(".libs a,.tool[data-href],.tbtn[data-href]", root).forEach(function (a) { a.addEventListener("click", function (ev) {
+      if (!S.isOK()) { ev.preventDefault(); err.textContent = "먼저 ‘휴대폰으로 입장’을 눌러 인증해 주세요.";
+        var tt = $("#teacher"); if (tt) tt.scrollIntoView({ behavior: "smooth", block: "center" }); } }); });
     paint();
     /* 선생님 혜택(광고성 정보 수신 동의): 안 받는 중이면 권하는 상자, 받는 중이면 끄기 링크 */
     var pbox = $(".perkbox", root), pon = $(".perkon", root);
@@ -79,7 +81,7 @@ window.SOLVEU = {
       if (out) out.addEventListener("click", function () { perks(false); });
     }
     if (S.isOK()) S.api("/api/me").then(function (j) {
-      if (j.ok) { if (who) who.textContent = j.teacher.name + " 선생님, 반가워요."; perks(j.teacher.marketing); if (j.teacher.need_buy) S.askBuy($(".gatebox", root)); }
+      if (j.ok) { if (who) who.textContent = j.teacher.name + " 선생님 · 인증됨"; perks(j.teacher.marketing); if (j.teacher.need_buy) S.askBuy($(".gatebox", root)); }
       else if (j.status === 401) { S.pass(null); paint(); }   /* 탈퇴·차단·로그아웃된 입장권 */
     });
   };
