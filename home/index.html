@@ -71,7 +71,9 @@
   .stp .tx{flex:1;min-width:0}
   .stp .nm{margin-top:0;font-size:17px}
   .stp .cv{margin:0;padding:0;width:62px;flex:none}
-  .gro{flex-wrap:wrap;gap:12px}
+  .gro{flex-wrap:wrap;gap:12px;padding:16px}
+  .gro .tx{flex-basis:100%;order:2}
+  .gro .ar{display:none}
 }
 @media(min-width:601px){.stp .tx{display:contents}}
 /* 시작 단계 찾기 */
@@ -79,8 +81,8 @@
 .fq{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:24px}
 .fq+.fq{margin-top:12px}
 .fq b{display:block;font-size:16px;font-weight:800}
-.opts{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
-.opt{font-size:14px;font-weight:700;padding:9px 14px;border-radius:11px;border:1px solid var(--line2);background:#fff;transition:border-color .15s,background .15s,color .15s}
+.opts{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.opt{font-size:14px;font-weight:700;padding:9px 12px;border-radius:11px;border:1px solid var(--line2);background:#fff;transition:border-color .15s,background .15s,color .15s}
 .opt:hover{border-color:var(--ink)}
 .opt[aria-pressed=true]{background:var(--ink);border-color:var(--ink);color:#fff}
 .result{border-radius:var(--r);padding:28px;background:#fff;border:1px solid var(--line);min-height:100%}
@@ -100,7 +102,7 @@
 .libline .ic{flex:none;width:42px;height:42px;border-radius:12px;background:var(--soft);color:var(--brand);display:grid;place-items:center}
 .libline .ic svg{width:21px;height:21px}
 .libline b{font-size:16.5px;font-weight:800;letter-spacing:-.03em}
-.libline span{display:block;font-size:14px;color:var(--sub);margin-top:2px}
+.libline .tx span{display:block;font-size:14px;color:var(--sub);margin-top:2px}
 .libline .btn{margin-left:auto;flex:none}
 @media(max-width:600px){.libline{flex-wrap:wrap}.libline .btn{margin-left:0}}
 </style>
@@ -177,7 +179,7 @@
 </div></section>
 
 <section class="sec tight"><div class="wrap">
-  <a class="libline rev" href="/library/"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div><div><b>정답 · 음원 · 수업 자료는 자료실에</b><span>정답 PDF와 음원·강의는 누구나, 수업 자료와 시험지 생성기는 선생님 인증 뒤에 열려요.</span></div><span class="btn line sm">자료실 <span class="ar">→</span></span></a>
+  <a class="libline rev" href="/library/"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div><div class="tx"><b>정답 · 음원 · 수업 자료는 자료실에</b><span>정답 PDF와 음원·강의는 누구나, 수업 자료와 시험지 생성기는 선생님 인증 뒤에 열려요.</span></div><span class="btn line sm">자료실 <span class="ar">→</span></span></a>
 </div></section>
 <section class="sec tight"><div class="wrap"><div class="band rev">
   <h2>쏠뷰 교재로 <br class="mo">수업을 시작해 보세요</h2><p>교재 도입 문의는 <br class="mo">톡톡으로 편하게 해 주세요.</p>
