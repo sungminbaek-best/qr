@@ -99,10 +99,10 @@ br.pc{display:inline}br.mo{display:none}
 .stats span{font-size:13.5px;color:var(--sub)}
 .rvg{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:28px}
 .rv{border:1px solid var(--line);border-radius:18px;padding:24px;display:flex;flex-direction:column;background:#fff}
-.rv .st5{color:#f5a524;font-size:12.5px;letter-spacing:2px}
+.rv .st5{color:var(--brand);font-size:12px;letter-spacing:2px}
 .rv q{quotes:none;font-size:15px;line-height:1.7;margin-top:12px;font-weight:500}
 .rv .who{margin-top:auto;padding-top:18px;font-size:12.5px;color:var(--mute)}
-.rv .who b{color:var(--brand);font-weight:700;margin-right:6px}
+.rv .who b{color:var(--ink);font-weight:700;margin-right:6px}
 .rv.hide{display:none}
 .more{display:flex;justify-content:center;margin-top:22px}
 .rvfoot{font-size:12.5px;color:var(--mute);text-align:center;margin-top:16px}

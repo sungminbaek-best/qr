@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>저절로 기본 1·2 · 쏠뷰</title>
-<meta name="description" content="저절로 기본 1·2 (초6~중1) — 문장 구조가 보이는 독해. 목차, 구성, 정답 PDF, 음원·강의 맛보기.">
+<meta name="description" content="저절로 기본 1·2 (초6~중1) — 문장 구조가 보이는 독해. 목차, 유닛 미리보기, 정답 PDF, 음원·강의.">
 <meta name="robots" content="noindex, nofollow">
-<meta property="og:title" content="저절로 기본 1·2 · 쏠뷰"><meta property="og:description" content="저절로 기본 1·2 (초6~중1) — 문장 구조가 보이는 독해. 목차, 구성, 정답 PDF, 음원·강의 맛보기."><meta property="og:type" content="website">
+<meta property="og:title" content="저절로 기본 1·2 · 쏠뷰"><meta property="og:description" content="저절로 기본 1·2 (초6~중1) — 문장 구조가 보이는 독해. 목차, 유닛 미리보기, 정답 PDF, 음원·강의."><meta property="og:type" content="website">
 <meta property="og:site_name" content="쏠뷰 SolveU"><meta property="og:locale" content="ko_KR"><meta property="og:url" content="https://solveu.co.kr/books/basic/">
 <meta property="og:image" content="https://solveu.co.kr/assets/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image">
 <link rel="canonical" href="https://solveu.co.kr/books/basic/">
@@ -14,8 +14,20 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/site.css?v=635c4ed4">
+<link rel="stylesheet" href="/assets/site.css?v=904ac9da">
 <style>
+.bk-hero{padding:28px 0 64px;border-bottom:1px solid var(--line)}
+.bk-hero .split{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:48px;align-items:center;margin-top:36px}
+.bk-hero .kicker{font-size:14.5px;font-weight:700;color:var(--mute)}
+.bk-hero h1{font-size:clamp(36px,5vw,58px);font-weight:800;letter-spacing:-.055em;line-height:1.12;margin-top:14px}
+.bk-hero .one{font-size:clamp(17px,1.9vw,20px);font-weight:600;color:var(--sub);margin-top:12px}
+.bk-hero .meta{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:22px;font-size:14px;color:var(--mute);font-weight:600}
+.bk-hero .meta span+span:before{content:"·";margin-right:16px;color:var(--line2)}
+.bk-hero .cta{margin-top:30px}
+.covs2{display:flex;gap:18px;justify-content:center;align-items:flex-end}
+.covs2 img{width:42%;max-width:220px;border-radius:5px;box-shadow:0 22px 44px -22px rgba(12,16,32,.5)}
+.covs2.land img{width:48%;max-width:none}
+@media(max-width:860px){.bk-hero .split{grid-template-columns:1fr;gap:28px;margin-top:20px}.covs2{order:-1;justify-content:flex-start}.covs2 img{width:30%}.covs2.land img{width:44%}}
 .buy{position:relative}
 .buy summary{list-style:none;cursor:pointer}
 .buy summary::-webkit-details-marker{display:none}
@@ -23,50 +35,50 @@
 .buy .menu{position:absolute;top:calc(100% + 8px);left:0;z-index:5;min-width:240px;background:#fff;border:1px solid var(--line2);border-radius:14px;box-shadow:var(--shadow);padding:6px;display:grid}
 .buy .menu a{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 14px;border-radius:10px;font-size:14.5px;font-weight:700}
 .buy .menu a:hover{background:var(--panel)}
-.b2brow{display:flex;align-items:center;gap:14px;flex-wrap:wrap;border:1px solid var(--line);border-radius:16px;padding:18px 22px;max-width:640px}
-.b2brow b{font-size:15.5px}.b2brow span{font-size:14px;color:var(--sub)}.b2brow .ar{margin-left:auto;color:var(--brand);font-weight:700}
-.top{padding:40px 0 72px;background:linear-gradient(180deg,#f7f8ff,#fff)}
-.split{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center;margin-top:28px}
-.split h1{font-size:clamp(34px,5vw,56px);font-weight:800;letter-spacing:-.05em;line-height:1.12;margin-top:16px}
-.split .one{font-size:clamp(17px,2vw,20px);font-weight:700;margin-top:12px}
-.split .desc{font-size:15px;color:var(--sub);line-height:1.75;margin-top:12px}
-.covpair{display:flex;gap:18px;justify-content:center}
-.covpair img{width:44%;border-radius:6px;box-shadow:0 26px 48px -18px rgba(12,16,32,.45)}
-.covpair img:first-child{transform:rotate(-4deg)}.covpair img:last-child{transform:rotate(4deg) translateY(16px)}
-.covpair.land img{width:48%}
-@media(max-width:860px){.split{grid-template-columns:1fr;gap:28px}.covpair{order:-1}.covpair img{width:38%}}
-.facts{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:36px}
-.fact{border:1px solid var(--line);border-radius:var(--r);padding:22px 24px;background:#fff}
-.fact b{font-size:17px;font-weight:800}
-.fact dl{display:grid;grid-template-columns:auto 1fr;gap:8px 18px;margin-top:14px;font-size:14.5px}
-.fact dt{color:var(--mute)}.fact dd{font-weight:600}
-.fact .cta{margin-top:18px}
-@media(max-width:700px){.facts{grid-template-columns:1fr}}
-.tabs{display:flex;gap:8px;margin-top:32px}
-.tab{font-size:14.5px;font-weight:700;padding:10px 16px;border-radius:11px;border:1px solid var(--line2);background:#fff}
+.bk-nav{position:sticky;top:64px;z-index:20;background:rgba(255,255,255,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.bk-nav .wrap{display:flex;gap:26px;overflow-x:auto;scrollbar-width:none}
+.bk-nav .wrap::-webkit-scrollbar{display:none}
+.bk-nav a{flex:none;padding:15px 0;font-size:14.5px;font-weight:700;color:var(--mute);border-bottom:2px solid transparent;transition:color .15s}
+.bk-nav a:hover{color:var(--ink)}
+.bk-nav a.on{color:var(--ink);border-bottom-color:var(--ink)}
+@media(max-width:760px){.bk-nav{top:98px}}
+.bk-sec{padding:72px 0;border-bottom:1px solid var(--line);scroll-margin-top:120px}
+.bk-sec:last-of-type{border-bottom:0}
+.bk-sec h2{font-size:clamp(24px,3vw,32px);font-weight:800;letter-spacing:-.045em}
+.bk-sec h2 .cnt{font-family:var(--mono);font-size:.62em;color:var(--brand);margin-left:6px;vertical-align:middle}
+.bk-sec .sub{font-size:15px;color:var(--sub);margin-top:8px}
+.vols{margin-top:24px;border-top:1px solid var(--line)}
+.vol{display:flex;align-items:center;gap:18px;padding:18px 4px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.vol img{width:48px;border-radius:3px;box-shadow:0 8px 16px -10px rgba(12,16,32,.5)}
+.vol img.land{width:68px}
+.vol .tx{flex:1;min-width:180px}
+.vol b{font-size:17px;font-weight:800;letter-spacing:-.03em}
+.vol .tx span{display:block;font-size:13.5px;color:var(--mute);margin-top:3px}
+.vol .acts{display:flex;gap:8px;flex-wrap:wrap}
+.tocs{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:24px}
+.tocs figure{margin:0}
+.tocs figcaption{font-size:13.5px;font-weight:700;color:var(--mute);margin-bottom:10px}
+.tocs .img{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#fff}
+.tocs .img img{width:100%}
+@media(max-width:700px){.tocs{grid-template-columns:1fr}}
+.tabs{display:flex;gap:8px;margin-top:24px}
+.tab{font-size:14px;font-weight:700;padding:9px 15px;border-radius:10px;border:1px solid var(--line2);background:#fff}
 .tab[aria-selected=true]{background:var(--ink);border-color:var(--ink);color:#fff}
-.tocimg{margin-top:16px;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;background:#fff;max-width:760px}
-.tocimg img{width:100%}
-.pvp{margin-top:18px}
+.pvp{margin-top:16px}
 .pvstrip{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 2px 14px;-webkit-overflow-scrolling:touch}
-.pvstrip img{flex:none;height:440px;width:auto;border:1px solid var(--line);border-radius:8px;background:#fff;scroll-snap-align:start;box-shadow:0 6px 18px -10px rgba(12,16,32,.25)}
-.pvbar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:8px;font-size:13.5px;color:var(--sub)}
+.pvstrip img{flex:none;height:380px;width:auto;border:1px solid var(--line);border-radius:8px;background:#fff;scroll-snap-align:start}
+.pvbar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:8px;font-size:13.5px;color:var(--mute)}
 .pvbar .btn{margin-left:auto}
-.sh h2 .cnt{font-family:var(--mono);font-size:.6em;color:var(--brand);vertical-align:middle;margin-left:4px}
-@media(max-width:600px){.pvstrip img{height:340px}.pvbar .btn{margin-left:0}}
-.alist{display:grid;gap:10px;margin-top:28px;max-width:640px}
-.arow{display:flex;align-items:center;gap:14px;border:1px solid var(--line);border-radius:16px;padding:16px 18px;background:#fff}
-.arow .ic{flex:none;width:40px;height:40px;border-radius:12px;background:var(--soft);color:var(--brand);display:grid;place-items:center}
-.arow .ic svg{width:20px;height:20px}
-.arow b{font-size:15.5px;font-weight:800}.arow span{display:block;font-size:13px;color:var(--mute);margin-top:2px}
-.arow .btn{margin-left:auto}
-.next{display:flex;align-items:center;gap:20px;border:1px solid var(--line);border-radius:var(--r);padding:22px 24px;background:#fff;transition:border-color .15s,transform .2s;max-width:640px;margin-top:28px}
-.next:hover{border-color:var(--brand);transform:translateY(-2px)}
-.next img{width:64px;border-radius:4px;box-shadow:0 10px 20px -10px rgba(12,16,32,.4)}
-.next .k{font-size:12.5px;font-weight:700;color:var(--brand)}
-.next b{display:block;font-size:18px;font-weight:800;margin-top:2px}
+@media(max-width:600px){.pvstrip img{height:300px}.pvbar .btn{margin-left:0}}
+.next{display:flex;align-items:center;gap:18px;border:1px solid var(--line);border-radius:16px;padding:18px 22px;background:#fff;transition:border-color .15s;max-width:560px;margin-top:20px}
+.next:hover{border-color:var(--ink)}
+.next img{width:52px;border-radius:3px;box-shadow:0 8px 16px -10px rgba(12,16,32,.5)}
+.next .k{font-size:12.5px;font-weight:700;color:var(--mute)}
+.next b{display:block;font-size:17px;font-weight:800;margin-top:2px}
 .next span{font-size:13.5px;color:var(--sub)}
-.next .ar{margin-left:auto;font-weight:700;color:var(--brand)}
+.next .ar{margin-left:auto;font-weight:700;color:var(--mute)}
+.b2brow{display:flex;align-items:center;gap:14px;flex-wrap:wrap;border:1px solid var(--line);border-radius:16px;padding:18px 22px;max-width:640px;margin-top:20px}
+.b2brow b{font-size:15.5px}.b2brow span{font-size:14px;color:var(--sub)}.b2brow .ar{margin-left:auto;color:var(--brand);font-weight:700}
 </style>
 </head>
 <body id="top">
@@ -77,54 +89,49 @@
 </div></header>
 <main>
 
-<section class="top"><div class="wrap">
+<section class="bk-hero"><div class="wrap">
   <nav class="crumb rev" aria-label="위치"><a href="/home/">홈</a><span>›</span><a href="/home/#books">교재</a><span>›</span><span>기본</span></nav>
   <div class="split">
-    <div class="rev">
-      <div class="chiprow"><span class="chip k">읽기 5단계</span><span class="chip">초6~중1</span></div>
-      <h1>저절로 기본 <span class="nw">1·2</span></h1>
-      <p class="one">문장 구조가 보이는 독해</p>
-      <div class="cta"><details class="buy"><summary class="btn dark">스마트스토어에서 구매 <span class="ar">▾</span></summary><div class="menu"><a class="store" href="https://smartstore.naver.com/solveu/products/13172197180">저절로 기본 1</a><a class="store" href="https://smartstore.naver.com/solveu/products/13172197181">저절로 기본 2</a><a class="store" href="https://smartstore.naver.com/solveu/products/13172314683">저절로 기본 1·2권 세트</a></div></details><a class="btn line" href="#preview">유닛 미리보기 <span class="ar">↓</span></a></div>
+    <div>
+      <span class="kicker rev">읽기 5단계 · 초6~중1</span>
+      <h1 class="rev">저절로 기본 <span class="nw">1·2</span></h1>
+      <p class="one rev">문장 구조가 보이는 독해</p>
+      <div class="meta rev"><span>1권 8유닛 · 2권 8유닛</span><span>음원·강의 QR</span><span>정답 PDF</span></div>
+      <div class="cta rev"><details class="buy"><summary class="btn dark">스마트스토어에서 구매 <span class="ar">▾</span></summary><div class="menu"><a class="store" href="https://smartstore.naver.com/solveu/products/13172197180">저절로 기본 1</a><a class="store" href="https://smartstore.naver.com/solveu/products/13172197181">저절로 기본 2</a><a class="store" href="https://smartstore.naver.com/solveu/products/13172314683">저절로 기본 1·2권 세트</a></div></details><a class="btn line" href="#preview">유닛 미리보기 <span class="ar">↓</span></a></div>
     </div>
-    <div class="covpair rev"><img src="/assets/covers/rba1.webp" alt="저절로 기본 1 표지"><img src="/assets/covers/rba2.webp" alt="저절로 기본 2 표지"></div>
+    <div class="covs2 rev"><img src="/assets/covers/rba1.webp" alt="저절로 기본 1 표지"><img src="/assets/covers/rba2.webp" alt="저절로 기본 2 표지"></div>
   </div>
 </div></section>
+<nav class="bk-nav" aria-label="이 페이지"><div class="wrap"><a href="#about">구성·자료</a><a href="#toc">목차</a><a href="#preview">미리보기</a><a href="#reviews">후기</a></div></nav>
 
-<section class="sec tight" id="about"><div class="wrap">
-  <div class="sh rev"><h2>구성</h2></div>
-  <div class="facts"><div class="fact rev"><b>저절로 기본 1</b><dl>
-      <dt>대상</dt><dd>초6~중1 (권장)</dd><dt>구성</dt><dd>8개 유닛</dd>
-      <dt>함께 제공</dt><dd>음원·강의 QR, 정답 PDF</dd></dl>
-      <div class="cta"><a class="btn line sm" href="/studio/?book=rba1">이 책 음원·강의 <span class="ar">→</span></a></div></div><div class="fact rev"><b>저절로 기본 2</b><dl>
-      <dt>대상</dt><dd>초6~중1 (권장)</dd><dt>구성</dt><dd>8개 유닛</dd>
-      <dt>함께 제공</dt><dd>음원·강의 QR, 정답 PDF</dd></dl>
-      <div class="cta"><a class="btn line sm" href="/studio/?book=rba2">이 책 음원·강의 <span class="ar">→</span></a></div></div></div>
+<section class="bk-sec" id="about"><div class="wrap">
+  <h2 class="rev">구성·자료</h2><p class="sub rev">권마다 음원·강의와 정답을 바로 열 수 있어요.</p>
+  <div class="vols"><div class="vol rev"><img src="/assets/covers/rba1.webp" alt="저절로 기본 1 표지">
+      <div class="tx"><b>저절로 기본 1</b><span>8개 유닛 · 초6~중1 권장</span></div>
+      <div class="acts"><a class="btn line sm" href="/studio/?book=rba1">이 책 음원·강의 <span class="ar">→</span></a><a class="btn line sm" href="/books/answers/rba1.pdf" target="_blank" rel="noopener">정답 PDF ↗</a></div></div><div class="vol rev"><img src="/assets/covers/rba2.webp" alt="저절로 기본 2 표지">
+      <div class="tx"><b>저절로 기본 2</b><span>8개 유닛 · 초6~중1 권장</span></div>
+      <div class="acts"><a class="btn line sm" href="/studio/?book=rba2">이 책 음원·강의 <span class="ar">→</span></a><a class="btn line sm" href="/books/answers/rba2.pdf" target="_blank" rel="noopener">정답 PDF ↗</a></div></div></div>
+  
 </div></section>
 
-<section class="sec" id="toc"><div class="wrap">
-  <div class="sh rev"><h2>목차</h2><p>책에 실린 목차 그대로예요.</p></div>
-  <div class="tabs rev" role="tablist"><button class="tab" type="button" role="tab" aria-selected="true" data-i="0">1권</button><button class="tab" type="button" role="tab" aria-selected="false" data-i="1">2권</button></div>
-  <div class="rev"><div class="tocimg" data-i="0"><img src="/books/img/toc_rba1.webp" alt="저절로 기본 1 목차"></div><div class="tocimg" hidden data-i="1"><img src="/books/img/toc_rba2.webp" alt="저절로 기본 2 목차" loading="lazy"></div></div>
+<section class="bk-sec" id="toc"><div class="wrap">
+  <h2 class="rev">목차</h2><p class="sub rev">책에 실린 목차 그대로예요.</p>
+  <div class="tocs"><figure class="rev"><figcaption>1권</figcaption><div class="img"><img src="/books/img/toc_rba1.webp" alt="저절로 기본 1 목차" loading="lazy"></div></figure><figure class="rev"><figcaption>2권</figcaption><div class="img"><img src="/books/img/toc_rba2.webp" alt="저절로 기본 2 목차" loading="lazy"></div></figure></div>
 </div></section>
-<section class="sec panel" id="preview"><div class="wrap">
-  <div class="sh rev"><h2>유닛 미리보기 · 레벨 테스트</h2><p>책의 한 유닛을 그대로 담았어요. <br class="pc">수업 전에 미리 풀어 보고 교재를 골라 보세요.</p></div>
+<section class="bk-sec" id="preview"><div class="wrap">
+  <h2 class="rev">유닛 미리보기 · 레벨 테스트</h2><p class="sub rev">책의 한 유닛을 그대로 담았어요. 수업 전에 미리 풀어 보고 교재를 골라 보세요.</p>
   <div class="tabs rev" role="tablist"><button class="tab ptab" type="button" role="tab" aria-selected="true" data-i="0">기본 1</button><button class="tab ptab" type="button" role="tab" aria-selected="false" data-i="1">기본 2</button></div>
-  <div class="rev"><div class="pvp" data-i="0"><div class="pvstrip"><img src="/books/img/pv/rba1_01.webp" alt="저절로 기본 1 샘플 1쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rba1_02.webp" alt="저절로 기본 1 샘플 2쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rba1_03.webp" alt="저절로 기본 1 샘플 3쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rba1_04.webp" alt="저절로 기본 1 샘플 4쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rba1_05.webp" alt="저절로 기본 1 샘플 5쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rba1_06.webp" alt="저절로 기본 1 샘플 6쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rba1_07.webp" alt="저절로 기본 1 샘플 7쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rba1_08.webp" alt="저절로 기본 1 샘플 8쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rba1_09.webp" alt="저절로 기본 1 샘플 9쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rba1_10.webp" alt="저절로 기본 1 샘플 10쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rba1_11.webp" alt="저절로 기본 1 샘플 11쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rba1_12.webp" alt="저절로 기본 1 샘플 12쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rba1_13.webp" alt="저절로 기본 1 샘플 13쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rba1_14.webp" alt="저절로 기본 1 샘플 14쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rba1_15.webp" alt="저절로 기본 1 샘플 15쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rba1_16.webp" alt="저절로 기본 1 샘플 16쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rba1_17.webp" alt="저절로 기본 1 샘플 17쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rba1_18.webp" alt="저절로 기본 1 샘플 18쪽" width="300" height="424" loading="lazy"></div>
-      <div class="pvbar"><span>저절로 기본 1 · 18쪽 · 옆으로 넘겨 보세요</span><a class="btn dark sm" href="/books/samples/rba1.pdf" target="_blank" rel="noopener">샘플 PDF 받기 (출력 가능)</a></div></div><div class="pvp" hidden data-i="1"><div class="pvstrip"><img src="/books/img/pv/rba2_01.webp" alt="저절로 기본 2 샘플 1쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rba2_02.webp" alt="저절로 기본 2 샘플 2쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rba2_03.webp" alt="저절로 기본 2 샘플 3쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rba2_04.webp" alt="저절로 기본 2 샘플 4쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rba2_05.webp" alt="저절로 기본 2 샘플 5쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rba2_06.webp" alt="저절로 기본 2 샘플 6쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rba2_07.webp" alt="저절로 기본 2 샘플 7쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rba2_08.webp" alt="저절로 기본 2 샘플 8쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rba2_09.webp" alt="저절로 기본 2 샘플 9쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rba2_10.webp" alt="저절로 기본 2 샘플 10쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rba2_11.webp" alt="저절로 기본 2 샘플 11쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rba2_12.webp" alt="저절로 기본 2 샘플 12쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rba2_13.webp" alt="저절로 기본 2 샘플 13쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rba2_14.webp" alt="저절로 기본 2 샘플 14쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rba2_15.webp" alt="저절로 기본 2 샘플 15쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rba2_16.webp" alt="저절로 기본 2 샘플 16쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rba2_17.webp" alt="저절로 기본 2 샘플 17쪽" width="300" height="424" loading="lazy"><img src="/books/img/pv/rba2_18.webp" alt="저절로 기본 2 샘플 18쪽" width="300" height="424" loading="lazy"></div>
+  <div class="rev"><div class="pvp" data-i="0"><div class="pvstrip"><img src="/books/img/pv/rba1_01.webp" alt="저절로 기본 1 샘플 1쪽" width="268" height="380" loading="lazy"><img src="/books/img/pv/rba1_02.webp" alt="저절로 기본 1 샘플 2쪽" width="268" height="380" loading="lazy"><img src="/books/img/pv/rba1_03.webp" alt="저절로 기본 1 샘플 3쪽" width="268" height="380" loading="lazy"><img src="/books/img/pv/rba1_04.webp" alt="저절로 기본 1 샘플 4쪽" width="268" height="380" loading="lazy"><img src="/books/img/pv/rba1_05.webp" alt="저절로 기본 1 샘플 5쪽" width="268" height="380" loading="lazy"><img src="/books/img/pv/rba1_06.webp" alt="저절로 기본 1 샘플 6쪽" width="268" height="380" loading="lazy"><img src="/books/img/pv/rba1_07.webp" alt="저절로 기본 1 샘플 7쪽" width="268" height="380" loading="lazy"><img src="/books/img/pv/rba1_08.webp" alt="저절로 기본 1 샘플 8쪽" width="268" height="380" loading="lazy"><img src="/books/img/pv/rba1_09.webp" alt="저절로 기본 1 샘플 9쪽" width="268" height="380" loading="lazy"><img src="/books/img/pv/rba1_10.webp" alt="저절로 기본 1 샘플 10쪽" width="268" height="380" loading="lazy"><img src="/books/img/pv/rba1_11.webp" alt="저절로 기본 1 샘플 11쪽" width="268" height="380" loading="lazy"><img src="/books/img/pv/rba1_12.webp" alt="저절로 기본 1 샘플 12쪽" width="268" height="380" loading="lazy"><img src="/books/img/pv/rba1_13.webp" alt="저절로 기본 1 샘플 13쪽" width="268" height="380" loading="lazy"><img src="/books/img/pv/rba1_14.webp" alt="저절로 기본 1 샘플 14쪽" width="268" height="380" loading="lazy"><img src="/books/img/pv/rba1_15.webp" alt="저절로 기본 1 샘플 15쪽" width="268" height="380" loading="lazy"><img src="/books/img/pv/rba1_16.webp" alt="저절로 기본 1 샘플 16쪽" width="268" height="380" loading="lazy"><img src="/books/img/pv/rba1_17.webp" alt="저절로 기본 1 샘플 17쪽" width="268" height="380" loading="lazy"><img src="/books/img/pv/rba1_18.webp" alt="저절로 기본 1 샘플 18쪽" width="268" height="380" loading="lazy"></div>
+      <div class="pvbar"><span>저절로 기본 1 · 18쪽 · 옆으로 넘겨 보세요</span><a class="btn dark sm" href="/books/samples/rba1.pdf" target="_blank" rel="noopener">샘플 PDF 받기 (출력 가능)</a></div></div><div class="pvp" hidden data-i="1"><div class="pvstrip"><img src="/books/img/pv/rba2_01.webp" alt="저절로 기본 2 샘플 1쪽" width="268" height="380" loading="lazy"><img src="/books/img/pv/rba2_02.webp" alt="저절로 기본 2 샘플 2쪽" width="268" height="380" loading="lazy"><img src="/books/img/pv/rba2_03.webp" alt="저절로 기본 2 샘플 3쪽" width="268" height="380" loading="lazy"><img src="/books/img/pv/rba2_04.webp" alt="저절로 기본 2 샘플 4쪽" width="268" height="380" loading="lazy"><img src="/books/img/pv/rba2_05.webp" alt="저절로 기본 2 샘플 5쪽" width="268" height="380" loading="lazy"><img src="/books/img/pv/rba2_06.webp" alt="저절로 기본 2 샘플 6쪽" width="268" height="380" loading="lazy"><img src="/books/img/pv/rba2_07.webp" alt="저절로 기본 2 샘플 7쪽" width="268" height="380" loading="lazy"><img src="/books/img/pv/rba2_08.webp" alt="저절로 기본 2 샘플 8쪽" width="268" height="380" loading="lazy"><img src="/books/img/pv/rba2_09.webp" alt="저절로 기본 2 샘플 9쪽" width="268" height="380" loading="lazy"><img src="/books/img/pv/rba2_10.webp" alt="저절로 기본 2 샘플 10쪽" width="268" height="380" loading="lazy"><img src="/books/img/pv/rba2_11.webp" alt="저절로 기본 2 샘플 11쪽" width="268" height="380" loading="lazy"><img src="/books/img/pv/rba2_12.webp" alt="저절로 기본 2 샘플 12쪽" width="268" height="380" loading="lazy"><img src="/books/img/pv/rba2_13.webp" alt="저절로 기본 2 샘플 13쪽" width="268" height="380" loading="lazy"><img src="/books/img/pv/rba2_14.webp" alt="저절로 기본 2 샘플 14쪽" width="268" height="380" loading="lazy"><img src="/books/img/pv/rba2_15.webp" alt="저절로 기본 2 샘플 15쪽" width="268" height="380" loading="lazy"><img src="/books/img/pv/rba2_16.webp" alt="저절로 기본 2 샘플 16쪽" width="268" height="380" loading="lazy"><img src="/books/img/pv/rba2_17.webp" alt="저절로 기본 2 샘플 17쪽" width="268" height="380" loading="lazy"><img src="/books/img/pv/rba2_18.webp" alt="저절로 기본 2 샘플 18쪽" width="268" height="380" loading="lazy"></div>
       <div class="pvbar"><span>저절로 기본 2 · 18쪽 · 옆으로 넘겨 보세요</span><a class="btn dark sm" href="/books/samples/rba2.pdf" target="_blank" rel="noopener">샘플 PDF 받기 (출력 가능)</a></div></div></div>
 </div></section>
-<section class="sec tight" id="answers"><div class="wrap">
-  <div class="sh rev"><h2>정답 PDF</h2><p>누구나 무료로 받을 수 있어요.</p></div>
-  <div class="alist"><div class="arow rev"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 14l2 2 4-4"/></svg></div><div><b>저절로 기본 1 정답</b><span>PDF · 누구나 무료</span></div><a class="btn line sm" href="/books/answers/rba1.pdf" target="_blank" rel="noopener">받기</a></div><div class="arow rev"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 14l2 2 4-4"/></svg></div><div><b>저절로 기본 2 정답</b><span>PDF · 누구나 무료</span></div><a class="btn line sm" href="/books/answers/rba2.pdf" target="_blank" rel="noopener">받기</a></div></div>
-</div></section>
-<section class="sec tight" id="reviews"><div class="wrap">
-  <div class="sh rev"><h2><span class="nw">이 교재 후기&nbsp;<span class="cnt">3</span></span></h2><p>스마트스토어 실제 구매 후기예요.</p></div>
+<section class="bk-sec" id="reviews"><div class="wrap">
+  <h2 class="rev">이 교재 후기<span class="cnt">3</span></h2><p class="sub rev">스마트스토어 실제 구매 후기예요.</p>
   <div class="rvg" id="rvg"></div>
   <div class="more"><button class="btn line sm" id="moreBtn" type="button">후기 더 보기</button></div>
 </div></section>
-<section class="sec tight"><div class="wrap"><div class="sh rev"><h2>다음 단계</h2></div>
-  <a class="next rev" href="/books/mock/"><img src="/assets/covers/rmo1.webp" alt=""><div><div class="k">6단계 · 중2~중3</div><b>첫모의고사 1·2</b><span>고등 모의고사 첫걸음</span></div><span class="ar">→</span></a></div></section>
-
+<section class="bk-sec"><div class="wrap"><h2 class="rev">다음 단계</h2>
+  <a class="next rev" href="/books/mock/"><img src="/assets/covers/rmo1.webp" alt=""><div><div class="k">6단계 · 중2~중3</div><b>저절로 첫모의고사 1·2</b><span>고등 모의고사 첫걸음</span></div><span class="ar">→</span></a></div></section>
 
 </main>
 <footer><div class="wrap">
@@ -133,15 +140,18 @@
   <nav><a href="/home/#books">교재</a><a href="/studio/">음원·강의</a><a href="/library/">자료실</a><a href="/contact/">문의</a><a href="/report/">오류 신고</a><a class="store">스마트스토어</a><a class="talk">톡톡</a><a href="/privacy/">개인정보처리방침</a></nav>
   <span class="biz"></span>
 </div></footer>
-<script src="/assets/reviews.js?v=635c4ed4"></script>
-<script src="/assets/site.js?v=635c4ed4"></script>
+<script src="/assets/reviews.js?v=904ac9da"></script>
+<script src="/assets/site.js?v=904ac9da"></script>
 <script>
 S=SOLVEU;
 function tabs(tabSel,panSel){S.$$(tabSel).forEach(function(t){t.onclick=function(){var i=t.dataset.i;S.$$(tabSel).forEach(function(x){x.setAttribute("aria-selected",x===t?"true":"false")});S.$$(panSel).forEach(function(d){d.hidden=d.dataset.i!==i;});};});}
-tabs("#toc .tab",".tocimg"); tabs("#preview .ptab",".pvp");
+tabs("#preview .ptab",".pvp");
 var RV=S.REVIEWS.filter(function(v){return v.step==="basic";}), shown=6;
 function drawRv(){var el=S.$("#rvg"); if(!el) return; S.renderReviews(el, RV.slice(0,shown)); var m=S.$("#moreBtn"); m.hidden=RV.length<=shown; m.textContent="후기 더 보기 ("+(RV.length-shown)+"개 더)";}
 var mb=S.$("#moreBtn"); if(mb) mb.onclick=function(){shown+=6;drawRv();}; drawRv();
+/* 이 페이지 메뉴: 지금 보고 있는 구역 표시 */
+if("IntersectionObserver" in window){var L=S.$$(".bk-nav a"),io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting)L.forEach(function(a){a.classList.toggle("on",a.getAttribute("href")==="#"+e.target.id);});});},{rootMargin:"-45% 0px -50% 0px"});
+  L.forEach(function(a){var t=S.$(a.getAttribute("href"));if(t)io.observe(t);});}
 </script>
 </body>
 </html>
