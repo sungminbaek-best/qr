@@ -75,6 +75,9 @@ window.SOLVEU = {
     $$(".store").forEach(function (a) { if (!a.getAttribute("href")) a.href = S.STORE; ext(a); });
     $$(".biz").forEach(function (e) { e.textContent = S.BIZ; });
     var nav = $("#nav"); if (nav) addEventListener("scroll", function () { nav.classList.toggle("scrolled", scrollY > 8); }, { passive: true });
+    /* 홈에서는 교재 구역이 화면에 있을 때 메뉴 '교재'를 파랗게 */
+    var bk = location.pathname.indexOf("/home") === 0 && $("#books"), bl = $('.nav nav a[href="/home/#books"]');
+    if (bk && bl && "IntersectionObserver" in window) new IntersectionObserver(function (es) { if (es[0].isIntersecting) bl.setAttribute("aria-current", "page"); else bl.removeAttribute("aria-current"); }, { rootMargin: "-40% 0px -40% 0px" }).observe(bk);
     /* 첫 화면 아래에 있는 요소만 숨겼다가 보일 때 올라오게 (첫 화면·IO 미지원·숨은 탭에선 항상 보임) */
     if (!("IntersectionObserver" in window) || matchMedia("(prefers-reduced-motion: reduce)").matches || document.visibilityState === "hidden") return;
     var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }); }, { rootMargin: "0px 0px -6% 0px" });
