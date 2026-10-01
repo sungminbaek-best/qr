@@ -15,7 +15,7 @@ const TYPES_R = [
 ];
 const TNAME = Object.fromEntries(TYPES_R.map(t=>[t[0],t[1]]));
 // 유형별 단 수(C&S 워크북처럼 짧은 것은 여러 단, 문장은 1단, 어순배열은 2단)
-const COLS = {w_mean:2, w_spell:2, s_trans:1, s_order:2};
+const COLS = {w_mean:2, w_spell:2, s_trans:1, s_order:1};   // 문장은 1단(손글씨 쓸 폭)
 
 let CUR=null, TAB="Q";
 // 꼬리말 왼쪽: 홈페이지와 같은 글자 로고(쏠뷰 | SolveU, U만 파랑)
@@ -169,6 +169,20 @@ function scramble(e, rnd, pn){
 }
 
 /* ===== 미리보기 · 쪽 나누기 ===== */
+function unitBig(us){   // 머리말 큰 숫자: 04 · 02–03 · 2, 5
+  const s=us.slice().sort((a,b)=>a-b), p=n=>String(n).padStart(2,"0");
+  const run=s.every((v,i)=>i===0||v===s[i-1]+1);
+  return s.length===1 ? p(s[0]) : run ? p(s[0])+"–"+p(s[s.length-1]) : s.join(", ");
+}
+// 쓰는 줄 수: 정답을 손글씨로 쓸 때의 길이(인쇄 14px 기준 우리말 1.7배·영어 1.5배)를 줄 폭으로 나눔, 1~3줄
+let MCTX=null;
+function nLines(text, ko){
+  MCTX=MCTX||document.createElement("canvas").getContext("2d");
+  MCTX.font = ko ? "500 14px 'Wanted Sans', Pretendard, sans-serif" : "600 14px 'Wanted Sans', sans-serif";
+  const mx={narrow:28, wide:58}[load().margin]||42;                // 쪽 좌우 여백(pt)
+  const linePx=(595-2*mx-19)*96/72;                                   // 쓰는 줄 폭(px)
+  return Math.max(1, Math.min(3, Math.ceil(MCTX.measureText(text).width*(ko?1.7:1.5)/linePx)));
+}
 function unitLabel(us){
   const s=us.slice().sort((a,b)=>a-b);
   const run=s.every((v,i)=>i===0||v===s[i-1]+1);
@@ -187,12 +201,12 @@ function render(){
   const ans=TAB==="A", acad=$("acad").value.trim(), host=$("preview");
   host.innerHTML="";
   CUR.sets.forEach((set,si)=>{
-    const title=`<span class="bk">${esc(CUR.book.name)} · ${unitLabel(CUR.units)}</span><span class="tk">${TNAME[set.t]}</span>${ans?`<span class="tag">정답</span>`:""}`;
+    const title=`<span class="bk">${esc(CUR.book.name)}</span><span class="tk">${TNAME[set.t]}</span>${ans?`<span class="tag">정답</span>`:""}`;
     const cols=COLS[set.t], pages=[];
     const newPage=()=>{
       const pg=document.createElement("div");
       pg.className="pg"+(ans?" ans":"");
-      pg.innerHTML=`<div class="hd"><span class="bd">${String(si+1).padStart(2,"0")}</span><span class="tt">${title}</span>${acad?`<span class="ac">${esc(acad)}</span>`:""}</div>
+      pg.innerHTML=`<div class="hd"><span class="bd"><small>UNIT</small>${unitBig(CUR.units)}</span><span class="tt">${title}</span>${acad?`<span class="ac">${esc(acad)}</span>`:""}</div>
         ${NOTE[set.t]&&!ans&&!pages.length?`<div class="note">${NOTE[set.t]}</div>`:""}
         <div class="bodyc c${cols}">${"<div class='col'></div>".repeat(cols)}</div><div class="ft">${LOGO}<span class="pn">1</span></div>`;   // 쪽번호 자리를 미리 차지(채우는 동안과 높이 같게)
       host.appendChild(pg); pages.push(pg); return pg;
@@ -225,11 +239,13 @@ function balance(pg){
 }
 function itemHTML(t,it,n,ans){
   const N=`<span class="n">${n}</span>`;
-  const line=a=>`<div class="ln">${ans?`<span class="a">${esc(a)}</span>`:""}</div>`;
+  const line=(a,k)=>ans ? `<div class="ln">${`<span class="a">${esc(a)}</span>`}</div>` : `<div class="ln"></div>`.repeat(k||1);
   switch(t){
     case "s_order":
-      return `<div class="row">${N}<span class="q">${esc(it.q)}</span></div><div class="mix">${esc(it.mix)}</div>${line(it.a)}`;
-    default:   // w_mean · w_spell · s_trans
+      return `<div class="row">${N}<span class="q">${esc(it.q)}</span></div><div class="mix">${esc(it.mix)}</div>${line(it.a, nLines(it.a,false))}`;
+    case "s_trans":
+      return `<div class="row">${N}<span class="q">${esc(it.q)}</span></div>${line(it.a, nLines(it.a,true))}`;
+    default:   // w_mean · w_spell
       return `<div class="row">${N}<span class="q">${esc(it.q)}</span></div>${line(it.a)}`;
   }
 }
