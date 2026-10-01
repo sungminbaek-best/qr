@@ -78,7 +78,7 @@ window.SOLVEU = {
     if (!("IntersectionObserver" in window) || matchMedia("(prefers-reduced-motion: reduce)").matches || document.visibilityState === "hidden") return;
     var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }); }, { rootMargin: "0px 0px -6% 0px" });
     $$(".rev").forEach(function (el) { if (el.getBoundingClientRect().top > innerHeight) { el.classList.add("pre"); io.observe(el); } });
-    /* 안전장치: 어떤 이유로든 3초 뒤엔 모두 표시 */
-    setTimeout(function () { $$(".rev.pre").forEach(function (el) { el.classList.add("in"); }); }, 3000);
+    /* 인쇄할 땐 모두 표시 */
+    addEventListener("beforeprint", function () { $$(".rev.pre").forEach(function (el) { el.classList.add("in"); }); });
   });
 })();
