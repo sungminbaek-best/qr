@@ -98,7 +98,7 @@ var LINKS = {
 
   // ── 표지 (책 전체 공용) ──
   "gw3yt":    "",   // [앞표지] 유튜브 무료 직강 (전 유닛)
-  "gw3extra": "",   // [뒷표지] 부가 자료
+  "gw3extra": "/library/",   // [뒷표지] 부가 자료
   "gw3guide": "",   // [뒷표지] 교재 활용법
   "gw3buy":   "https://smartstore.naver.com/solveu",   // [뒷표지] 구매 링크
 
@@ -145,13 +145,16 @@ var LINKS = {
   "gw3u14w": "/audio/gw3/u14.html",   // 단어 음원
   "gw3u14v": "",    // 유튜브 강의
 
+  // ══ 인서트 카드 (A6, 책과 함께 동봉 · 교재 안에는 없음) ══
+  "card": "/library/join/?from=insert&next=/library/%23teacher",   // 선생님 가입 → 자료실 (카드에서 온 것으로 기록)
+
   // ══ 새 인쇄용 코드 (2026-10-01) ══  새로 찍는 QR = solveu.co.kr/q/코드/
   //   코드 = 책 + 유닛 + 종류 :  w 단어음원 · s 문장음원 · v 강의 · k 기호표시강의 · i 불규칙동사음원 · o 앞부분 개념영상
   //   책 공통 : yt 강의전체 · extra 부가자료 · guide 교재활용법 · buy 구매 · cafe 저자카페
   //   지금 목적지는 기존 네이버 QR이 가던 곳 그대로. 네이버 QR도 나중에 같은 코드로 돌리면 됨(네이버QR_이전작업표 '새 코드' 칸).
   // ── 파닉스 1권 (ph1) ──
   "ph1cafe": "https://cafe.naver.com/strongeacademy",   // 저자카페 · 본교재 p126
-  "ph1extra": "https://southern-winter-c87.notion.site/1-2-8b02a1e094c745cf80a590f34d4db521",   // 부가자료 · 표지
+  "ph1extra": "/library/",   // 부가자료 · 표지
   "ph1u01v": "https://www.youtube.com/shorts/hW07gCxsk5I?feature=share",   // U01_강의 · 본교재 p9, 교사용정답지 p9
   "ph1u02v": "https://www.youtube.com/watch?v=KxeNbd4WhH8&feature=youtu.be",   // U02_강의 · 본교재 p23, 교사용정답지 p23
   "ph1u03v": "https://www.youtube.com/watch?v=FXrSGBuNNs4&feature=youtu.be",   // U03_강의 · 본교재 p35, 교사용정답지 p35
@@ -161,7 +164,7 @@ var LINKS = {
   "ph1u07v": "https://www.youtube.com/watch?v=421KP5yl6Jk&feature=youtu.be",   // U07_강의 · 본교재 p89, 교사용정답지 p89
   // ── 파닉스 2권 (ph2) ──
   "ph2cafe": "https://cafe.naver.com/strongeacademy",   // 저자카페 · 본교재 p126
-  "ph2extra": "https://southern-winter-c87.notion.site/1-2-8b02a1e094c745cf80a590f34d4db521",   // 부가자료 · 표지
+  "ph2extra": "/library/",   // 부가자료 · 표지
   "ph2u01v": "https://www.youtube.com/watch?v=4H7bzKaWtfY&feature=youtu.be",   // U01_강의 · 본교재 p7, 교사용정답지 p7
   "ph2u02v": "https://www.youtube.com/watch?v=k0LxQVoVENY&feature=youtu.be",   // U02_강의 · 본교재 p21, 교사용정답지 p21
   "ph2u03v": "https://www.youtube.com/watch?v=lW-TdPJqy3E&feature=youtu.be",   // U03_강의 · 본교재 p35, 교사용정답지 p35
@@ -170,7 +173,7 @@ var LINKS = {
   "ph2u06v": "https://www.youtube.com/watch?v=m6jTs1ySFAc&feature=youtu.be",   // U06_강의 · 본교재 p75, 교사용정답지 p75
   // ── 리딩 스타터 1권 (rst1) ──
   "rst1cafe": "https://cafe.naver.com/strongeacademy",   // 저자카페 · 본교재 p112
-  "rst1extra": "https://app.notion.com/p/15a3cdde2d7e80ddb3e0efd45c6f9fac?pvs=4",   // 부가자료 · 표지
+  "rst1extra": "/library/",   // 부가자료 · 표지
   "rst1u01s": "https://southern-winter-c87.notion.site/1-22f3cdde2d7e806f9c81ec38c3cbb2a0",   // U01_문장음원 · 본교재 p9
   "rst1u01w": "https://southern-winter-c87.notion.site/1-2f33cdde2d7e80f28b92f687aa50f021",   // U01_단어음원 · 본교재 p7
   "rst1u02s": "https://southern-winter-c87.notion.site/1-22f3cdde2d7e806f9c81ec38c3cbb2a0",   // U02_문장음원 · 본교재 p19
@@ -191,7 +194,7 @@ var LINKS = {
   "rst1u09w": "https://southern-winter-c87.notion.site/1-2f33cdde2d7e80f28b92f687aa50f021",   // U09_단어음원 · 본교재 p87
   // ── 리딩 스타터 2권 (rst2) ──
   "rst2cafe": "https://cafe.naver.com/strongeacademy",   // 저자카페 · 본교재 p112
-  "rst2extra": "https://app.notion.com/p/15a3cdde2d7e80ddb3e0efd45c6f9fac?pvs=4",   // 부가자료 · 표지
+  "rst2extra": "/library/",   // 부가자료 · 표지
   "rst2u01s": "https://southern-winter-c87.notion.site/2-22f3cdde2d7e80759525e41c858107fb",   // U01_문장음원 · 본교재 p9
   "rst2u01w": "https://southern-winter-c87.notion.site/2-2f33cdde2d7e8009b506c737073a28f2?pvs=74",   // U01_단어음원 · 본교재 p7
   "rst2u02s": "https://southern-winter-c87.notion.site/2-22f3cdde2d7e80759525e41c858107fb",   // U02_문장음원 · 본교재 p19
@@ -212,7 +215,7 @@ var LINKS = {
   "rst2u09w": "/studio/?c=rst2u09w",   // U09_단어음원 · 본교재 p87
   // ── 리딩 브릿지 1권 (rbr1) ──
   "rbr1cafe": "https://cafe.naver.com/strongeacademy",   // 저자카페 · 표지, 본교재 p144
-  "rbr1extra": "https://app.notion.com/p/15a3cdde2d7e80ddb3e0efd45c6f9fac?pvs=4",   // 부가자료 · 표지
+  "rbr1extra": "/library/",   // 부가자료 · 표지
   "rbr1o01": "https://www.youtube.com/shorts/YIY1oD-BwKU?feature=share",   // 개념영상01 · 본교재 p7, 부가자료 p1
   "rbr1o02": "https://www.youtube.com/shorts/8mIppwwbyz0?feature=share",   // 개념영상02 · 본교재 p8, 부가자료 p2
   "rbr1o03": "https://www.youtube.com/shorts/DVZ65BJV3bk?feature=share",   // 개념영상03 · 본교재 p11, 부가자료 p5
@@ -240,7 +243,7 @@ var LINKS = {
   "rbr1u08w": "https://southern-winter-c87.notion.site/1-23f3cdde2d7e80e4b0eee640e5bbedf2?pvs=74",   // U08_단어음원 · 본교재 p123
   // ── 리딩 브릿지 2권 (rbr2) ──
   "rbr2cafe": "https://cafe.naver.com/strongeacademy",   // 저자카페 · 표지, 본교재 p168
-  "rbr2extra": "https://app.notion.com/p/15a3cdde2d7e80ddb3e0efd45c6f9fac?pvs=4",   // 부가자료 · 표지
+  "rbr2extra": "/library/",   // 부가자료 · 표지
   "rbr2i01": "https://southern-winter-c87.notion.site/2-2e03cdde2d7e80c9ae0bcd9d54ef51b5?source=copy_link",   // 불규칙동사표1_음원 · 본교재 p24
   "rbr2i02": "https://southern-winter-c87.notion.site/2-2e03cdde2d7e80aea835ea876bd46efd?source=copy_link",   // 불규칙동사표2_음원 · 본교재 p30
   "rbr2i03": "https://southern-winter-c87.notion.site/2-2e03cdde2d7e80a59653fcfe74c3778b?source=copy_link",   // 불규칙동사표3_음원 · 본교재 p36
@@ -277,7 +280,7 @@ var LINKS = {
   "rbr2u08w": "https://southern-winter-c87.notion.site/2-2e03cdde2d7e80a2a703f998d713ac8e?source=copy_link",   // U08_단어음원 · 본교재 p145
   // ── 리딩 입문 1권 (rin1) ──
   "rin1cafe": "https://cafe.naver.com/strongeacademy",   // 저자카페 · 표지, 본교재 p158
-  "rin1extra": "https://app.notion.com/p/15a3cdde2d7e80ddb3e0efd45c6f9fac?pvs=4",   // 부가자료 · 표지
+  "rin1extra": "/library/",   // 부가자료 · 표지
   "rin1u01s": "/studio/?c=rin1u01s",   // U01_문장음원 · 본교재 p10
   "rin1u01w": "/studio/?c=rin1u01w",   // U01_단어음원 · 본교재 p6
   "rin1u02s": "/studio/?c=rin1u02s",   // U02_문장음원 · 본교재 p28
@@ -296,7 +299,7 @@ var LINKS = {
   "rin1u08w": "/studio/?c=rin1u08w",   // U08_단어음원 · 본교재 p132
   // ── 리딩 입문 2권 (rin2) ──
   "rin2cafe": "https://cafe.naver.com/strongeacademy",   // 저자카페 · 표지, 본교재 p160
-  "rin2extra": "https://app.notion.com/p/15a3cdde2d7e80ddb3e0efd45c6f9fac?pvs=4",   // 부가자료 · 표지
+  "rin2extra": "/library/",   // 부가자료 · 표지
   "rin2u01s": "https://southern-winter-c87.notion.site/2-1ec3cdde2d7e8059a67fde48fa8a7c9a?pvs=4",   // U01_문장음원 · 본교재 p8, 본교재 p10
   "rin2u01w": "https://app.notion.com/p/2-1ec3cdde2d7e808ca437c3f7947ebceb?pvs=4",   // U01_단어음원 · 본교재 p6
   "rin2u02s": "https://southern-winter-c87.notion.site/2-1ec3cdde2d7e8059a67fde48fa8a7c9a?pvs=4",   // U02_문장음원 · 본교재 p26, 본교재 p28
@@ -315,7 +318,7 @@ var LINKS = {
   "rin2u08w": "https://app.notion.com/p/2-1ec3cdde2d7e808ca437c3f7947ebceb?pvs=4",   // U08_단어음원 · 본교재 p132
   // ── 리딩 기본 1권 (rba1) ──
   "rba1cafe": "https://cafe.naver.com/strongeacademy",   // 저자카페 · 표지, 본교재 p166
-  "rba1extra": "https://app.notion.com/p/15a3cdde2d7e80ddb3e0efd45c6f9fac?pvs=4",   // 부가자료 · 표지
+  "rba1extra": "/library/",   // 부가자료 · 표지
   "rba1u01k": "https://southern-winter-c87.notion.site/1-2233cdde2d7e80a19b1ffab6d4386ec0",   // U01_기호표시강의 · 본교재 p12
   "rba1u01s": "https://southern-winter-c87.notion.site/1-21d3cdde2d7e808b89ead5d5e9869572",   // U01_문장음원 · 본교재 p8, 본교재 p10
   "rba1u01w": "https://southern-winter-c87.notion.site/1-21d3cdde2d7e8050a87dc36f38ded5d8",   // U01_단어음원 · 본교재 p6
@@ -342,7 +345,7 @@ var LINKS = {
   "rba1u08w": "https://southern-winter-c87.notion.site/1-21d3cdde2d7e8050a87dc36f38ded5d8",   // U08_단어음원 · 본교재 p132
   // ── 리딩 기본 2권 (rba2) ──
   "rba2cafe": "https://cafe.naver.com/strongeacademy",   // 저자카페 · 표지, 본교재 p164, 본교재 p180, 정답지 p16
-  "rba2extra": "https://app.notion.com/p/15a3cdde2d7e80ddb3e0efd45c6f9fac?pvs=4",   // 부가자료 · 표지
+  "rba2extra": "/library/",   // 부가자료 · 표지
   "rba2u01k": "https://www.youtube.com/watch?v=_o_S6IdxwBk",   // U01_기호표시강의 · 본교재 p14
   "rba2u01s": "https://southern-winter-c87.notion.site/2-2a33cdde2d7e808b890bd8be6b8b660b",   // U01_문장음원 · 본교재 p8, 본교재 p10
   "rba2u01v": "https://www.youtube.com/watch?v=rF1pV6Tu9Wg&feature=youtu.be",   // U01_강의 · 본교재 p12
@@ -378,7 +381,7 @@ var LINKS = {
   // ── 리딩 첫모의고사 1권 (rmo1) ──
   "rmo1buy": "https://smartstore.naver.com/solveu",   // 구매 · 표지
   "rmo1cafe": "https://cafe.naver.com/strongeacademy",   // 저자카페 · 본교재 p162, 정답지 p52
-  "rmo1extra": "https://southern-winter-c87.notion.site/2df3cdde2d7e80d9ad16d1fdde7d0d13",   // 부가자료 · 표지
+  "rmo1extra": "/library/",   // 부가자료 · 표지
   "rmo1o01": "https://www.youtube.com/watch?v=hd7OMJiJHX8",   // 개념영상01 · 본교재 p6
   "rmo1o02": "https://www.youtube.com/shorts/82BPQ6vX3DI?feature=share",   // 개념영상02 · 본교재 p8
   "rmo1o03": "https://www.youtube.com/shorts/5a40Dgqbjks?feature=share",   // 개념영상03 · 본교재 p10
@@ -402,7 +405,7 @@ var LINKS = {
   // ── 리딩 첫모의고사 2권 (rmo2) ──
   "rmo2buy": "https://smartstore.naver.com/solveu",   // 구매 · 표지
   "rmo2cafe": "https://cafe.naver.com/strongeacademy",   // 저자카페 · 본교재 p104, 본교재 p156, 정답지 p52
-  "rmo2extra": "https://southern-winter-c87.notion.site/2df3cdde2d7e80d9ad16d1fdde7d0d13",   // 부가자료 · 표지
+  "rmo2extra": "/library/",   // 부가자료 · 표지
   "rmo2o01": "https://www.youtube.com/watch?v=hd7OMJiJHX8",   // 개념영상01 · 본교재 p6
   "rmo2u01v": "https://www.youtube.com/watch?v=2AVNqP-o4NM&feature=youtu.be",   // U01_강의 · 본교재 p10
   "rmo2u02v": "https://www.youtube.com/watch?v=YKsRcEOHXYg&feature=youtu.be",   // U02_강의 · 본교재 p16
@@ -424,7 +427,7 @@ var LINKS = {
   // ── 저그랑 1권 (gw1) ──
   "gw1buy": "https://smartstore.naver.com/solveu",   // 구매 · 표지
   "gw1cafe": "https://cafe.naver.com/strongeacademy",   // 저자카페 · 본교재 p176, 본교재 p206, 정답지 p30, 교사용정답지 p148
-  "gw1extra": "https://southern-winter-c87.notion.site/1-3a93cdde2d7e8032826dd3d925ed4278?source=copy_link",   // 부가자료 · 표지
+  "gw1extra": "/library/",   // 부가자료 · 표지
   "gw1guide": "https://southern-winter-c87.notion.site/3a93cdde2d7e803c9d0ef6e9e557aa41?source=copy_link",   // 교재활용법 · 표지
   "gw1u01v": "https://www.youtube.com/watch?v=074UTd86vaQ",   // U01_강의 · 본교재 p11, 교사용정답지 p11
   "gw1u01w": "https://southern-winter-c87.notion.site/1-01-3a63cdde2d7e80f18ae7f7a43845f4cc",   // U01_단어음원 · 본교재 p7, 교사용정답지 p7
