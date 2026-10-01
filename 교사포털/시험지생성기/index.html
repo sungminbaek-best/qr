@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>저절로 워크북 만들기</title>
 <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200..700&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg:#f5f6f8; --card:#fff; --ink:#1f2430; --sub:#5f6775; --muted:#9aa1ad; --line:#e3e6eb;
@@ -62,31 +63,45 @@
   .preview{background:#e3e6eb; border-radius:14px; padding:20px; overflow:auto; min-height:400px}
   .empty{text-align:center; color:var(--muted); padding:120px 20px; font-size:15px}
 
-  /* ===== 워크북 쪽 (C&S 규격: A4, 좌우 42pt) ===== */
+  /* ===== 워크북 쪽 (A4 · 미니멀: 얇은 선, 영어 Inter, 유형 이름만 굵은 남색) ===== */
   .preview .pg{zoom:var(--z,1)}                          /* 미리보기 칸 너비에 맞춰 축소(인쇄는 원래 크기) */
-  .pg{width:210mm; height:297mm; margin:0 auto 18px; background:#fff; box-shadow:0 1px 8px rgba(0,0,0,.12);
-    padding:28pt 42pt 26pt; display:flex; flex-direction:column;
-    font-family:"Malgun Gothic","맑은 고딕","Pretendard",sans-serif; color:#1a1a1a}
-  .hd{display:flex; align-items:center; gap:9pt; padding-bottom:9pt; border-bottom:1pt solid var(--navy)}
-  .bd{flex:none; width:20pt; height:20pt; border-radius:6.4pt; background:var(--navy); color:#fff; font-size:11pt; font-weight:700;
-    display:flex; align-items:center; justify-content:center}
-  .tt{font-size:12.5pt; font-weight:700; white-space:pre; overflow:hidden; text-overflow:ellipsis}
-  .ac{margin-left:auto; font-size:9pt; color:#8a8f98; white-space:nowrap}
-  .note{font-size:9pt; font-weight:700; color:var(--navy); margin-top:8pt}
-  .bodyc{flex:1; min-height:0; display:flex; gap:18pt; margin-top:10pt}
+  .pg{--mx:42pt; --mt:28pt; --mb:24pt;
+    width:210mm; height:297mm; margin:0 auto 18px; background:#fff; box-shadow:0 1px 8px rgba(0,0,0,.12);
+    padding:var(--mt) var(--mx) var(--mb); display:flex; flex-direction:column;
+    font-family:"Pretendard","Malgun Gothic",sans-serif; color:#1a1a1a}
+  .m-narrow .pg{--mx:28pt; --mt:22pt; --mb:18pt}         /* 여백: 좁게 */
+  .m-wide .pg{--mx:58pt; --mt:36pt; --mb:30pt}           /* 여백: 넓게 */
+  .hd{display:flex; align-items:center; gap:10pt; padding-bottom:8pt; border-bottom:.6pt solid #1a1a1a}
+  .bd{flex:none; font-family:"Inter",sans-serif; font-weight:200; font-size:20pt; letter-spacing:-1pt; color:var(--navy);
+    line-height:1; padding-right:10pt; border-right:.6pt solid #c8ccd2}
+  .tt{display:flex; align-items:baseline; gap:7pt; min-width:0; white-space:nowrap; overflow:hidden}
+  .tt .bk{font-size:10pt; font-weight:400; color:#8a9099; letter-spacing:-.1pt}
+  .tt .tk{font-size:13pt; font-weight:800; color:var(--navy); letter-spacing:-.4pt}
+  .tt .tag{font-size:9pt; font-weight:700; color:var(--orange)}
+  .ac{margin-left:auto; font-size:8.5pt; color:#a0a5ad; white-space:nowrap}
+  .note{font-size:8.8pt; font-weight:500; color:#666; margin-top:8pt}
+  .bodyc{flex:1; min-height:0; display:flex; gap:30pt; margin-top:10pt}
   .col{flex:1; min-width:0; overflow:hidden; padding-bottom:6pt}
-  .bodyc.c2 .col + .col, .bodyc.c3 .col + .col{border-left:0.6pt solid #e6e8ec; padding-left:12pt}
-  .ft{border-top:1pt solid var(--navy); padding-top:5pt; text-align:center; font-size:8.5pt; color:#777}
+  .ft{display:flex; align-items:center; justify-content:center; position:relative; padding-top:6pt; font-family:"Inter",sans-serif; font-size:8pt; color:#b0b4ba}
+  .ft .lg{position:absolute; left:0; display:flex; align-items:center; gap:4pt; color:#0C1020; opacity:.55}
+  .ft .lg .ko{font-family:"Pretendard",sans-serif; font-weight:800; font-size:8pt; letter-spacing:-.2pt}
+  .ft .lg .dv{width:.5pt; height:7pt; background:#9aa1ad}
+  .ft .lg .en{font-family:"Space Grotesk",sans-serif; font-weight:700; font-size:7.6pt}
+  .ft .lg .g{color:#4361FF}
   .it{break-inside:avoid; padding-top:8pt}
   .row{display:flex; gap:6pt; align-items:baseline}
-  .n{flex:none; min-width:13pt; font-size:9pt; font-weight:700; color:var(--orange)}
-  .pg.ans .n{color:var(--navy)}
-  .q{font-size:10.2pt; font-weight:700; word-break:keep-all}
-  .ln{height:20pt; border-bottom:0.6pt solid #cfd3d9; margin-left:19pt; display:flex; align-items:flex-end; gap:8pt; padding-bottom:2pt}
-  .ln .a{font-size:10pt; font-weight:700; color:var(--orange); line-height:1.35}
+  .n{flex:none; min-width:13pt; font-family:"Inter",sans-serif; font-size:8.5pt; font-weight:500; color:#b3b8bf}
+  .q{font-size:10.4pt; font-weight:500; word-break:keep-all}
+  .it.w_mean .q, .it.s_trans .q{font-family:"Inter","Pretendard",sans-serif; font-weight:600; font-size:11pt; letter-spacing:-.2pt}
+  .ln{height:20pt; border-bottom:.5pt solid #dcdfe4; margin-left:19pt; display:flex; align-items:flex-end; gap:8pt; padding-bottom:2pt}
+  .ln .a{font-size:10pt; font-weight:600; color:var(--orange); line-height:1.35}
   .pg.ans .ln{height:auto; min-height:20pt}            /* 정답이 길면 줄이 늘어남(위 글자와 안 겹치게) */
   .s_trans .ln, .s_order .ln{height:22pt}
-  .mix{margin:3pt 0 0 19pt; font-size:8.6pt; color:#8a8f98; word-break:keep-all}
+  .mix{margin:3pt 0 0 19pt; font-family:"Inter",sans-serif; font-size:8.8pt; color:#9aa0a8; word-break:keep-all}
+
+  .marg{display:flex; gap:6px}
+  .marg button{flex:1; height:36px; border:1.5px solid #d5d9e0; border-radius:8px; background:#fff; font-family:inherit; font-size:14px; cursor:pointer; color:var(--ink)}
+  .marg button.on{background:var(--navy); border-color:var(--navy); color:#fff; font-weight:700}
 
   @media print{
     @page{size:A4; margin:0}
@@ -136,6 +151,14 @@
         <div class="step">
           <label for="acad">학원 이름</label>
           <input type="text" id="acad" placeholder="비워 두면 인쇄되지 않아요" oninput="render()">
+        </div>
+        <div class="step">
+          <div class="lb">여백</div>
+          <div class="marg" id="marg">
+            <button data-m="narrow" onclick="setMargin('narrow')">좁게</button>
+            <button data-m="normal" class="on" onclick="setMargin('normal')">보통</button>
+            <button data-m="wide" onclick="setMargin('wide')">넓게</button>
+          </div>
         </div>
         <button class="go" onclick="make()">만들기</button>
       </div>

@@ -18,6 +18,13 @@ const TNAME = Object.fromEntries(TYPES_R.map(t=>[t[0],t[1]]));
 const COLS = {w_mean:2, w_spell:2, s_trans:1, s_order:2};
 
 let CUR=null, TAB="Q";
+// 꼬리말 왼쪽: 홈페이지와 같은 글자 로고(쏠뷰 | SolveU, U만 파랑)
+const LOGO=`<span class="lg"><span class="ko">쏠뷰</span><span class="dv"></span><span class="en">Solve<span class="g">U</span></span></span>`;
+function setMargin(m){
+  document.querySelectorAll("#marg button").forEach(b=>b.classList.toggle("on", b.dataset.m===m));
+  const pv=$("preview"); pv.classList.remove("m-narrow","m-wide"); if(m!=="normal") pv.classList.add("m-"+m);
+  save({margin:m}); render();   // 여백이 바뀌면 한 쪽에 들어가는 양이 달라져 다시 나눔
+}
 
 /* ===== 게이트 ===== */
 function getPass(){ try{ return localStorage.getItem(PASS_KEY)||""; }catch(e){ return ""; } }
@@ -54,6 +61,7 @@ function initControls(){
   const sv=load();
   if(sv.book && GEN_BOOKS.some(b=>b.code===sv.book)) $("book").value=sv.book;
   if(sv.acad) $("acad").value=sv.acad;
+  if(sv.margin && sv.margin!=="normal"){ document.querySelectorAll("#marg button").forEach(b=>b.classList.toggle("on", b.dataset.m===sv.margin)); $("preview").classList.add("m-"+sv.margin); }
   /* 주소로 책·유닛 지정(QR 음원 화면·자료실에서 옴): ?book=ph1&u=3 (음원 코드나 생성기 코드 둘 다) */
   const QS=new URLSearchParams(location.search), qb=QS.get("book"), qu=parseInt(QS.get("u"));
   const qbook=qb && GEN_BOOKS.find(b=>b.code===qb||b.studio===qb);
@@ -174,18 +182,19 @@ function fitZoom(){   // A4(794px)가 미리보기 칸보다 넓으면 줄여 �
 window.addEventListener("resize", fitZoom);
 function render(){
   if(!CUR) return;
+  if(document.fonts && document.fonts.status!=="loaded"){ document.fonts.ready.then(render); return; }   // 글꼴이 다 온 뒤에 쪽 나누기
   fitZoom();
   const ans=TAB==="A", acad=$("acad").value.trim(), host=$("preview");
   host.innerHTML="";
   CUR.sets.forEach((set,si)=>{
-    const title=`${CUR.book.name}  ${unitLabel(CUR.units)}  ${TNAME[set.t]}${ans?"  [정답]":""}`;
+    const title=`<span class="bk">${esc(CUR.book.name)} · ${unitLabel(CUR.units)}</span><span class="tk">${TNAME[set.t]}</span>${ans?`<span class="tag">정답</span>`:""}`;
     const cols=COLS[set.t], pages=[];
     const newPage=()=>{
       const pg=document.createElement("div");
       pg.className="pg"+(ans?" ans":"");
-      pg.innerHTML=`<div class="hd"><span class="bd">${String(si+1).padStart(2,"0")}</span><span class="tt">${esc(title)}</span>${acad?`<span class="ac">${esc(acad)}</span>`:""}</div>
+      pg.innerHTML=`<div class="hd"><span class="bd">${String(si+1).padStart(2,"0")}</span><span class="tt">${title}</span>${acad?`<span class="ac">${esc(acad)}</span>`:""}</div>
         ${NOTE[set.t]&&!ans&&!pages.length?`<div class="note">${NOTE[set.t]}</div>`:""}
-        <div class="bodyc c${cols}">${"<div class='col'></div>".repeat(cols)}</div><div class="ft">1</div>`;   // 쪽번호 자리를 미리 차지(채우는 동안과 높이 같게)
+        <div class="bodyc c${cols}">${"<div class='col'></div>".repeat(cols)}</div><div class="ft">${LOGO}<span class="pn">1</span></div>`;   // 쪽번호 자리를 미리 차지(채우는 동안과 높이 같게)
       host.appendChild(pg); pages.push(pg); return pg;
     };
     let pg=newPage(), ci=0, col=pg.querySelector(".col");
@@ -200,14 +209,17 @@ function render(){
       }
     });
     if(cols>1) balance(pages[pages.length-1]);   // 마지막 쪽은 단마다 고르게(한쪽 단만 차지 않게)
-    pages.forEach((p,k)=>p.querySelector(".ft").textContent = pages.length>1 ? `${k+1} / ${pages.length}` : "1");
   });
+  // 쪽번호 = 이번에 뽑는 PDF 전체 기준(2 / 8)
+  const all=[...host.querySelectorAll(".pg")];
+  all.forEach((p,k)=>p.querySelector(".ft .pn").textContent = `${k+1} / ${all.length}`);
 }
 function balance(pg){
   const cs=[...pg.querySelectorAll(".col")], its=cs.flatMap(c=>[...c.children]);
   const per=Math.ceil(its.length/cs.length);
   cs.forEach((c,i)=>its.slice(i*per,(i+1)*per).forEach(el=>c.appendChild(el)));
-  if(cs.some(c=>c.scrollHeight>c.clientHeight+1)){   // 드물게 안 맞으면 원래대로 앞 단부터 채움
+  if(cs.some(c=>c.scrollHeight>c.clientHeight+1)){   // 고르게 나눠 넘치면 다 빼고 앞 단부터 다시 채움
+    its.forEach(el=>el.remove());
     let ci=0; its.forEach(el=>{ cs[ci].appendChild(el); if(cs[ci].scrollHeight>cs[ci].clientHeight+1 && cs[ci].children.length>1 && ci<cs.length-1){ ci++; cs[ci].appendChild(el); } });
   }
 }
