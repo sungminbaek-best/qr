@@ -69,31 +69,22 @@
 .lh b{font-size:16px;font-weight:800;letter-spacing:-.03em}
 .lh span{font-size:13.5px;color:var(--mute);font-weight:600}
 .stps.gr{margin-top:0}
-.gcard{grid-column:3 / span 3;display:flex;align-items:center;gap:22px;border:1px solid var(--line);border-radius:18px;background:#fff;padding:18px 20px;transition:border-color .15s,transform .2s;min-width:0;position:relative}
-.gcard:hover{border-color:var(--ink);transform:translateY(-3px)}
-.gcard .tx{flex:1;min-width:0}
-.gcard .no{display:flex;align-items:center;gap:8px}
-.gcard .no b{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--mute)}
-.gcard .no .chip{font-size:11.5px;padding:4px 9px}
-.gcard .nm{font-size:19px;font-weight:800;letter-spacing:-.04em;margin-top:10px}
-.gcard .one{font-size:13.5px;color:var(--sub);line-height:1.5;margin-top:6px}
-.gcard .cv{display:flex;gap:8px;flex:none}
-.gcard .cv img{width:96px;border-radius:3px;box-shadow:0 8px 16px -10px rgba(12,16,32,.45)}
-.gnote{grid-column:1 / span 2;align-self:center;font-size:13.5px;color:var(--mute);line-height:1.6;padding-right:8px}
+.stps.gr .gstart{grid-column:3}
+.stp .cv.land{align-items:flex-end}
+.soon{grid-column:4 / span 3;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;border:1px dashed var(--line2);border-radius:18px;padding:18px;color:var(--mute);text-align:center}
+.soon b{font-size:15px;font-weight:800;color:var(--sub);letter-spacing:-.03em}
+.soon span{font-size:13px;font-weight:600}
 .rmnote{font-size:13.5px;color:var(--mute);margin-top:16px}
-@media(max-width:1000px){.stps{grid-template-columns:repeat(3,minmax(0,1fr))}.gcard{grid-column:1 / -1}.gnote{display:none}}
+@media(max-width:1000px){.stps{grid-template-columns:repeat(3,minmax(0,1fr))}.soon{grid-column:1 / -1}}
 @media(max-width:600px){
   .stps{grid-template-columns:1fr;gap:10px}
+  .stps.gr .gstart,.soon{grid-column:1 / -1}
+  .soon{flex-direction:row;gap:8px;padding:14px}
   .stp{flex-direction:row;align-items:center;gap:14px;padding:14px 16px}
   .stp .no{flex-direction:column;align-items:flex-start;gap:6px;width:64px;flex:none}
   .stp .tx{flex:1;min-width:0}
   .stp .nm{margin-top:0;font-size:17px}
   .stp .cv{margin:0;padding:0;width:62px;flex:none}
-  .gcard{gap:14px;padding:14px 16px}
-  .gcard .nm{font-size:17px;margin-top:6px}
-  .gcard .one{font-size:13px}
-  .gcard .cv{gap:4px}
-  .gcard .cv img{width:44px}
 }
 @media(min-width:601px){.stp .tx{display:contents}}
 /* 시작 단계 찾기 */
@@ -166,9 +157,10 @@
       <div class="cv"><img src="/assets/covers/rba1.webp" alt="저절로 기본 1 표지" loading="lazy"><img src="/assets/covers/rba2.webp" alt="저절로 기본 2 표지" loading="lazy"></div></a><a class="stp rev" href="/books/mock/"><div class="no"><b>6단계</b><span class="chip">중2~중3</span></div>
       <div class="tx"><div class="nm">첫모의고사</div><div class="one">고등 모의고사 첫걸음</div></div>
       <div class="cv"><img src="/assets/covers/rmo1.webp" alt="저절로 첫모의고사 1 표지" loading="lazy"><img src="/assets/covers/rmo2.webp" alt="저절로 첫모의고사 2 표지" loading="lazy"></div></a></div></div>
-  <div class="lane"><div class="lh rev"><b>문법·쓰기</b><span>브릿지 · 입문 · 기본 단계와 함께 쓰면 좋아요</span></div><div class="stps gr"><a class="gcard rev" href="/books/grammar/"><div class="tx"><div class="no"><b>문법·쓰기</b><span class="chip">초3~4</span></div>
-      <div class="nm">그래머&amp;라이팅 1·2</div><div class="one">쓰면서 익히는 첫 문법. 문장 규칙을 쓰면서 익혀요.</div></div>
-      <div class="cv"><img src="/assets/covers/gw1.webp" alt="저절로 그래머&amp;라이팅 1 표지" loading="lazy"><img src="/assets/covers/gw2.webp" alt="저절로 그래머&amp;라이팅 2 표지" loading="lazy"></div></a></div></div>
+  <div class="lane"><div class="lh rev"><b>문법·쓰기</b><span>브릿지와 같은 단계(초3~4)부터 함께 써요</span></div><div class="stps gr"><a class="stp rev gstart" href="/books/grammar/"><div class="no"><b>문법·쓰기</b><span class="chip">초3~4</span></div>
+      <div class="tx"><div class="nm">그래머&amp;라이팅</div><div class="one">쓰면서 익히는 첫 문법</div></div>
+      <div class="cv land"><img src="/assets/covers/gw1.webp" alt="저절로 그래머&amp;라이팅 1 표지" loading="lazy"><img src="/assets/covers/gw2.webp" alt="저절로 그래머&amp;라이팅 2 표지" loading="lazy"></div></a>
+      <div class="soon rev"><b>다음 권 제작 중</b><span>그래머&amp;라이팅 3권을 만들고 있어요</span></div></div></div>
   <p class="rmnote rev">학년은 권장 기준이에요. 기초가 부족하면 한 단계 아래부터 시작해요.</p>
 </div></section>
 
