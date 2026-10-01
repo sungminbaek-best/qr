@@ -48,8 +48,7 @@
 @media(max-width:560px){.btn.door{min-width:0;flex:1 1 100%}.pnum div{padding:2px 16px}.pnum b{font-size:24px}.pnum div>span{font-size:12px}}
 .sh h2{margin-top:0}
 /* 교재: 로드맵과 목록을 하나로 */
-.stps{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px}
-.sh+.lane{margin-top:40px}
+.stps{display:grid;gap:12px}
 .stp{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:18px;background:#fff;padding:18px 16px 16px;transition:border-color .15s,transform .2s;min-width:0}
 .stp:hover{border-color:var(--ink);transform:translateY(-3px)}
 .stp .no{display:flex;align-items:center;justify-content:space-between;gap:8px}
@@ -62,28 +61,25 @@
 /* 가로 표지(그래머): 1권 한 장을 꽉 차게 → 세로 표지 두 권과 거의 같은 높이 */
 .stp .cv.land img{width:100%}
 .stp .cv.land img+img{display:none}
-/* 갈래: 회색 판 하나에 제목 + 카드 */
-.lane{background:var(--panel);border-radius:24px;padding:26px 26px 26px}
-.lane+.lane{margin-top:16px}
-.lh{display:flex;align-items:baseline;gap:12px;margin-bottom:18px}
-.lh b{font-size:21px;font-weight:800;letter-spacing:-.04em}
-.lh span{font-size:14px;color:var(--mute);font-weight:700}
-.stps.gr{margin-top:0}
-.stps.gr .gstart{grid-column:3}
-.soon{grid-column:4 / span 3;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;border:1.5px dashed var(--line2);border-radius:18px;padding:18px;color:var(--mute);text-align:center}
-.soon b{font-size:15px;font-weight:800;color:var(--sub);letter-spacing:-.03em}
-.soon span{font-size:13px;font-weight:600}
-.rmnote{font-size:13.5px;color:var(--mute);margin-top:16px}
-@media(max-width:1000px){.stps{grid-template-columns:repeat(3,minmax(0,1fr))}.soon{grid-column:1 / -1}}
+/* 갈래 두 판을 나란히: 파닉스·독해(3칸×2줄) | 문법·쓰기(1칸×2줄) — 카드 크기·판 높이 모두 같게 */
+.lanes{display:grid;grid-template-columns:calc((100% - 144px)*3/4 + 76px) minmax(0,1fr);gap:16px;margin-top:40px}
+.lane{display:flex;flex-direction:column;background:var(--panel);border-radius:24px;padding:24px 26px 26px}
+.lh{margin-bottom:16px}
+.lh b{font-size:20px;font-weight:800;letter-spacing:-.04em}
+.lane .stps{flex:1;grid-template-columns:repeat(3,minmax(0,1fr));grid-auto-rows:1fr}
+.lane .stps.gr{grid-template-columns:minmax(0,1fr)}
+.soon{display:flex;align-items:center;justify-content:center;border:1.5px dashed var(--line2);border-radius:18px;padding:18px;text-align:center}
+.soon b{font-size:15px;font-weight:800;color:var(--mute);letter-spacing:-.03em}
+.stp .nm{font-size:20px}
+@media(max-width:860px){.lanes{grid-template-columns:1fr}.lane .stps.gr{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:600px){
-  .stps{grid-template-columns:1fr;gap:10px}
-  .stps.gr .gstart,.soon{grid-column:1 / -1}
-  .soon{flex-direction:row;gap:8px;padding:14px}
+  .lane .stps,.lane .stps.gr{grid-template-columns:1fr;gap:10px;grid-auto-rows:auto}
+  .soon{padding:14px}
   .stp{flex-direction:row;align-items:center;gap:14px;padding:14px 16px}
   .stp .no{flex-direction:column;align-items:flex-start;gap:6px;width:64px;flex:none}
   .stp .tx{flex:1;min-width:0}
   .stp .nm{margin-top:0;font-size:17px}
-  .stp .cv{margin:0;padding:0;width:62px;height:auto;flex:none}
+  .stp .cv{margin:0;padding:0;width:62px;flex:none}
   .lane{padding:18px 14px;border-radius:20px}
   .lh b{font-size:18px}
 }
@@ -121,8 +117,9 @@
 </section>
 
 <section class="sec" id="books"><div class="wrap">
-  <div class="sh rev"><h2>파닉스부터 모의고사까지<br>한 단계씩 이어집니다.</h2><p>단계를 누르면 목차·샘플·정답을 볼 수 있어요.</p></div>
-  <div class="lane"><div class="lh"><b>파닉스·독해</b><span>6단계 · 초1~중3</span></div><div class="stps"><a class="stp rev" href="/books/phonics/"><div class="no"><b>1단계</b><span class="chip">초1~2</span></div>
+  <div class="sh rev"><h2>단계별로 이어지는 교재</h2><p>단계를 누르면 목차·샘플·정답을 볼 수 있어요.</p></div>
+  <div class="lanes">
+    <div class="lane"><div class="lh"><b>파닉스·독해</b></div><div class="stps"><a class="stp rev" href="/books/phonics/"><div class="no"><b>1단계</b><span class="chip">초1~2</span></div>
       <div class="tx"><div class="nm">파닉스</div></div>
       <div class="cv"><img src="/assets/covers/ph1.webp" alt="저절로 파닉스 1 표지" loading="lazy"><img src="/assets/covers/ph2.webp" alt="저절로 파닉스 2 표지" loading="lazy"></div></a><a class="stp rev" href="/books/starter/"><div class="no"><b>2단계</b><span class="chip">초2~3</span></div>
       <div class="tx"><div class="nm">스타터</div></div>
@@ -135,10 +132,11 @@
       <div class="cv"><img src="/assets/covers/rba1.webp" alt="저절로 기본 1 표지" loading="lazy"><img src="/assets/covers/rba2.webp" alt="저절로 기본 2 표지" loading="lazy"></div></a><a class="stp rev" href="/books/mock/"><div class="no"><b>6단계</b><span class="chip">중2~중3</span></div>
       <div class="tx"><div class="nm">첫모의고사</div></div>
       <div class="cv"><img src="/assets/covers/rmo1.webp" alt="저절로 첫모의고사 1 표지" loading="lazy"><img src="/assets/covers/rmo2.webp" alt="저절로 첫모의고사 2 표지" loading="lazy"></div></a></div></div>
-  <div class="lane"><div class="lh"><b>문법·쓰기</b><span>그래머&amp;라이팅 · 초3~4</span></div><div class="stps gr"><a class="stp rev gstart" href="/books/grammar/"><div class="no"><b>1단계</b><span class="chip">초3~4</span></div>
+    <div class="lane"><div class="lh"><b>문법·쓰기</b></div><div class="stps gr"><a class="stp rev" href="/books/grammar/"><div class="no"><b>1단계</b><span class="chip">초3~4</span></div>
       <div class="tx"><div class="nm">그래머&amp;라이팅</div></div>
       <div class="cv land"><img src="/assets/covers/gw1.webp" alt="저절로 그래머&amp;라이팅 1 표지" loading="lazy"><img src="/assets/covers/gw2.webp" alt="저절로 그래머&amp;라이팅 2 표지" loading="lazy"></div></a>
       <div class="soon rev"><b>다음 권 제작 중</b></div></div></div>
+  </div>
 </div></section>
 
 <section class="sec panel" id="reviews"><div class="wrap">
