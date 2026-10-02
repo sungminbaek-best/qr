@@ -131,6 +131,7 @@ function make(){
   if(!sets.length){ alert("고른 유닛에는 이 유형으로 만들 문제가 없어요. 유닛이나 유형을 바꿔 주세요."); return; }
   CUR={book:b, units, sets};
   render();
+  if(window.innerWidth<900) document.querySelector(".bar").scrollIntoView({behavior:"smooth"});   // 휴대폰·좁은 화면: 결과로 내려가기
 }
 function buildSets(b, units, types){
   const W=[], S=[], seen=new Set();
@@ -144,7 +145,10 @@ function buildSets(b, units, types){
     const rnd=mulberry32(seedFrom(b.code+"|"+units.join(",")+"|"+t));
     let items=[];
     if(t==="w_mean")  items=shuffle(W.filter(w=>w.k),rnd).map(w=>({q:w.e, a:w.k}));
-    if(t==="w_spell") items=shuffle(W.filter(w=>w.k),rnd).map(w=>({q:w.k, a:w.e}));
+    if(t==="w_spell"){   // 뜻이 같은 단어가 둘 이상(되다 = get·turn·become)이면 첫 글자를 함께 보여 줌
+      const cnt={}; W.forEach(w=>{ if(w.k) cnt[w.k]=(cnt[w.k]||0)+1; });
+      items=shuffle(W.filter(w=>w.k),rnd).map(w=>({q:w.k, a:w.e, h: cnt[w.k]>1 ? w.e[0] : ""}));
+    }
     if(t==="s_trans") items=S.map(s=>({q:s.e, a:s.k}));
     if(t==="s_order") items=S.map(s=>({q:s.ck&&s.ck.length>1?s.ck.join(" / "):s.k, mix:scramble(s.e,rnd,pn), a:s.e}));
     if(t==="s_listen") items=S.map(s=>({sent:s.e, blanks:listenBlanks(s, blanksN(), pn)})).filter(x=>x.blanks.length);
@@ -220,7 +224,8 @@ function inflections(w){
 // 이번 유닛 단어(한 낱말짜리, 불규칙 '(gave)' 꼴 포함)의 변화형 모음
 function unitForms(words){
   const f=new Set();
-  words.forEach(w=>w.e.replace(/[~?!.,]/g," ").split(/[()]/).forEach(part=>{ const x=part.trim().toLowerCase(); if(/^[a-z']+$/.test(x) && x.length>=3) inflections(x).forEach(v=>f.add(v)); }));
+  // w.f = 원천에 함께 적힌 바뀐 꼴(came·wore 등) — 시험엔 원형만 나오지만 문장 속 과거형도 유닛 단어로 알아봄
+  words.forEach(w=>[w.e, ...(w.f||[])].forEach(e=>e.replace(/[~?!.,]/g," ").split(/[()]/).forEach(part=>{ const x=part.trim().toLowerCase(); if(/^[a-z']+$/.test(x) && x.length>=3) inflections(x).forEach(v=>f.add(v)); })));
   return f;
 }
 // 문장에서 빈칸 n개: 유닛 단어 먼저, 그다음 긴 내용어 · 기능어·고유명사 제외 · 짧은 문장은 낱말의 절반까지
@@ -366,7 +371,7 @@ function itemHTML(t,it,n,ans){
       return `<div class="row">${N}<span class="q ls">${h+esc(it.sent.slice(pos))}</span></div>`;
     }
     default:   // w_mean · w_spell
-      return `<div class="row">${N}<span class="q">${esc(it.q)}</span></div>${line(it.a)}`;
+      return `<div class="row">${N}<span class="q">${esc(it.q)}</span>${it.h?`<span class="hl">(${esc(it.h)}…)</span>`:""}</div>${line(it.a)}`;
   }
 }
 
