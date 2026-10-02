@@ -154,6 +154,7 @@
   @keyframes blink{ 50%{ filter:brightness(1.25); } }
 
   /* 태블릿·작은 노트북 */
+  @media (max-width:720px){ .lu-sec{ grid-template-columns:1fr; gap:8px; } }
   @media (max-width:1100px){ .t{ display:none; } .book{ display:none; } select#unit{ max-width:150px; } }
   /* 폰: 도구 줄 꽉 채우고 가로로 밀기, 이름 글자 숨김 */
   @media (max-width:720px){
@@ -172,6 +173,46 @@
     #ttime{ font-size:28px; min-width:84px; }
     [data-tip]:hover::after{ display:none; }
   }
+  /* ── 시작 화면(1쪽 대신, 14권 같은 틀 · 색만 책별) ── */
+  .sheet.cv{ display:flex; overflow:hidden; font-family:"Pretendard Variable",Pretendard,sans-serif; color:var(--ink); }
+  .cv-l{ width:560px; flex:none; padding:88px 0 80px 88px; display:flex; flex-direction:column; }
+  .cv-l::before{ content:""; width:56px; height:6px; border-radius:3px; background:var(--cc); margin-bottom:34px; }
+  .cv-se{ font-size:26px; font-weight:700; color:var(--cc); letter-spacing:-.01em; }
+  .cv-ti{ margin-top:12px; font-size:92px; font-weight:800; letter-spacing:-.04em; line-height:1; }
+  .cv-su{ margin-top:22px; font-size:24px; font-weight:500; color:var(--sub); line-height:1.45; word-break:keep-all; padding-right:40px; }
+  .cv-im{ margin-top:auto; align-self:flex-start; max-width:300px; max-height:300px; border-radius:4px; border:1px solid var(--line); box-shadow:0 10px 30px rgba(16,24,40,.10); background:#fff; }
+  .cv-r{ flex:1; margin:88px 88px 80px 0; padding-left:72px; border-left:1px solid var(--line); display:flex; flex-direction:column; min-width:0; }
+  .cv-h{ font-size:20px; font-weight:700; color:var(--mute); letter-spacing:.08em; }
+  .cv-g{ margin-top:22px; display:grid; column-gap:56px; align-content:start; flex:1; }
+  .cv-u{ display:flex; align-items:baseline; gap:22px; padding:19px 6px; border:0; border-bottom:1px solid var(--line); background:transparent; text-align:left;
+         font:inherit; color:inherit; cursor:pointer; min-width:0; transition:background .12s; }
+  .cv-u:hover{ background:var(--hover); }
+  .cv-u:hover .cv-t{ color:var(--cc); }
+  .cv-n{ flex:none; width:36px; font-size:22px; font-weight:700; color:var(--cc); font-variant-numeric:tabular-nums; }
+  .cv-t{ flex:1; min-width:0; font-size:25px; font-weight:600; line-height:1.35; word-break:keep-all; transition:color .12s; }
+  .cv-t small{ display:block; margin-top:4px; font-size:19px; font-weight:500; color:var(--sub); }
+  .cv-c .cv-u{ padding:12px 6px; } .cv-c .cv-t{ font-size:21px; line-height:1.3; } .cv-c .cv-t small{ font-size:16px; margin-top:2px; }
+  .cv-c .cv-n{ font-size:19px; width:30px; } .cv-c .cv-p{ font-size:16px; }
+  .cv-p{ flex:none; font-size:19px; color:var(--mute); font-variant-numeric:tabular-nums; }
+  .cv-f{ display:flex; justify-content:flex-end; margin-top:36px; }
+  .cv-go{ border:0; border-radius:12px; background:var(--ink); color:#fff; font:inherit; font-size:22px; font-weight:700; padding:18px 30px; cursor:pointer; }
+  .cv-go:hover{ background:var(--cc); }
+  /* ── 쏠뷰 E-Book 라인업(전체 교재) ── */
+  #lineup{ position:fixed; inset:0; z-index:20; display:none; align-items:center; justify-content:center; background:rgba(12,16,32,.42); padding:24px; }
+  #lineup.show{ display:flex; }
+  .lu-box{ background:var(--surface); border-radius:20px; box-shadow:0 24px 60px rgba(16,24,40,.25); width:min(1180px,100%); max-height:100%; overflow:auto; padding:26px 32px 18px; }
+  .lu-hd{ display:flex; align-items:center; justify-content:space-between; margin-bottom:6px; }
+  .lu-hd b{ font-size:22px; font-weight:800; letter-spacing:-.02em; }
+  .lu-sec{ display:grid; grid-template-columns:170px 1fr; align-items:center; gap:16px; padding:14px 0; border-top:1px solid var(--line); }
+  .lu-hd{ padding-bottom:10px; }
+  .lu-sec h3{ margin:0; font-size:15px; font-weight:700; color:var(--sub); word-break:keep-all; line-height:1.4; }
+  .lu-row{ display:flex; flex-wrap:wrap; gap:6px; }
+  .lu-bk{ width:108px; display:flex; flex-direction:column; gap:6px; text-decoration:none; color:inherit; border-radius:12px; padding:7px; transition:background .12s; }
+  .lu-bk:hover{ background:var(--hover); }
+  .lu-bk img{ width:100%; aspect-ratio:3/4; object-fit:contain; background:#f4f5f8; border-radius:6px; border:1px solid var(--line); }
+  .lu-bk span{ font-size:13px; font-weight:700; text-align:center; white-space:nowrap; }
+  .lu-bk.cur{ background:var(--brand-soft); }
+  .lu-bk.cur{ box-shadow:inset 0 0 0 2px var(--brand); } .lu-bk.cur span{ color:var(--brand); }
 </style>
 </head>
 <body>
@@ -186,10 +227,14 @@
     <button class="ib" id="tclose" data-tip="타이머 닫기"><svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>
 </div>
 <audio id="aud" preload="none"></audio>
+<div id="lineup"><div class="lu-box"><div class="lu-hd"><b>쏠뷰 E-Book 라인업</b><button class="ib" id="luclose" data-tip="닫기 (Esc)"><svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div><div id="lubody"></div></div></div>
 
 <!-- 위: 가끔 쓰는 것(책·유닛 · 음원 · 타이머 · 보기) -->
 <div class="dock" id="top">
+  <button class="ib" id="lineupbtn" data-tip="쏠뷰 E-Book 전체"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg><span class="t">전체 교재</span></button>
+  <span class="sep"></span>
   <span class="book">입문 2</span>
+  <button class="ib" id="tocbtn" data-tip="목차로 (Home)" style="display:none"><svg viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13"/><circle cx="3.5" cy="6" r="1"/><circle cx="3.5" cy="12" r="1"/><circle cx="3.5" cy="18" r="1"/></svg><span class="t">목차</span></button>
   <select id="unit" aria-label="유닛 바로가기"></select>
   <span class="sep"></span>
   <span id="audgrp"></span>
@@ -254,10 +299,13 @@
 const START=5;            // 표지(1쪽) 다음 이 쪽부터 표시(앞 안내·오리엔테이션 건너뜀)
 const BGPAGES=[];        // 박스그래머쪽(첫모의): 아래쪽 요약칸 회색 placeholder
 const Q2PAGES=[];        // 지문/객관식쪽(첫모의): 보기해석 좌측정렬
-const UNITS=[["Unit 1 · Animals Predict Weather", 5], ["Unit 2 · Changing Diet", 23], ["Unit 3 · Healthy Diet", 41], ["Unit 4 · Changes to Help Vegetarians", 59], ["Unit 5 · Stephanie is Going to Travel to Japan", 77], ["Unit 6 · What Kind of Transportation Do You Like to Use?", 95], ["Unit 7 · Cultural Differences", 113], ["Unit 8 · Stephanie Goes to the Supermarket", 131]];            // 유닛 바로가기 [[이름, 시작쪽], …]
+const UNITS=[["Unit 1 · Animals Predict Weather", 5], ["Unit 2 · Changing Diet", 23], ["Unit 3 · Healthy Diet", 41], ["Unit 4 · Changes to Help Vegetarians", 59], ["Unit 5 · Stephanie is Going to Travel to Japan", 77], ["Unit 6 · What Kind of Transportation Do You Like to Use?", 95], ["Unit 7 · Cultural Differences", 113], ["Unit 8 · Stephanie Goes to the Supermarket", 131]];
+const LINEUP=[["저절로 파닉스", [["파닉스 1", "ph1", "파닉스1_판서"], ["파닉스 2", "ph2", "파닉스2_판서"]]], ["저절로 리딩", [["스타터 1", "rst1", "스타터1_판서"], ["스타터 2", "rst2", "스타터2_판서"], ["브릿지 1", "rbr1", "브릿지1_판서"], ["브릿지 2", "rbr2", "브릿지2_판서"], ["입문 1", "rin1", "입문1_판서"], ["입문 2", "rin2", "입문2_판서"], ["기본 1", "rba1", "기본1_판서"], ["기본 2", "rba2", "기본2_판서"]]], ["저절로 리딩 첫 모의고사", [["첫모의 1", "rmo1", "첫모의1_판서"], ["첫모의 2", "rmo2", "첫모의2_판서"]]], ["저절로 그래머 라이팅", [["저그랑 1", "gw1", "저그랑1_판서"], ["저그랑 2", "gw2", "저그랑2_판서"]]]];          // 전체 교재 [[시리즈, [[책이름, 코드, 폴더], …]], …]
+const COVER={"series": "저절로 리딩 입문", "sub": "3단계 동시통역 시스템", "color": "#d61c23"};            // 시작 화면 설정 {series, sub, color} — 없으면(null) 교재 1쪽 그림 그대로            // 유닛 바로가기 [[이름, 시작쪽], …]
 // ────────────────────────────────────────────
 const END=148;              // 이 쪽까지만 표시(뒤쪽 정답·해설 제외)
 const P = (window.PAGES||[]).filter(p=>p.n===1 || (p.n>=START && p.n<=END));
+if(COVER && P.length && P[0].n===1) P[0]={...P[0], w:1600, h:1000, zones:[], boxes:[], cover:true};   // 1쪽 자리에 시작 화면(가로 1600×1000)
 const $=id=>document.getElementById(id);
 const SVG='http://www.w3.org/2000/svg';
 const board=$('board'), stage=$('stage'), pgIn=$('pg'), unitSel=$('unit');
@@ -284,14 +332,28 @@ function setMode(m){ const k=V[vi]?V[vi][0]:0; viewPref=m; store.set('ebook-view
 function syncModeBtns(){ const sp=spreadOn(); $('vsingle').classList.toggle('on',!sp); $('vspread').classList.toggle('on',sp); }
 
 // 유닛 바로가기 메뉴
-unitSel.innerHTML='<option value="">목차</option>'+UNITS.map(u=>`<option value="${u[1]}">${u[0]}</option>`).join('');
+unitSel.innerHTML='<option value="">'+(COVER?'유닛 이동':'목차')+'</option>'+UNITS.map(u=>`<option value="${u[1]}">${u[0]}</option>`).join('');
 if(!UNITS.length) unitSel.style.display='none';
 function gotoPage(n){ let k=P.findIndex(p=>p.n>=n); if(k<0) k=P.length-1; vi=viewOfPage(k); loadView(); }
 unitSel.onchange=()=>{ const n=+unitSel.value; if(n) gotoPage(n); unitSel.blur(); };
+if(COVER){ const tb=$('tocbtn'); tb.style.display=''; tb.onclick=()=>{ vi=0; loadView(); tb.blur(); }; }   // 어느 쪽에서든 한 번에 시작 화면(목차)으로
+// 전체 교재(라인업): 다른 책으로 바로 이동. 내 컴퓨터는 폴더 이름, 홈페이지는 책 코드 폴더
+(function(){ const local=/^(localhost|127\.0\.0\.1)$/.test(location.hostname), me='rin2';
+  if(!LINEUP.length){ $('lineupbtn').style.display='none'; return; }
+  const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  $('lubody').innerHTML=LINEUP.map(([se,bs])=>`<div class="lu-sec"><h3>${esc(se)}</h3><div class="lu-row">`+bs.map(([t,c,f])=>{ const d='../'+encodeURI(local?f:c)+'/';
+    return `<a class="lu-bk${c===me?' cur':''}" href="${d}index.html"><img loading="lazy" src="${d}cover.webp" onerror="this.onerror=null;this.src='${d}pages/p001.webp'" alt=""><span>${esc(t)}</span></a>`; }).join('')+'</div></div>').join('');
+  const lu=$('lineup'), close=()=>lu.classList.remove('show');
+  $('lineupbtn').onclick=()=>{ closePops(); lu.classList.add('show'); };
+  $('luclose').onclick=close; lu.onclick=e=>{ if(e.target===lu) close(); };
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&lu.classList.contains('show')){ close(); e.stopImmediatePropagation(); } },true);
+  lu.querySelector('.lu-bk.cur')?.addEventListener('click',e=>{ e.preventDefault(); close(); });
+})();
 function syncUnit(){ const n=curPage().n; let v=''; UNITS.forEach(u=>{ if(n>=u[1]) v=String(u[1]); }); unitSel.value=v; }
 
 // ── 한 쪽(sheet) 그리기: 지면 이미지 + 정답칸 + 선/원/박스 + 펜 잉크 ──
 function buildSheet(p, ox){
+  if(p.cover) return buildCover(p, ox);
   const sh=document.createElement('div'); sh.className='sheet'; sh.style.left=ox+'px'; sh.style.width=p.w+'px'; sh.style.height=p.h+'px';
   const im=document.createElement('img'); im.src=p.img; im.width=p.w; im.height=p.h; im.alt='교재 '+p.n+'쪽'; sh.appendChild(im);
   const isBG=BGPAGES.includes(p.n);
@@ -353,6 +415,31 @@ function buildSheet(p, ox){
   return {p, ox, el:sh, ml, ink, im};
 }
 
+// 시작 화면: 왼쪽 책 색 띠(시리즈·책 이름·실제 표지) + 오른쪽 목차(누르면 그 유닛으로)
+function buildCover(p, ox){
+  const sh=document.createElement('div'); sh.className='sheet cv'; sh.style.left=ox+'px'; sh.style.width=p.w+'px'; sh.style.height=p.h+'px';
+  sh.style.setProperty('--cc',COVER.color); 
+  const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const cols=UNITS.length>24?3:(UNITS.length>8||(COVER.subs&&UNITS.length>5))?2:1;   // 한글 부제가 있으면 줄이 높아져 두 줄로
+  const us=UNITS.map((u,i)=>{ const t=u[0].includes(' · ')?u[0].split(' · ').slice(1).join(' · '):u[0];
+    return `<button class="cv-u" data-n="${u[1]}"><span class="cv-n">${String(i+1).padStart(2,'0')}</span><span class="cv-t">${esc(t)}${COVER.subs&&COVER.subs[i]?`<small>${esc(COVER.subs[i])}</small>`:''}</span><span class="cv-p">${u[1]}쪽</span></button>`; }).join('');
+  sh.innerHTML=`<div class="cv-l"><div class="cv-se">${esc(COVER.series)}</div>
+    <div class="cv-ti">${esc(document.querySelector('#top .book').textContent)}</div>${COVER.sub?`<div class="cv-su">${esc(COVER.sub)}</div>`:''}
+    <img class="cv-im" src="cover.webp" onerror="this.onerror=null;this.src='${p.img}'" alt="교재 표지"></div>
+    <div class="cv-r"><div class="cv-h">목차</div>
+    <div class="cv-g${UNITS.length>12?' cv-c':''}" style="grid-template-columns:repeat(${cols},minmax(0,1fr))">${us}</div>
+    <div class="cv-f"><button class="cv-go">처음부터 보기 →</button></div></div>`;
+  const tap=(el,f)=>{ el.addEventListener('pointerdown',e=>e.stopPropagation()); el.onclick=e=>{ e.stopPropagation(); if(!tool) f(); }; };
+  sh.querySelectorAll('.cv-u').forEach(b=>tap(b,()=>gotoPage(+b.dataset.n)));
+  tap(sh.querySelector('.cv-go'),()=>go(1));
+  const im={complete:true};                                     // loadView의 이미지 대기용(표지 그림은 기다릴 필요 없음)
+  board.appendChild(sh);
+  const ml=document.createElementNS(SVG,'svg'); const ink=document.createElementNS(SVG,'svg');
+  for(const [s_,c] of [[ml,'ml'],[ink,'ink']]){ s_.setAttribute('class',c); s_.setAttribute('width',p.w); s_.setAttribute('height',p.h); s_.setAttribute('viewBox',`0 0 ${p.w} ${p.h}`); sh.appendChild(s_); }
+  ink.style.pointerEvents='none';
+  return {p, ox, el:sh, ml, ink, im};
+}
+
 function loadView(){
   board.innerHTML=''; S=[]; Z=[]; step=-1;
   let ox=0; BH=0;
@@ -373,7 +460,7 @@ function loadView(){
   $('ptot').textContent=(S.length>1?'–'+S[S.length-1].p.n:'')+' / '+LAST;
   store.set('ebook-last:'+KEY, S[0].p.n);
   $('sprev').disabled=$('pprev').disabled=vi<=0; $('snext').disabled=$('pnext').disabled=vi>=V.length-1;
-  syncUnit(); syncModeBtns(); buildAudio();
+  syncUnit(); syncModeBtns(); buildAudio(); $('tocbtn').classList.toggle('on',!!S[0].p.cover);
   // 스테이지가 실제 크기를 가질 때까지 기다렸다 그림(초기/리로드 축소 방지)
   let _t=0; const redraw=()=>{ if(stage.clientWidth>100||_t>40){ drawStep(); } else { _t++; requestAnimationFrame(redraw); } };
   const ims=S.map(s=>s.im); if(ims.every(i=>i.complete)) redraw(); else { let left=ims.length; ims.forEach(i=>{ if(i.complete){ if(--left===0) redraw(); } else i.onload=i.onerror=()=>{ if(--left===0) redraw(); }; }); }
@@ -437,6 +524,7 @@ window.addEventListener('keydown',e=>{
   if(e.key==='ArrowLeft'||e.key==='PageUp'){ e.preventDefault(); go(-1); }
   if(e.key==='Escape'){ if(tool) setTool(null); else { step=-1; drawStep(); } closePops(); }
   if(e.key==='f'||e.key==='F') toggleFS();
+  if(e.key==='Home'&&COVER){ e.preventDefault(); vi=0; loadView(); }
   if(e.key===' '||e.key==='Enter'){ e.preventDefault(); stepReveal(true); } });   // Space=하나씩 공개, 다 끝나면 다음 활동/쪽(PPT처럼)
 
 // ── 자유 확대/이동 (휠 줌 · 드래그 이동 · 핀치) + 탭으로 활동 확대 ──
