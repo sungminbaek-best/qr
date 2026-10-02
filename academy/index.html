@@ -99,14 +99,14 @@
 .cmap .bar b{display:block;font-size:14.5px;font-weight:800;letter-spacing:-.03em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .cmap .bar.gr{background:linear-gradient(90deg,#eefaf3,#f4fbf7);border-color:#d7f0e1}.cmap .bar.gr small{color:#1e8e3e}
 /* 수업 도구 실제 화면 */
-.atools{display:grid;grid-template-columns:1.6fr 1fr 1fr;gap:16px;margin-top:32px;align-items:start}
+.atools{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:32px;align-items:start}
 .atools figure{margin:0}
 .atools .shot{border-radius:18px;overflow:hidden;border:1px solid var(--line);background:#fff;box-shadow:0 20px 40px -28px rgba(12,16,32,.45);aspect-ratio:16/10}
 .atools .shot.tall{aspect-ratio:1/1}
 .atools .shot img{width:100%;height:100%;object-fit:cover;object-position:top}
 .atools figcaption{margin-top:12px}.atools figcaption b{display:block;font-size:16px;font-weight:800}
 .atools figcaption span{display:block;font-size:13.5px;color:var(--sub);margin-top:3px}
-@media(max-width:860px){.atools{grid-template-columns:1fr 1fr}.atools figure:first-child{grid-column:1/-1}}
+@media(max-width:760px){.atools{grid-template-columns:1fr}}
 /* 샘플 바로 보기 */
 .smps{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:10px;margin-top:28px}
 .smp{display:flex;flex-direction:column;align-items:center;gap:6px;padding:16px 10px;border:1px solid var(--line);border-radius:16px;background:#fff;text-align:center;transition:border-color .15s,transform .2s}
@@ -283,7 +283,7 @@
     <h1>교재가 아니라,<br><span class="gt">학원 영어 시스템</span>입니다</h1>
     <div class="abft">
       <div><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M6 3h8l4 4v14H6zM14 3v4h4M9 13h6M9 17h6"/></svg></span><b>가맹비·로열티 0원</b></div>
-      <div><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M3 7h7l2 2h9v10H3z"/></svg></span><b>6단계 커리큘럼</b></div>
+      <div><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path fill="currentColor" d="M10 9.2v5.6l5-2.8z"/></svg></span><b>저자 직강 영상</b></div>
       <div><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M5 4h14v16H5zM8 9h8M8 13h8M8 17h5"/></svg></span><b>수업 도구 무료</b></div>
     </div>
     <div class="tcta"><a class="big" href="#apply">무료 견적 받기 →</a><small>30권 이상 · 사업자 학원·공부방 대상</small></div>
@@ -300,9 +300,8 @@
 <section class="sec panel" id="tools"><div class="wrap">
   <div class="sh rev"><h2>교재와 함께 오는 수업 도구</h2><p>모두 무료예요. 선생님은 수업에만 집중하세요.</p></div>
   <div class="atools">
-    <figure class="rev"><div class="shot"><img src="/academy/img/tool_workbook.webp" alt="워크북 만들기 화면" loading="lazy"></div><figcaption><b>워크북 만들기</b><span>유닛만 고르면 문제지와 정답지가 바로 나와요</span></figcaption></figure>
-    <figure class="rev"><div class="shot tall"><img src="/academy/img/tool_studio.webp" alt="QR 음원 화면" loading="lazy"></div><figcaption><b>QR 음원·강의</b><span>학생은 책의 QR만 찍으면 바로 들어요</span></figcaption></figure>
-    <figure class="rev"><div class="shot tall"><img src="/academy/img/tool_answer.webp" alt="정답 PDF" loading="lazy"></div><figcaption><b>정답 PDF</b><span>교재별로 누구나 바로 받아요</span></figcaption></figure>
+    <figure class="rev"><div class="shot"><img src="/academy/img/tool_workbook.webp" alt="워크북 만들기 화면" loading="lazy"></div><figcaption><b>워크북 만들기</b><span>유닛만 고르면 단어 뜻·단어 쓰기·문장 해석·어순 배열·듣고 빈칸 쓰기 워크북이 정답지와 함께 바로 나와요</span></figcaption></figure>
+    <figure class="rev"><div class="shot"><img src="/academy/img/tool_lecture.webp" alt="저자 강의 영상" loading="lazy"></div><figcaption><b>저자 직강 영상</b><span>저자가 직접 강의한 영상을 책의 QR로 바로 봐요. 수업 준비와 학생 복습에 그대로 써요</span></figcaption></figure>
   </div>
 </div></section>
 
