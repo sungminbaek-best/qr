@@ -108,6 +108,11 @@
 .atools figcaption span{display:block;font-size:13.5px;color:var(--sub);margin-top:3px}
 @media(max-width:760px){.atools{grid-template-columns:1fr}}
 .atools .shot.w169{aspect-ratio:16/9}
+.wbstrip{margin-top:32px;border-radius:22px;overflow:hidden}
+.wbstrip img{width:100%;display:block}
+.wbtypes{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin-top:14px;padding:0 3.5%}
+.wbtypes span{text-align:center;font-size:14px;font-weight:800;color:var(--ink)}
+@media(max-width:760px){.wbstrip{overflow-x:auto}.wbstrip img{width:auto;height:300px;max-width:none}.wbtypes{display:flex;flex-wrap:wrap;justify-content:center;padding:0}.wbtypes span{font-size:12.5px;padding:5px 10px;border-radius:999px;background:#fff;border:1px solid var(--line)}}
 .lech{font-size:18px;font-weight:800;letter-spacing:-.03em;margin-top:48px}
 .lech+.atools{margin-top:16px}
 /* 샘플 바로 보기 */
@@ -318,16 +323,9 @@
 </section>
 
 <section class="sec panel" id="tools"><div class="wrap">
-  <div class="sh rev"><h2>교재와 함께 오는 수업 도구</h2><p>모두 무료예요. 선생님은 수업에만 집중하세요.</p></div>
-  <div class="atools">
-    <figure class="rev"><div class="shot"><img src="/academy/img/tool_workbook.webp" alt="워크북 만들기 화면" loading="lazy"></div><figcaption><b>워크북 만들기</b><span>교재와 유닛을 고르고, 원하는 유형에 체크만 하면 돼요</span></figcaption></figure>
-    <figure class="rev"><div class="shot"><img src="/academy/img/tool_workbook_out.webp" alt="만들어진 워크북" loading="lazy"></div><figcaption><b>바로 인쇄하는 워크북</b><span>단어 뜻·단어 쓰기·문장 해석·어순 배열·듣고 빈칸 쓰기, 정답지까지 함께 나와요</span></figcaption></figure>
-  </div>
-  <h3 class="lech rev">주요 교재 저자 직강 영상</h3>
-  <div class="atools">
-    <figure class="rev"><div class="shot w169"><img src="/academy/img/tool_lecture.webp?v=6" alt="저자 강의 장면" loading="lazy"></div></figure>
-    <figure class="rev"><div class="shot w169"><img src="/academy/img/tool_lecture2.webp?v=1" alt="저자 강의 장면" loading="lazy"></div></figure>
-  </div>
+  <div class="sh rev"><h2>유닛만 고르면, 워크북이 바로 나와요</h2><p>선생님 전용 '워크북 만들기' · 무료 · 정답지까지 함께</p></div>
+  <div class="wbstrip rev"><img src="/academy/img/tool_workbook_out.webp?v=3" alt="첫모의고사 1 Unit 3으로 만든 워크북 5종" loading="lazy"></div>
+  <div class="wbtypes rev"><span>단어 뜻 쓰기</span><span>단어 쓰기</span><span>문장 해석</span><span>어순 배열</span><span>듣고 빈칸 쓰기</span></div>
 </div></section>
 
 <section class="sec" id="sample"><div class="wrap">
