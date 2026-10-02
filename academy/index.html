@@ -65,6 +65,13 @@
 .ahero .tp{margin-top:0}
 .ahero h1{font-size:clamp(30px,4.4vw,48px);font-weight:800;letter-spacing:-.055em;line-height:1.2;margin-top:14px}
 .ahero .lead{font-size:clamp(15px,1.7vw,17px);color:var(--sub);margin-top:12px}
+.abft{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:28px}
+.abft>div{display:flex;flex-direction:column;border-radius:18px;background:#fff;border:1px solid #e8eaf6;padding:20px;box-shadow:0 14px 34px -26px rgba(67,97,255,.5)}
+.abft .ic{width:42px;height:42px;border-radius:12px;background:var(--soft);color:var(--brand);display:grid;place-items:center;margin-bottom:12px}
+.abft .ic svg{width:20px;height:20px}
+.abft b{font-size:clamp(17px,1.8vw,19px);font-weight:800;letter-spacing:-.03em}
+.abft small{font-size:13.5px;color:var(--sub);margin-top:4px}
+@media(max-width:700px){.abft{grid-template-columns:1fr;gap:8px}.abft>div{display:grid;grid-template-columns:42px 1fr;column-gap:14px;padding:14px 16px}.abft .ic{grid-row:1/3;margin:0}}
 .astat{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:28px}
 .astat div{border-radius:18px;background:#fff;border:1px solid #e8eaf6;padding:18px 20px;box-shadow:0 14px 34px -26px rgba(67,97,255,.5)}
 .astat small{display:block;font-size:13px;font-weight:700;color:var(--mute)}
@@ -225,14 +232,15 @@
 
 <section class="ahero"><div class="wrap">
   <div class="tp rev"><div class="in">
-    <span class="badge"><em>학원 공급</em></span>
-    <h1>저절로를 <span class="gt">학원 교재로</span><br>도입하세요</h1>
-    <div class="astat">
-      <div><small>신청 조건</small><b><em>30권 이상</em></b></div>
-      <div><small>대상</small><b>사업자 학원·공부방</b></div>
-      <div><small>배송 · 결제</small><b>무료 배송 · 계산서</b></div>
+    <span class="badge"><em>학원 전용</em></span>
+    <h1>저절로를 학원 교재로,<br><span class="gt">더 합리적으로</span> 도입하세요</h1>
+    <p class="lead">학원·공부방에만 드리는 학원 공급가에, 수업 자료까지 함께 드려요.</p>
+    <div class="abft">
+      <div><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M6 3h8l4 4v14H6zM14 3v4h4M9 13h6M9 17h6"/></svg></span><b>학원 전용 공급가</b><small>많이 주문할수록 더 낮아져요</small></div>
+      <div><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M3 7h7l2 2h9v10H3z"/></svg></span><b>무료 배송 · 계산서</b><small>한 곳으로 한 번에 보내 드려요</small></div>
+      <div><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M5 4h14v16H5zM8 9h8M8 13h8M8 17h5"/></svg></span><b>레벨 교환 · 수업 자료</b><small>배치가 바뀌면 30일 안에 교환해 드려요</small></div>
     </div>
-    <div class="tcta"><a class="big" href="#apply">도입 신청하기 ↓</a><a class="line2" href="#terms">공급 조건 보기</a></div>
+    <div class="tcta"><a class="big" href="#apply">무료 견적 받기 →</a><small>30권 이상 · 사업자 학원·공부방 대상 · 1영업일 안에 문자로 견적</small></div>
   </div></div>
 </div></section>
 
@@ -308,7 +316,7 @@
         <details><summary>자세히 보기</summary>학원 이름, 대표자·담당자, 사업자등록번호, 계산서 받을 이메일, 배송지, 받는 분 이름·연락처, 주문 교재와 수량을 견적·공급 계약, 배송, 계산서 발행에 써요. 거래 기록은 전자상거래법에 따라 5년 동안 보관해요. 동의하지 않으면 학원 공급 신청을 할 수 없어요. <a href="/privacy/">개인정보처리방침</a></details>
       </div>
       <p class="jerr" id="berr" role="alert"></p>
-      <button type="submit" class="go1 full" id="bsend">도입 신청하기</button>
+      <button type="submit" class="go1 full" id="bsend">무료 견적 받기</button>
     </div>
     <aside class="calc" aria-live="polite">
       <h3>주문 요약</h3>
@@ -374,7 +382,7 @@ $("#bf").addEventListener("submit",function(e){e.preventDefault();var err=$("#be
   var b=$("#bsend");b.disabled=true;b.textContent="보내는 중…";
   S.api("/api/b2b",{academy:val("#b-academy"),manager:val("#b-manager"),biz:val("#b-biz"),email:val("#b-email"),qty:q.o,addr:val("#b-addr"),rname:val("#b-rname"),rphone:val("#b-rphone"),
     heard:radio("heard"),first:radio("first")==="yes",req:val("#b-req"),src:src,
-    returns:true,privacy:true,website:val("#b-website")}).then(function(j){b.disabled=false;b.textContent="도입 신청하기";
+    returns:true,privacy:true,website:val("#b-website")}).then(function(j){b.disabled=false;b.textContent="무료 견적 받기";
     if(j.ok){$("#bf").hidden=true;$("#bdone").hidden=false;$("#apply").scrollIntoView();}
     else if(j.status===401){S.pass(null);show();}
     else err.textContent=j.msg||"잠시 뒤 다시 시도해 주세요.";});
