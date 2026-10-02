@@ -9,60 +9,113 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#f5f6f8; --card:#fff; --ink:#1f2430; --sub:#5f6775; --muted:#9aa1ad; --line:#e3e6eb;
-    --navy:#223A5E; --orange:#E65C21; --navyBg:#eef2f8;
+    /* 홈페이지(assets/site.css)와 같은 토큰 */
+    --ink:#0c1020; --ink2:#1c2236; --sub:#565d73; --mute:#8f95a8; --line:#eaecf2; --line2:#dfe3ec;
+    --panel:#f6f7fb; --soft:#eef1ff; --brand:#4361ff; --mono:"Space Grotesk",ui-monospace,monospace;
+    --shadow:0 1px 2px rgba(12,16,32,.04),0 12px 32px -12px rgba(12,16,32,.12);
+    /* 워크북 종이 색 */
+    --navy:#223A5E; --orange:#E65C21;
   }
   *{box-sizing:border-box}
   html,body{margin:0}
-  body{background:var(--bg); color:var(--ink); font-family:"Pretendard","Malgun Gothic","맑은 고딕",sans-serif; line-height:1.5}
-  .wrap{max-width:1180px; margin:0 auto; padding:18px 16px 60px}
-  .top{display:flex; align-items:center; gap:12px; margin-bottom:14px}
-  .top a{font-size:14px; color:var(--sub); text-decoration:none}
-  .top a:hover{color:var(--ink)}
-  .top h1{font-size:18px; margin:0 0 0 auto; color:var(--navy)}
+  body{background:var(--panel); color:var(--ink); font-family:"Pretendard",-apple-system,"Malgun Gothic",sans-serif; letter-spacing:-.02em; line-height:1.5; -webkit-font-smoothing:antialiased}
+  button{font:inherit; color:inherit; background:none; border:0; cursor:pointer}
   .hidden{display:none !important}
+  :focus-visible{outline:2px solid var(--brand); outline-offset:2px; border-radius:8px}
+
+  /* 위 막대(홈페이지 nav와 같은 모양) */
+  .nav{position:sticky; top:0; z-index:20; background:rgba(255,255,255,.85); backdrop-filter:saturate(1.6) blur(16px); -webkit-backdrop-filter:saturate(1.6) blur(16px); border-bottom:1px solid var(--line)}
+  .nav .in{max-width:1220px; margin:0 auto; padding:0 24px; height:64px; display:flex; align-items:center; gap:14px}
+  .logo{display:flex; align-items:center; gap:10px; text-decoration:none; color:var(--ink)}
+  .logo .ko{font-weight:800; font-size:19px; letter-spacing:-.03em}
+  .logo .dv{width:1px; height:16px; background:var(--line2)}
+  .logo .en{font-family:var(--mono); font-weight:700; font-size:18px; letter-spacing:-.01em}
+  .logo .g{color:var(--brand)}
+  .nav .ttl{font-size:15px; font-weight:700; color:var(--sub); padding-left:14px; border-left:1px solid var(--line2)}
+  .nbtn{margin-left:auto; display:inline-flex; align-items:center; gap:4px; font-size:14px; font-weight:700; padding:9px 16px; border-radius:999px; background:var(--soft); color:var(--brand); text-decoration:none; transition:background .15s,color .15s}
+  .nbtn:hover{background:var(--brand); color:#fff}
+  .wrap{max-width:1220px; margin:0 auto; padding:24px 24px 64px}
 
   /* 인증 */
-  .gate{max-width:400px; margin:48px auto; background:var(--card); border:1px solid var(--line); border-radius:14px; padding:28px 24px; text-align:center}
-  .gate h2{font-size:18px; margin:0 0 6px}
-  .gate p{font-size:14px; color:var(--sub); margin:0 0 18px}
-  .gate button{width:100%; height:48px; border:none; border-radius:10px; background:var(--navy); color:#fff; font-size:16px; font-weight:700; cursor:pointer; font-family:inherit}
-  .gate .hint{font-size:12px; color:var(--muted); margin-top:12px}
+  .gate{max-width:420px; margin:56px auto; background:#fff; border:1px solid var(--line); border-radius:22px; padding:32px 26px; text-align:center; box-shadow:var(--shadow)}
+  .gate h2{font-size:20px; font-weight:800; margin:0 0 8px; letter-spacing:-.04em}
+  .gate p{font-size:14.5px; color:var(--sub); margin:0 0 20px}
+  .gate button{width:100%; height:52px; border-radius:13px; background:var(--ink); color:#fff; font-size:16px; font-weight:700}
+  .gate .hint{font-size:12.5px; color:var(--mute); margin-top:12px}
 
   /* 왼쪽 고르기 */
-  .layout{display:grid; grid-template-columns:300px minmax(0,1fr); gap:18px; align-items:start}
-  @media(max-width:880px){.layout{grid-template-columns:1fr}}
-  .panel{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:18px; position:sticky; top:12px}
-  @media(max-width:880px){.panel{position:static}}
-  .step{margin-bottom:18px}
-  .step > label, .step > .lb{display:flex; align-items:center; gap:8px; font-size:14px; font-weight:700; margin-bottom:8px}
-  .step .no{display:inline-flex; width:20px; height:20px; border-radius:6px; background:var(--navy); color:#fff; font-size:12px; align-items:center; justify-content:center}
-  .step .lb .mini + .mini{margin-left:0}
-  .step .lb .mini{margin-left:auto; font-size:12px; color:var(--sub); background:none; border:none; cursor:pointer; font-family:inherit; padding:0 2px}
-  select,input[type=text]{width:100%; height:42px; border:1.5px solid #d5d9e0; border-radius:9px; padding:0 10px; font-size:15px; font-family:inherit; outline:none; background:#fff}
-  select:focus,input:focus{border-color:var(--navy)}
-  .units{display:flex; flex-wrap:wrap; gap:6px}
-  .units label{min-width:38px; height:34px; display:inline-flex; align-items:center; justify-content:center; font-size:14px; border:1.5px solid #d5d9e0; border-radius:8px; cursor:pointer; user-select:none; background:#fff}
-  .units label.on{background:var(--navy); border-color:var(--navy); color:#fff; font-weight:700}
+  .layout{display:grid; grid-template-columns:320px minmax(0,1fr); gap:22px; align-items:start}
+  @media(max-width:900px){.layout{grid-template-columns:1fr}}
+  .panel{background:#fff; border:1px solid var(--line); border-radius:22px; padding:22px 20px 20px; position:sticky; top:84px; box-shadow:var(--shadow)}
+  @media(max-width:900px){.panel{position:static}}
+  .step{margin-bottom:22px}
+  .lb{display:flex; align-items:center; gap:8px; font-size:15px; font-weight:800; letter-spacing:-.03em; margin-bottom:10px}
+  .lb .k{font-family:var(--mono); font-size:11px; font-weight:700; letter-spacing:.12em; color:var(--brand)}
+  .lb .opt{font-weight:600; font-size:12.5px; color:var(--mute)}
+  .lb .mini{font-size:12.5px; font-weight:600; color:var(--sub); padding:2px 4px}
+  .lb .mini:first-of-type{margin-left:auto}
+  .lb .mini:hover{color:var(--brand)}
+  select,input[type=text]{width:100%; height:46px; border:1px solid var(--line2); border-radius:12px; padding:0 14px; font-size:15px; font-family:inherit; color:var(--ink); background:#fff; outline:none; transition:border-color .15s,box-shadow .15s}
+  select{appearance:none; -webkit-appearance:none; background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%238f95a8' stroke-width='1.8' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 14px center; padding-right:36px; font-weight:600}
+  select:focus,input:focus{border-color:var(--brand); box-shadow:0 0 0 3px var(--soft)}
+  input::placeholder{color:var(--mute)}
+  .units{display:grid; grid-template-columns:repeat(6,1fr); gap:6px}
+  .units label{height:40px; display:flex; align-items:center; justify-content:center; font-family:var(--mono); font-size:15px; font-weight:700; border:1px solid var(--line2); border-radius:11px; cursor:pointer; user-select:none; background:#fff; color:var(--sub); transition:all .12s}
+  .units label:hover{border-color:var(--ink)}
+  .units label.on{background:var(--ink); border-color:var(--ink); color:#fff}
   .units input{display:none}
-  .types{display:flex; flex-direction:column; gap:6px}
-  .ty{display:flex; align-items:center; gap:10px; border:1.5px solid #d5d9e0; border-radius:9px; padding:8px 10px; cursor:pointer; background:#fff}
-  .ty.on{border-color:var(--navy); background:var(--navyBg)}
-  .ty input{width:17px; height:17px; accent-color:var(--navy); flex:none}
-  .ty b{display:block; font-size:14.5px}
-  .ty small{display:block; font-size:12px; color:var(--sub)}
-  .step .help{font-size:12px; color:var(--muted); margin-top:5px}
-  .go{width:100%; height:48px; border:none; border-radius:10px; background:var(--orange); color:#fff; font-size:16px; font-weight:700; cursor:pointer; font-family:inherit}
-  .go:hover{filter:brightness(1.05)}
+  .types{display:flex; flex-direction:column; gap:8px}
+  .ty{display:flex; align-items:center; gap:12px; border:1px solid var(--line2); border-radius:14px; padding:11px 14px; cursor:pointer; background:#fff; transition:all .12s}
+  .ty:hover{border-color:#c5cad8}
+  .ty input{display:none}
+  .ty .ck{flex:none; width:20px; height:20px; border-radius:7px; border:1.5px solid #c9cfdc; display:grid; place-items:center; transition:all .12s}
+  .ty.on{border-color:var(--brand); background:var(--soft)}
+  .ty.on .ck{background:var(--brand); border-color:var(--brand)}
+  .ty.on .ck::after{content:""; width:9px; height:5px; border-left:2px solid #fff; border-bottom:2px solid #fff; transform:translateY(-1px) rotate(-45deg)}
+  .ty b{display:block; font-size:14.5px; font-weight:700; letter-spacing:-.03em}
+  .ty small{display:block; font-size:12px; color:var(--sub); margin-top:1px}
+  .sub-opt{margin:-8px 0 22px; padding:14px; border-radius:14px; background:var(--panel)}
+  .sub-opt .lb{font-size:13px; margin-bottom:8px}
+  .sub-opt .row2{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+  .help{font-size:12px; color:var(--mute); margin-top:8px; line-height:1.5}
+  /* 고르는 단추 묶음(빈칸·힌트·여백·문제지/정답지) */
+  .pills{display:flex; gap:4px; padding:4px; border-radius:12px; background:var(--panel); border:1px solid var(--line)}
+  .sub-opt .pills{background:#fff}
+  .pills button{flex:1; height:34px; border-radius:9px; font-size:13.5px; font-weight:600; color:var(--sub); transition:all .12s}
+  .pills button:hover{color:var(--ink)}
+  .pills button.on{background:var(--ink); color:#fff; font-weight:700}
+  .go{width:100%; height:52px; border-radius:13px; background:var(--ink); color:#fff; font-size:16px; font-weight:700; display:flex; align-items:center; justify-content:center; gap:8px;
+    box-shadow:0 10px 24px -10px rgba(12,16,32,.55); transition:background .15s}
+  .go:hover{background:var(--ink2)}
+  .go .ar{transition:transform .18s}.go:hover .ar{transform:translateX(3px)}
 
   /* 오른쪽 미리보기 */
-  .bar{display:flex; align-items:center; gap:10px; margin-bottom:10px}
-  .seg{display:inline-flex; background:#e8ebf0; border-radius:9px; padding:3px}
-  .seg button{border:none; background:none; font-family:inherit; font-size:14px; font-weight:700; color:var(--sub); padding:7px 16px; border-radius:7px; cursor:pointer}
-  .seg button.on{background:#fff; color:var(--navy); box-shadow:0 1px 2px rgba(0,0,0,.08)}
-  .print{margin-left:auto; height:40px; padding:0 18px; border:none; border-radius:9px; background:var(--navy); color:#fff; font-weight:700; font-size:14px; cursor:pointer; font-family:inherit}
-  .preview{background:#e3e6eb; border-radius:14px; padding:20px; overflow:auto; min-height:400px}
-  .empty{text-align:center; color:var(--muted); padding:120px 20px; font-size:15px}
+  .bar{display:flex; align-items:center; gap:10px; margin-bottom:12px}
+  .bar .pills{width:220px; background:#fff}
+  .bar.off .pills, .bar.off .print{opacity:.4; pointer-events:none}
+  .print{margin-left:auto; height:42px; padding:0 18px; border-radius:11px; background:#fff; border:1px solid var(--line2); font-weight:700; font-size:14px; transition:border-color .15s}
+  .print:hover{border-color:var(--ink)}
+  .preview{background:#e9ebf2; border-radius:22px; padding:24px; overflow:auto; min-height:420px}
+  /* 유형 미리보기(만들기 전) */
+  .exhd{display:flex; flex-wrap:wrap; align-items:baseline; gap:6px 10px; margin:2px 4px 16px}
+  .exhd b{font-size:17px; font-weight:800; letter-spacing:-.04em}
+  .exhd span{font-family:var(--mono); font-size:12px; font-weight:700; letter-spacing:.06em; color:var(--brand)}
+  .exhd small{flex-basis:100%; font-size:13px; color:var(--sub)}
+  .exhd small b{font-size:13px; font-weight:700}
+  .exgrid{display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:14px}
+  .exc{background:#fff; border:1px solid var(--line); border-radius:18px; padding:16px 18px 14px; cursor:pointer; transition:border-color .12s,box-shadow .12s}
+  .exc:hover{border-color:#c5cad8}
+  .exc.on{border-color:var(--brand); box-shadow:0 0 0 3px var(--soft)}
+  .exh{display:flex; align-items:center; gap:10px}
+  .exh b{font-size:15.5px; font-weight:800; letter-spacing:-.03em}
+  .exc .ck{flex:none; width:20px; height:20px; border-radius:7px; border:1.5px solid #c9cfdc; display:grid; place-items:center}
+  .exc.on .ck{background:var(--brand); border-color:var(--brand)}
+  .exc.on .ck::after{content:""; width:9px; height:5px; border-left:2px solid #fff; border-bottom:2px solid #fff; transform:translateY(-1px) rotate(-45deg)}
+  .exc p{margin:6px 0 10px; font-size:12.5px; color:var(--sub)}
+  .exb{--kf:"Wanted Sans","Pretendard"; --ef:"Wanted Sans","Pretendard"; font-family:var(--kf),sans-serif; color:#1a1a1a;
+    border-top:1px dashed var(--line2); padding-top:4px; zoom:.86; pointer-events:none}
+  .empty{text-align:center; color:var(--mute); padding:140px 20px; font-size:15px}
+  .empty b{color:var(--ink)}
 
   /* ===== 워크북 쪽 (A4 · 미니멀: 얇은 선, 영어 Inter, 유형 이름만 굵은 남색) ===== */
   .preview .pg{zoom:var(--z,1)}                          /* 미리보기 칸 너비에 맞춰 축소(인쇄는 원래 크기) */
@@ -108,17 +161,15 @@
   .q.ls{font-weight:500; font-size:10.6pt; line-height:2.35; font-family:var(--ef),var(--kf),sans-serif}
   .it.s_listen{padding-top:4pt}
   .bl{display:inline-block; height:1.15em; border-bottom:.7pt solid #333; margin:0 2pt; vertical-align:-2pt}
-  .bl.a{width:auto; height:auto; border-bottom-color:var(--orange); color:var(--orange); font-weight:700; padding:0 3pt; vertical-align:baseline}
-
-  .marg{display:flex; gap:6px}
-  .marg button{flex:1; height:36px; border:1.5px solid #d5d9e0; border-radius:8px; background:#fff; font-family:inherit; font-size:14px; cursor:pointer; color:var(--ink)}
-  .marg button.on{background:var(--navy); border-color:var(--navy); color:#fff; font-weight:700}
+  .bl{text-align:left; line-height:1.15em; white-space:nowrap}
+  .bl i{font-style:normal; font-weight:600; color:#8f95a0; padding-left:3pt}   /* 첫 글자 힌트: 밑줄 위 왼쪽 */
+  .bl.a{color:var(--orange); font-weight:700; text-align:left; padding-left:3pt; line-height:1.15em; vertical-align:-2pt; white-space:nowrap}
 
   @media print{
     @page{size:A4; margin:0}
     body{background:#fff}
     .wrap{max-width:none; padding:0}
-    .top,.panel,.bar{display:none !important}
+    .nav,.panel,.bar{display:none !important}
     .layout{display:block}
     .preview{background:none; padding:0; border-radius:0; overflow:visible; min-height:0}
     .preview .pg{zoom:1}
@@ -128,12 +179,12 @@
 </style>
 </head>
 <body>
+<header class="nav"><div class="in">
+  <a class="logo" href="/" aria-label="쏠뷰 SolveU 홈"><span class="ko">쏠뷰</span><span class="dv"></span><span class="en">Solve<span class="g">U</span></span></a>
+  <span class="ttl">워크북 만들기</span>
+  <a class="nbtn" href="/library/">자료실</a>
+</div></header>
 <div class="wrap">
-  <div class="top">
-    <a href="/library/">← 자료실</a>
-    <h1>워크북 만들기</h1>
-  </div>
-
   <!-- 인증 -->
   <section id="gate" class="hidden">
     <div class="gate">
@@ -148,49 +199,56 @@
     <div class="layout">
       <div class="panel">
         <div class="step">
-          <label for="book"><span class="no">1</span>교재</label>
-          <select id="book" onchange="onBook()"></select>
+          <div class="lb"><span class="k">01</span>교재</div>
+          <select id="book" onchange="onBook()" aria-label="교재"></select>
         </div>
         <div class="step">
-          <div class="lb"><span class="no">2</span>유닛 <button class="mini" onclick="allUnits(true)">전체</button><button class="mini" onclick="allUnits(false)">해제</button></div>
+          <div class="lb"><span class="k">02</span>유닛<button class="mini" onclick="allUnits(true)">전체</button><button class="mini" onclick="allUnits(false)">해제</button></div>
           <div class="units" id="units"></div>
         </div>
         <div class="step">
-          <div class="lb"><span class="no">3</span>유형</div>
+          <div class="lb"><span class="k">03</span>유형</div>
           <div class="types" id="types"></div>
         </div>
-        <div class="step hidden" id="blankStep">
-          <div class="lb">문장당 빈칸</div>
-          <div class="marg" id="blanks">
-            <button data-n="1" onclick="setBlanks(1)">1개</button>
-            <button data-n="2" class="on" onclick="setBlanks(2)">2개</button>
+        <div class="sub-opt hidden" id="blankStep">
+          <div class="row2">
+            <div><div class="lb">문장당 빈칸</div>
+              <div class="pills" id="blanks">
+                <button data-n="1" onclick="setBlanks(1)">1개</button>
+                <button data-n="2" class="on" onclick="setBlanks(2)">2개</button>
+              </div></div>
+            <div><div class="lb">첫 글자 힌트</div>
+              <div class="pills" id="hint">
+                <button data-h="0" class="on" onclick="setHint(0)">없음</button>
+                <button data-h="1" onclick="setHint(1)">주기</button>
+              </div></div>
           </div>
-          <div class="help">한 문장에 빈칸은 2개까지예요. 짧은 문장은 1개만 비워요.</div>
+          <div class="help">듣고 빈칸 쓰기에만 적용돼요. 짧은 문장은 빈칸 1개만 비워요.</div>
         </div>
         <div class="step">
-          <label for="acad">학원 이름</label>
-          <input type="text" id="acad" placeholder="비워 두면 인쇄되지 않아요" oninput="render()">
+          <div class="lb">학원 이름<span class="opt">· 비우면 인쇄 안 됨</span></div>
+          <input type="text" id="acad" placeholder="예: 쏠뷰영어학원" oninput="render()">
         </div>
         <div class="step">
           <div class="lb">여백</div>
-          <div class="marg" id="marg">
+          <div class="pills" id="marg">
             <button data-m="narrow" onclick="setMargin('narrow')">좁게</button>
             <button data-m="normal" class="on" onclick="setMargin('normal')">보통</button>
             <button data-m="wide" onclick="setMargin('wide')">넓게</button>
           </div>
         </div>
-        <button class="go" onclick="make()">만들기</button>
+        <button class="go" onclick="make()">워크북 만들기 <span class="ar">→</span></button>
       </div>
 
       <div>
         <div class="bar">
-          <div class="seg">
+          <div class="pills">
             <button id="tabQ" class="on" onclick="showTab('Q')">문제지</button>
             <button id="tabA" onclick="showTab('A')">정답지</button>
           </div>
-          <button class="print" onclick="window.print()">인쇄하기</button>
+          <button class="print" onclick="window.print()">인쇄 · PDF 저장</button>
         </div>
-        <div class="preview" id="preview"><div class="empty">유닛과 유형을 고르고 <b>만들기</b>를 눌러 주세요.</div></div>
+        <div class="preview" id="preview"><div class="empty">유닛과 유형을 고르고 <b>워크북 만들기</b>를 눌러 주세요.</div></div>
       </div>
     </div>
   </section>
