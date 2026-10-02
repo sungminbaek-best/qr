@@ -12,10 +12,11 @@ const TYPES_R = [
   ["w_spell", "단어 쓰기",     "동생 → (영어)",                    true],
   ["s_trans", "문장 해석",     "영어 문장 → (우리말)",             false],
   ["s_order", "어순 배열",     "우리말 + 섞인 단어 → (영어 문장)", false],
+  ["s_listen","듣고 빈칸 쓰기", "음원 듣고 빈칸 채우기 + 단어 상자",  false],
 ];
 const TNAME = Object.fromEntries(TYPES_R.map(t=>[t[0],t[1]]));
 // 유형별 단 수(C&S 워크북처럼 짧은 것은 여러 단, 문장은 1단, 어순배열은 2단)
-const COLS = {w_mean:2, w_spell:2, s_trans:1, s_order:1};   // 문장은 1단(손글씨 쓸 폭)
+const COLS = {w_mean:2, w_spell:2, s_trans:1, s_order:1, s_listen:1};   // 문장은 1단(손글씨 쓸 폭)
 
 let CUR=null, TAB="Q";
 // 꼬리말 왼쪽: 홈페이지와 같은 글자 로고(쏠뷰 | SolveU, U만 파랑)
@@ -61,6 +62,7 @@ function initControls(){
   const sv=load();
   if(sv.book && GEN_BOOKS.some(b=>b.code===sv.book)) $("book").value=sv.book;
   if(sv.acad) $("acad").value=sv.acad;
+  if(sv.blanks) document.querySelectorAll("#blanks button").forEach(b=>b.classList.toggle("on", +b.dataset.n===Math.min(2,sv.blanks)));
   if(sv.margin && sv.margin!=="normal"){ document.querySelectorAll("#marg button").forEach(b=>b.classList.toggle("on", b.dataset.m===sv.margin)); $("preview").classList.add("m-"+sv.margin); }
   /* 주소로 책·유닛 지정(QR 음원 화면·자료실에서 옴): ?book=ph1&u=3 (음원 코드나 생성기 코드 둘 다) */
   const QS=new URLSearchParams(location.search), qb=QS.get("book"), qu=parseInt(QS.get("u"));
@@ -76,10 +78,18 @@ function onBook(){
   const chosen = sv.types && sv.types[b.kind];
   $("types").innerHTML = TYPES_R.map(([id,nm,ex,def])=>{
     const on = chosen ? chosen.includes(id) : def;
-    return `<label class="ty ${on?"on":""}"><input type="checkbox" value="${id}" ${on?"checked":""} onchange="this.parentNode.classList.toggle('on',this.checked)">
+    return `<label class="ty ${on?"on":""}"><input type="checkbox" value="${id}" ${on?"checked":""} onchange="this.parentNode.classList.toggle('on',this.checked); syncListen()">
       <span><b>${nm}</b><small>${esc(ex)}</small></span></label>`; }).join("");
+  syncListen();
   CUR=null; $("preview").innerHTML=`<div class="empty">유닛과 유형을 고르고 <b>만들기</b>를 눌러 주세요.</div>`;
 }
+// '듣고 빈칸 쓰기'를 골랐을 때만 문장당 빈칸 수 버튼을 보여 줌
+function syncListen(){ $("blankStep").classList.toggle("hidden", !selTypes().includes("s_listen")); }
+function setBlanks(n){
+  document.querySelectorAll("#blanks button").forEach(b=>b.classList.toggle("on", +b.dataset.n===n));
+  save({blanks:n});
+}
+function blanksN(){ return Math.min(2, +(document.querySelector("#blanks .on")||{dataset:{n:2}}).dataset.n); }   // 문장당 최대 2개(사용자 결정)
 function setUnits(list){ document.querySelectorAll("#units input").forEach(c=>{ c.checked=list.includes(+c.value); c.parentNode.classList.toggle("on",c.checked); }); }
 function allUnits(on){ setUnits(on ? curBook().units.map(u=>u.u) : []); }
 function selUnits(){ return [...document.querySelectorAll("#units input:checked")].map(c=>+c.value); }
@@ -95,7 +105,7 @@ function make(){
   const W=[], S=[], seen=new Set();
   b.units.filter(u=>units.includes(u.u)).forEach(u=>{
     u.words.forEach(w=>{ const k=w.e.toLowerCase(); if(!seen.has(k)){ seen.add(k); W.push(w); } });
-    u.sents.forEach(s=>S.push(s));
+    u.sents.forEach(s=>S.push({...s, _uw:u.words}));
   });
   const pn=allProper();
   const sets=[];
@@ -106,7 +116,8 @@ function make(){
     if(t==="w_spell") items=shuffle(W.filter(w=>w.k),rnd).map(w=>({q:w.k, a:w.e}));
     if(t==="s_trans") items=S.map(s=>({q:s.e, a:s.k}));
     if(t==="s_order") items=S.map(s=>({q:s.ck&&s.ck.length>1?s.ck.join(" / "):s.k, mix:scramble(s.e,rnd,pn), a:s.e}));
-    if(items.length) sets.push({t, items});
+    if(t==="s_listen") items=S.map(s=>({sent:s.e, blanks:listenBlanks(s, blanksN(), pn)})).filter(x=>x.blanks.length);
+    if(items.length) sets.push({t, items, bank: t==="s_listen" ? wordBank(items, W, S, rnd, pn) : null});
   });
   if(!sets.length){ alert("고른 유닛에는 이 유형으로 만들 문제가 없어요. 유닛이나 유형을 바꿔 주세요."); return; }
   CUR={book:b, units, sets};
@@ -168,6 +179,54 @@ function scramble(e, rnd, pn){
   return mix.join(" / ");
 }
 
+/* ===== 듣고 빈칸 쓰기 ===== */
+const STOP=new Set("the a an and or but is am are was were be been to of in on at by for with from up as it its he she we you they i me my your his her our their them him us this that these those there here not no do does did have has had will can so if than then very too what who when where how why yes".split(" "));
+function inflections(w){
+  const v=new Set([w,w+"s",w+"es",w+"d",w+"ed",w+"ing",w+"er",w+"est"]);
+  if(/e$/.test(w)) v.add(w.slice(0,-1)+"ing");
+  if(/[^aeiou]y$/.test(w)){ v.add(w.slice(0,-1)+"ies"); v.add(w.slice(0,-1)+"ied"); }
+  if(/[^aeiou][aeiou][^aeiouwxy]$/.test(w)){ const c=w.slice(-1); v.add(w+c+"ed"); v.add(w+c+"ing"); }
+  return v;
+}
+// 이번 유닛 단어(한 낱말짜리, 불규칙 '(gave)' 꼴 포함)의 변화형 모음
+function unitForms(words){
+  const f=new Set();
+  words.forEach(w=>w.e.replace(/[~?!.,]/g," ").split(/[()]/).forEach(part=>{ const x=part.trim().toLowerCase(); if(/^[a-z']+$/.test(x) && x.length>=3) inflections(x).forEach(v=>f.add(v)); }));
+  return f;
+}
+// 문장에서 빈칸 n개: 유닛 단어 먼저, 그다음 긴 내용어 · 기능어·고유명사 제외 · 짧은 문장은 낱말의 절반까지
+function listenBlanks(s, n, pn){
+  const toks=[...s.e.matchAll(/[A-Za-z][A-Za-z'’]*/g)].map((m,i)=>({t:m[0], s:m.index, e:m.index+m[0].length, i}));
+  const uf=unitForms(s._uw||[]);
+  const cands=toks.filter(t=>t.t.length>=3 && !STOP.has(t.t.toLowerCase()) && t.t!=="I" &&
+      !pn.has(t.t.replace(/['’]s$/,"")) && !(t.i>0 && /^[A-Z]/.test(t.t)))
+    .map(t=>({...t, pri:(uf.has(t.t.toLowerCase())?100:0)+t.t.length}))
+    .sort((a,b)=>b.pri-a.pri || a.s-b.s);
+  const k=Math.min(n, cands.length, Math.max(1, Math.floor(toks.length/2)));
+  return cands.slice(0,k).sort((a,b)=>a.s-b.s);
+}
+// 단어 상자: 정답 + 함정(정답 수의 약 20%, 2~5개 · 같은 유닛 단어나 다른 문장의 내용어), 알파벳순
+function wordBank(items, W, S, rnd, pn){
+  const low=t=>pn.has(t.replace(/['’]s$/,"")) ? t : t.toLowerCase();
+  const ans=[...new Set(items.flatMap(x=>x.blanks.map(b=>low(b.t))))];
+  const used=new Set(ans.map(a=>a.toLowerCase()));
+  const pool=[...new Set([
+    ...W.map(w=>w.e).filter(e=>/^[A-Za-z]+$/.test(e) && e.length>=3),
+    ...S.flatMap(s=>(s.e.match(/[A-Za-z][A-Za-z'’]*/g)||[])).filter(t=>t.length>=4 && !STOP.has(t.toLowerCase()) && !/^[A-Z]/.test(t)),
+  ].map(low))].filter(t=>!used.has(t.toLowerCase()) && !STOP.has(t.toLowerCase()));
+  // 정답의 다른 꼴(dot↔dots, celebrate↔celebrates)은 함정에서 뺌 — 둘 다 맞아 보여 헷갈리기만 함
+  const stem=w=>{ w=w.toLowerCase().replace(/['’]s$/,""); return w.replace(/(ies|es|s|ed|ing|d)$/,"").replace(/e$/,""); };
+  const ansStems=new Set(ans.map(stem));
+  const nTrap=Math.max(2, Math.min(5, Math.round(ans.length*0.2)));
+  let traps=shuffle(pool.filter(t=>!ansStems.has(stem(t))),rnd).slice(0,nTrap);
+  if(traps.length<nTrap){   // 고른 유닛 단어가 모두 정답이면 같은 책 다른 유닛 단어에서 채움
+    const more=curBook().units.flatMap(u=>u.words.map(w=>w.e)).filter(e=>/^[A-Za-z]+$/.test(e) && e.length>=3 && !STOP.has(e.toLowerCase()))
+      .map(low).filter(t=>!used.has(t.toLowerCase()) && !ansStems.has(stem(t)) && !traps.includes(t));
+    traps=traps.concat(shuffle([...new Set(more)],rnd).slice(0,nTrap-traps.length));
+  }
+  return ans.concat(traps).sort((a,b)=>a.toLowerCase().localeCompare(b.toLowerCase()));
+}
+
 /* ===== 미리보기 · 쪽 나누기 ===== */
 function unitBig(us){   // 머리말 큰 숫자: 04 · 02–03 · 2, 5
   const s=us.slice().sort((a,b)=>a-b), p=n=>String(n).padStart(2,"0");
@@ -188,7 +247,7 @@ function unitLabel(us){
   const run=s.every((v,i)=>i===0||v===s[i-1]+1);
   return "Unit "+(s.length===1?s[0]: run? s[0]+"–"+s[s.length-1] : s.join(", "));
 }
-const NOTE={s_order:"※ 주어진 단어를 바르게 배열하여 문장을 쓰세요."};
+const NOTE={s_order:"※ 주어진 단어를 바르게 배열하여 문장을 쓰세요.", s_listen:"※ 음원을 듣고 빈칸에 알맞은 단어를 상자에서 골라 쓰세요."};
 function fitZoom(){   // A4(794px)가 미리보기 칸보다 넓으면 줄여 보이기
   const w=$("preview").clientWidth-40;
   $("preview").style.setProperty("--z", Math.min(1, Math.max(.35, w/794)).toFixed(3));
@@ -212,6 +271,11 @@ function render(){
       host.appendChild(pg); pages.push(pg); return pg;
     };
     let pg=newPage(), ci=0, col=pg.querySelector(".col");
+    if(set.bank && !ans){   // 단어 상자(문제지 첫 쪽 맨 위)
+      const bx=document.createElement("div"); bx.className="bank";
+      bx.innerHTML=set.bank.map(w=>`<span>${esc(w)}</span>`).join("");
+      col.appendChild(bx);
+    }
     set.items.forEach((it,i)=>{
       const el=document.createElement("div"); el.className="it "+set.t; el.innerHTML=itemHTML(set.t,it,i+1,ans);
       col.appendChild(el);
@@ -245,6 +309,15 @@ function itemHTML(t,it,n,ans){
       return `<div class="row">${N}<span class="q">${esc(it.q)}</span></div><div class="mix">${esc(it.mix)}</div>${line(it.a, nLines(it.a,false))}`;
     case "s_trans":
       return `<div class="row">${N}<span class="q">${esc(it.q)}</span></div>${line(it.a, nLines(it.a,true))}`;
+    case "s_listen": {   // 빈칸 폭 = 손글씨 기준(글자 수에 비례)
+      let h="", pos=0;
+      it.blanks.forEach(b=>{
+        h+=esc(it.sent.slice(pos,b.s));
+        h+= ans ? `<span class="bl a">${esc(b.t)}</span>` : `<span class="bl" style="width:${Math.max(38, b.t.length*8.5+14)}pt"></span>`;
+        pos=b.e;
+      });
+      return `<div class="row">${N}<span class="q ls">${h+esc(it.sent.slice(pos))}</span></div>`;
+    }
     default:   // w_mean · w_spell
       return `<div class="row">${N}<span class="q">${esc(it.q)}</span></div>${line(it.a)}`;
   }

@@ -101,6 +101,15 @@
   .s_trans .ln, .s_order .ln{height:27pt}
   .mix{margin:3pt 0 0 19pt; font-family:var(--ef),sans-serif; font-size:8.8pt; color:#9aa0a8; word-break:keep-all}
 
+  /* 듣고 빈칸 쓰기 */
+  .bank{display:flex; flex-wrap:wrap; gap:4pt 7pt; border:.6pt solid #c9ced6; border-radius:5pt; padding:7pt 9pt; margin-top:6pt;
+    font-family:var(--ef),sans-serif; font-size:9.6pt; font-weight:500; color:#333}
+  .bank span{padding:1pt 5pt; background:#f3f5f8; border-radius:3pt}
+  .q.ls{font-weight:500; font-size:10.6pt; line-height:2.35; font-family:var(--ef),var(--kf),sans-serif}
+  .it.s_listen{padding-top:4pt}
+  .bl{display:inline-block; height:1.15em; border-bottom:.7pt solid #333; margin:0 2pt; vertical-align:-2pt}
+  .bl.a{width:auto; height:auto; border-bottom-color:var(--orange); color:var(--orange); font-weight:700; padding:0 3pt; vertical-align:baseline}
+
   .marg{display:flex; gap:6px}
   .marg button{flex:1; height:36px; border:1.5px solid #d5d9e0; border-radius:8px; background:#fff; font-family:inherit; font-size:14px; cursor:pointer; color:var(--ink)}
   .marg button.on{background:var(--navy); border-color:var(--navy); color:#fff; font-weight:700}
@@ -149,6 +158,14 @@
         <div class="step">
           <div class="lb"><span class="no">3</span>유형</div>
           <div class="types" id="types"></div>
+        </div>
+        <div class="step hidden" id="blankStep">
+          <div class="lb">문장당 빈칸</div>
+          <div class="marg" id="blanks">
+            <button data-n="1" onclick="setBlanks(1)">1개</button>
+            <button data-n="2" class="on" onclick="setBlanks(2)">2개</button>
+          </div>
+          <div class="help">한 문장에 빈칸은 2개까지예요. 짧은 문장은 1개만 비워요.</div>
         </div>
         <div class="step">
           <label for="acad">학원 이름</label>
