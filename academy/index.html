@@ -66,12 +66,12 @@
 .ahero h1{font-size:clamp(30px,4.4vw,48px);font-weight:800;letter-spacing:-.055em;line-height:1.2;margin-top:14px}
 .ahero .lead{font-size:clamp(15px,1.7vw,17px);color:var(--sub);margin-top:12px}
 .abft{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:28px}
-.abft>div{display:flex;flex-direction:column;border-radius:18px;background:#fff;border:1px solid #e8eaf6;padding:20px;box-shadow:0 14px 34px -26px rgba(67,97,255,.5)}
-.abft .ic{width:42px;height:42px;border-radius:12px;background:var(--soft);color:var(--brand);display:grid;place-items:center;margin-bottom:12px}
+.abft>div{display:flex;align-items:center;gap:14px;border-radius:18px;background:#fff;border:1px solid #e8eaf6;padding:20px;box-shadow:0 14px 34px -26px rgba(67,97,255,.5)}
+.abft .ic{flex:none;width:42px;height:42px;border-radius:12px;background:var(--soft);color:var(--brand);display:grid;place-items:center}
 .abft .ic svg{width:20px;height:20px}
 .abft b{font-size:clamp(17px,1.8vw,19px);font-weight:800;letter-spacing:-.03em}
 .abft small{font-size:13.5px;color:var(--sub);margin-top:4px}
-@media(max-width:700px){.abft{grid-template-columns:1fr;gap:8px}.abft>div{display:grid;grid-template-columns:42px 1fr;column-gap:14px;padding:14px 16px}.abft .ic{grid-row:1/3;margin:0}}
+@media(max-width:700px){.abft{grid-template-columns:1fr;gap:8px}.abft>div{padding:14px 16px}}
 .astat{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:28px}
 .astat div{border-radius:18px;background:#fff;border:1px solid #e8eaf6;padding:18px 20px;box-shadow:0 14px 34px -26px rgba(67,97,255,.5)}
 .astat small{display:block;font-size:13px;font-weight:700;color:var(--mute)}
@@ -234,13 +234,12 @@
   <div class="tp rev"><div class="in">
     <span class="badge"><em>학원 전용</em></span>
     <h1>저절로를 학원 교재로,<br><span class="gt">더 합리적으로</span> 도입하세요</h1>
-    <p class="lead">학원·공부방에만 드리는 학원 공급가에, 수업 자료까지 함께 드려요.</p>
     <div class="abft">
-      <div><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M6 3h8l4 4v14H6zM14 3v4h4M9 13h6M9 17h6"/></svg></span><b>학원 전용 공급가</b><small>많이 주문할수록 더 낮아져요</small></div>
-      <div><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M3 7h7l2 2h9v10H3z"/></svg></span><b>무료 배송 · 계산서</b><small>한 곳으로 한 번에 보내 드려요</small></div>
-      <div><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M5 4h14v16H5zM8 9h8M8 13h8M8 17h5"/></svg></span><b>선생님 전용 자료 무료</b><small>워크북 만들기·수업 자료를 함께 드려요</small></div>
+      <div><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M6 3h8l4 4v14H6zM14 3v4h4M9 13h6M9 17h6"/></svg></span><b>학원 전용 공급가</b></div>
+      <div><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M3 7h7l2 2h9v10H3z"/></svg></span><b>무료 배송 · 계산서</b></div>
+      <div><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M5 4h14v16H5zM8 9h8M8 13h8M8 17h5"/></svg></span><b>선생님 전용 자료 무료</b></div>
     </div>
-    <div class="tcta"><a class="big" href="#apply">무료 견적 받기 →</a><small>30권 이상 · 사업자 학원·공부방 대상 · 1영업일 안에 문자로 견적</small></div>
+    <div class="tcta"><a class="big" href="#apply">무료 견적 받기 →</a><small>30권 이상 · 사업자 학원·공부방 대상</small></div>
   </div></div>
 </div></section>
 
