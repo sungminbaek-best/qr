@@ -248,13 +248,13 @@
   <button class="ib" id="zall" data-tip="원래 크기로 (Esc)" style="display:none"><svg viewBox="0 0 24 24"><path d="m15 15 6 6m-6-6v4.8m0-4.8h4.8M9 19.8V15m0 0H4.2M9 15l-6 6M15 4.2V9m0 0h4.8M15 9l6-6M9 4.2V9m0 0H4.2M9 9 3 3"/></svg><span class="t">원래 크기</span></button>
 </div>
 
-<script src="data.js?v=730839744"></script>
+<script src="data.js?v=992483910"></script>
 <script>
 // ── 책별 설정(E-Book반영.py가 books.json 값으로 채움) ──
 const START=9;            // 표지(1쪽) 다음 이 쪽부터 표시(앞 안내·오리엔테이션 건너뜀)
 const BGPAGES=[];        // 박스그래머쪽(첫모의): 아래쪽 요약칸 회색 placeholder
 const Q2PAGES=[];        // 지문/객관식쪽(첫모의): 보기해석 좌측정렬
-const UNITS=[["Unit 1", 9], ["Unit 2", 23], ["Unit 3", 35], ["Unit 4", 47], ["Unit 5", 61], ["Unit 6", 75], ["Unit 7", 89], ["Unit 8", 103]];            // 유닛 바로가기 [[이름, 시작쪽], …]
+const UNITS=[["Unit 1 · Unit 01", 9], ["Unit 2 · Unit 02", 23], ["Unit 3 · Unit 03", 35], ["Unit 4 · Unit 04", 47], ["Unit 5 · Unit 05", 61], ["Unit 6 · Unit 06", 75], ["Unit 7 · Unit 07", 89], ["Unit 8 · Unit 08", 103]];            // 유닛 바로가기 [[이름, 시작쪽], …]
 // ────────────────────────────────────────────
 const END=125;              // 이 쪽까지만 표시(뒤쪽 정답·해설 제외)
 const P = (window.PAGES||[]).filter(p=>p.n===1 || (p.n>=START && p.n<=END));
