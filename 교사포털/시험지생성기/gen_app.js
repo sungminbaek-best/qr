@@ -31,16 +31,27 @@ function setMargin(m){
 
 /* ===== 게이트 ===== */
 function getPass(){ try{ return localStorage.getItem(PASS_KEY)||""; }catch(e){ return ""; } }
+// 데이터(단어·문장·해석·끊어읽기)는 사이트에 공개 파일로 두지 않고 인증 서버가 입장권 확인 후 내려 줌.
+// 내 컴퓨터 미리보기(localhost)는 로컬 gen_data.js(사이트에는 안 올라감)를 씀.
+const LOCAL=/^(localhost|127\.0\.0\.1)$/.test(location.hostname);
+function loadData(pass){
+  if(LOCAL) return new Promise((ok,no)=>{ const sc=document.createElement("script"); sc.src="gen_data.js"; sc.onload=()=>ok(true); sc.onerror=no; document.head.appendChild(sc); });
+  return fetch(AUTH+"/api/gen-data",{headers:{Authorization:"Bearer "+pass}}).then(r=>{
+    if(r.status===401) return false;
+    if(!r.ok) throw new Error("data "+r.status);
+    return r.json().then(d=>{ window.GEN_BOOKS=d; return true; });
+  });
+}
 function boot(){
   try{ localStorage.removeItem("jeol_teacher_ok"); }catch(e){}   // 옛 교사 코드(2026-09-30 폐지)
-  // 내 컴퓨터에서 미리보기(localhost)할 때만 인증 생략 — 실제 사이트(solveu.co.kr)는 그대로 잠김
-  if(/^(localhost|127\.0\.0\.1)$/.test(location.hostname)){ openApp(); return; }
   const p=getPass();
-  if(!p){ show("gate"); return; }
-  openApp();   // 입장권이 있으면 바로 열고, 서버 확인에서 무효면 다시 잠금
-  fetch(AUTH+"/api/me",{headers:{Authorization:"Bearer "+p}}).then(r=>{
-    if(r.status===401){ try{localStorage.removeItem(PASS_KEY)}catch(e){}; show("gate"); }
-  }).catch(()=>{});
+  if(!LOCAL && !p){ show("gate"); return; }
+  show("app");
+  $("preview").innerHTML=`<div class="empty">자료를 불러오는 중이에요…</div>`;
+  loadData(p).then(ok=>{
+    if(!ok){ try{localStorage.removeItem(PASS_KEY)}catch(e){}; show("gate"); return; }   // 입장권이 만료·폐기됨
+    openApp();
+  }).catch(()=>{ $("preview").innerHTML=`<div class="empty">자료를 불러오지 못했어요. 인터넷 연결을 확인하고 새로고침해 주세요.</div>`; });
 }
 function show(id){ ["gate","app"].forEach(v=>$(v).classList.toggle("hidden", v!==id)); }
 let OPENED=false;
