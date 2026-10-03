@@ -67,6 +67,22 @@ window.SOLVEU = {
     $$(".libs a,.tool[data-href],.tbtn[data-href]", root).forEach(function (a) { a.addEventListener("click", function (ev) {
       if (!S.isOK()) { ev.preventDefault(); err.textContent = "먼저 ‘휴대폰으로 입장’을 눌러 인증해 주세요.";
         var tt = $("#teacher"); if (tt) tt.scrollIntoView({ behavior: "smooth", block: "center" }); } }); });
+    /* 잠금 자료(자료실 완성본): 입장권으로 인증 서버에서 받아 새 창에 PDF로 띄움(주소만으로는 못 받음) */
+    $$("[data-file]", root).forEach(function (a) { a.addEventListener("click", function (ev) {
+      ev.preventDefault();
+      if (!S.isOK()) { err.textContent = "먼저 ‘휴대폰으로 입장’을 눌러 인증해 주세요.";
+        var g = $(".lgate", root); if (g) g.scrollIntoView({ behavior: "smooth", block: "center" }); return; }
+      var w = window.open("", "_blank"); err.textContent = "";
+      if (w) w.document.write('<p style="font-family:system-ui;text-align:center;margin-top:40vh;color:#667">자료를 여는 중이에요…</p>');
+      fetch(S.AUTH + "/api/file?p=" + encodeURIComponent(a.dataset.file), { headers: { Authorization: "Bearer " + S.pass() } }).then(function (r) {
+        if (r.status === 401) { S.pass(null); paint(); throw new Error("다시 인증해 주세요."); }
+        if (!r.ok) throw new Error("자료를 찾지 못했어요. 잠시 뒤 다시 시도해 주세요.");
+        return r.blob();
+      }).then(function (b) {
+        var u = URL.createObjectURL(new Blob([b], { type: "application/pdf" }));
+        if (w) w.location.href = u; else location.href = u;
+      }).catch(function (e) { if (w) w.close(); err.textContent = e.message || "잠시 뒤 다시 시도해 주세요."; });
+    }); });
     paint();
     /* 선생님 혜택(광고성 정보 수신 동의): 안 받는 중이면 권하는 상자, 받는 중이면 끄기 링크 */
     var pbox = $(".perkbox", root), pon = $(".perkon", root);
