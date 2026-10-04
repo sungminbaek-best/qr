@@ -227,7 +227,7 @@ function bookView(b){
 
 const IC_HP='<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" d="M4 15v-3a8 8 0 0 1 16 0v3"/><rect x="3" y="14" width="5" height="7" rx="2" fill="currentColor"/><rect x="16" y="14" width="5" height="7" rx="2" fill="currentColor"/></svg>';
 const IC_PL='<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M8 5.5v13l11-6.5z"/></svg>';
-let miniIO=null, stkIO=null;
+let miniIO=null, stkIO=null, shadowTimer=null, shadowSkip=-1;
 /* QR 음원 화면 아래 '선생님이세요?' 한 줄 — 책 QR은 어디서 산 책이든 원장님을 만나는 곳(학생 화면은 가리지 않게 본문 맨 아래) */
 const TSOON=true;   // 선생님 영역 준비 중이면 '선생님이세요?' 줄 숨김
 const GEN=['rst1','rst2','rbr1','rbr2','rin1','rin2','rba1','rba2','rmo1','rmo2','gw1','gw2'];   // 시험지 생성기에 있는 책
@@ -285,7 +285,8 @@ function leaf(b,u,selP){
   const seek=document.getElementById('seek'), curEl=document.getElementById('cur'), durEl=document.getElementById('dur');
   let curSpd=1, curT=(types.length?types[T0].k:'word');
   const listbox=document.getElementById('listbox');
-  let hideMean=false, hideKo=false, repeatOn=false, curIdx=-1, boundEnd=null;
+  let hideMean=false, hideKo=false, repeatOn=false, shadowOn=false, curIdx=-1, boundEnd=null;
+  if(shadowTimer){ clearTimeout(shadowTimer); shadowTimer=null; }
   const hasKo=SENTSRC.some(s=>s.k);   // 해석/발음 있으면 토글 표시
   const koLabel=isSentPage?'발음':'해석';   // 파닉스 문장읽기는 '발음'
   function TIMES(){ return curT==='sent'?ST:(curT==='word'?WT:null); }
@@ -295,8 +296,9 @@ function leaf(b,u,selP){
       let h='<div class="lctrl">';
       if(hasKo) h+='<button class="lbtn'+(hideKo?' on':'')+'" type="button" id="tgKo">'+(hideKo?koLabel+' 보기':koLabel+' 숨기기')+'</button>';
       if(ST) h+='<button class="lbtn'+(repeatOn?' on':'')+'" type="button" id="tgRep">한 문장 반복</button>';
+      if(ST) h+='<button class="lbtn'+(shadowOn?' on':'')+'" type="button" id="tgSh">따라 말하기</button>';
       h+='</div>';
-      if(ST) h+='<div class="lhint" id="lhint">'+(repeatOn?'반복 켜짐 — 문장을 누르면 그 문장만 계속 반복돼요 (멈추려면 재생 버튼)':'문장을 누르면 그 문장만 재생돼요')+'</div>';
+      if(ST) h+='<div class="lhint" id="lhint">'+(shadowOn?'따라 말하기 켜짐 — 문장이 끝날 때마다 잠깐 멈춰요. 그동안 소리 내어 따라 말해요':repeatOn?'반복 켜짐 — 문장을 누르면 그 문장만 계속 반복돼요 (멈추려면 재생 버튼)':'문장을 누르면 그 문장만 재생돼요')+'</div>';
       return h;
     }
     if(curT==='word' && src.words && src.words.length){
@@ -314,6 +316,8 @@ function leaf(b,u,selP){
   function bindList(){
     const km=document.getElementById('tgKo'); if(km) km.onclick=()=>{ hideKo=!hideKo; km.classList.toggle('on',hideKo); km.textContent=hideKo?koLabel+' 보기':koLabel+' 숨기기'; listbox.classList.toggle('hidek',hideKo); listbox.querySelectorAll('.srow.rv').forEach(r=>r.classList.remove('rv')); };
     const mm=document.getElementById('tgMean'); if(mm) mm.onclick=()=>{ hideMean=!hideMean; mm.classList.toggle('on',hideMean); mm.textContent=PAGES?(hideMean?'소리 보기':'소리 숨기기'):(hideMean?'뜻 보기':'뜻 숨기기'); listbox.classList.toggle('hidem',hideMean); listbox.querySelectorAll('.row.rv').forEach(r=>r.classList.remove('rv')); };
+    const sh=document.getElementById('tgSh'); if(sh) sh.onclick=()=>{ shadowOn=!shadowOn; sh.classList.toggle('on',shadowOn); if(!shadowOn&&shadowTimer){ clearTimeout(shadowTimer); shadowTimer=null; }
+      const lh=document.getElementById('lhint'); if(lh) lh.textContent=shadowOn?'따라 말하기 켜짐 — 문장이 끝날 때마다 잠깐 멈춰요. 그동안 소리 내어 따라 말해요':(repeatOn?'반복 켜짐 — 문장을 누르면 그 문장만 계속 반복돼요 (멈추려면 재생 버튼)':'문장을 누르면 그 문장만 재생돼요'); };
     const rp=document.getElementById('tgRep'); if(rp) rp.onclick=()=>{ repeatOn=!repeatOn; rp.classList.toggle('on',repeatOn); const lh=document.getElementById('lhint'); const isw=(curT==='word'); if(lh) lh.textContent=repeatOn?('반복 켜짐 — '+(isw?'단어':'문장')+'를 누르면 그 '+(isw?'단어':'문장')+'만 계속 반복돼요 (멈추려면 재생 버튼)'):((isw?'단어':'문장')+'를 누르면 그 '+(isw?'단어':'문장')+'만 재생돼요'); };
     if(curT==='sent') listbox.querySelectorAll('.srow').forEach((r,i)=>r.onclick=()=>{ if(hideKo) r.classList.add('rv'); if(ST) playSeg(i); });
     if(curT==='word') listbox.querySelectorAll('.row').forEach((r,i)=>r.onclick=()=>{ if(hideMean) r.classList.toggle('rv'); if(WT) playSeg(i); });
@@ -331,7 +335,7 @@ function leaf(b,u,selP){
     if(au.readyState>=1) go(); else au.addEventListener('loadedmetadata',go,{once:true}); }
   function loadSrc(){ au.src=A[curT]||''; try{au.load();}catch(e){} au.playbackRate=curSpd;
     ico.textContent='▶'; lbl.textContent='듣기'; seek.value=0; curEl.textContent='0:00'; durEl.textContent='0:00'; curIdx=-1; boundEnd=null; renderList(); }
-  play.onclick=()=>{ if(au.paused){ boundEnd=null; au.play(); } else au.pause(); };
+  play.onclick=()=>{ if(shadowTimer){ clearTimeout(shadowTimer); shadowTimer=null; au.play(); return; } if(au.paused){ boundEnd=null; au.play(); } else au.pause(); };
   const mini=document.getElementById('mini'), mplay=document.getElementById('mplay'), mbar=document.getElementById('mbar'), mtm=document.getElementById('mtm');
   mplay.onclick=()=>play.click();
   if(miniIO) miniIO.disconnect();
@@ -343,13 +347,22 @@ function leaf(b,u,selP){
   stkEl.querySelectorAll('.chip[data-un]').forEach(x=>x.onclick=()=>{ const nu=u+parseInt(x.dataset.un); if(nu>=1 && nu<=b.units.length){ if(curAudio){curAudio.pause();curAudio=null;} go({book:b.code,u:nu}); } });
   if('IntersectionObserver' in window){ miniIO=new IntersectionObserver(es=>{ const off=!es[0].isIntersecting && es[0].boundingClientRect.top<0; mini.classList.toggle('on',off); mini.setAttribute('aria-hidden',off?'false':'true'); }); miniIO.observe(play); }
   au.onplay=()=>{ ico.textContent='❚❚'; lbl.textContent='듣는 중'; mplay.textContent='❚❚'; };
-  au.onpause=()=>{ mplay.textContent='▶'; if(!au.ended){ ico.textContent='▶'; lbl.textContent='계속 듣기'; } };
+  au.onpause=()=>{ mplay.textContent='▶'; if(!au.ended){ ico.textContent=shadowTimer?'…':'▶'; lbl.textContent=shadowTimer?'따라 말해요':'계속 듣기'; } };
   au.onended=()=>{ ico.textContent='↺'; lbl.textContent='다시 듣기'; mplay.textContent='↺'; curIdx=-1; highlight(); };
   au.ontimeupdate=()=>{ if(au.duration){ seek.value=Math.round(au.currentTime/au.duration*1000); curEl.textContent=fmt(au.currentTime); mbar.style.width=(au.currentTime/au.duration*100)+'%'; mtm.textContent=fmt(au.currentTime);}
     const T=TIMES();
     if(T){
       if(boundEnd!=null){ if(au.currentTime>=boundEnd-0.04){ if(repeatOn){ au.currentTime=T[curIdx]; } else { au.pause(); boundEnd=null; } } }
-      else { let idx=0; for(let j=0;j<T.length;j++){ if(au.currentTime>=T[j]-0.02) idx=j; } if(idx!==curIdx){ curIdx=idx; highlight(true); } }
+      else { let idx=0; for(let j=0;j<T.length;j++){ if(au.currentTime>=T[j]-0.02) idx=j; }
+        if(idx!==curIdx){
+          if(shadowTimer) return;
+          if(shadowOn && curT==='sent' && curIdx>=0 && idx===curIdx+1 && idx!==shadowSkip && !au.paused && !shadowTimer){
+            const wait=(T[idx]-T[curIdx])*0.6/curSpd, nxt=idx; shadowSkip=nxt;
+            au.pause(); lbl.textContent='따라 말해요'; ico.textContent='…';
+            shadowTimer=setTimeout(()=>{ shadowTimer=null; au.play(); }, wait*1000);
+            return;
+          }
+          if(idx===shadowSkip) shadowSkip=-1; curIdx=idx; highlight(true); } }
     } };
   au.onloadedmetadata=()=>durEl.textContent=fmt(au.duration);
   seek.oninput=()=>{ if(au.duration){ boundEnd=null; au.currentTime=seek.value/1000*au.duration; } };
