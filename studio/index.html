@@ -129,6 +129,32 @@
 .stk .chip.tool.on{background:var(--soft);border-color:var(--brand);color:var(--brand)}
 @media(max-width:600px){.stk .in{padding:8px 12px}.stk .tools{margin-left:0;width:100%}}
 .lhint{color:var(--mute);font-size:12.5px;margin:-4px 0 10px}
+/* 숙제 녹음: 녹음 → 들어 보기 → 보내기(휴대폰 공유 = 카카오톡 등). 서버에 올리지 않음 */
+.recbtn{margin-top:18px;display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line2);background:#fff;border-radius:999px;padding:10px 18px;font-weight:800;font-size:14.5px;color:var(--ink)}
+.recbtn i{width:10px;height:10px;border-radius:50%;background:#ef4444;display:inline-block}
+.rec{position:fixed;inset:0;z-index:60;background:rgba(12,16,32,.45);display:flex;align-items:flex-end;justify-content:center}
+.rec .sh{width:min(560px,100%);max-height:92vh;overflow:auto;background:#fff;border-radius:22px 22px 0 0;padding:20px 18px 24px}
+@media(min-width:700px){.rec{align-items:center}.rec .sh{border-radius:22px}}
+.rec h3{font-size:19px;font-weight:800;letter-spacing:-.03em}.rec .sub2{font-size:13px;color:var(--mute);margin-top:2px}
+.rec .x{float:right;font-size:24px;line-height:1;color:var(--mute);background:none;border:0;padding:2px 6px}
+.rec .mt{display:flex;gap:4px;margin-top:14px;background:var(--panel);padding:4px;border-radius:12px}
+.rec .mt button{flex:1;padding:9px 6px;border-radius:9px;font-weight:700;font-size:13.5px;color:var(--sub);background:none;border:0}
+.rec .mt button.on{background:#fff;color:var(--ink);box-shadow:0 1px 3px rgba(12,16,32,.12)}
+.rec ol{margin:12px 0 0;padding:12px 14px 12px 34px;background:var(--panel);border-radius:12px;max-height:30vh;overflow:auto;font-size:15px;line-height:1.55}
+.rec ol li{margin:3px 0}
+.rec label{display:block;margin-top:12px;font-size:12.5px;color:var(--mute);font-weight:700}
+.rec input{width:100%;margin-top:4px;padding:10px 12px;border:1px solid var(--line2);border-radius:10px;font-size:15px;font-family:inherit}
+.rec .rb{display:flex;flex-direction:column;align-items:center;margin-top:16px}
+.rec .big{width:84px;height:84px;border-radius:50%;background:#ef4444;color:#fff;font-size:15px;font-weight:800;border:0;box-shadow:0 12px 26px -12px rgba(239,68,68,.8)}
+.rec .big.on{animation:recp 1.2s infinite}
+@keyframes recp{50%{box-shadow:0 0 0 12px rgba(239,68,68,.15)}}
+.rec .tm{margin-top:8px;font-variant-numeric:tabular-nums;color:var(--sub);font-size:13.5px;text-align:center;word-break:keep-all}
+.rec audio{width:100%;margin-top:12px}
+.rec .acts{display:flex;gap:8px;margin-top:10px}
+.rec .acts button{flex:1;padding:13px;border-radius:12px;font-weight:800;font-size:15px;border:1px solid var(--line2);background:#fff;color:var(--ink)}
+.rec .acts .send{background:var(--grad);border:0;color:#fff}
+.rec .note{margin-top:10px;font-size:12px;color:var(--mute);line-height:1.55;word-break:keep-all}
+.rec .note.ok{color:var(--brand);font-weight:700}
 .msg{color:var(--mute);text-align:center;padding:64px 0}
 @media(max-width:700px){.st{padding:28px 18px 16px}.rows{grid-template-columns:1fr}.row .w{font-size:18px}.row .m{font-size:15px}}
 </style>
@@ -171,6 +197,63 @@ function loadFull(b, cb){
   document.head.appendChild(s);
 }
 function esc(s){ return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+/* 숙제 녹음 — 휴대폰 안에서 녹음·mp3로 바꾸고, 공유(카카오톡 등)로 선생님께. 쏠뷰 서버로는 안 보냄 */
+let recState=null;
+function loadLame(){ return window.lamejs?Promise.resolve():new Promise((ok,no)=>{ const s=document.createElement('script'); s.src='https://cdnjs.cloudflare.com/ajax/libs/lamejs/1.2.1/lame.min.js'; s.onload=ok; s.onerror=no; document.head.appendChild(s); }); }
+async function toMp3(blob){ await loadLame(); const AC=window.AudioContext||window.webkitAudioContext; const ac=new AC();
+  const buf=await new Promise((ok,no)=>blob.arrayBuffer().then(ab=>ac.decodeAudioData(ab,ok,no)).catch(no)); try{ac.close();}catch(e){}
+  const SR=22050, off=new OfflineAudioContext(1,Math.max(1,Math.ceil(buf.duration*SR)),SR), src=off.createBufferSource(); src.buffer=buf; src.connect(off.destination); src.start();
+  const r=await off.startRendering(), f=r.getChannelData(0), pcm=new Int16Array(f.length);
+  for(let i=0;i<f.length;i++){ const v=Math.max(-1,Math.min(1,f[i])); pcm[i]=v<0?v*0x8000:v*0x7fff; }
+  const enc=new lamejs.Mp3Encoder(1,SR,64), out=[];
+  for(let i=0;i<pcm.length;i+=1152){ const d=enc.encodeBuffer(pcm.subarray(i,i+1152)); if(d.length) out.push(new Uint8Array(d)); }
+  const e=enc.flush(); if(e.length) out.push(new Uint8Array(e));
+  return {blob:new Blob(out,{type:'audio/mpeg'}),ext:'mp3'}; }
+function openRec(b,u,S){
+  closeRec(); const NK='solveu_rec_name'; let n0=''; try{ n0=localStorage.getItem(NK)||''; }catch(e){}
+  const hasKo=S.some(s=>s.k); let mode='en';
+  document.body.insertAdjacentHTML('beforeend','<div class="rec" id="rec" role="dialog" aria-modal="true" aria-label="숙제 녹음"><div class="sh">'+
+    '<button class="x" type="button" id="recX" aria-label="닫기">×</button><h3>숙제 녹음</h3><p class="sub2">'+esc(nm(b))+' · Unit '+u+'</p>'+
+    (hasKo?'<div class="mt"><button type="button" class="on" data-m="en">영어 보고 읽기</button><button type="button" data-m="ko">한글 보고 영어로</button></div>':'')+
+    '<ol id="recList"></ol>'+
+    '<label>이름 <input id="recName" maxlength="12" autocomplete="name" placeholder="선생님이 알아보도록 적어 주세요" value="'+esc(n0)+'"></label>'+
+    '<div class="rb"><button class="big" type="button" id="recGo">녹음</button><div class="tm" id="recTm">버튼을 누르고 읽어요</div></div>'+
+    '<div id="recDone" hidden><audio id="recAu" controls></audio><div class="acts"><button type="button" id="recRe">다시 녹음</button><button type="button" class="send" id="recSend">보내기</button></div></div>'+
+    '<p class="note" id="recMsg">보내기를 누르고 카카오톡 → 선생님 채팅방을 고르면 돼요.</p>'+
+    '<p class="note">녹음은 이 휴대폰에만 있어요. 쏠뷰 서버로 보내지 않아요.</p></div></div>');
+  const $r=id=>document.getElementById(id), list=$r('recList'), go=$r('recGo'), tm=$r('recTm'), done=$r('recDone'), rau=$r('recAu'), msg=$r('recMsg'), nameIn=$r('recName');
+  const st=recState={mr:null,stream:null,tmr:null,file:null,ext:'mp3',chunks:[]};
+  function draw(){ list.innerHTML=S.map(s=>'<li>'+esc(mode==='ko'?(s.k||''):s.e)+'</li>').join(''); }
+  draw();
+  document.querySelectorAll('#rec .mt button').forEach(x=>x.onclick=()=>{ if(st.mr&&st.mr.state==='recording') return; mode=x.dataset.m; document.querySelectorAll('#rec .mt button').forEach(y=>y.classList.toggle('on',y===x)); draw(); });
+  function fname(){ const d=new Date(), who=(nameIn.value.trim()||'이름없음').replace(/[\\/:*?"<>|\s]/g,'');
+    return who+'_'+nm(b).replace(/\s/g,'')+'_U'+u+'_'+(mode==='ko'?'한글보고영어':'영어읽기')+'_'+(d.getMonth()+1)+'월'+d.getDate()+'일.'+st.ext; }
+  function say(t,ok){ msg.textContent=t; msg.classList.toggle('ok',!!ok); }
+  async function start(){
+    if(!navigator.mediaDevices||!window.MediaRecorder){ say('이 브라우저는 녹음이 안 돼요. 크롬이나 사파리로 열어 주세요.'); return; }
+    try{ st.stream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true}}); }
+    catch(e){ say('마이크를 쓸 수 없어요. 마이크 권한을 허용해 주세요. 카카오톡·네이버 앱 안에서 열었다면 오른쪽 위 메뉴에서 "다른 브라우저로 열기"를 눌러 주세요.'); return; }
+    done.hidden=true; st.file=null; st.chunks=[]; st.mr=new MediaRecorder(st.stream);
+    st.mr.ondataavailable=e=>{ if(e.data&&e.data.size) st.chunks.push(e.data); }; st.mr.onstop=finish; st.mr.start();
+    const t0=Date.now(); go.classList.add('on'); go.textContent='멈추기'; tm.textContent='녹음 중 0:00';
+    st.tmr=setInterval(()=>{ const s=Math.floor((Date.now()-t0)/1000); tm.textContent='녹음 중 '+Math.floor(s/60)+':'+String(s%60).padStart(2,'0'); },250);
+    say('다 읽으면 멈추기를 눌러요.'); }
+  function stopRec(){ if(st.mr&&st.mr.state!=='inactive') st.mr.stop(); if(st.stream) st.stream.getTracks().forEach(t=>t.stop()); clearInterval(st.tmr); go.classList.remove('on'); go.textContent='녹음'; }
+  async function finish(){ tm.textContent='파일 만드는 중…'; const type=(st.mr&&st.mr.mimeType)||'audio/webm', raw=new Blob(st.chunks,{type});
+    let out; try{ out=await toMp3(raw); }catch(e){ out={blob:raw,ext:type.indexOf('mp4')>=0?'m4a':'webm'}; }
+    st.ext=out.ext; st.blob=out.blob; rau.src=URL.createObjectURL(out.blob); done.hidden=false; tm.textContent='들어 보고 괜찮으면 보내요'; say('보내기를 누르고 카카오톡 → 선생님 채팅방을 고르면 돼요.'); }
+  go.onclick=()=>{ if(st.mr&&st.mr.state==='recording') stopRec(); else start(); };
+  $r('recRe').onclick=()=>{ rau.pause(); start(); };
+  $r('recSend').onclick=async()=>{ if(!st.blob) return; try{ localStorage.setItem(NK,nameIn.value.trim()); }catch(e){}
+    const file=new File([st.blob],fname(),{type:st.ext==='mp3'?'audio/mpeg':st.blob.type});
+    if(navigator.canShare&&navigator.canShare({files:[file]})){ try{ await navigator.share({files:[file],title:file.name}); say('보냈어요. 수고했어요!',true); return; }catch(e){ if(e&&e.name==='AbortError') return; } }
+    const a=document.createElement('a'); a.href=URL.createObjectURL(file); a.download=file.name; document.body.appendChild(a); a.click(); a.remove();
+    say('파일로 저장했어요. 카카오톡 채팅방에서 + → 파일로 보내 주세요. ('+file.name+')',true); };
+  $r('recX').onclick=closeRec; $r('rec').addEventListener('click',e=>{ if(e.target.id==='rec' && !(st.mr&&st.mr.state==='recording')) closeRec(); });
+}
+function closeRec(){ const m=document.getElementById('rec'); if(!m) return; const st=recState;
+  if(st){ try{ if(st.mr&&st.mr.state!=='inactive'){ st.mr.onstop=null; st.mr.stop(); } }catch(e){} if(st.stream) st.stream.getTracks().forEach(t=>t.stop()); clearInterval(st.tmr); }
+  recState=null; m.remove(); }
 function bookByCode(c){ return BOOKS.find(b=>b.code===c); }
 function parse(){ const q=new URLSearchParams(location.search); let book=q.get('book'), u=parseInt(q.get('u'));
   const c=q.get('c'); if(c){ const m=c.match(/^([a-z]+\d+)u(\d+)/i); if(m){ book=book||m[1]; if(!u)u=parseInt(m[2]); } }
@@ -276,6 +359,7 @@ function leaf(b,u,selP){
       '<div class="seekwrap"><input type="range" id="seek" min="0" max="1000" value="0" aria-label="재생 위치">'+
       '<div class="time"><span id="cur">0:00</span><span id="dur">0:00</span></div></div>'+
       '<div class="spds"><button class="spd" type="button" data-s="0.8">0.8×</button><button class="spd on" type="button" data-s="1">1.0×</button><button class="spd" type="button" data-s="1.2">1.2×</button></div>'+
+      ((SENTSRC.length && !PAGES)?'<button class="recbtn" type="button" id="recOpen"><i></i>숙제 녹음하기</button>':'')+
     '</div>'+
     ((wordHTML||sentHTML)? '<div class="wl" id="listbox"></div>':'')+
     teacherLine(b,u)+stk+
@@ -385,6 +469,7 @@ function leaf(b,u,selP){
     document.querySelectorAll('.atg').forEach(y=>y.classList.remove('on')); x.classList.add('on'); loadSrc(); });
   loadSrc();
   document.querySelectorAll('.pgtab').forEach(x=>x.onclick=()=>{ const pi=parseInt(x.dataset.pg); if(pi===selP)return; if(curAudio){curAudio.pause();curAudio=null;} leaf(b,u,pi); window.scrollTo(0,0); });
+  const ro=document.getElementById('recOpen'); if(ro) ro.onclick=()=>{ if(!au.paused) au.pause(); openRec(b,u,SENTSRC); };
   const prev=document.getElementById('uprev'), next=document.getElementById('unext');
   prev.disabled=(u<=1); next.disabled=(u>=b.units.length);
   prev.onclick=()=>{ if(u>1) go({book:b.code,u:u-1}); };
