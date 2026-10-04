@@ -232,6 +232,9 @@ function leaf(b,u,selP){
   const isSentPage=!!(PAGES && src.sents && src.sents.length);  // 문장읽기 페이지
   const A=PAGES?(isSentPage?{sent:src.audio||''}:{word:src.audio||''}):(un.audio||{});
   const types=[]; if(A.word)types.push({k:'word',l:'단어'}); if(A.sent)types.push({k:'sent',l:'문장'});
+  // QR 코드 끝이 s(문장)/w(단어)면 그 음원을 먼저 선택 — 처음 들어온 그 유닛에서만
+  const PREF=(function(){ const m=QRC.match(/^([a-z]+\d+)u0*(\d+)([ws])$/i); if(m && m[1]===b.code && parseInt(m[2],10)===u) return m[3].toLowerCase()==='s'?'sent':'word'; return null; })();
+  const T0=Math.max(0, types.findIndex(t=>t.k===PREF));
   const ST=isSentPage?(src.st||null):(PAGES?null:(un.st||null));  // 문장 시작시각(탭재생/하이라이트/반복)
   const WT=isSentPage?null:(src.wt||null);  // 단어 시작시각(파닉스 등: 단어 탭재생)
   const SENTSRC=isSentPage?src.sents:(un.sents||[]);
@@ -242,7 +245,7 @@ function leaf(b,u,selP){
   const wordHTML=(!isSentPage&&src.words&&src.words.length)?'<h2>'+wordHead+'</h2><div class="rows">'+words+'</div>':'';
   const sentHead=(isSentPage?(esc(src.label||'문장읽기')+' · '):'')+'문장 '+SENTSRC.length+'개';
   const sentHTML=(SENTSRC.length)?'<h2>'+sentHead+'</h2><div class="rows">'+sents+'</div>':'';
-  const toggle= types.length>1 ? '<div class="atog">'+types.map((t,i)=>'<button class="atg'+(i===0?' on':'')+'" type="button" data-t="'+t.k+'">'+t.l+' 음원</button>').join('')+'</div><br>' : '';
+  const toggle= types.length>1 ? '<div class="atog">'+types.map((t,i)=>'<button class="atg'+(i===T0?' on':'')+'" type="button" data-t="'+t.k+'">'+t.l+' 음원</button>').join('')+'</div><br>' : '';
   app.innerHTML='<nav class="crumb" aria-label="위치"><button type="button" data-go="home">음원·강의</button><span>›</span><button type="button" data-go="book" data-book="'+b.code+'">'+esc(nm(b))+'</button></nav>'+
     '<div class="ltop">'+cover(b)+'<div class="tt"><span class="bk">'+esc(nm(b))+'</span><h1>Unit '+u+'</h1></div>'+
     '<div class="unav"><button type="button" id="uprev">이전 유닛</button><button type="button" id="unext">다음 유닛</button></div></div>'+
@@ -260,7 +263,7 @@ function leaf(b,u,selP){
   const au=document.getElementById('au'); curAudio=au;
   const play=document.getElementById('play'), ico=document.getElementById('ico'), lbl=document.getElementById('lbl');
   const seek=document.getElementById('seek'), curEl=document.getElementById('cur'), durEl=document.getElementById('dur');
-  let curSpd=1, curT=(types.length?types[0].k:'word');
+  let curSpd=1, curT=(types.length?types[T0].k:'word');
   const listbox=document.getElementById('listbox');
   let hideMean=false, hideKo=false, repeatOn=false, curIdx=-1, boundEnd=null;
   const hasKo=SENTSRC.some(s=>s.k);   // 해석/발음 있으면 토글 표시
