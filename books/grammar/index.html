@@ -39,6 +39,7 @@
 .buy .menu{position:absolute;top:calc(100% + 8px);left:0;z-index:5;min-width:240px;background:#fff;border:1px solid var(--line2);border-radius:14px;box-shadow:var(--shadow);padding:6px;display:grid}
 .buy .menu a{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 14px;border-radius:10px;font-size:14.5px;font-weight:700}
 .buy .menu a:hover{background:var(--panel)}
+.bk-hero.buyopen,.bk-hero:has(.buy[open]){position:relative;z-index:25}
 .bk-nav{position:sticky;top:64px;z-index:20;background:rgba(255,255,255,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
 .bk-nav .wrap{display:flex;gap:26px;overflow-x:auto;scrollbar-width:none}
 .bk-nav .wrap::-webkit-scrollbar{display:none}
@@ -177,6 +178,8 @@ tabs("#preview .ptab",".pvp");
 var RV=S.REVIEWS.filter(function(v){return v.step==="grammar";}), shown=6;
 function drawRv(){var el=S.$("#rvg"); if(!el) return; S.renderReviews(el, RV.slice(0,shown)); var m=S.$("#moreBtn"); m.hidden=RV.length<=shown; m.textContent="후기 "+(RV.length-shown)+"개 더 보기";}
 var mb=S.$("#moreBtn"); if(mb) mb.onclick=function(){shown=RV.length;drawRv();}; drawRv();
+/* 구매 메뉴가 열리면 첫 화면을 '이 페이지' 메뉴(고정 띠) 위로 — 메뉴가 띠에 가려지지 않게 */
+S.$$(".buy").forEach(function(d){d.addEventListener("toggle",function(){var h=d.closest(".bk-hero");if(h)h.classList.toggle("buyopen",d.open);});});
 /* 이 페이지 메뉴: 지금 보고 있는 구역 표시 */
 if("IntersectionObserver" in window){var L=S.$$(".bk-nav a"),io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting)L.forEach(function(a){a.classList.toggle("on",a.getAttribute("href")==="#"+e.target.id);});});},{rootMargin:"-45% 0px -50% 0px"});
   L.forEach(function(a){var t=S.$(a.getAttribute("href"));if(t)io.observe(t);});}
