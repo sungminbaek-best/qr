@@ -112,6 +112,16 @@
 .mini .mt b{display:block;font-size:13.5px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .mini .bar{height:4px;border-radius:4px;background:var(--line);margin-top:6px;overflow:hidden}.mini .bar i{display:block;height:100%;width:0;background:var(--grad)}
 .mini .tm{flex:none;font-size:12px;color:var(--mute);font-variant-numeric:tabular-nums}
+/* 아래로 내리면 위에 붙는 '지금 어디' 띠: 유닛·쪽 이동 */
+.stk{position:fixed;top:64px;left:0;right:0;z-index:35;background:rgba(255,255,255,.96);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line);box-shadow:0 10px 24px -20px rgba(12,16,32,.5);transform:translateY(calc(-100% - 70px));transition:transform .25s cubic-bezier(.2,.8,.2,1)}
+.stk.on{transform:none}
+.stk .in{max-width:1100px;margin:0 auto;padding:9px 16px;display:flex;align-items:center;gap:10px}
+.stk .lab{flex:none;font-size:13px;font-weight:800;color:var(--ink)}
+.stk .chips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding:1px}
+.stk .chips::-webkit-scrollbar{display:none}
+.stk .chip{flex:none;border:1px solid var(--line2);background:#fff;color:var(--sub);border-radius:9px;padding:6px 10px;font-size:12.5px;font-weight:700;white-space:nowrap}
+.stk .chip small{font-size:11px;font-weight:600;color:var(--mute);margin-left:4px}
+.stk .chip.on{background:var(--brand);border-color:var(--brand);color:#fff}.stk .chip.on small{color:#dfe5ff}
 .lhint{color:var(--mute);font-size:12.5px;margin:-4px 0 10px}
 .msg{color:var(--mute);text-align:center;padding:64px 0}
 @media(max-width:700px){.st{padding:28px 18px 16px}.rows{grid-template-columns:1fr}.row .w{font-size:18px}.row .m{font-size:15px}}
@@ -211,7 +221,7 @@ function bookView(b){
 
 const IC_HP='<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" d="M4 15v-3a8 8 0 0 1 16 0v3"/><rect x="3" y="14" width="5" height="7" rx="2" fill="currentColor"/><rect x="16" y="14" width="5" height="7" rx="2" fill="currentColor"/></svg>';
 const IC_PL='<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M8 5.5v13l11-6.5z"/></svg>';
-let miniIO=null;
+let miniIO=null, stkIO=null;
 /* QR 음원 화면 아래 '선생님이세요?' 한 줄 — 책 QR은 어디서 산 책이든 원장님을 만나는 곳(학생 화면은 가리지 않게 본문 맨 아래) */
 const TSOON=true;   // 선생님 영역 준비 중이면 '선생님이세요?' 줄 숨김
 const GEN=['rst1','rst2','rbr1','rbr2','rin1','rin2','rba1','rba2','rmo1','rmo2','gw1','gw2'];   // 시험지 생성기에 있는 책
@@ -245,6 +255,10 @@ function leaf(b,u,selP){
   const wordHTML=(!isSentPage&&src.words&&src.words.length)?'<h2>'+wordHead+'</h2><div class="rows">'+words+'</div>':'';
   const sentHead=(isSentPage?(esc(src.label||'문장읽기')+' · '):'')+'문장 '+SENTSRC.length+'개';
   const sentHTML=(SENTSRC.length)?'<h2>'+sentHead+'</h2><div class="rows">'+sents+'</div>':'';
+  const PLAB=PAGES?((src.p!=null?'p.'+src.p+' ':'')+(src.label||'')).trim():'';
+  const stkChips=PAGES?PAGES.map((p,i)=>'<button class="chip'+(i===selP?' on':'')+'" type="button" data-pg="'+i+'">'+esc(p.label||('세트 '+(i+1)))+((p.p!=null)?'<small>p.'+p.p+'</small>':'')+'</button>').join('')
+    :(types.length>1?types.map((t,i)=>'<button class="chip'+(i===T0?' on':'')+'" type="button" data-t="'+t.k+'">'+t.l+' 음원</button>').join(''):'');
+  const stk='<div class="stk" id="stk" aria-hidden="true"><div class="in"><span class="lab">Unit '+u+'</span><div class="chips" id="stkc">'+stkChips+'</div></div></div>';
   const toggle= types.length>1 ? '<div class="atog">'+types.map((t,i)=>'<button class="atg'+(i===T0?' on':'')+'" type="button" data-t="'+t.k+'">'+t.l+' 음원</button>').join('')+'</div><br>' : '';
   app.innerHTML='<nav class="crumb" aria-label="위치"><button type="button" data-go="home">음원·강의</button><span>›</span><button type="button" data-go="book" data-book="'+b.code+'">'+esc(nm(b))+'</button></nav>'+
     '<div class="ltop">'+cover(b)+'<div class="tt"><span class="bk">'+esc(nm(b))+'</span><h1>Unit '+u+'</h1></div>'+
@@ -257,8 +271,8 @@ function leaf(b,u,selP){
       '<div class="spds"><button class="spd" type="button" data-s="0.8">0.8×</button><button class="spd on" type="button" data-s="1">1.0×</button><button class="spd" type="button" data-s="1.2">1.2×</button></div>'+
     '</div>'+
     ((wordHTML||sentHTML)? '<div class="wl" id="listbox"></div>':'')+
-    teacherLine(b,u)+
-    '<div class="mini" id="mini" aria-hidden="true"><button type="button" id="mplay" aria-label="재생">▶</button><div class="mt"><b>'+esc(nm(b))+' · Unit '+u+'</b><div class="bar"><i id="mbar"></i></div></div><span class="tm" id="mtm">0:00</span></div>';
+    teacherLine(b,u)+stk+
+    '<div class="mini" id="mini" aria-hidden="true"><button type="button" id="mplay" aria-label="재생">▶</button><div class="mt"><b>'+esc(nm(b))+' · Unit '+u+(PLAB?' · '+esc(PLAB):'')+'</b><div class="bar"><i id="mbar"></i></div></div><span class="tm" id="mtm">0:00</span></div>';
 
   const au=document.getElementById('au'); curAudio=au;
   const play=document.getElementById('play'), ico=document.getElementById('ico'), lbl=document.getElementById('lbl');
@@ -290,7 +304,7 @@ function leaf(b,u,selP){
     return '';
   }
   function highlight(follow){ if(!listbox) return; let el=null; listbox.querySelectorAll(ROWSEL()).forEach((r,i)=>{ r.classList.toggle('cur', i===curIdx); if(i===curIdx) el=r; });
-    if(follow && el && !au.paused){ const r=el.getBoundingClientRect(); if(r.bottom>innerHeight-90 || r.top<70) el.scrollIntoView({block:'center',behavior:'smooth'}); } }
+    if(follow && el && !au.paused){ const r=el.getBoundingClientRect(); if(r.bottom>innerHeight-90 || r.top<130) el.scrollIntoView({block:'center',behavior:'smooth'}); } }
   function bindList(){
     const km=document.getElementById('tgKo'); if(km) km.onclick=()=>{ hideKo=!hideKo; km.classList.toggle('on',hideKo); km.textContent=hideKo?koLabel+' 보기':koLabel+' 숨기기'; listbox.classList.toggle('hidek',hideKo); listbox.querySelectorAll('.srow.rv').forEach(r=>r.classList.remove('rv')); };
     const mm=document.getElementById('tgMean'); if(mm) mm.onclick=()=>{ hideMean=!hideMean; mm.classList.toggle('on',hideMean); mm.textContent=PAGES?(hideMean?'소리 보기':'소리 숨기기'):(hideMean?'뜻 보기':'뜻 숨기기'); listbox.classList.toggle('hidem',hideMean); listbox.querySelectorAll('.row.rv').forEach(r=>r.classList.remove('rv')); };
@@ -310,6 +324,12 @@ function leaf(b,u,selP){
   const mini=document.getElementById('mini'), mplay=document.getElementById('mplay'), mbar=document.getElementById('mbar'), mtm=document.getElementById('mtm');
   mplay.onclick=()=>play.click();
   if(miniIO) miniIO.disconnect();
+  if(stkIO) stkIO.disconnect();
+  const stkEl=document.getElementById('stk'), stkAnchor=document.querySelector('.pgtabs')||document.querySelector('.atog')||play;
+  if('IntersectionObserver' in window){ stkIO=new IntersectionObserver(es=>{ const off=!es[0].isIntersecting && es[0].boundingClientRect.top<80; stkEl.classList.toggle('on',off); stkEl.setAttribute('aria-hidden',off?'false':'true');
+      if(off){ const c=stkEl.querySelector('.chip.on'); if(c) c.scrollIntoView({inline:'center',block:'nearest'}); } },{rootMargin:'-64px 0px 0px 0px'}); stkIO.observe(stkAnchor); }
+  stkEl.querySelectorAll('.chip[data-pg]').forEach(x=>x.onclick=()=>{ const pi=parseInt(x.dataset.pg); if(pi===selP)return; if(curAudio){curAudio.pause();curAudio=null;} leaf(b,u,pi); const pt=document.querySelector('.pgtabs'); window.scrollTo(0, pt? Math.max(0,pt.getBoundingClientRect().top+scrollY-80):0); });
+  stkEl.querySelectorAll('.chip[data-t]').forEach(x=>x.onclick=()=>{ const a=document.querySelector('.atg[data-t="'+x.dataset.t+'"]'); if(a) a.click(); stkEl.querySelectorAll('.chip').forEach(y=>y.classList.toggle('on',y===x)); });
   if('IntersectionObserver' in window){ miniIO=new IntersectionObserver(es=>{ const off=!es[0].isIntersecting && es[0].boundingClientRect.top<0; mini.classList.toggle('on',off); mini.setAttribute('aria-hidden',off?'false':'true'); }); miniIO.observe(play); }
   au.onplay=()=>{ ico.textContent='❚❚'; lbl.textContent='듣는 중'; mplay.textContent='❚❚'; };
   au.onpause=()=>{ mplay.textContent='▶'; if(!au.ended){ ico.textContent='▶'; lbl.textContent='계속 듣기'; } };
@@ -325,7 +345,8 @@ function leaf(b,u,selP){
   document.querySelectorAll('.spd').forEach(x=>x.onclick=()=>{ curSpd=parseFloat(x.dataset.s); au.playbackRate=curSpd;
     document.querySelectorAll('.spd').forEach(y=>y.classList.remove('on')); x.classList.add('on'); });
   document.querySelectorAll('.atg').forEach(x=>x.onclick=()=>{ curT=x.dataset.t;
-    document.querySelectorAll('.atg').forEach(y=>y.classList.remove('on')); x.classList.add('on'); loadSrc(); });
+    document.querySelectorAll('.atg').forEach(y=>y.classList.remove('on')); x.classList.add('on'); loadSrc();
+    document.querySelectorAll('.stk .chip[data-t]').forEach(y=>y.classList.toggle('on',y.dataset.t===curT)); });
   loadSrc();
   document.querySelectorAll('.pgtab').forEach(x=>x.onclick=()=>{ const pi=parseInt(x.dataset.pg); if(pi===selP)return; if(curAudio){curAudio.pause();curAudio=null;} leaf(b,u,pi); window.scrollTo(0,0); });
   const prev=document.getElementById('uprev'), next=document.getElementById('unext');
