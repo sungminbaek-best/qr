@@ -113,15 +113,21 @@
 .mini .bar{height:4px;border-radius:4px;background:var(--line);margin-top:6px;overflow:hidden}.mini .bar i{display:block;height:100%;width:0;background:var(--grad)}
 .mini .tm{flex:none;font-size:12px;color:var(--mute);font-variant-numeric:tabular-nums}
 /* 아래로 내리면 위에 붙는 '지금 어디' 띠: 유닛·쪽 이동 */
-.stk{position:fixed;top:64px;left:0;right:0;z-index:35;background:rgba(255,255,255,.96);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line);box-shadow:0 10px 24px -20px rgba(12,16,32,.5);transform:translateY(calc(-100% - 70px));transition:transform .25s cubic-bezier(.2,.8,.2,1)}
+.nav{position:relative}
+.stk{position:fixed;top:0;left:0;right:0;z-index:35;background:rgba(255,255,255,.96);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line);box-shadow:0 10px 24px -20px rgba(12,16,32,.5);transform:translateY(calc(-100% - 70px));transition:transform .25s cubic-bezier(.2,.8,.2,1)}
 .stk.on{transform:none}
-.stk .in{max-width:1100px;margin:0 auto;padding:9px 16px;display:flex;align-items:center;gap:10px}
+.stk .in{max-width:1100px;margin:0 auto;padding:9px 16px;display:flex;align-items:center;gap:8px 10px;flex-wrap:wrap}
 .stk .lab{flex:none;font-size:13px;font-weight:800;color:var(--ink)}
-.stk .chips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding:1px}
+.stk .chips{flex:0 1 auto;min-width:0;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding:1px}
 .stk .chips::-webkit-scrollbar{display:none}
 .stk .chip{flex:none;border:1px solid var(--line2);background:#fff;color:var(--sub);border-radius:9px;padding:6px 10px;font-size:12.5px;font-weight:700;white-space:nowrap}
 .stk .chip small{font-size:11px;font-weight:600;color:var(--mute);margin-left:4px}
 .stk .chip.on{background:var(--brand);border-color:var(--brand);color:#fff}.stk .chip.on small{color:#dfe5ff}
+.stk .chip:disabled{opacity:.4}
+.stk .tools{display:flex;gap:6px;margin-left:auto}
+.stk .tools:empty{display:none}
+.stk .chip.tool.on{background:var(--soft);border-color:var(--brand);color:var(--brand)}
+@media(max-width:600px){.stk .in{padding:8px 12px}.stk .tools{margin-left:0;width:100%}}
 .lhint{color:var(--mute);font-size:12.5px;margin:-4px 0 10px}
 .msg{color:var(--mute);text-align:center;padding:64px 0}
 @media(max-width:700px){.st{padding:28px 18px 16px}.rows{grid-template-columns:1fr}.row .w{font-size:18px}.row .m{font-size:15px}}
@@ -257,8 +263,8 @@ function leaf(b,u,selP){
   const sentHTML=(SENTSRC.length)?'<h2>'+sentHead+'</h2><div class="rows">'+sents+'</div>':'';
   const PLAB=PAGES?((src.p!=null?'p.'+src.p+' ':'')+(src.label||'')).trim():'';
   const stkChips=PAGES?PAGES.map((p,i)=>'<button class="chip'+(i===selP?' on':'')+'" type="button" data-pg="'+i+'">'+esc(p.label||('세트 '+(i+1)))+((p.p!=null)?'<small>p.'+p.p+'</small>':'')+'</button>').join('')
-    :(types.length>1?types.map((t,i)=>'<button class="chip'+(i===T0?' on':'')+'" type="button" data-t="'+t.k+'">'+t.l+' 음원</button>').join(''):'');
-  const stk='<div class="stk" id="stk" aria-hidden="true"><div class="in"><span class="lab">Unit '+u+'</span><div class="chips" id="stkc">'+stkChips+'</div></div></div>';
+    :('<button class="chip" type="button" data-un="-1"'+(u<=1?' disabled':'')+'>◀ 이전 유닛</button><button class="chip" type="button" data-un="1"'+(u>=b.units.length?' disabled':'')+'>다음 유닛 ▶</button>');
+  const stk='<div class="stk" id="stk" aria-hidden="true"><div class="in"><span class="lab">Unit '+u+'</span><div class="chips" id="stkc">'+stkChips+'</div><div class="tools" id="stkt"></div></div></div>';
   const toggle= types.length>1 ? '<div class="atog">'+types.map((t,i)=>'<button class="atg'+(i===T0?' on':'')+'" type="button" data-t="'+t.k+'">'+t.l+' 음원</button>').join('')+'</div><br>' : '';
   app.innerHTML='<nav class="crumb" aria-label="위치"><button type="button" data-go="home">음원·강의</button><span>›</span><button type="button" data-go="book" data-book="'+b.code+'">'+esc(nm(b))+'</button></nav>'+
     '<div class="ltop">'+cover(b)+'<div class="tt"><span class="bk">'+esc(nm(b))+'</span><h1>Unit '+u+'</h1></div>'+
@@ -312,9 +318,14 @@ function leaf(b,u,selP){
     if(curT==='sent') listbox.querySelectorAll('.srow').forEach((r,i)=>r.onclick=()=>{ if(hideKo) r.classList.add('rv'); if(ST) playSeg(i); });
     if(curT==='word') listbox.querySelectorAll('.row').forEach((r,i)=>r.onclick=()=>{ if(hideMean) r.classList.toggle('rv'); if(WT) playSeg(i); });
   }
+  function stkTools(){ const box=document.getElementById('stkt'); if(!box||!listbox) return;
+    const src=[...listbox.querySelectorAll('.lctrl .lbtn')];
+    box.innerHTML=src.map(x=>'<button class="chip tool'+(x.classList.contains('on')?' on':'')+'" type="button" data-for="'+x.id+'">'+esc(x.textContent)+'</button>').join('');
+    box.querySelectorAll('.chip').forEach(c=>c.onclick=()=>{ const o=document.getElementById(c.dataset.for); if(o){ o.click(); stkTools(); } });
+    src.forEach(x=>x.addEventListener('click',()=>setTimeout(stkTools,0))); }
   function renderList(){ if(!listbox) return; listbox.innerHTML=ctrlBar()+((curT==='sent'&&sentHTML)?sentHTML:(wordHTML||sentHTML));
     listbox.classList.toggle('hidem', curT==='word'&&hideMean); listbox.classList.toggle('hidek', curT==='sent'&&hideKo);
-    bindList(); highlight(); }
+    bindList(); highlight(); stkTools(); }
   function playSeg(i){ const T=TIMES(); if(!T) return; curIdx=i; highlight();
     const go=()=>{ boundEnd=(T[i+1]!=null?T[i+1]:(au.duration||1e9)); try{au.currentTime=T[i];}catch(e){} au.playbackRate=curSpd; au.play(); };
     if(au.readyState>=1) go(); else au.addEventListener('loadedmetadata',go,{once:true}); }
@@ -326,10 +337,10 @@ function leaf(b,u,selP){
   if(miniIO) miniIO.disconnect();
   if(stkIO) stkIO.disconnect();
   const stkEl=document.getElementById('stk'), stkAnchor=document.querySelector('.pgtabs')||document.querySelector('.atog')||play;
-  if('IntersectionObserver' in window){ stkIO=new IntersectionObserver(es=>{ const off=!es[0].isIntersecting && es[0].boundingClientRect.top<80; stkEl.classList.toggle('on',off); stkEl.setAttribute('aria-hidden',off?'false':'true');
-      if(off){ const c=stkEl.querySelector('.chip.on'); if(c) c.scrollIntoView({inline:'center',block:'nearest'}); } },{rootMargin:'-64px 0px 0px 0px'}); stkIO.observe(stkAnchor); }
-  stkEl.querySelectorAll('.chip[data-pg]').forEach(x=>x.onclick=()=>{ const pi=parseInt(x.dataset.pg); if(pi===selP)return; if(curAudio){curAudio.pause();curAudio=null;} leaf(b,u,pi); const pt=document.querySelector('.pgtabs'); window.scrollTo(0, pt? Math.max(0,pt.getBoundingClientRect().top+scrollY-80):0); });
-  stkEl.querySelectorAll('.chip[data-t]').forEach(x=>x.onclick=()=>{ const a=document.querySelector('.atg[data-t="'+x.dataset.t+'"]'); if(a) a.click(); stkEl.querySelectorAll('.chip').forEach(y=>y.classList.toggle('on',y===x)); });
+  if('IntersectionObserver' in window){ stkIO=new IntersectionObserver(es=>{ const off=!es[0].isIntersecting && es[0].boundingClientRect.top<10; stkEl.classList.toggle('on',off); stkEl.setAttribute('aria-hidden',off?'false':'true');
+      if(off){ const c=stkEl.querySelector('.chip.on'); if(c) c.scrollIntoView({inline:'center',block:'nearest'}); } }); stkIO.observe(stkAnchor); }
+  stkEl.querySelectorAll('.chip[data-pg]').forEach(x=>x.onclick=()=>{ const pi=parseInt(x.dataset.pg); if(pi===selP)return; if(curAudio){curAudio.pause();curAudio=null;} leaf(b,u,pi); const pt=document.querySelector('.pgtabs'); window.scrollTo(0, pt? Math.max(0,pt.getBoundingClientRect().top+scrollY-16):0); });
+  stkEl.querySelectorAll('.chip[data-un]').forEach(x=>x.onclick=()=>{ const nu=u+parseInt(x.dataset.un); if(nu>=1 && nu<=b.units.length){ if(curAudio){curAudio.pause();curAudio=null;} go({book:b.code,u:nu}); } });
   if('IntersectionObserver' in window){ miniIO=new IntersectionObserver(es=>{ const off=!es[0].isIntersecting && es[0].boundingClientRect.top<0; mini.classList.toggle('on',off); mini.setAttribute('aria-hidden',off?'false':'true'); }); miniIO.observe(play); }
   au.onplay=()=>{ ico.textContent='❚❚'; lbl.textContent='듣는 중'; mplay.textContent='❚❚'; };
   au.onpause=()=>{ mplay.textContent='▶'; if(!au.ended){ ico.textContent='▶'; lbl.textContent='계속 듣기'; } };
@@ -345,8 +356,7 @@ function leaf(b,u,selP){
   document.querySelectorAll('.spd').forEach(x=>x.onclick=()=>{ curSpd=parseFloat(x.dataset.s); au.playbackRate=curSpd;
     document.querySelectorAll('.spd').forEach(y=>y.classList.remove('on')); x.classList.add('on'); });
   document.querySelectorAll('.atg').forEach(x=>x.onclick=()=>{ curT=x.dataset.t;
-    document.querySelectorAll('.atg').forEach(y=>y.classList.remove('on')); x.classList.add('on'); loadSrc();
-    document.querySelectorAll('.stk .chip[data-t]').forEach(y=>y.classList.toggle('on',y.dataset.t===curT)); });
+    document.querySelectorAll('.atg').forEach(y=>y.classList.remove('on')); x.classList.add('on'); loadSrc(); });
   loadSrc();
   document.querySelectorAll('.pgtab').forEach(x=>x.onclick=()=>{ const pi=parseInt(x.dataset.pg); if(pi===selP)return; if(curAudio){curAudio.pause();curAudio=null;} leaf(b,u,pi); window.scrollTo(0,0); });
   const prev=document.getElementById('uprev'), next=document.getElementById('unext');
