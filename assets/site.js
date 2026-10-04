@@ -2,7 +2,7 @@
 window.SOLVEU = {
   STORE: "https://smartstore.naver.com/solveu",
   TALK: "https://talk.naver.com/ct/wfk779v",
-  BIZ: "상호 쏠뷰(SolveYou) · 대표 백성민",
+  BIZ: "상호 쏠뷰(SolveYou) · 대표 백성민 · 사업자등록번호 872-21-02280 · 통신판매업 신고 제2026-인천부평-0671호",
     REVIEWS: window.SOLVEU_REVIEWS || []   /* /assets/reviews.js (build_site.py가 site_src/reviews.json에서 생성) */
 };
 
