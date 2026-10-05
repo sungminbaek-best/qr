@@ -34,6 +34,9 @@
 .bcard.off{opacity:.5;cursor:default}.bcard.off:hover{border-color:var(--line)}
 @media(max-width:860px){.bgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .bhead{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.btabs{display:flex;gap:4px;margin-top:24px;padding:4px;background:var(--panel);border-radius:14px;max-width:420px}
+.btabs button{flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:11px;border-radius:11px;font-size:15px;font-weight:800;color:var(--sub)}
+.btabs button svg{width:16px;height:16px}.btabs button.on{background:#fff;color:var(--brand);box-shadow:0 1px 4px rgba(12,16,32,.14)}
 .bhead img{width:64px;border-radius:4px;box-shadow:0 12px 24px -12px rgba(12,16,32,.45)}
 .bhead img.land{width:96px}
 .bhead .tx{flex:1;min-width:0}
@@ -190,6 +193,12 @@
 @keyframes rkp{50%{box-shadow:0 0 0 12px rgba(239,68,68,.15)}}
 .rk .bar p{font-size:13.5px;color:var(--sub);line-height:1.45}.rk .bar p b{display:block;font-size:16px;color:var(--ink);font-variant-numeric:tabular-nums}
 .rk .bot{flex:none;padding:12px 18px calc(18px + env(safe-area-inset-bottom));display:flex;justify-content:center;border-top:1px solid var(--line)}
+.rk .sync{flex:none;display:flex;align-items:center;justify-content:center;gap:8px;padding:12px 18px 0;font-size:14.5px;font-weight:700;color:var(--ink);border-top:1px solid var(--line)}
+.rk .sync input{width:20px;height:20px;accent-color:var(--brand)}
+.rk .sync+.cue+.bot,.rk .sync+.cue[hidden]+.bot{border-top:0}
+.rk .cue{flex:none;margin:10px auto 0;padding:7px 14px;border-radius:999px;background:var(--soft);color:var(--brand);font-weight:800;font-size:14px}
+.rk .cue[hidden]{display:none}
+.rk .ls.s li.cur{background:var(--soft);border-radius:12px;padding-left:12px;padding-right:12px;border-bottom-color:transparent}.rk .ls.s li.cur b{color:var(--brand)}
 .rk .pill{display:flex;align-items:center;gap:10px;padding:16px 30px;border-radius:999px;background:#ef4444;color:#fff;border:0;font-size:16px;font-weight:800;box-shadow:0 12px 26px -12px rgba(239,68,68,.8)}
 .rk .pill i{width:14px;height:14px;border-radius:50%;background:#fff}
 .rk .pill.on{background:var(--ink);box-shadow:none}.rk .pill.on i{border-radius:3px;background:#ef4444}
@@ -272,7 +281,7 @@ function inAppOut(kind){ const ua=navigator.userAgent, and=/Android/i.test(ua);
   if(/NAVER\(inapp|NAVER/i.test(ua)) return and? {app:'네이버 앱', link:'intent://'+href.replace(/^https?:\/\//,'')+'#Intent;scheme=https;package=com.android.chrome;end', btn:'크롬으로 열기'}
     : {app:'네이버 앱', link:'', btn:''};
   return null; }
-function openRec(b,u,S,kind,pg){   // S=[{e,k}] kind='단어'|'문장' pg='p.25'(파닉스)
+function openRec(b,u,S,kind,pg,ctl){   // S=[{e,k}] kind='단어'|'문장' pg='p.25'(파닉스) ctl=음원 조종(따라 말하며 녹음)
   closeRec(); const OUT=inAppOut(kind); const NK='solveu_rec_name'; let n0=''; try{ n0=localStorage.getItem(NK)||''; }catch(e){}
   const W=(kind==='단어');
   const items=S.map((s,i)=>'<li>'+(W?'<i>'+(i+1)+'</i>':'')+'<b>'+esc(s.e)+'</b>'+(s.k?'<span>'+esc(s.k)+'</span>':'')+'</li>').join('');
@@ -281,13 +290,16 @@ function openRec(b,u,S,kind,pg){   // S=[{e,k}] kind='단어'|'문장' pg='p.25'
     (OUT?'<div class="inapp"><b>먼저 아래 버튼을 눌러 주세요</b>'+(OUT.link?'지금 화면('+OUT.app+')에서는 녹음을 선생님께 보낼 수 없어요. 버튼을 누르면 보낼 수 있는 화면으로 바뀌어요.<a href="'+esc(OUT.link)+'">녹음하러 가기 →</a>':'지금 화면('+OUT.app+')에서는 녹음을 선생님께 보낼 수 없어요. 오른쪽 아래 ⋯ 를 누르고 "다른 브라우저로 열기"를 눌러 주세요.')+'</div>':'')+
     '<div class="read" id="recRead"><ol class="ls '+(W?'w':'s')+'">'+items+'</ol>'+
       (W?'<div class="bar"><button class="rb" type="button" id="recGo" aria-label="녹음"><i></i></button><p id="recTm"><b>눌러서 녹음 시작</b>위에서부터 읽어요</p></div>'
-        :'<div class="bot"><button class="pill" type="button" id="recGo"><i></i><span id="recTm">녹음 시작</span></button></div>')+'</div>'+
+        :((ctl?'<label class="sync"><input type="checkbox" id="recSync">음원 듣고 따라 말하며 녹음</label><div class="cue" id="recCue" hidden>지금 따라 말해요</div>':'')+
+          '<div class="bot"><button class="pill" type="button" id="recGo"><i></i><span id="recTm">녹음 시작</span></button></div>'))+'</div>'+
     '<div class="done" id="recDone" hidden><div class="ok">✓</div><b>녹음 완료</b><small id="recLen"></small><audio id="recAu" controls></audio>'+
       '<label class="nm"><span>이름</span><input id="recName" maxlength="12" autocomplete="name" placeholder="선생님이 알아보도록" value="'+esc(n0)+'"></label>'+
       '<button class="send" type="button" id="recSend">선생님께 보내기</button><button class="re" type="button" id="recRe">다시 녹음</button></div>'+
     '<p class="msg" id="recMsg"></p></div></div>');
   const $r=id=>document.getElementById(id), go=$r('recGo'), tm=$r('recTm'), live=$r('recLive'), read=$r('recRead'), done=$r('recDone'), rau=$r('recAu'), msg=$r('recMsg'), nameIn=$r('recName');
-  const st=recState={mr:null,stream:null,tmr:null,file:null,ext:'mp3',chunks:[],sec:0};
+  const st=recState={mr:null,stream:null,tmr:null,file:null,ext:'mp3',chunks:[],sec:0,ctl:null};
+  const sync=$r('recSync'), cue=$r('recCue'), lis=[...document.querySelectorAll('#rec .ls li')];
+  function mark(i){ lis.forEach((x,j)=>x.classList.toggle('cur',j===i)); if(lis[i]) lis[i].scrollIntoView({block:'center',behavior:'smooth'}); }
   const mmss=x=>Math.floor(x/60)+':'+String(x%60).padStart(2,'0');
   function idle(){ go.classList.remove('on'); if(W) tm.innerHTML='<b>눌러서 녹음 시작</b>위에서부터 읽어요'; else tm.textContent='녹음 시작'; live.hidden=true; }
   function fname(){ const d=new Date(), who=(nameIn.value.trim()||'이름없음').replace(/[\\/:*?"<>|\s]/g,'');
@@ -301,8 +313,9 @@ function openRec(b,u,S,kind,pg){   // S=[{e,k}] kind='단어'|'문장' pg='p.25'
     st.mr.ondataavailable=e=>{ if(e.data&&e.data.size) st.chunks.push(e.data); }; st.mr.onstop=finish; st.mr.start();
     const t0=Date.now(); st.sec=0; go.classList.add('on'); live.hidden=W; live.textContent='0:00';
     const draw=()=>{ st.sec=Math.floor((Date.now()-t0)/1000); if(W) tm.innerHTML='<b>녹음 중 '+mmss(st.sec)+'</b>다 읽으면 눌러요'; else { tm.textContent='녹음 끝내기'; live.textContent=mmss(st.sec); } };
-    draw(); st.tmr=setInterval(draw,250); }
-  function stopRec(){ if(st.mr&&st.mr.state!=='inactive') st.mr.stop(); if(st.stream) st.stream.getTracks().forEach(t=>t.stop()); clearInterval(st.tmr); idle(); if(W) tm.innerHTML='<b>파일 만드는 중…</b>잠깐만 기다려요'; }
+    draw(); st.tmr=setInterval(draw,250);
+    if(ctl && sync && sync.checked){ st.ctl=ctl; ctl.hook(ev=>{ if(ev==='say'){ cue.hidden=false; } else if(ev==='end'){ cue.hidden=true; stopRec(); } else { cue.hidden=true; mark(ev); } }); ctl.start(); } }
+  function stopRec(){ if(st.ctl){ st.ctl.hook(null); st.ctl.stop(); st.ctl=null; } if(cue) cue.hidden=true; mark(-1); if(st.mr&&st.mr.state!=='inactive') st.mr.stop(); if(st.stream) st.stream.getTracks().forEach(t=>t.stop()); clearInterval(st.tmr); idle(); if(W) tm.innerHTML='<b>파일 만드는 중…</b>잠깐만 기다려요'; }
   async function finish(){ const type=(st.mr&&st.mr.mimeType)||'audio/webm', raw=new Blob(st.chunks,{type});
     let out; try{ out=await toMp3(raw); }catch(e){ out={blob:raw,ext:type.indexOf('mp4')>=0?'m4a':'webm'}; }
     st.ext=out.ext; st.blob=out.blob; rau.src=URL.createObjectURL(out.blob);
@@ -318,6 +331,7 @@ function openRec(b,u,S,kind,pg){   // S=[{e,k}] kind='단어'|'문장' pg='p.25'
   $r('recX').onclick=closeRec; $r('rec').addEventListener('click',e=>{ if(e.target.id==='rec' && !(st.mr&&st.mr.state==='recording')) closeRec(); });
 }
 function closeRec(){ const m=document.getElementById('rec'); if(!m) return; const st=recState;
+  if(st&&st.ctl){ try{ st.ctl.hook(null); st.ctl.stop(); }catch(e){} }
   if(st){ try{ if(st.mr&&st.mr.state!=='inactive'){ st.mr.onstop=null; st.mr.stop(); } }catch(e){} if(st.stream) st.stream.getTracks().forEach(t=>t.stop()); clearInterval(st.tmr); }
   recState=null; m.remove(); }
 function bookByCode(c){ return BOOKS.find(b=>b.code===c); }
@@ -325,7 +339,7 @@ function parse(){ const q=new URLSearchParams(location.search); let book=q.get('
   const c=q.get('c'); if(c){ const m=c.match(/^([a-z]+\d+)u(\d+)/i); if(m){ book=book||m[1]; if(!u)u=parseInt(m[2]); } }
   return {book, u:(u>=1?u:null)}; }
 function go(params, push){ const qs=new URLSearchParams();
-  if(params.book) qs.set('book',params.book); if(params.u) qs.set('u',params.u);
+  if(params.book) qs.set('book',params.book); if(params.u) qs.set('u',params.u); if(params.tab) qs.set('tab',params.tab);
   const url=location.pathname+(qs.toString()?'?'+qs.toString():'');
   if(push!==false) history.pushState(params,'',url); render(); }
 window.addEventListener('popstate', render);
@@ -360,18 +374,22 @@ function bookView(b){
     const chips=vids.map(r=>'<a class="orient" href="'+esc(r.url)+'" target="_blank" rel="noopener">'+esc(r.label||'영상')+' ↗</a>').join('');
     top='<div class="orientbox"><h2>'+esc(b.orient_title||'오리엔테이션 영상')+'</h2><div class="orientgrid">'+chips+'</div></div>';
   }
+  const VL=un=>(un.videos&&un.videos.length)? un.videos : (un.video? [{label:'강의 영상',url:un.video}] : []);
+  const HA=un=>(un.audio&&(un.audio.word||un.audio.sent))||(un.pages&&un.pages.length)||un.np;
+  const hasAud=b.units.some(HA), hasLec=vids.length>0||b.units.some(un=>VL(un).length);
+  const lec=(new URLSearchParams(location.search).get('tab')==='lec' && hasLec) || !hasAud;
+  if(lec) top=top; else top='';
   const cards=b.units.map(un=>{
-    const hasA=(un.audio&&(un.audio.word||un.audio.sent))||(un.pages&&un.pages.length)||un.np;
-    const vlist=(un.videos&&un.videos.length)? un.videos : (un.video? [{label:'강의 영상',url:un.video}] : []);
-    const a=hasA? '<button class="ubtn main" type="button" data-go="leaf" data-book="'+b.code+'" data-u="'+un.n+'">'+IC_HP+'음원 듣기</button>'
-                : (vlist.length? '' : '<span class="ubtn off">준비 중</span>');
-    const vid=vlist.map(v=>'<a class="ubtn" href="'+esc(v.url)+'" target="_blank" rel="noopener">'+IC_PL+esc(v.label)+' ↗</a>').join('');
-    return '<div class="ucard"><div class="ut">Unit '+un.n+'</div><div class="ubtns">'+a+vid+'</div></div>';
+    if(lec){ const vl=VL(un); if(!vl.length) return '';
+      return '<div class="ucard"><div class="ut">Unit '+un.n+'</div><div class="ubtns">'+vl.map(v=>'<a class="ubtn main" href="'+esc(v.url)+'" target="_blank" rel="noopener">'+IC_PL+esc(v.label)+' ↗</a>').join('')+'</div></div>'; }
+    const a=HA(un)? '<button class="ubtn main" type="button" data-go="leaf" data-book="'+b.code+'" data-u="'+un.n+'">'+IC_HP+'음원 듣기</button>' : '<span class="ubtn off">준비 중</span>';
+    return '<div class="ucard"><div class="ut">Unit '+un.n+'</div><div class="ubtns">'+a+'</div></div>';
   }).join('');
+  const tabs=(hasAud&&hasLec)? '<div class="btabs"><button type="button" class="'+(lec?'':'on')+'" data-go="book" data-book="'+b.code+'">'+IC_HP+'음원</button><button type="button" class="'+(lec?'on':'')+'" data-go="lec" data-book="'+b.code+'">'+IC_PL+'강의</button></div>' : '';
   const sl=slugOf(b.code);
   app.innerHTML='<nav class="crumb" aria-label="위치"><button type="button" data-go="home">음원·강의</button><span>›</span><span>'+esc(nm(b))+'</span></nav>'+
     '<div class="bhead">'+cover(b)+'<div class="tx"><h1>'+esc(nm(b))+'</h1></div>'+(sl?'<a class="btn line sm" href="/books/'+sl+'/">교재 소개 →</a>':'')+'</div>'+
-    top+'<div class="ugrid">'+cards+'</div>';
+    tabs+top+'<div class="ugrid">'+cards+'</div>';
 }
 
 const IC_HP='<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" d="M4 15v-3a8 8 0 0 1 16 0v3"/><rect x="3" y="14" width="5" height="7" rx="2" fill="currentColor"/><rect x="16" y="14" width="5" height="7" rx="2" fill="currentColor"/></svg>';
@@ -428,7 +446,7 @@ function leaf(b,u,selP){
   const seek=document.getElementById('seek'), curEl={}, durEl={};   // 시간 숫자는 표시 안 함
   let curSpd=1, curT=(types.length?types[T0].k:'word');
   const listbox=document.getElementById('listbox');
-  let hideMean=false, hideKo=false, repeatOn=false, shadowOn=false, curIdx=-1, boundEnd=null, shadowDone=-1, shadowHold=false;
+  let hideMean=false, hideKo=false, repeatOn=false, shadowOn=false, curIdx=-1, boundEnd=null, shadowDone=-1, shadowHold=false, recHook=null;
   if(shadowTimer){ clearTimeout(shadowTimer); shadowTimer=null; } holdAfter=null;
   const hasKo=SENTSRC.some(s=>s.k);   // 해석/발음 있으면 토글 표시
   const koLabel=isSentPage?'발음':'해석';   // 파닉스 문장읽기는 '발음'
@@ -463,7 +481,12 @@ function leaf(b,u,selP){
     if(curT==='word') listbox.querySelectorAll('.row').forEach((r,i)=>r.onclick=()=>{ if(hideMean) r.classList.toggle('rv'); if(WT) playSeg(i); });
   }
   function recGo(){ const sent=(curT==='sent'&&SENTSRC.length); const items=sent? SENTSRC.map(x=>({e:x.e,k:x.k})) : (src.words||[]).map(w=>({e:w.w,k:w.m}));
-    openRec(b,u,items,sent?'문장':'단어',(PAGES&&src.p!=null)?'p.'+src.p:''); }
+    const ctl=(sent&&ST&&SE&&!PAGES)?{
+      start(){ if(shadowTimer){ clearTimeout(shadowTimer); shadowTimer=null; holdAfter=null; } shadowOn=true; const sh=document.getElementById('tgSh'); if(sh) sh.classList.add('on'); setHint();
+        boundEnd=null; shadowDone=-1; shadowHold=false; curIdx=-1; try{au.currentTime=0;}catch(e){} au.playbackRate=curSpd; au.play(); },
+      stop(){ if(shadowTimer){ clearTimeout(shadowTimer); shadowTimer=null; holdAfter=null; } shadowHold=false; au.pause(); },
+      hook(fn){ recHook=fn; } } : null;
+    openRec(b,u,items,sent?'문장':'단어',(PAGES&&src.p!=null)?'p.'+src.p:'',ctl); }
   function renderList(){ const tb=document.getElementById('tbar'); if(tb) tb.innerHTML=ctrlBar(); setHint(); if(!listbox) return; listbox.innerHTML=((curT==='sent'&&sentHTML)?sentHTML:(wordHTML||sentHTML));
     listbox.classList.toggle('hidem', curT==='word'&&hideMean); listbox.classList.toggle('hidek', curT==='sent'&&hideKo);
     bindList(); highlight(); }
@@ -483,7 +506,7 @@ function leaf(b,u,selP){
   //  반복만: 지금 항목 끝 → (문장은 0.6초 쉬고) 처음으로  / 따라 말하기만: 문장 끝 → 문장 길이+0.8초 멈춤(음원 속 쉼 포함) → 다음
   //  둘 다: 문장 끝 → 문장 길이+0.8초 멈춤 → 같은 문장 처음  / 항목을 누르면: 반복 켜짐=그 항목 반복, 꺼짐=그 항목 한 번
   function segEnd(k){ const T=TIMES(); return (curT==='sent'&&SE)? SE[k] : (T[k+1]!=null? T[k+1]-0.05 : (au.duration||1e9)-0.05); }
-  function hold(ms, after, say){ shadowHold=!!say; holdAfter=after; au.pause(); shadowTimer=setTimeout(()=>{ shadowTimer=null; const f=holdAfter; holdAfter=null; if(f) f(); }, ms); }
+  function hold(ms, after, say){ shadowHold=!!say; holdAfter=after; if(say&&recHook) recHook('say'); au.pause(); shadowTimer=setTimeout(()=>{ shadowTimer=null; const f=holdAfter; holdAfter=null; if(f) f(); }, ms); }
   function skipHold(){ clearTimeout(shadowTimer); shadowTimer=null; const f=holdAfter; holdAfter=null; if(f) f(); else au.play(); }
   function tick(){ const T=TIMES(); if(!T||au.paused||shadowTimer) return; const t=au.currentTime;
     if(curIdx>=0 && (repeatOn||boundEnd!=null)){
@@ -494,12 +517,12 @@ function leaf(b,u,selP){
       else { try{au.currentTime=T[k];}catch(e){} }
       return; }
     let idx=0; for(let j=0;j<T.length;j++){ if(t>=T[j]-0.02) idx=j; }
-    if(idx!==curIdx){ curIdx=idx; highlight(true); shadowDone=-1; if(shadowHold){ shadowHold=false; ico.textContent='❚❚'; lbl.textContent=''; } }
+    if(idx!==curIdx){ curIdx=idx; highlight(true); shadowDone=-1; if(recHook) recHook(idx); if(shadowHold){ shadowHold=false; ico.textContent='❚❚'; lbl.textContent=''; } }
     if(shadowOn&&curT==='sent'&&SE&&curIdx>=0&&shadowDone!==curIdx&&t>=SE[curIdx]){ const k=curIdx; shadowDone=k; const gap=(ST[k+1]!=null?ST[k+1]-SE[k]:0);
-      hold(Math.max(0.6,(SE[k]-ST[k])+0.8-gap)*1000/curSpd, ()=>au.play(), ST[k+1]!=null); } }
+      hold(Math.max(0.6,(SE[k]-ST[k])+0.8-gap)*1000/curSpd, ()=>au.play(), true); } }
   function loopTick(){ tick(); if(!au.paused && (shadowOn||repeatOn||boundEnd!=null)) requestAnimationFrame(loopTick); }
   au.onpause=()=>{ mplay.textContent='▶'; if(!au.ended){ ico.textContent=shadowHold?'…':(shadowTimer?'❚❚':'▶'); lbl.textContent=shadowHold?'따라 말해요':''; } };
-  au.onended=()=>{ ico.textContent='↺'; lbl.textContent=''; mplay.textContent='↺'; curIdx=-1; highlight(); };
+  au.onended=()=>{ if(recHook) recHook('end'); ico.textContent='↺'; lbl.textContent=''; mplay.textContent='↺'; curIdx=-1; highlight(); };
   au.ontimeupdate=()=>{ if(au.duration){ seek.value=Math.round(au.currentTime/au.duration*1000); curEl.textContent=fmt(au.currentTime); mbar.style.width=(au.currentTime/au.duration*100)+'%'; mtm.textContent=fmt(au.currentTime);}
     tick(); };
   au.onloadedmetadata=()=>durEl.textContent=fmt(au.duration);
@@ -521,6 +544,7 @@ app.addEventListener('click', e=>{
   const t=e.target.closest('[data-go]'); if(!t) return; const g=t.dataset.go;
   if(g==='home') go({});
   else if(g==='book') go({book:t.dataset.book});
+  else if(g==='lec') go({book:t.dataset.book, tab:'lec'});
   else if(g==='leaf') go({book:t.dataset.book, u:parseInt(t.dataset.u)});
 });
 render();
