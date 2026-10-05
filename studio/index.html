@@ -129,6 +129,35 @@
 .stk .chip.tool.on{background:var(--soft);border-color:var(--brand);color:var(--brand)}
 @media(max-width:600px){.stk .in{padding:8px 12px}.stk .tools{margin-left:0;width:100%}}
 .lhint{color:var(--mute);font-size:12.5px;margin:-4px 0 10px}
+/* 간소화(2026-10-05): 제목 한 줄 + 붙는 조작판(쪽·재생 줄·보기 버튼) + 목록 */
+.lhead{display:flex;align-items:center;gap:12px}
+.lhead>img{width:38px;border-radius:3px;box-shadow:0 8px 16px -10px rgba(12,16,32,.45)}.lhead>img.land{width:56px}
+.lhead .bk{background:none;border:0;padding:0;font-size:13px;color:var(--sub);font-weight:700;cursor:pointer}
+.lhead .bk:hover{color:var(--brand)}
+.lhead .un{display:flex;align-items:center;gap:8px;margin-top:1px}
+.lhead h1{font-size:26px;font-weight:800;letter-spacing:-.03em;margin:0;line-height:1.1}
+.lhead .un button{width:30px;height:30px;border-radius:50%;border:1px solid var(--line2);background:#fff;font-size:17px;line-height:1;color:var(--ink);display:grid;place-items:center;padding:0}
+.lhead .un button:disabled{opacity:.3}
+.lview .atog{margin:16px 0 0}
+.dock{position:sticky;top:0;z-index:30;background:rgba(255,255,255,.97);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);padding:12px 0 10px;margin-top:6px;border-bottom:1px solid transparent;transition:border-color .2s,box-shadow .2s}
+.dock.stuck{border-bottom-color:var(--line);box-shadow:0 12px 20px -18px rgba(12,16,32,.45)}
+.pgrow{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;margin-bottom:10px;padding:1px}
+.pgrow::-webkit-scrollbar{display:none}
+.pgrow .pgtab{flex:none;flex-direction:row;gap:5px;padding:6px 11px;border-radius:9px}
+.pgrow .pgtab b{font-size:13px}.pgrow .pgtab span{font-size:11px}
+.pbar{display:flex;align-items:center;gap:12px}
+.pbtn{flex:none;width:52px;height:52px;border-radius:50%;background:var(--grad);color:#fff;font-size:17px;display:grid;place-items:center;border:0;box-shadow:0 10px 22px -12px rgba(67,97,255,.85)}
+.pbtn:active{transform:scale(.95)}
+.pbar input[type=range]{flex:1;min-width:0;accent-color:var(--brand);height:20px}
+.pbar .say{flex:none;font-size:12.5px;font-weight:800;color:var(--brand);white-space:nowrap}
+.pbar .say:empty{display:none}
+.spdb{flex:none;border:1px solid var(--line2);background:#fff;border-radius:9px;padding:6px 9px;font-weight:700;font-size:13px;font-family:var(--mono);color:var(--ink)}
+.tbar{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.tbar:empty{display:none}
+.tbar .lbtn{padding:7px 12px}
+.tbar .lbtn.recb{color:var(--ink)}.tbar .lbtn.recb i{display:inline-block;width:8px;height:8px;border-radius:50%;background:#ef4444;margin-right:6px;vertical-align:1px}
+.dock .lhint{margin:8px 0 0}
+.lview .wl{margin-top:8px}
 /* 숙제 녹음: 녹음 → 들어 보기 → 보내기(휴대폰 공유 = 카카오톡 등). 서버에 올리지 않음 */
 .recbtn{margin-top:18px;display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line2);background:#fff;border-radius:999px;padding:10px 18px;font-weight:800;font-size:14.5px;color:var(--ink)}
 .recbtn i{width:10px;height:10px;border-radius:50%;background:#ef4444;display:inline-block}
@@ -228,11 +257,11 @@ function openRec(b,u,S){
     (hasKo?'<div class="mt"><button type="button" class="on" data-m="en">영어 보고 읽기</button><button type="button" data-m="ko">한글 보고 영어로</button></div>':'')+
     (OUT?'<div class="inapp"><b>먼저 아래 버튼을 눌러 주세요</b>'+(OUT.link?'지금 화면('+OUT.app+')에서는 녹음을 선생님께 보낼 수 없어요. 버튼을 누르면 보낼 수 있는 화면으로 바뀌어요.<a href="'+esc(OUT.link)+'">녹음하러 가기 →</a>':'지금 화면('+OUT.app+')에서는 녹음을 선생님께 보낼 수 없어요. 오른쪽 아래 ⋯ 를 누르고 "다른 브라우저로 열기"를 눌러 주세요.')+'</div>':'')+
     '<ol id="recList"></ol>'+
-    '<label>이름 <input id="recName" maxlength="12" autocomplete="name" placeholder="선생님이 알아보도록 적어 주세요" value="'+esc(n0)+'"></label>'+
     '<div class="rb"><button class="big" type="button" id="recGo">녹음</button><div class="tm" id="recTm">버튼을 누르고 읽어요</div></div>'+
-    '<div id="recDone" hidden><audio id="recAu" controls></audio><div class="acts"><button type="button" id="recRe">다시 녹음</button><button type="button" class="send" id="recSend">보내기</button></div></div>'+
-    '<p class="note" id="recMsg">[보내기] → 카카오톡 → 선생님을 골라서 보내요.</p>'+
-    '<p class="note">녹음은 이 휴대폰에만 있어요. 쏠뷰 서버로 보내지 않아요.</p></div></div>');
+    '<div id="recDone" hidden><audio id="recAu" controls></audio>'+
+      '<label>이름 <input id="recName" maxlength="12" autocomplete="name" placeholder="선생님이 알아보도록" value="'+esc(n0)+'"></label>'+
+      '<div class="acts"><button type="button" id="recRe">다시 녹음</button><button type="button" class="send" id="recSend">보내기</button></div></div>'+
+    '<p class="note" id="recMsg">녹음은 이 휴대폰에만 저장돼요.</p></div></div>');
   const $r=id=>document.getElementById(id), list=$r('recList'), go=$r('recGo'), tm=$r('recTm'), done=$r('recDone'), rau=$r('recAu'), msg=$r('recMsg'), nameIn=$r('recName');
   const st=recState={mr:null,stream:null,tmr:null,file:null,ext:'mp3',chunks:[]};
   function draw(){ list.innerHTML=S.map(s=>'<li>'+esc(mode==='ko'?(s.k||''):s.e)+'</li>').join(''); }
@@ -249,11 +278,11 @@ function openRec(b,u,S){
     st.mr.ondataavailable=e=>{ if(e.data&&e.data.size) st.chunks.push(e.data); }; st.mr.onstop=finish; st.mr.start();
     const t0=Date.now(); go.classList.add('on'); go.textContent='멈추기'; tm.textContent='녹음 중 0:00';
     st.tmr=setInterval(()=>{ const s=Math.floor((Date.now()-t0)/1000); tm.textContent='녹음 중 '+Math.floor(s/60)+':'+String(s%60).padStart(2,'0'); },250);
-    say('다 읽으면 멈추기를 눌러요.'); }
+    say(''); }
   function stopRec(){ if(st.mr&&st.mr.state!=='inactive') st.mr.stop(); if(st.stream) st.stream.getTracks().forEach(t=>t.stop()); clearInterval(st.tmr); go.classList.remove('on'); go.textContent='녹음'; }
   async function finish(){ tm.textContent='파일 만드는 중…'; const type=(st.mr&&st.mr.mimeType)||'audio/webm', raw=new Blob(st.chunks,{type});
     let out; try{ out=await toMp3(raw); }catch(e){ out={blob:raw,ext:type.indexOf('mp4')>=0?'m4a':'webm'}; }
-    st.ext=out.ext; st.blob=out.blob; rau.src=URL.createObjectURL(out.blob); done.hidden=false; tm.textContent='들어 보고 괜찮으면 보내요'; say('[보내기] → 카카오톡 → 선생님을 골라서 보내요.'); }
+    st.ext=out.ext; st.blob=out.blob; rau.src=URL.createObjectURL(out.blob); done.hidden=false; tm.textContent='들어 보고 괜찮으면 보내요'; say('[보내기] → 카카오톡 → 선생님을 골라서 보내요.'); if(!nameIn.value.trim()) nameIn.focus(); }
   go.onclick=()=>{ if(st.mr&&st.mr.state==='recording') stopRec(); else start(); };
   $r('recRe').onclick=()=>{ rau.pause(); start(); };
   $r('recSend').onclick=async()=>{ if(!st.blob) return; try{ localStorage.setItem(NK,nameIn.value.trim()); }catch(e){}
@@ -352,34 +381,25 @@ function leaf(b,u,selP){
   const SENTSRC=isSentPage?src.sents:(un.sents||[]);
   const words=(isSentPage?[]:(src.words||[])).map((w,i)=>'<div class="row selw'+(WT?' play':'')+'"><span class="n">'+(i+1)+'</span><span class="w">'+esc(w.w)+'</span><span class="m">'+esc(w.m)+'</span></div>').join('');
   const sents=SENTSRC.map((s,i)=>'<div class="srow'+(ST?' play':'')+'"><span class="sn">'+(i+1)+'</span><div class="sc"><span class="se">'+esc(s.e)+'</span><span class="sk">'+esc(s.k)+'</span></div></div>').join('');
-  const pgtabs=PAGES?('<div class="pgtabs">'+PAGES.map((p,i)=>{const sub=(p.sub!==undefined?p.sub:(p.p!=null?'p.'+p.p:''));return '<button class="pgtab'+(i===selP?' on':'')+'" type="button" data-pg="'+i+'"><b>'+esc(p.label||('세트 '+(i+1)))+'</b>'+(sub?'<span>'+esc(sub)+'</span>':'')+'</button>';}).join('')+'</div>'):'';
+  const pgtabs=PAGES?('<div class="pgrow">'+PAGES.map((p,i)=>{const sub=(p.sub!==undefined?p.sub:(p.p!=null?'p.'+p.p:''));return '<button class="pgtab'+(i===selP?' on':'')+'" type="button" data-pg="'+i+'"><b>'+esc(p.label||('세트 '+(i+1)))+'</b>'+(sub?'<span>'+esc(sub)+'</span>':'')+'</button>';}).join('')+'</div>'):'';
   const wordHead=PAGES?('교재 '+src.p+'쪽 순서 · '+(src.words||[]).length+'개'):('단어 '+(src.words?src.words.length:0)+'개');
-  const wordHTML=(!isSentPage&&src.words&&src.words.length)?'<h2>'+wordHead+'</h2><div class="rows">'+words+'</div>':'';
+  const wordHTML=(!isSentPage&&src.words&&src.words.length)?'<div class="rows">'+words+'</div>':'';
   const sentHead=(isSentPage?(esc(src.label||'문장읽기')+' · '):'')+'문장 '+SENTSRC.length+'개';
-  const sentHTML=(SENTSRC.length)?'<h2>'+sentHead+'</h2><div class="rows">'+sents+'</div>':'';
-  const PLAB=PAGES?((src.p!=null?'p.'+src.p+' ':'')+(src.label||'')).trim():'';
-  const stkChips=PAGES?PAGES.map((p,i)=>'<button class="chip'+(i===selP?' on':'')+'" type="button" data-pg="'+i+'">'+esc(p.label||('세트 '+(i+1)))+((p.p!=null)?'<small>p.'+p.p+'</small>':'')+'</button>').join('')
-    :('<button class="chip" type="button" data-un="-1"'+(u<=1?' disabled':'')+'>◀ 이전 유닛</button><button class="chip" type="button" data-un="1"'+(u>=b.units.length?' disabled':'')+'>다음 유닛 ▶</button>');
-  const stk='<div class="stk" id="stk" aria-hidden="true"><div class="in"><span class="lab">Unit '+u+'</span><div class="chips" id="stkc">'+stkChips+'</div><div class="tools" id="stkt"></div></div></div>';
-  const toggle= types.length>1 ? '<div class="atog">'+types.map((t,i)=>'<button class="atg'+(i===T0?' on':'')+'" type="button" data-t="'+t.k+'">'+t.l+' 음원</button>').join('')+'</div><br>' : '';
-  app.innerHTML='<nav class="crumb" aria-label="위치"><button type="button" data-go="home">음원·강의</button><span>›</span><button type="button" data-go="book" data-book="'+b.code+'">'+esc(nm(b))+'</button></nav>'+
-    '<div class="ltop">'+cover(b)+'<div class="tt"><span class="bk">'+esc(nm(b))+'</span><h1>Unit '+u+'</h1></div>'+
-    '<div class="unav"><button type="button" id="uprev">이전 유닛</button><button type="button" id="unext">다음 유닛</button></div></div>'+
-    pgtabs+
-    '<div class="player"><audio id="au" preload="metadata"></audio>'+toggle+
-      '<button class="playbig" type="button" id="play" aria-label="재생"><span class="ico" id="ico">▶</span><span class="lbl" id="lbl">듣기</span></button>'+
-      '<div class="seekwrap"><input type="range" id="seek" min="0" max="1000" value="0" aria-label="재생 위치">'+
-      '<div class="time"><span id="cur">0:00</span><span id="dur">0:00</span></div></div>'+
-      '<div class="spds"><button class="spd" type="button" data-s="0.8">0.8×</button><button class="spd on" type="button" data-s="1">1.0×</button><button class="spd" type="button" data-s="1.2">1.2×</button></div>'+
-      ((SENTSRC.length && !PAGES)?'<button class="recbtn" type="button" id="recOpen"><i></i>숙제 녹음하기</button>':'')+
-    '</div>'+
+  const sentHTML=(SENTSRC.length)?'<div class="rows">'+sents+'</div>':'';
+  const toggle= types.length>1 ? '<div class="atog">'+types.map((t,i)=>'<button class="atg'+(i===T0?' on':'')+'" type="button" data-t="'+t.k+'">'+t.l+' 음원</button>').join('')+'</div>' : '';
+  app.innerHTML='<div class="lview"><div class="lhead">'+cover(b)+'<div><button type="button" class="bk" data-go="book" data-book="'+b.code+'">'+esc(nm(b))+'</button>'+
+    '<div class="un"><button type="button" id="uprev" aria-label="이전 유닛">‹</button><h1>Unit '+u+'</h1><button type="button" id="unext" aria-label="다음 유닛">›</button></div></div></div>'+
+    toggle+'<audio id="au" preload="metadata"></audio>'+
+    '<div class="dock" id="dock">'+pgtabs+
+      '<div class="pbar"><button class="pbtn" type="button" id="play" aria-label="재생"><span id="ico">▶</span></button>'+
+      '<input type="range" id="seek" min="0" max="1000" value="0" aria-label="재생 위치"><span class="say" id="lbl"></span>'+
+      '<button class="spdb" type="button" id="spd" aria-label="재생 속도">1.0×</button></div>'+
+      '<div class="tbar" id="tbar"></div><div class="lhint" id="lhint" hidden></div></div>'+
     ((wordHTML||sentHTML)? '<div class="wl" id="listbox"></div>':'')+
-    teacherLine(b,u)+stk+
-    '<div class="mini" id="mini" aria-hidden="true"><button type="button" id="mplay" aria-label="재생">▶</button><div class="mt"><b>'+esc(nm(b))+' · Unit '+u+(PLAB?' · '+esc(PLAB):'')+'</b><div class="bar"><i id="mbar"></i></div></div><span class="tm" id="mtm">0:00</span></div>';
-
+    teacherLine(b,u)+'</div>';
   const au=document.getElementById('au'); curAudio=au;
   const play=document.getElementById('play'), ico=document.getElementById('ico'), lbl=document.getElementById('lbl');
-  const seek=document.getElementById('seek'), curEl=document.getElementById('cur'), durEl=document.getElementById('dur');
+  const seek=document.getElementById('seek'), curEl={}, durEl={};   // 시간 숫자는 표시 안 함
   let curSpd=1, curT=(types.length?types[T0].k:'word');
   const listbox=document.getElementById('listbox');
   let hideMean=false, hideKo=false, repeatOn=false, shadowOn=false, curIdx=-1, boundEnd=null, shadowDone=-1, shadowHold=false;
@@ -388,68 +408,50 @@ function leaf(b,u,selP){
   const koLabel=isSentPage?'발음':'해석';   // 파닉스 문장읽기는 '발음'
   function TIMES(){ return curT==='sent'?ST:(curT==='word'?WT:null); }
   function ROWSEL(){ return curT==='sent'?'.srow':'.row'; }
-  function hintText(){ const w=(curT==='word'), o=w?'단어를':'문장을', ro=w?'단어로':'문장으로', n=w?'단어':'문장';
-    if(repeatOn&&shadowOn&&!w) return '지금 문장을 듣고 따라 말하기를 계속 반복해요 · 다른 문장을 누르면 그 문장으로 바뀌어요';
-    if(repeatOn) return '지금 '+o+' 계속 반복해요 · 다른 '+o+' 누르면 그 '+ro+' 바뀌어요';
-    if(shadowOn&&!w) return '문장이 끝날 때마다 멈춰요 · 그동안 소리 내어 따라 말해요';
-    return o+' 누르면 그 '+n+'만 들려줘요'; }
-  function setHint(){ const lh=document.getElementById('lhint'); if(lh) lh.textContent=hintText(); }
+  function hintText(){ return (shadowOn&&curT==='sent')?'문장이 끝날 때마다 멈춰요. 그동안 소리 내어 따라 말해요':''; }
+  function setHint(){ const lh=document.getElementById('lhint'); if(lh){ const t=hintText(); lh.textContent=t; lh.hidden=!t; } }
   function ctrlBar(){
     if(curT==='sent' && SENTSRC.length){
-      let h='<div class="lctrl">';
+      let h='';
       if(hasKo) h+='<button class="lbtn'+(hideKo?' on':'')+'" type="button" id="tgKo">'+(hideKo?koLabel+' 보기':koLabel+' 숨기기')+'</button>';
-      if(ST) h+='<button class="lbtn'+(repeatOn?' on':'')+'" type="button" id="tgRep">한 문장 반복</button>';
       if(ST&&SE) h+='<button class="lbtn'+(shadowOn?' on':'')+'" type="button" id="tgSh">따라 말하기</button>';
-      h+='</div>';
-      if(ST) h+='<div class="lhint" id="lhint">'+hintText()+'</div>';
+      if(!PAGES) h+='<button class="lbtn recb" type="button" id="recOpen"><i></i>녹음</button>';
       return h;
     }
     if(curT==='word' && src.words && src.words.length){
       const mlab=PAGES?(hideMean?'소리 보기':'소리 숨기기'):(hideMean?'뜻 보기':'뜻 숨기기');
-      let h='<div class="lctrl"><button class="lbtn'+(hideMean?' on':'')+'" type="button" id="tgMean">'+mlab+'</button>';
-      if(WT) h+='<button class="lbtn'+(repeatOn?' on':'')+'" type="button" id="tgRep">한 단어 반복</button>';
-      h+='</div>';
-      if(WT) h+='<div class="lhint" id="lhint">'+hintText()+'</div>';
-      return h;
+      return '<button class="lbtn'+(hideMean?' on':'')+'" type="button" id="tgMean">'+mlab+'</button>';
     }
     return '';
   }
   function highlight(follow){ if(!listbox) return; let el=null; listbox.querySelectorAll(ROWSEL()).forEach((r,i)=>{ r.classList.toggle('cur', i===curIdx); if(i===curIdx) el=r; });
-    if(follow && el && !au.paused){ const r=el.getBoundingClientRect(); if(r.bottom>innerHeight-90 || r.top<130) el.scrollIntoView({block:'center',behavior:'smooth'}); } }
+    if(follow && el && !au.paused){ const r=el.getBoundingClientRect(); const dh=(document.getElementById('dock')||{}).offsetHeight||0; if(r.bottom>innerHeight-30 || r.top<dh+10) el.scrollIntoView({block:'center',behavior:'smooth'}); } }
   function bindList(){
     const km=document.getElementById('tgKo'); if(km) km.onclick=()=>{ hideKo=!hideKo; km.classList.toggle('on',hideKo); km.textContent=hideKo?koLabel+' 보기':koLabel+' 숨기기'; listbox.classList.toggle('hidek',hideKo); listbox.querySelectorAll('.srow.rv').forEach(r=>r.classList.remove('rv')); };
     const mm=document.getElementById('tgMean'); if(mm) mm.onclick=()=>{ hideMean=!hideMean; mm.classList.toggle('on',hideMean); mm.textContent=PAGES?(hideMean?'소리 보기':'소리 숨기기'):(hideMean?'뜻 보기':'뜻 숨기기'); listbox.classList.toggle('hidem',hideMean); listbox.querySelectorAll('.row.rv').forEach(r=>r.classList.remove('rv')); };
     const sh=document.getElementById('tgSh'); if(sh) sh.onclick=()=>{ shadowOn=!shadowOn; sh.classList.toggle('on',shadowOn); shadowDone=-1;
       if(!shadowOn && shadowTimer && shadowHold){ skipHold(); } setHint(); if(!au.paused) loopTick(); };
     const rp=document.getElementById('tgRep'); if(rp) rp.onclick=()=>{ repeatOn=!repeatOn; rp.classList.toggle('on',repeatOn); if(repeatOn) boundEnd=null; setHint(); if(!au.paused) loopTick(); };
+    const ro=document.getElementById('recOpen'); if(ro) ro.onclick=()=>{ if(!au.paused) au.pause(); openRec(b,u,SENTSRC); };
     if(curT==='sent') listbox.querySelectorAll('.srow').forEach((r,i)=>r.onclick=()=>{ if(hideKo) r.classList.add('rv'); if(ST) playSeg(i); });
     if(curT==='word') listbox.querySelectorAll('.row').forEach((r,i)=>r.onclick=()=>{ if(hideMean) r.classList.toggle('rv'); if(WT) playSeg(i); });
   }
-  function stkTools(){ const box=document.getElementById('stkt'); if(!box||!listbox) return;
-    const src=[...listbox.querySelectorAll('.lctrl .lbtn')];
-    box.innerHTML=src.map(x=>'<button class="chip tool'+(x.classList.contains('on')?' on':'')+'" type="button" data-for="'+x.id+'">'+esc(x.textContent)+'</button>').join('');
-    box.querySelectorAll('.chip').forEach(c=>c.onclick=()=>{ const o=document.getElementById(c.dataset.for); if(o){ o.click(); stkTools(); } });
-    src.forEach(x=>x.addEventListener('click',()=>setTimeout(stkTools,0))); }
-  function renderList(){ if(!listbox) return; listbox.innerHTML=ctrlBar()+((curT==='sent'&&sentHTML)?sentHTML:(wordHTML||sentHTML));
+  function renderList(){ const tb=document.getElementById('tbar'); if(tb) tb.innerHTML=ctrlBar(); setHint(); if(!listbox) return; listbox.innerHTML=((curT==='sent'&&sentHTML)?sentHTML:(wordHTML||sentHTML));
     listbox.classList.toggle('hidem', curT==='word'&&hideMean); listbox.classList.toggle('hidek', curT==='sent'&&hideKo);
-    bindList(); highlight(); stkTools(); }
+    bindList(); highlight(); }
   function playSeg(i){ const T=TIMES(); if(!T) return; if(shadowTimer){ clearTimeout(shadowTimer); shadowTimer=null; holdAfter=null; } shadowHold=false; shadowDone=-1; curIdx=i; highlight();
     const go=()=>{ boundEnd=repeatOn?null:1; try{au.currentTime=T[i];}catch(e){} au.playbackRate=curSpd; au.play(); };
     if(au.readyState>=1) go(); else au.addEventListener('loadedmetadata',go,{once:true}); }
   function loadSrc(){ au.src=A[curT]||''; try{au.load();}catch(e){} au.playbackRate=curSpd;
-    ico.textContent='▶'; lbl.textContent='듣기'; seek.value=0; curEl.textContent='0:00'; durEl.textContent='0:00'; curIdx=-1; boundEnd=null; renderList(); }
+    ico.textContent='▶'; lbl.textContent=''; seek.value=0; curEl.textContent='0:00'; durEl.textContent='0:00'; curIdx=-1; boundEnd=null; renderList(); }
   play.onclick=()=>{ if(shadowTimer){ skipHold(); return; } shadowHold=false; if(au.paused){ boundEnd=null; au.play(); } else au.pause(); };
-  const mini=document.getElementById('mini'), mplay=document.getElementById('mplay'), mbar=document.getElementById('mbar'), mtm=document.getElementById('mtm');
-  mplay.onclick=()=>play.click();
-  if(miniIO) miniIO.disconnect();
-  if(stkIO) stkIO.disconnect();
-  const stkEl=document.getElementById('stk'), stkAnchor=document.querySelector('.pgtabs')||document.querySelector('.atog')||play;
-  if('IntersectionObserver' in window){ stkIO=new IntersectionObserver(es=>{ const off=!es[0].isIntersecting && es[0].boundingClientRect.top<10; stkEl.classList.toggle('on',off); stkEl.setAttribute('aria-hidden',off?'false':'true');
-      if(off){ const c=stkEl.querySelector('.chip.on'); if(c) c.scrollIntoView({inline:'center',block:'nearest'}); } }); stkIO.observe(stkAnchor); }
-  stkEl.querySelectorAll('.chip[data-pg]').forEach(x=>x.onclick=()=>{ const pi=parseInt(x.dataset.pg); if(pi===selP)return; if(curAudio){curAudio.pause();curAudio=null;} leaf(b,u,pi); const pt=document.querySelector('.pgtabs'); window.scrollTo(0, pt? Math.max(0,pt.getBoundingClientRect().top+scrollY-16):0); });
-  stkEl.querySelectorAll('.chip[data-un]').forEach(x=>x.onclick=()=>{ const nu=u+parseInt(x.dataset.un); if(nu>=1 && nu<=b.units.length){ if(curAudio){curAudio.pause();curAudio=null;} go({book:b.code,u:nu}); } });
-  if('IntersectionObserver' in window){ miniIO=new IntersectionObserver(es=>{ const off=!es[0].isIntersecting && es[0].boundingClientRect.top<0; mini.classList.toggle('on',off); mini.setAttribute('aria-hidden',off?'false':'true'); }); miniIO.observe(play); }
-  au.onplay=()=>{ ico.textContent=shadowHold?'…':'❚❚'; lbl.textContent=shadowHold?'따라 말해요':'듣는 중'; mplay.textContent='❚❚'; loopTick(); };
+  const mk=()=>document.createElement('i'), mplay=mk(), mbar=mk(), mtm=mk();   // (옛 아래 재생 막대 자리 — 이제 조작판이 위에 붙음)
+  const dock=document.getElementById('dock');
+  if(stkIO) stkIO.disconnect(); if(miniIO) miniIO.disconnect();
+  if('IntersectionObserver' in window && dock){ const sen=document.createElement('div'); dock.parentNode.insertBefore(sen,dock);
+    stkIO=new IntersectionObserver(es=>{ dock.classList.toggle('stuck',!es[0].isIntersecting); const c=dock.querySelector('.pgtab.on'); if(c&&!es[0].isIntersecting) c.scrollIntoView({inline:'center',block:'nearest'}); }); stkIO.observe(sen); }
+  { const c=dock&&dock.querySelector('.pgtab.on'); if(c) c.scrollIntoView({inline:'center',block:'nearest'}); }
+  au.onplay=()=>{ ico.textContent=shadowHold?'…':'❚❚'; lbl.textContent=shadowHold?'따라 말해요':''; mplay.textContent='❚❚'; loopTick(); };
   // 반복·따라 말하기·한 개 듣기 — 조합 규칙
   //  반복만: 지금 항목 끝 → (문장은 0.6초 쉬고) 처음으로  / 따라 말하기만: 문장 끝 → 문장 길이+0.8초 멈춤(음원 속 쉼 포함) → 다음
   //  둘 다: 문장 끝 → 문장 길이+0.8초 멈춤 → 같은 문장 처음  / 항목을 누르면: 반복 켜짐=그 항목 반복, 꺼짐=그 항목 한 번
@@ -465,24 +467,22 @@ function leaf(b,u,selP){
       else { try{au.currentTime=T[k];}catch(e){} }
       return; }
     let idx=0; for(let j=0;j<T.length;j++){ if(t>=T[j]-0.02) idx=j; }
-    if(idx!==curIdx){ curIdx=idx; highlight(true); shadowDone=-1; if(shadowHold){ shadowHold=false; ico.textContent='❚❚'; lbl.textContent='듣는 중'; } }
+    if(idx!==curIdx){ curIdx=idx; highlight(true); shadowDone=-1; if(shadowHold){ shadowHold=false; ico.textContent='❚❚'; lbl.textContent=''; } }
     if(shadowOn&&curT==='sent'&&SE&&curIdx>=0&&shadowDone!==curIdx&&t>=SE[curIdx]){ const k=curIdx; shadowDone=k; const gap=(ST[k+1]!=null?ST[k+1]-SE[k]:0);
       hold(Math.max(0.6,(SE[k]-ST[k])+0.8-gap)*1000/curSpd, ()=>au.play(), ST[k+1]!=null); } }
   function loopTick(){ tick(); if(!au.paused && (shadowOn||repeatOn||boundEnd!=null)) requestAnimationFrame(loopTick); }
-  au.onpause=()=>{ mplay.textContent='▶'; if(!au.ended){ ico.textContent=shadowHold?'…':(shadowTimer?'❚❚':'▶'); lbl.textContent=shadowHold?'따라 말해요':(shadowTimer?'듣는 중':'계속 듣기'); } };
-  au.onended=()=>{ ico.textContent='↺'; lbl.textContent='다시 듣기'; mplay.textContent='↺'; curIdx=-1; highlight(); };
+  au.onpause=()=>{ mplay.textContent='▶'; if(!au.ended){ ico.textContent=shadowHold?'…':(shadowTimer?'❚❚':'▶'); lbl.textContent=shadowHold?'따라 말해요':''; } };
+  au.onended=()=>{ ico.textContent='↺'; lbl.textContent=''; mplay.textContent='↺'; curIdx=-1; highlight(); };
   au.ontimeupdate=()=>{ if(au.duration){ seek.value=Math.round(au.currentTime/au.duration*1000); curEl.textContent=fmt(au.currentTime); mbar.style.width=(au.currentTime/au.duration*100)+'%'; mtm.textContent=fmt(au.currentTime);}
     tick(); };
   au.onloadedmetadata=()=>durEl.textContent=fmt(au.duration);
   seek.oninput=()=>{ if(au.duration){ if(shadowTimer){ clearTimeout(shadowTimer); shadowTimer=null; holdAfter=null; shadowHold=false; } boundEnd=null; shadowDone=-1; curIdx=-1; au.currentTime=seek.value/1000*au.duration; } };
-  document.querySelectorAll('.spd').forEach(x=>x.onclick=()=>{ curSpd=parseFloat(x.dataset.s); au.playbackRate=curSpd;
-    document.querySelectorAll('.spd').forEach(y=>y.classList.remove('on')); x.classList.add('on'); });
+  const spdB=document.getElementById('spd'); spdB.onclick=()=>{ curSpd=curSpd===1?1.2:(curSpd===1.2?0.8:1); au.playbackRate=curSpd; spdB.textContent=curSpd.toFixed(1)+'×'; spdB.classList.toggle('on',curSpd!==1); };
   document.querySelectorAll('.atg').forEach(x=>x.onclick=()=>{ curT=x.dataset.t;
     document.querySelectorAll('.atg').forEach(y=>y.classList.remove('on')); x.classList.add('on'); loadSrc(); });
   loadSrc();
-  document.querySelectorAll('.pgtab').forEach(x=>x.onclick=()=>{ const pi=parseInt(x.dataset.pg); if(pi===selP)return; if(curAudio){curAudio.pause();curAudio=null;} leaf(b,u,pi); window.scrollTo(0,0); });
-  const ro=document.getElementById('recOpen'); if(ro) ro.onclick=()=>{ if(!au.paused) au.pause(); openRec(b,u,SENTSRC); };
-  if(ro && new URLSearchParams(location.search).get('rec')==='1'){ const q=new URL(location.href); q.searchParams.delete('rec'); history.replaceState(history.state,'',q.toString()); openRec(b,u,SENTSRC); }
+  document.querySelectorAll('.pgtab').forEach(x=>x.onclick=()=>{ const pi=parseInt(x.dataset.pg); if(pi===selP)return; if(curAudio){curAudio.pause();curAudio=null;} const keep=scrollY>0; leaf(b,u,pi); const d=document.getElementById('dock'); if(keep&&d){ d.scrollIntoView({block:'start'}); } else window.scrollTo(0,0); });
+  if(SENTSRC.length && !PAGES && new URLSearchParams(location.search).get('rec')==='1'){ const q=new URL(location.href); q.searchParams.delete('rec'); history.replaceState(history.state,'',q.toString()); openRec(b,u,SENTSRC); }
   const prev=document.getElementById('uprev'), next=document.getElementById('unext');
   prev.disabled=(u<=1); next.disabled=(u>=b.units.length);
   prev.onclick=()=>{ if(u>1) go({book:b.code,u:u-1}); };
