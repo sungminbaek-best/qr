@@ -18,6 +18,17 @@
 <style>
 /* E-Book · 워크북 자동 생성기 소개 */
 .tshow{display:flex;flex-direction:column;gap:22px;margin-top:40px}
+.tshow.in2{margin-top:30px;gap:16px}.tshow.in2 .sw{padding:28px;box-shadow:0 6px 22px rgba(20,30,60,.05)}
+.sw .go{display:inline-block;margin-top:18px;font-weight:800;color:var(--brand)}
+.jump{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+.jump a{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border:1px solid var(--line);border-radius:999px;font-weight:800;font-size:14.5px;background:#fff}
+.jump a:hover{border-color:var(--brand);color:var(--brand)}.jump small{font-size:12px;color:var(--mute);font-weight:600}
+.xtra{margin-top:16px;padding:26px 28px;border:1px solid var(--line);border-radius:24px;background:#fff}
+.xtra .xh{display:block;font-size:16px;font-weight:800;margin-bottom:14px}
+.xtra ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px 22px}
+.xtra li{display:flex;flex-direction:column;gap:3px;padding-left:16px;border-left:3px solid var(--soft)}
+.xtra li b{font-size:15px}.xtra li span{font-size:13.5px;color:var(--mute)}
+@media(max-width:860px){.xtra{padding:20px}}
 .sw{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,8fr);gap:36px;align-items:center;padding:34px;border:1px solid var(--line);border-radius:24px;background:#fff;scroll-margin-top:90px}
 .sw .sx em{display:inline-block;font-style:normal;font-size:12.5px;font-weight:800;color:var(--brand);background:var(--soft);padding:5px 12px;border-radius:999px}
 .sw h3{margin:14px 0 6px;font-size:28px;font-weight:800;letter-spacing:-.04em}
@@ -195,6 +206,7 @@
 <section class="top"><div class="wrap">
   <h1 class="rev">자료실</h1>
   <p class="rev">교재마다 정답·음원은 누구나 받을 수 있어요. <br class="mo">선생님 자료는 곧 열려요.</p>
+  <div class="jump rev"><a href="#books">교재별 자료 <small>누구나</small></a><a href="#teacher">선생님 전용 <small>곧 열려요</small></a></div>
   <div id="tz">
     <h2 class="libcap rev">교재별 자료</h2><div class="ans" id="books"><div class="ag rev"><div class="hd"><div class="cv"><img src="/assets/covers/ph1.webp" alt="저절로 파닉스 1 표지" loading="lazy"><img src="/assets/covers/ph2.webp" alt="저절로 파닉스 2 표지" loading="lazy"></div><div class="tx"><h3>파닉스 <span class="chip gray">초1~2</span></h3><div class="vl"><b>1권</b><a class="pill a" href="/books/answers/ph1.pdf" target="_blank" rel="noopener" aria-label="저절로 파닉스 1 정답 PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 20h14"/></svg>정답 PDF</a><a class="pill b" href="/studio/?book=ph1" aria-label="저절로 파닉스 1 음원·강의"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" d="M4 15v-3a8 8 0 0 1 16 0v3"/><rect x="3" y="14" width="5" height="7" rx="2" fill="currentColor"/><rect x="16" y="14" width="5" height="7" rx="2" fill="currentColor"/></svg>음원·강의</a></div><div class="vl"><b>2권</b><a class="pill a" href="/books/answers/ph2.pdf" target="_blank" rel="noopener" aria-label="저절로 파닉스 2 정답 PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 20h14"/></svg>정답 PDF</a><a class="pill b" href="/studio/?book=ph2" aria-label="저절로 파닉스 2 음원·강의"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" d="M4 15v-3a8 8 0 0 1 16 0v3"/><rect x="3" y="14" width="5" height="7" rx="2" fill="currentColor"/><rect x="16" y="14" width="5" height="7" rx="2" fill="currentColor"/></svg>음원·강의</a></div></div></div>
       </div><div class="ag rev"><div class="hd"><div class="cv"><img src="/assets/covers/rst1.webp" alt="저절로 스타터 1 표지" loading="lazy"><img src="/assets/covers/rst2.webp" alt="저절로 스타터 2 표지" loading="lazy"></div><div class="tx"><h3>스타터 <span class="chip gray">초1~2</span></h3><div class="vl"><b>1권</b><a class="pill a" href="/books/answers/rst1.pdf" target="_blank" rel="noopener" aria-label="저절로 스타터 1 정답 PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 20h14"/></svg>정답 PDF</a><a class="pill b" href="/studio/?book=rst1" aria-label="저절로 스타터 1 음원"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" d="M4 15v-3a8 8 0 0 1 16 0v3"/><rect x="3" y="14" width="5" height="7" rx="2" fill="currentColor"/><rect x="16" y="14" width="5" height="7" rx="2" fill="currentColor"/></svg>음원</a></div><div class="vl"><b>2권</b><a class="pill a" href="/books/answers/rst2.pdf" target="_blank" rel="noopener" aria-label="저절로 스타터 2 정답 PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 20h14"/></svg>정답 PDF</a><a class="pill b" href="/studio/?book=rst2" aria-label="저절로 스타터 2 음원"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" d="M4 15v-3a8 8 0 0 1 16 0v3"/><rect x="3" y="14" width="5" height="7" rx="2" fill="currentColor"/><rect x="16" y="14" width="5" height="7" rx="2" fill="currentColor"/></svg>음원</a></div></div></div>
@@ -206,24 +218,11 @@
       </div></div>
     <div class="tp gatebox rev" id="teacher" style="margin-top:56px"><div class="in">
       <span class="badge"><i class="lk"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2.5" fill="currentColor"/><path d="M8 11V8a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="2.2"/></svg></i><i class="okk"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="M5 12l5 5 9-10"/></svg></i><em class="b-pre">곧 열려요</em><em class="b-post">인증됨</em></span>
-      <h2 class="t-pre">선생님 자료를<br><span class="gt">준비하고 있어요.</span></h2>
+      <h2 class="t-pre">선생님 전용 자료,<br><span class="gt">곧 열려요.</span></h2>
       <h2 class="t-post"><span class="tname">선생님</span>,<br><span class="gt">모든 자료가 열렸어요.</span></h2>
-      <p class="lead t-pre">워크북부터 판서까지, 저절로로 수업하는 데 필요한 것을 곧 모두 드려요.</p>
+      <p class="lead t-pre">휴대폰 문자 인증 한 번으로 아래 자료를 모두 무료로 쓸 수 있어요.</p>
       <p class="lead t-post">필요한 도구를 바로 여세요. 교재별 자료는 아래 카드에서 받을 수 있어요.</p>
-      <div class="tg4">
-        <div class="tf"><div class="art"><div class="sheet b2"><i class="h"></i><i></i><i class="s"></i><i></i></div><div class="sheet b3"><i class="h"></i><i></i><i class="s"></i><i></i></div><div class="sheet"><i class="h"></i><i></i><i class="s"></i><i></i><i></i><i class="s"></i></div><span class="chk"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="M5 12l5 5 9-10"/></svg></span></div>
-          <b>워크북 자동 생성기</b><span>유닛만 고르면 단어·문장·어순·듣고 빈칸 쓰기 워크북이 정답지와 함께 나와요</span><a class="go tbtn" data-href="/교사포털/시험지생성기/">열기 →</a></div>
-        <div class="tf"><div class="art"><div class="sheet l"><i class="h"></i><i></i><i></i><i class="s"></i></div><div class="sheet r"><i class="h"></i><i class="s"></i><i></i><i></i></div><span class="tag" style="left:12px;bottom:10px">단어 리스트</span><span class="tag" style="right:12px;top:10px">워크북</span></div>
-          <b>인쇄만 하면 되는 수업 자료</b><span>수업에 바로 쓰는 여러 유형의 워크북 완성본</span><a class="go" href="#books">교재별로 받기 ↓</a></div>
-        <div class="tf"><div class="art"><div class="scr"><i class="h"></i><i></i><i style="width:70%"></i><i></i><span class="hl"></span><span class="cir"></span></div><span class="stand"></span></div>
-          <b>교재 그대로, 전자칠판에</b><span>화면에 띄워 판서하고 정답을 하나씩 공개해요</span><a class="go tbtn" data-href="/교사포털/이북/">열기 →</a></div>
-        <div class="tf"><div class="art"><span class="gift"></span><span class="tag" style="left:10px;top:12px">설명회</span><span class="tag" style="right:10px;bottom:12px">티칭 가이드</span></div>
-          <b>선생님만 받는 혜택</b><span>저자 직강 설명회 · 티칭 가이드 · 신간 샘플 우선</span><a class="go" href="#perk">혜택 받기 →</a></div>
-      </div>
-      <div class="tcta"><small>휴대폰 문자 인증 한 번으로 모두 열 수 있게 준비하고 있어요.</small></div>
-      <div class="ok"><small>다른 기기에서도 같은 번호로 다시 들어올 수 있어요.</small><button type="button" class="relock">로그아웃</button></div>
-    </div></div>
-    <div class="tshow">
+          <div class="tshow in2">
       <div class="sw rev" id="ebook"><div class="sx"><em>선생님용 · 14권</em><h3>수업용 E-Book</h3><p class="sl">교재 그대로, 전자칠판에 띄워 수업해요</p>
         <ul><li>정답을 한 문제씩 공개</li><li>펜 · 형광펜으로 바로 판서</li><li>단어 · 문장 음원과 타이머까지</li></ul></div>
         <div class="si"><img src="/library/img/ebook_show.webp" alt="수업용 E-Book 화면" loading="lazy"></div></div>
@@ -231,6 +230,18 @@
         <ul><li>단어 뜻 쓰기 · 단어 쓰기 · 문장 해석 · 어순 배열 · 듣고 빈칸 쓰기</li><li>필요한 유형만 골라서</li><li>학원 이름 넣어 인쇄 · PDF 저장</li></ul></div>
         <div class="si"><img src="/academy/img/tool_workbook_ui.webp?v=2" alt="워크북 자동 생성기 화면" loading="lazy"><img class="sub" src="/academy/img/tool_workbook_out.webp" alt="만들어진 워크북" loading="lazy"></div></div>
     </div>
+      <div class="xtra rev"><b class="xh">그 밖에 드리는 것</b><ul>
+        <li><b>인쇄용 수업 자료</b><span>단어 리스트 · 유형별 워크북 완성본</span></li>
+        <li><b>수업가이드</b><span>대표 유닛으로 수업 흐름을 보여 드려요</span></li>
+        <li><b>권장 진도표</b><span>권마다 몇 회에 끝내는지 · 엑셀로도</span></li>
+        <li><b>학부모 안내</b><span>상담 · 설명회에 바로 쓰는 자료</span></li>
+        <li><b>파닉스 음가표 · 카드</b><span>교실에 붙이고 바로 쓰는 카드</span></li>
+      </ul></div>
+
+      
+      <div class="ok"><small>다른 기기에서도 같은 번호로 다시 들어올 수 있어요.</small><button type="button" class="relock">로그아웃</button></div>
+    </div></div>
+    
     <span id="perk"></span>
     <div class="err" id="err" role="alert"></div>
     
