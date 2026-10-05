@@ -38,6 +38,9 @@
 .opts span{display:inline-block;font-size:14px;font-weight:600;padding:9px 14px;border-radius:10px;border:1px solid var(--line2);color:var(--sub);transition:all .15s}
 .opts input:checked+span{background:var(--ink);border-color:var(--ink);color:#fff}
 .opts input:focus-visible+span{outline:2px solid var(--brand);outline-offset:2px}
+.bulk{display:flex;gap:12px;align-items:flex-start;margin-top:18px;padding:14px 16px;border:1px solid var(--line);border-radius:14px;background:var(--panel);cursor:pointer}
+.bulk input{width:18px;height:18px;margin-top:2px;flex:none;accent-color:var(--brand)}
+.bulk span{display:flex;flex-direction:column;gap:3px}.bulk b{font-size:15px}.bulk small{font-size:12.5px;color:var(--mute)}
 .agree{margin-top:22px;border-top:1px solid var(--line);padding-top:16px;display:grid;gap:12px}
 .agree label{display:flex;gap:10px;align-items:flex-start;font-size:14.5px;line-height:1.5;cursor:pointer}
 .agree input{width:18px;height:18px;margin-top:2px;flex:none;accent-color:var(--ink)}
@@ -102,12 +105,11 @@
     <label class="fld"><span>학원·학교 이름</span><input type="text" name="academy" maxlength="40" autocomplete="organization" placeholder="예: 쏠뷰영어학원"></label>
     <label class="fld"><span>지역</span><select name="region"><option value="">선택해 주세요</option><option>서울</option><option>부산</option><option>대구</option><option>인천</option><option>광주</option><option>대전</option><option>울산</option><option>세종</option><option>경기</option><option>강원</option><option>충북</option><option>충남</option><option>전북</option><option>전남</option><option>경북</option><option>경남</option><option>제주</option><option>해외</option></select></label>
     <div class="fld"><span>직책</span><div class="opts"><label><input type="radio" name="role" value="원장"><span>원장</span></label><label><input type="radio" name="role" value="강사"><span>강사</span></label><label><input type="radio" name="role" value="공부방"><span>공부방</span></label><label><input type="radio" name="role" value="학교"><span>학교</span></label><label><input type="radio" name="role" value="기타"><span>기타</span></label></div></div>
-    <div class="fld"><span>교재를 주로 어디서 구매하시나요?</span><div class="opts"><label><input type="radio" name="buy" value="네이버 스마트스토어"><span>네이버 스마트스토어</span></label><label><input type="radio" name="buy" value="학원 공급(직거래)"><span>학원 공급(직거래)</span></label><label><input type="radio" name="buy" value="쿠팡"><span>쿠팡</span></label><label><input type="radio" name="buy" value="온라인 서점"><span>온라인 서점</span></label><label><input type="radio" name="buy" value="오프라인 서점·총판"><span>오프라인 서점·총판</span></label><label><input type="radio" name="buy" value="아직 구매 전"><span>아직 구매 전</span></label></div></div>
-    <div class="fld"><span>쓰고 있거나 볼 예정인 교재<em>선택 · 여러 개 가능</em></span><div class="opts"><label><input type="checkbox" name="books" value="phonics"><span>파닉스</span></label><label><input type="checkbox" name="books" value="starter"><span>스타터</span></label><label><input type="checkbox" name="books" value="bridge"><span>브릿지</span></label><label><input type="checkbox" name="books" value="intro"><span>입문</span></label><label><input type="checkbox" name="books" value="basic"><span>기본</span></label><label><input type="checkbox" name="books" value="mock"><span>첫모의고사</span></label><label><input type="checkbox" name="books" value="grammar"><span>그래머&amp;라이팅</span></label></div></div>
+    <label class="bulk"><input type="checkbox" name="bulk"><span><b>교재 대량 구입 상담을 원해요</b><small>선택 · 체크하시면 쏠뷰가 직접 연락드려요</small></span></label>
     <div class="agree">
       <label class="all"><input type="checkbox" id="agall"><span><b>전체 동의</b> <small>(선택 항목 포함)</small></span></label>
       <label><input type="checkbox" name="privacy"><span><b>[필수]</b> 개인정보 수집·이용에 동의해요.</span></label>
-      <details><summary>자세히 보기</summary>휴대폰 번호·이름·학원 이름·지역·직책·주 구매처(선택: 쓰는 교재)을 선생님 본인 확인과 선생님 전용 자료 제공, 문의 응대를 위해 모아요. 탈퇴할 때까지 보관하고, 탈퇴하면 바로 지워요. 동의하지 않을 수 있지만, 그러면 선생님 전용 자료를 이용할 수 없어요. <a href="/privacy/" target="_blank" rel="noopener">개인정보처리방침 전문</a></details>
+      <details><summary>자세히 보기</summary>휴대폰 번호·이름·학원 이름·지역·직책(선택: 교재 대량 구입 상담 희망 여부)을 선생님 본인 확인과 선생님 전용 자료 제공, 문의 응대·상담 연락을 위해 모아요. 탈퇴할 때까지 보관하고, 탈퇴하면 바로 지워요. 동의하지 않을 수 있지만, 그러면 선생님 전용 자료를 이용할 수 없어요. <a href="/privacy/" target="_blank" rel="noopener">개인정보처리방침 전문</a></details>
       <label class="opt"><input type="checkbox" name="marketing"><span><b>[선택]</b> 선생님 혜택 받기 <small>(광고성 정보 문자 수신 동의)</small></span></label>
       <ul class="perks"><li>학부모 상담·설명회 자료</li><li>저자 직강 온라인 설명회 초대 (새 로드맵·교재 활용법)</li><li>티칭 가이드 (유닛별 수업 흐름·판서 예시·자주 틀리는 포인트)</li><li>신간 출시 알림·샘플 우선 제공</li><li>체험단·서평단 우선 선정</li></ul>
       <details><summary>자세히 보기</summary><b>목적</b> 선생님 혜택 자료와 신간·샘플·체험단·설명회 등 광고성 정보 전송 · <b>방법</b> 문자 · <b>항목</b> 이름, 휴대폰 번호 · <b>보관</b> 동의를 끄거나 탈퇴할 때까지 · 동의를 거부할 권리가 있으며, 거부해도 선생님 전용 자료 이용에는 제한이 없어요(혜택 안내만 받지 않아요). 언제든 자료실 화면에서 끌 수 있어요.</details>
@@ -162,10 +164,10 @@ $("#s2").addEventListener("submit",function(e){e.preventDefault();var b=$("#s2 .
     else msg("#e2",(j.msg||"다시 시도해 주세요.")+(j.left>=0?" (남은 기회 "+j.left+"번)":""));});});
 $("#s3").addEventListener("submit",function(e){e.preventDefault();var f=e.target,b=$("#s3 .go1");
   var v={ticket:st.ticket,name:f.name.value.trim(),academy:f.academy.value.trim(),region:f.region.value,
-    role:(f.querySelector("[name=role]:checked")||{}).value,books:[].map.call(f.querySelectorAll("[name=books]:checked"),function(x){return x.value;}),
+    role:(f.querySelector("[name=role]:checked")||{}).value,bulk:f.bulk.checked,
     privacy:f.privacy.checked,marketing:f.marketing.checked,
-    buy:(f.querySelector("[name=buy]:checked")||{}).value,src:S.ss("solveu_from"),src_code:S.ss("solveu_code")};
-  if(!v.name||!v.academy||!v.region||!v.role||!v.buy){msg("#e3","이름·학원·지역·직책·구매처를 모두 입력해 주세요.");return;}
+    src:S.ss("solveu_from"),src_code:S.ss("solveu_code")};
+  if(!v.name||!v.academy||!v.region||!v.role){msg("#e3","이름·학원·지역·직책을 모두 입력해 주세요.");return;}
   if(!v.privacy){msg("#e3","개인정보 수집·이용에 동의해 주셔야 입장할 수 있어요.");return;}
   busy(b,true);msg("#e3");S.api("/api/signup",v).then(function(j){busy(b,false);
     if(j.pass)done(j);else{msg("#e3",j.msg||"다시 시도해 주세요.");if(j.error==="ticket")setTimeout(function(){show("#s1");},1500);}});});
