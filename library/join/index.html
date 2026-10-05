@@ -1,185 +1,24 @@
 <!doctype html>
-<html lang="ko">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>선생님 인증 · 쏠뷰</title>
-<meta name="description" content="휴대폰 문자 인증으로 쏠뷰 자료실의 선생님 전용 자료에 입장해요.">
-<meta name="robots" content="noindex, nofollow">
-<meta property="og:title" content="선생님 인증 · 쏠뷰"><meta property="og:description" content="휴대폰 문자 인증으로 쏠뷰 자료실의 선생님 전용 자료에 입장해요."><meta property="og:type" content="website">
-<meta property="og:site_name" content="쏠뷰 SolveU"><meta property="og:locale" content="ko_KR">
-<meta property="og:image" content="https://solveu.co.kr/assets/og.png?v=20261004"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image">
-
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22%3E%3Crect width=%2264%22 height=%2264%22 rx=%2216%22 fill=%22%230c1020%22/%3E%3Ctext x=%2232%22 y=%2244%22 font-size=%2234%22 font-family=%22Arial%22 font-weight=%22700%22 text-anchor=%22middle%22 fill=%22%236b7dff%22%3EU%3C/text%3E%3C/svg%3E">
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex, nofollow"><title>쏠뷰 SolveU · 준비 중</title>
+<meta property="og:title" content="쏠뷰 SolveU"><meta property="og:description" content="선생님 자료를 준비하고 있어요. 곧 새롭게 열어요."><meta property="og:image" content="https://solveu.co.kr/assets/og.png">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/site.css?v=34b40a9b">
 <style>
-.top{padding:56px 0 96px}
-.top h1{font-size:clamp(30px,4.2vw,44px);font-weight:800;letter-spacing:-.05em;margin-top:14px}
-.top>.wrap>p{font-size:clamp(15px,1.7vw,17px);color:var(--sub);line-height:1.7;margin-top:12px;max-width:34em}
-.jbox{max-width:520px;margin-top:30px;border:1px solid var(--line);border-radius:var(--r);padding:30px 28px;background:#fff;box-shadow:var(--shadow)}
-.jbox h2{font-size:19px;font-weight:800;letter-spacing:-.03em}
-.jbox h2 small{display:block;font-size:13px;font-weight:700;color:var(--brand);margin-bottom:6px}
-.jbox>p,.jbox form>p{font-size:14px;color:var(--sub);line-height:1.65;margin-top:8px}
-.fld{display:flex;flex-direction:column;gap:7px;margin-top:18px}
-.fld>span{font-size:13.5px;font-weight:700}.fld>span em{font-style:normal;color:var(--mute);font-weight:500;margin-left:4px}
-.jbox input[type=text],.jbox input[type=tel],.jbox select{width:100%;height:48px;border:1px solid var(--line2);border-radius:11px;padding:0 14px;font:inherit;font-size:15px;outline:none;background:#fff;transition:border-color .15s}
-.jbox input:focus,.jbox select:focus{border-color:var(--ink)}
-.row{display:flex;gap:8px}.row input{flex:1;min-width:0}
-.go1{height:48px;padding:0 18px;border-radius:11px;background:var(--ink);color:#fff;font-weight:700;font-size:15px;white-space:nowrap}
-.go1:disabled{opacity:.45;cursor:default}
-.go1.full{width:100%;margin-top:22px}
-.go2{font-size:13.5px;color:var(--mute);text-decoration:underline;text-underline-offset:3px;margin-top:12px}
-.go2:disabled{text-decoration:none;cursor:default}
-.opts{display:flex;flex-wrap:wrap;gap:7px}
-.opts label{cursor:pointer}.opts input{position:absolute;opacity:0;pointer-events:none}
-.opts span{display:inline-block;font-size:14px;font-weight:600;padding:9px 14px;border-radius:10px;border:1px solid var(--line2);color:var(--sub);transition:all .15s}
-.opts input:checked+span{background:var(--ink);border-color:var(--ink);color:#fff}
-.opts input:focus-visible+span{outline:2px solid var(--brand);outline-offset:2px}
-.bulk{display:flex;gap:12px;align-items:flex-start;margin-top:18px;padding:14px 16px;border:1px solid var(--line);border-radius:14px;background:var(--panel);cursor:pointer}
-.bulk input{width:18px;height:18px;margin-top:2px;flex:none;accent-color:var(--brand)}
-.bulk span{display:flex;flex-direction:column;gap:3px}.bulk b{font-size:15px}.bulk small{font-size:12.5px;color:var(--mute)}
-.agree{margin-top:22px;border-top:1px solid var(--line);padding-top:16px;display:grid;gap:12px}
-.agree label{display:flex;gap:10px;align-items:flex-start;font-size:14.5px;line-height:1.5;cursor:pointer}
-.agree input{width:18px;height:18px;margin-top:2px;flex:none;accent-color:var(--ink)}
-.agree b{font-weight:700;color:var(--brand)}
-.agree details{font-size:13px;color:var(--sub);line-height:1.7;margin:-4px 0 0 28px}
-.agree .all{font-size:15.5px;padding-bottom:12px;border-bottom:1px dashed var(--line2)}.agree .all small{font-weight:500;color:var(--mute)}
-.agree .opt b{color:var(--brand)}.agree .opt small{font-size:12.5px;color:var(--mute)}
-.perks{list-style:none;margin:-4px 0 0 28px;display:grid;gap:5px;padding:12px 14px;border-radius:11px;background:var(--soft)}
-.perks li{font-size:13.5px;font-weight:600;color:var(--ink2);padding-left:20px;position:relative;line-height:1.5}
-.perks li:before{content:"✓";position:absolute;left:0;color:var(--brand);font-weight:800}
-.agree summary{cursor:pointer;color:var(--mute);text-decoration:underline;text-underline-offset:3px}
-.agree details a{color:var(--ink);font-weight:700;text-decoration:underline}
-.jerr{font-size:13.5px;color:#d93025;min-height:19px;margin-top:10px}
-.timer{font-size:13px;color:var(--brand);font-weight:700;margin-top:8px}
-.dev{font-size:13px;background:#fff7e0;color:#8a5a00;border-radius:9px;padding:8px 12px;margin-top:12px}
-.dev:empty{display:none}
-.okc{width:52px;height:52px;border-radius:50%;background:#1e8e3e;color:#fff;display:grid;place-items:center;font-size:24px;margin-bottom:16px}
-.acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:22px}
-.small{font-size:13px;color:var(--mute);margin-top:18px}.small button{text-decoration:underline;text-underline-offset:3px;color:var(--mute)}
-[hidden]{display:none!important}
-</style>
-</head>
-<body id="top">
-<header class="nav" id="nav"><div class="wrap">
-  <a class="logo" href="/" aria-label="쏠뷰 SolveU 홈"><span class="ko">쏠뷰</span><span class="dv"></span><span class="en">Solve<span class="g">U</span></span></a>
-  <nav aria-label="주 메뉴"><a href="/home/#books">교재</a><a href="/studio/">음원·강의</a><a href="/library/">자료실</a><a href="/contact/">문의</a></nav>
-  <a class="nbtn tlog" href="/library/join/?next=/library/%23teacher">선생님 인증</a><a class="nbtn store">스토어</a>
-</div></header>
-<main>
-
-<section class="top"><div class="wrap">
-  <h1>선생님 인증</h1>
-  <p>휴대폰 문자로 한 번 인증하면 이 기기에서는 다시 묻지 않아요. <br>처음이시면 간단한 신청서만 적어 주세요.</p>
-
-  <div class="jbox" id="s0" hidden>
-    <div class="okc">✓</div><h2>이미 입장돼 있어요</h2><p id="who0"></p>
-    <div class="acts"><a class="btn dark sm tonext" href="/library/">자료실로 가기 <span class="ar">→</span></a><button class="btn line sm" type="button" id="out">이 기기에서 로그아웃</button></div>
-    <p class="small">명단에서 완전히 지우려면 <button type="button" id="bye">탈퇴하기</button></p>
-  </div>
-
-  <form class="jbox" id="s1" hidden novalidate>
-    <h2><small>1 / 2</small>휴대폰 번호</h2>
-    <p>처음 오신 선생님도, 다른 기기에서 다시 들어오시는 선생님도 여기서 시작해요.</p>
-    <label class="fld"><span>휴대폰 번호</span><span class="row"><input type="tel" id="phone" inputmode="numeric" autocomplete="tel" placeholder="010-0000-0000" maxlength="13"><button class="go1" type="submit">인증번호 받기</button></span></label>
-    <div class="jerr" id="e1" role="alert"></div>
-  </form>
-
-  <form class="jbox" id="s2" hidden novalidate>
-    <h2><small>2 / 2</small>인증번호 입력</h2>
-    <p><b id="pshow"></b>(으)로 보낸 6자리 숫자를 입력해 주세요.</p>
-    <div class="dev" id="dev"></div>
-    <label class="fld"><span>인증번호</span><span class="row"><input type="text" id="code" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="6자리"><button class="go1" type="submit">확인</button></span></label>
-    <div class="timer" id="timer"></div>
-    <div class="jerr" id="e2" role="alert"></div>
-    <button class="go2" type="button" id="resend" disabled>인증번호 다시 받기</button> &nbsp; <button class="go2" type="button" id="back">번호 바꾸기</button>
-  </form>
-
-  <form class="jbox" id="s3" hidden novalidate>
-    <h2><small>처음 오셨네요</small>선생님 신청서</h2>
-    <p>한 번만 적으면 돼요.</p>
-    <label class="fld"><span>이름</span><input type="text" name="name" maxlength="20" autocomplete="name"></label>
-    <label class="fld"><span>학원·학교 이름</span><input type="text" name="academy" maxlength="40" autocomplete="organization" placeholder="예: 쏠뷰영어학원"></label>
-    <label class="fld"><span>지역</span><select name="region"><option value="">선택해 주세요</option><option>서울</option><option>부산</option><option>대구</option><option>인천</option><option>광주</option><option>대전</option><option>울산</option><option>세종</option><option>경기</option><option>강원</option><option>충북</option><option>충남</option><option>전북</option><option>전남</option><option>경북</option><option>경남</option><option>제주</option><option>해외</option></select></label>
-    <div class="fld"><span>직책</span><div class="opts"><label><input type="radio" name="role" value="원장"><span>원장</span></label><label><input type="radio" name="role" value="강사"><span>강사</span></label><label><input type="radio" name="role" value="공부방"><span>공부방</span></label><label><input type="radio" name="role" value="학교"><span>학교</span></label><label><input type="radio" name="role" value="기타"><span>기타</span></label></div></div>
-    <label class="bulk"><input type="checkbox" name="bulk"><span><b>교재 대량 구입 상담을 원해요</b><small>선택 · 체크하시면 쏠뷰가 직접 연락드려요</small></span></label>
-    <div class="agree">
-      <label class="all"><input type="checkbox" id="agall"><span><b>전체 동의</b> <small>(선택 항목 포함)</small></span></label>
-      <label><input type="checkbox" name="privacy"><span><b>[필수]</b> 개인정보 수집·이용에 동의해요.</span></label>
-      <details><summary>자세히 보기</summary>휴대폰 번호·이름·학원 이름·지역·직책(선택: 교재 대량 구입 상담 희망 여부)을 선생님 본인 확인과 선생님 전용 자료 제공, 문의 응대·상담 연락을 위해 모아요. 탈퇴할 때까지 보관하고, 탈퇴하면 바로 지워요. 동의하지 않을 수 있지만, 그러면 선생님 전용 자료를 이용할 수 없어요. <a href="/privacy/" target="_blank" rel="noopener">개인정보처리방침 전문</a></details>
-      <label class="opt"><input type="checkbox" name="marketing"><span><b>[선택]</b> 선생님 혜택 받기 <small>(광고성 정보 문자 수신 동의)</small></span></label>
-      <ul class="perks"><li>학부모 상담·설명회 자료</li><li>저자 직강 온라인 설명회 초대 (새 로드맵·교재 활용법)</li><li>티칭 가이드 (유닛별 수업 흐름·판서 예시·자주 틀리는 포인트)</li><li>신간 출시 알림·샘플 우선 제공</li><li>체험단·서평단 우선 선정</li></ul>
-      <details><summary>자세히 보기</summary><b>목적</b> 선생님 혜택 자료와 신간·샘플·체험단·설명회 등 광고성 정보 전송 · <b>방법</b> 문자 · <b>항목</b> 이름, 휴대폰 번호 · <b>보관</b> 동의를 끄거나 탈퇴할 때까지 · 동의를 거부할 권리가 있으며, 거부해도 선생님 전용 자료 이용에는 제한이 없어요(혜택 안내만 받지 않아요). 언제든 자료실 화면에서 끌 수 있어요.</details>
-    </div>
-    <button class="go1 full" type="submit">신청하고 입장하기</button>
-    <div class="jerr" id="e3" role="alert"></div>
-  </form>
-
-  <div class="jbox" id="s4" hidden>
-    <div class="okc">✓</div><h2>입장됐어요</h2><p><b id="who"></b>, 반가워요. 이 기기에서는 다시 인증하지 않아도 돼요. 잠시 뒤 자동으로 이동해요.</p>
-    <div class="acts"><a class="btn dark sm tonext" href="/library/">자료실로 가기 <span class="ar">→</span></a></div>
-  </div>
-</div></section>
-
-</main>
-<footer><div class="wrap">
-  <span class="fl"><span class="ko">쏠뷰</span><span class="en">Solve<span class="g">U</span></span></span>
-  <span>현장에서 검증된 영어 교재</span>
-  <nav><a href="/home/#books">교재</a><a href="/studio/">음원·강의</a><a href="https://www.youtube.com/channel/UCoLiIPQe_U01fMFa0X1F2ng/playlists" target="_blank" rel="noopener">유튜브 강의 ↗</a><a href="https://www.instagram.com/solveu_baek/" target="_blank" rel="noopener">인스타그램 ↗</a><a href="/library/">자료실</a><a href="/contact/">문의</a><a href="/report/">오류 신고</a><a class="store">스마트스토어</a><a class="talk">톡톡</a><a href="/privacy/">개인정보처리방침</a></nav>
-  <span class="biz"></span>
-</div></footer>
-<script src="/assets/reviews.js?v=34b40a9b"></script>
+body{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 20px;background:#fff}
+body:before{content:"";position:fixed;inset:0 0 auto 0;height:5px;background:linear-gradient(90deg,#4361ff,#8b5cf6)}
+.lg{font-size:22px;font-weight:800;display:flex;align-items:center;gap:10px;justify-content:center}
+.lg i{width:1px;height:18px;background:#e3e6f0}.lg b{font-family:"Space Grotesk";font-weight:700}.lg b em{font-style:normal;color:#4361ff}
+h1{font-size:clamp(28px,6vw,40px);font-weight:800;letter-spacing:-.05em;margin-top:34px;line-height:1.3}
+p{font-size:16px;color:#4a5068;margin-top:12px}
+.bt{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:32px}
+.bt a{display:inline-flex;align-items:center;height:48px;padding:0 22px;border-radius:999px;font-weight:700;font-size:15px;border:1px solid #d6dae6;color:#0c1020;cursor:pointer}
+.bt a.main{background:#0c1020;color:#fff;border-color:#0c1020}
+</style></head><body>
+<div class="lg"><span>쏠뷰</span><i></i><b>Solve<em>U</em></b></div>
+<h1>선생님 자료를 준비하고 있어요</h1>
+<p>곧 열려요. <a href="/home/" style="color:#4361ff;font-weight:700">홈으로 →</a></p>
+<div class="bt"><a class="main store">스마트스토어</a><a href="https://www.youtube.com/channel/UCoLiIPQe_U01fMFa0X1F2ng/playlists" target="_blank" rel="noopener">유튜브 강의</a><a class="talk">톡톡 문의</a></div>
 <script src="/assets/site.js?v=34b40a9b"></script>
-<script>
-var S=SOLVEU,$=S.$,st={phone:"",ticket:"",left:0,t:null};
-function show(id){["#s0","#s1","#s2","#s3","#s4"].forEach(function(k){$(k).hidden=k!==id;});var f=$(id+" input");if(f&&id!=="#s0")f.focus();}
-function msg(id,m){$(id).textContent=m||"";}
-function busy(b,on){b.disabled=on;}
-var NEXT=(new URLSearchParams(location.search).get("next")||"/library/");if(!/^\/(?!\/)/.test(NEXT))NEXT="/library/";
-[].forEach.call(document.querySelectorAll(".tonext"),function(a){a.href=NEXT;if(NEXT!=="/library/")a.firstChild.textContent="보던 화면으로 돌아가기 ";});
-function done(j){S.pass(j.pass);$("#who").textContent=j.teacher.name+" 선생님";show("#s4");setTimeout(function(){location.href=NEXT;},1500);}
-function tick(){clearInterval(st.t);st.left=300;var rs=$("#resend");rs.disabled=true;
-  st.t=setInterval(function(){st.left--;if(st.left<=240)rs.disabled=false;
-    $("#timer").textContent=st.left>0?"남은 시간 "+Math.floor(st.left/60)+":"+("0"+st.left%60).slice(-2):"시간이 지났어요. 인증번호를 다시 받아 주세요.";
-    if(st.left<=0)clearInterval(st.t);},1000);}
-function send(btn){var d=($("#phone").value||"").replace(/\D/g,"");
-  if(!/^01[016789]\d{7,8}$/.test(d)){msg("#e1","휴대폰 번호를 확인해 주세요.");return;}
-  busy(btn,true);msg("#e1");msg("#e2");
-  S.api("/api/code",{phone:d}).then(function(j){busy(btn,false);
-    if(!j.ok){msg($("#s2").hidden?"#e1":"#e2",j.msg||"잠시 뒤 다시 시도해 주세요.");return;}
-    st.phone=d;$("#pshow").textContent=d.replace(/^(\d{3})(\d{3,4})(\d{4})$/,"$1-$2-$3");
-    $("#dev").textContent=j.dev_code?"시험 모드 — 문자 대신 여기 표시: "+j.dev_code:"";
-    $("#code").value="";show("#s2");tick();});}
-$("#s1").addEventListener("submit",function(e){e.preventDefault();send($("#s1 button"));});
-$("#resend").addEventListener("click",function(){send($("#resend"));});
-$("#back").addEventListener("click",function(){clearInterval(st.t);show("#s1");});
-$("#s2").addEventListener("submit",function(e){e.preventDefault();var b=$("#s2 .go1"),c=($("#code").value||"").replace(/\D/g,"");
-  if(c.length!==6){msg("#e2","인증번호 6자리를 입력해 주세요.");return;}
-  busy(b,true);S.api("/api/verify",{phone:st.phone,code:c}).then(function(j){busy(b,false);
-    if(j.pass){clearInterval(st.t);done(j);}
-    else if(j.need_signup){clearInterval(st.t);st.ticket=j.ticket;show("#s3");}
-    else msg("#e2",(j.msg||"다시 시도해 주세요.")+(j.left>=0?" (남은 기회 "+j.left+"번)":""));});});
-$("#s3").addEventListener("submit",function(e){e.preventDefault();var f=e.target,b=$("#s3 .go1");
-  var v={ticket:st.ticket,name:f.name.value.trim(),academy:f.academy.value.trim(),region:f.region.value,
-    role:(f.querySelector("[name=role]:checked")||{}).value,bulk:f.bulk.checked,
-    privacy:f.privacy.checked,marketing:f.marketing.checked,
-    src:S.ss("solveu_from"),src_code:S.ss("solveu_code")};
-  if(!v.name||!v.academy||!v.region||!v.role){msg("#e3","이름·학원·지역·직책을 모두 입력해 주세요.");return;}
-  if(!v.privacy){msg("#e3","개인정보 수집·이용에 동의해 주셔야 입장할 수 있어요.");return;}
-  busy(b,true);msg("#e3");S.api("/api/signup",v).then(function(j){busy(b,false);
-    if(j.pass)done(j);else{msg("#e3",j.msg||"다시 시도해 주세요.");if(j.error==="ticket")setTimeout(function(){show("#s1");},1500);}});});
-(function(){var all=$("#agall"),f=$("#s3"),bx=[f.privacy,f.marketing];
-  all.addEventListener("change",function(){bx.forEach(function(b){b.checked=all.checked;});});
-  bx.forEach(function(b){b.addEventListener("change",function(){all.checked=bx.every(function(x){return x.checked;});});});})();
-$("#out").addEventListener("click",function(){S.api("/api/logout",{}).then(function(){S.pass(null);show("#s1");});});
-$("#bye").addEventListener("click",function(){if(!confirm("선생님 명단에서 삭제할까요?\n모든 기기에서 로그아웃되고, 다시 쓰려면 새로 신청해야 해요."))return;
-  S.api("/api/withdraw",{}).then(function(j){if(j.ok){S.pass(null);alert("삭제했어요. 그동안 이용해 주셔서 감사합니다.");show("#s1");}else alert(j.msg||"다시 시도해 주세요.");});});
-if(S.pass()){S.api("/api/me").then(function(j){if(j.ok){$("#who0").textContent=j.teacher.name+" 선생님 · "+j.teacher.academy;show("#s0");}else{if(j.status===401)S.pass(null);show("#s1");}});}
-else show("#s1");
-</script>
-
-</body>
-</html>
+</body></html>
