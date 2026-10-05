@@ -23,7 +23,8 @@
   *{ box-sizing:border-box; }
   html,body{ margin:0; height:100%; overflow:hidden; background:var(--bg); color:var(--ink);
     font-family:"Pretendard Variable",Pretendard,-apple-system,"Malgun Gothic","맑은 고딕",sans-serif; letter-spacing:-.01em; -webkit-font-smoothing:antialiased; }
-  #stage{ position:absolute; inset:0; overflow:hidden; cursor:grab; touch-action:none; }
+  #stage{ position:absolute; inset:0; overflow:hidden; cursor:grab; touch-action:none; user-select:none; -webkit-user-select:none; }
+  #stage img{ -webkit-user-drag:none; user-select:none; }
   #board{ position:absolute; top:0; left:0; transform-origin:0 0; will-change:transform; }
   .sheet{ position:absolute; top:0; background:#fff; box-shadow:0 2px 6px rgba(16,24,40,.08),0 12px 40px rgba(16,24,40,.12); }
   .sheet img{ display:block; }
@@ -38,6 +39,7 @@
          font-family:"Malgun Gothic","맑은 고딕","Apple SD Gothic Neo",system-ui,sans-serif; }
   /* 정답=텍스트만(박스·테두리 없음) */
   .abox.reveal{ color:var(--ans); }
+  .abox.wide{ overflow:visible; z-index:2; }   /* 칸보다 긴 답: 빈칸 바로 위 빈 공간에 빨간 글씨만(10-04 사용자: 흰 칸은 어색) */
   /* 여러 줄 요약문: 좌측 상단 정렬 */
   .abox.multi{ white-space:pre-line; text-align:left; justify-content:flex-start; align-items:flex-start; padding:8px 12px; line-height:1.65; }
   /* 회색 placeholder(클릭 전) — 교재 단어칸과 같은 색(#f2f2f3), 4px 간격(위박스와 안겹침) */
@@ -45,6 +47,10 @@
   .abox.ph:not(.reveal){ background:#f2f2f3; border-radius:6px; cursor:pointer; }
   .abox.ph:not(.reveal):hover{ background:#e7ebf0; }
   .abox.ph.reveal{ background:transparent; }
+  /* 가림 띠: 열기 전엔 회색으로 문장을 덮고, 열면 사라져 교재 글자가 보임 */
+  .abox.mask{ background:#e9ecf1; border-radius:6px; transition:background .2s; }
+  .abox.mask:hover{ background:#dfe3ea; }
+  .abox.mask.reveal{ background:transparent; }
   /* 빨간 밑줄(정답 공개시) */
   .abox.ul.reveal{ box-shadow:0 2px 0 var(--ans); }
   /* 끊어읽기 슬래시: 크게·굵게(겹침 허용) */
@@ -56,11 +62,19 @@
   .ml,.ink{ position:absolute; top:0; left:0; pointer-events:none; overflow:visible; }
   .ml line{ stroke:var(--ans); stroke-width:5; stroke-linecap:round; opacity:0; transition:opacity .28s; }
   .ml ellipse{ fill:none; stroke:var(--ans); stroke-width:4; opacity:0; transition:opacity .28s; }
+  .ml ellipse.th{ stroke-width:3; }   /* 얇은 동그라미(저그랑 자리 번호 은·는·다·을·를) */
   .ml rect{ fill:none; stroke:var(--ans); stroke-width:3; rx:6; opacity:0; transition:opacity .28s; }
   .ml rect.kv{ stroke:var(--hae); }
   .ml line.br,.ml line.brt{ stroke-width:3; }
   .ml line.brt{ stroke:var(--hae); }
   .ml line.tri,.ml line.trit{ stroke-width:2; }
+  .ml line.sl{ stroke-width:3.5; }
+  .ml path.slb{ stroke-width:5; }   /* 끊어읽기 빗금(굵게) */
+  .ml path.sym,.ml path.symk{ stroke-width:2; }          /* 기호 표시(브릿지 STEP 3): 가늘게 */
+  .ml path.symk{ stroke:var(--hae); }
+  .ml path.mz{ stroke-width:5; stroke-linejoin:round; }   /* 미로 길(스타터 미로 선과 같은 굵기) */
+  .ml path.ld{ stroke-width:5; stroke-linejoin:round; }   /* 사다리 길(정답 칸과 함께) */
+  .ml path.ld.reveal{ opacity:.9; }                 /* 낱말 찾기: 위 단어 칸 빗금(동그라미와 함께) */
   .ml path{ fill:none; stroke:var(--ans); stroke-width:2.5; stroke-linecap:round; stroke-linejoin:round; opacity:0; transition:opacity .28s; }
   .ml path.pf{ fill:var(--ans); stroke:none; }
   .ml path.pt{ fill:var(--ans); stroke:none; }
@@ -141,6 +155,8 @@
   #audgrp .none:hover{ background:transparent; color:var(--mute); }
   @media (max-width:1100px){ #audgrp{ width:auto; min-width:92px; } }
   #aseek{ flex:1; min-width:140px; accent-color:var(--brand); }
+  #arate{ min-width:52px; font-variant-numeric:tabular-nums; font-weight:700; }
+  #arate.slow{ color:var(--brand); background:var(--brand-soft); }
   #atime{ font-size:13px; font-weight:600; color:var(--sub); font-variant-numeric:tabular-nums; white-space:nowrap; padding:0 4px; }
   .ib.warn{ background:var(--ans); color:#fff; }
   #tchip{ position:absolute; right:16px; top:70px; z-index:6; display:none; align-items:center; gap:4px; background:var(--surface); border:1px solid var(--line);
@@ -175,28 +191,32 @@
   }
   /* ── 시작 화면(1쪽 대신, 14권 같은 틀 · 색만 책별) ── */
   .sheet.cv{ display:flex; overflow:hidden; font-family:"Pretendard Variable",Pretendard,sans-serif; color:var(--ink); }
-  .cv-l{ width:560px; flex:none; padding:88px 0 80px 88px; display:flex; flex-direction:column; }
+  .cv-l{ width:440px; flex:none; padding:80px 0 72px 72px; display:flex; flex-direction:column; }
   .cv-l::before{ content:""; width:56px; height:6px; border-radius:3px; background:var(--cc); margin-bottom:34px; }
   .cv-se{ font-size:26px; font-weight:700; color:var(--cc); letter-spacing:-.01em; }
-  .cv-ti{ margin-top:12px; font-size:92px; font-weight:800; letter-spacing:-.04em; line-height:1; }
-  .cv-su{ margin-top:22px; font-size:24px; font-weight:500; color:var(--sub); line-height:1.45; word-break:keep-all; padding-right:40px; }
-  .cv-im{ margin-top:auto; align-self:flex-start; max-width:300px; max-height:300px; border-radius:4px; border:1px solid var(--line); box-shadow:0 10px 30px rgba(16,24,40,.10); background:#fff; }
-  .cv-r{ flex:1; margin:88px 88px 80px 0; padding-left:72px; border-left:1px solid var(--line); display:flex; flex-direction:column; min-width:0; }
+  .cv-ti{ margin-top:12px; font-size:84px; font-weight:800; letter-spacing:-.04em; line-height:1; }
+  .cv-su{ margin-top:22px; font-size:23px; font-weight:500; color:var(--sub); line-height:1.45; word-break:keep-all; padding-right:32px; }
+  .cv-im{ margin-top:auto; align-self:flex-start; max-width:260px; max-height:280px; border-radius:4px; border:1px solid var(--line); box-shadow:0 10px 30px rgba(16,24,40,.10); background:#fff; }
+  .cv-r{ flex:1; margin:80px 64px 72px 0; padding-left:52px; border-left:1px solid var(--line); display:flex; flex-direction:column; min-width:0; }
   .cv-h{ font-size:20px; font-weight:700; color:var(--mute); letter-spacing:.08em; }
-  .cv-g{ margin-top:22px; display:grid; column-gap:56px; align-content:start; flex:1; }
-  .cv-u{ display:flex; align-items:baseline; gap:22px; padding:19px 6px; border:0; border-bottom:1px solid var(--line); background:transparent; text-align:left;
+  .cv-g{ margin-top:22px; display:grid; column-gap:44px; align-content:start; flex:1; }
+  .cv-u{ display:flex; align-items:baseline; gap:16px; padding:19px 6px; border:0; border-bottom:1px solid var(--line); background:transparent; text-align:left;
          font:inherit; color:inherit; cursor:pointer; min-width:0; transition:background .12s; }
   .cv-u:hover{ background:var(--hover); }
   .cv-u:hover .cv-t{ color:var(--cc); }
-  .cv-n{ flex:none; width:36px; font-size:22px; font-weight:700; color:var(--cc); font-variant-numeric:tabular-nums; }
+  .cv-n{ flex:none; width:32px; font-size:22px; font-weight:700; color:var(--cc); font-variant-numeric:tabular-nums; }
   .cv-t{ flex:1; min-width:0; font-size:25px; font-weight:600; line-height:1.35; word-break:keep-all; transition:color .12s; }
+  .cv-tt{ display:block; }   /* 제목은 한 줄(길면 글자 줄임, 그래도 길면 두 줄) */
   .cv-t small{ display:block; margin-top:4px; font-size:19px; font-weight:500; color:var(--sub); }
   .cv-c .cv-u{ padding:12px 6px; } .cv-c .cv-t{ font-size:21px; line-height:1.3; } .cv-c .cv-t small{ font-size:16px; margin-top:2px; }
   .cv-c .cv-n{ font-size:19px; width:30px; } .cv-c .cv-p{ font-size:16px; }
   .cv-p{ flex:none; font-size:19px; color:var(--mute); font-variant-numeric:tabular-nums; }
-  .cv-f{ display:flex; justify-content:flex-end; margin-top:36px; }
+  .cv-f{ display:flex; justify-content:flex-end; gap:14px; margin-top:36px; }
+  .cv-re{ border:2px solid var(--cc); border-radius:12px; background:#fff; color:var(--cc); font:inherit; font-size:22px; font-weight:700; padding:16px 26px; cursor:pointer; }
+  .cv-re:hover{ background:var(--cc); color:#fff; }
   .cv-go{ border:0; border-radius:12px; background:var(--ink); color:#fff; font:inherit; font-size:22px; font-weight:700; padding:18px 30px; cursor:pointer; }
   .cv-go:hover{ background:var(--cc); }
+  .cv-pre .cv-n{ font-size:15px; letter-spacing:0; color:var(--cc); }   /* 기초 단원 번호 자리 */
   /* ── 쏠뷰 E-Book 라인업(전체 교재) ── */
   #lineup{ position:fixed; inset:0; z-index:20; display:none; align-items:center; justify-content:center; background:rgba(12,16,32,.42); padding:24px; }
   #lineup.show{ display:flex; }
@@ -262,6 +282,7 @@
   <button class="ib" id="aback" data-tip="5초 뒤로"><svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>5초</button>
   <input type="range" id="aseek" min="0" max="1000" value="0" aria-label="음원 위치">
   <span id="atime">0:00 / 0:00</span>
+  <button class="ib" id="arate" data-tip="재생 속도">1.0×</button>
   <button class="ib" id="aclose" data-tip="음원 끄기"><svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
 </div>
 <!-- 오류 신고: 보이는 쪽 번호 + 메모 -->
@@ -287,23 +308,25 @@
   <span class="pill"><input id="pg" type="number" min="1" value="1" aria-label="쪽 번호"><span id="ptot">/ 0</span></span>
   <button class="ib" id="pnext" data-tip="다음 쪽 (→)"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></button>
   <span class="sep"></span>
-  <button class="ib primary" id="stepbtn" data-tip="Space"><svg viewBox="0 0 24 24"><path d="m6 17 5-5-5-5M13 17l5-5-5-5"/></svg>정답<span class="mh"> 하나씩</span><span class="cnt" id="rcnt"></span></button>
+  <button class="ib" id="stepback" data-tip="하나 되돌리기 · 다 가려지면 이전으로 (Backspace)"><svg viewBox="0 0 24 24"><path d="m18 17-5-5 5-5M11 17l-5-5 5-5"/></svg></button>
+  <button class="ib primary" id="stepbtn" data-tip="Space"><svg viewBox="0 0 24 24"><path d="m6 17 5-5-5-5M13 17l5-5-5-5"/></svg><span id="steplbl">정답<span class="mh"> 하나씩</span></span><span class="cnt" id="rcnt"></span></button>
   <button class="ib" id="reveal" data-tip="정답 모두 보기"><svg viewBox="0 0 24 24"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg><span class="t">모두</span></button>
   <button class="ib" id="hide" data-tip="정답 가리기"><svg viewBox="0 0 24 24"><path d="M9.9 9.9a3 3 0 1 0 4.2 4.2M10.7 5.1A10.4 10.4 0 0 1 12 5c7 0 10 7 10 7a13 13 0 0 1-1.7 2.7M6.6 6.6A13.5 13.5 0 0 0 2 12s3 7 10 7a9.7 9.7 0 0 0 5.4-1.6M2 2l20 20"/></svg><span class="t">가리기</span></button>
   <button class="ib" id="zall" data-tip="원래 크기로 (Esc)" style="display:none"><svg viewBox="0 0 24 24"><path d="m15 15 6 6m-6-6v4.8m0-4.8h4.8M9 19.8V15m0 0H4.2M9 15l-6 6M15 4.2V9m0 0h4.8M15 9l6-6M9 4.2V9m0 0H4.2M9 9 3 3"/></svg><span class="t">원래 크기</span></button>
 </div>
 
-<script src="data.js?v=2903865306"></script>
+<script src="data.js?v=1929333778"></script>
 <script>
 // ── 책별 설정(E-Book반영.py가 books.json 값으로 채움) ──
-const START=24;            // 표지(1쪽) 다음 이 쪽부터 표시(앞 안내·오리엔테이션 건너뜀)
+const START=7;            // 표지(1쪽) 다음 이 쪽부터 표시(앞 안내·오리엔테이션 건너뜀)
 const BGPAGES=[];        // 박스그래머쪽(첫모의): 아래쪽 요약칸 회색 placeholder
 const Q2PAGES=[];        // 지문/객관식쪽(첫모의): 보기해석 좌측정렬
 const UNITS=[["Unit 1 · My First Day and a New Friend", 24], ["Unit 2 · Our New Family, Lucky", 38], ["Unit 3 · He Likes My Pillow!", 52], ["Unit 4 · The Pink Bunny Pajamas", 66], ["Unit 5 · My Dog Ate My Homework!", 80], ["Unit 6 · Lucky Goes to the Vet", 94], ["Unit 7 · The Talent Show", 108], ["Unit 8 · Taking Care of Jenny", 122]];
+const PRE=[["품사", 7, "9품사 개념 · 쇼츠 대본 · 확인 문제"]];              // 유닛 앞 기초 단원(브릿지 품사·과거동사): [이름, 시작 쪽, 부제] — 목차·유닛 이동에만(음원·유닛 번호는 UNITS 그대로)
 const LINEUP=[["저절로 파닉스", [["파닉스 1", "ph1", "파닉스1_판서"], ["파닉스 2", "ph2", "파닉스2_판서"]]], ["저절로 리딩", [["스타터 1", "rst1", "스타터1_판서"], ["스타터 2", "rst2", "스타터2_판서"], ["브릿지 1", "rbr1", "브릿지1_판서"], ["브릿지 2", "rbr2", "브릿지2_판서"], ["입문 1", "rin1", "입문1_판서"], ["입문 2", "rin2", "입문2_판서"], ["기본 1", "rba1", "기본1_판서"], ["기본 2", "rba2", "기본2_판서"]]], ["저절로 리딩 첫 모의고사", [["첫모의 1", "rmo1", "첫모의1_판서"], ["첫모의 2", "rmo2", "첫모의2_판서"]]], ["저절로 그래머 라이팅", [["저그랑 1", "gw1", "저그랑1_판서"], ["저그랑 2", "gw2", "저그랑2_판서"]]]];          // 전체 교재 [[시리즈, [[책이름, 코드, 폴더], …]], …]
 const COVER={"series": "저절로 리딩 BRIDGE", "sub": "품사편", "color": "#2e6c79", "subs": ["나의 첫 등교날, 그리고 새 친구", "우리의 새로운 가족, 럭키", "럭키가 내 베개를 좋아해!", "분홍 토끼 잠옷", "우리 강아지가 숙제를 먹었어!", "럭키, 동물병원에 가다", "장기자랑 대회", "제니 간호하기"]};            // 시작 화면 설정 {series, sub, color} — 없으면(null) 교재 1쪽 그림 그대로            // 유닛 바로가기 [[이름, 시작쪽], …]
 // ────────────────────────────────────────────
-const END=9999;              // 이 쪽까지만 표시(뒤쪽 정답·해설 제외)
+const END=135;              // 이 쪽까지만 표시(뒤쪽 정답·해설 제외)
 const P = (window.PAGES||[]).filter(p=>p.n===1 || (p.n>=START && p.n<=END));
 if(COVER && P.length && P[0].n===1) P[0]={...P[0], w:1600, h:1000, zones:[], boxes:[], cover:true};   // 1쪽 자리에 시작 화면(가로 1600×1000)
 const $=id=>document.getElementById(id);
@@ -332,13 +355,13 @@ function setMode(m){ const k=V[vi]?V[vi][0]:0; viewPref=m; store.set('ebook-view
 function syncModeBtns(){ const sp=spreadOn(); $('vsingle').classList.toggle('on',!sp); $('vspread').classList.toggle('on',sp); }
 
 // 유닛 바로가기 메뉴
-unitSel.innerHTML='<option value="">'+(COVER?'유닛 이동':'목차')+'</option>'+UNITS.map(u=>`<option value="${u[1]}">${u[0]}</option>`).join('');
+unitSel.innerHTML='<option value="">'+(COVER?'유닛 이동':'목차')+'</option>'+PRE.concat(UNITS).map(u=>`<option value="${u[1]}">${u[0]}</option>`).join('');
 if(!UNITS.length) unitSel.style.display='none';
 function gotoPage(n){ let k=P.findIndex(p=>p.n>=n); if(k<0) k=P.length-1; vi=viewOfPage(k); loadView(); }
 unitSel.onchange=()=>{ const n=+unitSel.value; if(n) gotoPage(n); unitSel.blur(); };
 if(COVER){ const tb=$('tocbtn'); tb.style.display=''; tb.onclick=()=>{ vi=0; loadView(); tb.blur(); }; }   // 어느 쪽에서든 한 번에 시작 화면(목차)으로
 // 전체 교재(라인업): 다른 책으로 바로 이동. 내 컴퓨터는 폴더 이름, 홈페이지는 책 코드 폴더
-(function(){ const local=/^(localhost|127\.0\.0\.1)$/.test(location.hostname), me='rbr1';
+(function(){ const local=location.protocol==='file:'||/^(localhost|127\.0\.0\.1)$/.test(location.hostname), me='rbr1';   // 파일로 연 경우도 내 컴퓨터 폴더(10-04)
   if(!LINEUP.length){ $('lineupbtn').style.display='none'; return; }
   const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
   $('lubody').innerHTML=LINEUP.map(([se,bs])=>`<div class="lu-sec"><h3>${esc(se)}</h3><div class="lu-row">`+bs.map(([t,c,f])=>{ const d='../'+encodeURI(local?f:c)+'/';
@@ -349,13 +372,15 @@ if(COVER){ const tb=$('tocbtn'); tb.style.display=''; tb.onclick=()=>{ vi=0; loa
   document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&lu.classList.contains('show')){ close(); e.stopImmediatePropagation(); } },true);
   lu.querySelector('.lu-bk.cur')?.addEventListener('click',e=>{ e.preventDefault(); close(); });
 })();
-function syncUnit(){ const n=curPage().n; let v=''; UNITS.forEach(u=>{ if(n>=u[1]) v=String(u[1]); }); unitSel.value=v; }
+// 펼침에서 오른쪽 쪽이 새 유닛 첫 쪽이면 그 유닛 기준(유닛 이름·단어/문장 음원) — 왼쪽은 이전 유닛 마지막 쪽이라서
+function viewSheets(){ const r=S[S.length-1]; return (S.length>1 && UNITS.some(u=>u[1]===r.p.n)) ? [...S].reverse() : S; }
+function syncUnit(){ const n=viewSheets()[0].p.n; let v=''; PRE.concat(UNITS).forEach(u=>{ if(n>=u[1]) v=String(u[1]); }); unitSel.value=v; }
 
 // ── 한 쪽(sheet) 그리기: 지면 이미지 + 정답칸 + 선/원/박스 + 펜 잉크 ──
 function buildSheet(p, ox){
   if(p.cover) return buildCover(p, ox);
   const sh=document.createElement('div'); sh.className='sheet'; sh.style.left=ox+'px'; sh.style.width=p.w+'px'; sh.style.height=p.h+'px';
-  const im=document.createElement('img'); im.src=p.img; im.width=p.w; im.height=p.h; im.alt='교재 '+p.n+'쪽'; sh.appendChild(im);
+  const im=document.createElement('img'); im.src=p.img; im.draggable=false; im.width=p.w; im.height=p.h; im.alt='교재 '+p.n+'쪽'; sh.appendChild(im);
   const isBG=BGPAGES.includes(p.n);
   const click=d=>{ d.onclick=e=>{ if(tool)return; d.classList.toggle('reveal'); updCount(); e.stopPropagation(); }; };
   // 같은 정답이 같은 자리에 두 번 들어간 칸은 하나만(하나씩 공개가 두 번 눌려야 넘어가는 문제 방지)
@@ -365,25 +390,43 @@ function buildSheet(p, ox){
   // 정답 글자가 칸보다 길면 칸에 들어갈 때까지 글자 크기를 줄임(최소 11px)
   const fit=(d,tx,w)=>{ let fs=parseFloat(d.style.fontSize)||20; const pad=(parseFloat(d.style.paddingLeft)||0)+(d.classList.contains('ph')?8:0)+6;
     _mc.font='600 '+fs+'px "Malgun Gothic","맑은 고딕",sans-serif'; const tw=_mc.measureText(tx).width;
-    if(tw>w-pad){ fs=Math.max(11,Math.floor(fs*(w-pad)/tw)); d.style.fontSize=fs+'px'; } };
+    if(tw>w-pad){ fs=Math.max(11,Math.floor(fs*(w-pad)/tw)); d.style.fontSize=fs+'px'; }
+    // 짧은 낱말 칸(가운데 정렬)에 긴 답: 글자가 너무 작아지면 → 읽히는 크기로, 칸을 오른쪽으로 넓혀 흰 바탕 위에(빈칸에 꼭 안 들어가도 됨, 10-03 · 저그랑 표 칸은 제외: 따로 다룸)
+    const h=parseFloat(d.style.height)||34, tgt=Math.min(22,Math.round(h*0.62));
+    if(d.classList.contains('ph') && !d.style.paddingLeft && !/^gw/.test('rbr1') && fs<Math.min(14,tgt*0.7)){   // 회색 칸(첫모의 SIGNAL 등)에 긴 답: 같은 크기로 칸 왼쪽부터 오른쪽 빈 곳까지 이어 씀(10-04)
+      d.style.fontSize=Math.min(26,Math.round(h*0.62))+'px'; d.style.overflow='visible'; d.style.justifyContent='flex-start'; d.style.paddingLeft='10px'; d.style.zIndex='2'; return; }
+    if(!d.style.paddingLeft && !d.classList.contains('ph') && !/^gw/.test('rbr1') && fs<Math.min(14,tgt*0.7)){ d.dataset.fs0=fs; _mc.font='600 '+tgt+'px "Malgun Gothic","맑은 고딕",sans-serif';
+      const nw=Math.ceil(_mc.measureText(tx).width)+pad+10, l=parseFloat(d.style.left)||0;
+      const cx=l+w/2, top=parseFloat(d.style.top)||0, hh=Math.round(tgt*1.3);
+      d.style.fontSize=tgt+'px'; d.style.width=nw+'px'; d.style.left=Math.max(0,Math.min(cx-nw/2,(p.w||1241)-nw-4))+'px';   // 빈칸 가운데 맞춰
+      d.style.top=Math.max(0,top-hh+2)+'px'; d.style.height=hh+'px'; d.classList.add('wide'); } };   // 빈칸 바로 위
   p.boxes.forEach((b,i)=>{ if(dup(i)) return; const d=document.createElement('div'); d.className='abox';
     d.style.left=b[0]+'px'; d.style.top=b[1]+'px'; d.style.width=b[2]+'px'; d.style.height=b[3]+'px';
-    if(p.bord&&p.bord[i]!=null) d.setAttribute('data-ord',p.bord[i]);   // 명시 공개순서(활동7 모음 등 열우선)
+    if(p.bord&&p.bord[i]!=null) d.setAttribute('data-ord',p.bord[i]);
+    if(p.bcol&&p.bcol[i]) d.style.setProperty('--ans',p.bcol[i]);      // 사다리: 정답 글자도 그 길 색   // 명시 공개순서(활동7 모음 등 열우선)
     const tx=p.atext&&p.atext[i];
     if(tx==='/'){ d.classList.add('slash'); d.textContent=tx; d.style.fontSize='34px'; }       // 끊어읽기: 크게
+    else if(tx==='='){ d.classList.add('slash'); d.textContent=tx; d.style.fontSize='24px'; }   // 동격 '=': 정답지처럼 또렷하게(칸보다 커도 됨)
     else if(tx&&tx.includes('\n')){ d.classList.add('multi','ph'); d.textContent=tx; d.style.fontSize='23px'; }  // 요약: 회색박스
+    if(tx&&/\n$/.test(tx)&&tx.trim().indexOf('\n')<0){ d.textContent=tx.trim(); d.style.padding='0 12px'; d.style.alignItems='center'; d.style.lineHeight='1.2'; }   // 요약 한 줄씩(첫모의 글의 구조): 칸 높이 = 한 줄
     else if(tx){ d.textContent=tx;
-                 if(tx.includes(' / ') || (b[2]>500 && b[3]<=40)){ d.style.justifyContent='flex-start'; d.style.paddingLeft='4px'; d.style.fontSize=Math.min(26,Math.round(b[3]*0.72))+'px'; }  // 슬래시 문장답(해석·영어쓰기): 좌측정렬·크게
-                 else { d.style.fontSize=Math.min(Math.round(b[2]/Math.max(tx.length,1)*1.5),Math.round(b[3]*0.7),28)+'px';
+                 if(!(p.ctr&&p.ctr[i]) && (tx.includes(' / ') || (b[2]>500 && b[3]<=50))){ d.style.justifyContent='flex-start'; d.style.paddingLeft='4px'; d.style.fontSize=(p.hfs||Math.min(26,Math.round(b[3]*0.72)))+'px'; }  // 슬래시 문장답(해석·영어쓰기): 좌측정렬·쪽마다 같은 글자 크기(hfs), 긴 문장은 칸을 넓혀 둠 / p.ctr[i]=표 칸 답은 가운데(첫모의 Box Grammar)
+                 else { d.style.fontSize=Math.min(Math.round(b[2]/Math.max(tx.length,1)*1.5),Math.max(Math.round(b[3]*0.7),Math.min(18,b[3])),28)+'px';
                    if(isBG&&b[1]>1090) d.classList.add('ph');
-                   else if(Q2PAGES.includes(p.n)&&b[1]>1150){ d.style.justifyContent='flex-start'; d.style.paddingLeft='6px'; d.style.fontSize=Math.min(21,Math.round(b[3]*0.66))+'px'; } } }
+                   else if(Q2PAGES.includes(p.n)&&b[1]>1150){ d.style.justifyContent='flex-start'; d.style.paddingLeft='6px'; d.style.fontSize=Math.min(21,Math.round(b[3]*0.66))+'px'; } } 
+                 if(p.bfs&&p.bfs[i]) d.style.fontSize=p.bfs[i]+'px';   // 활동 안 같은 글자 크기(저그랑, 10-04)
+                 }
     else { d.classList.add('mark','ul'); }                                                      // 객관식: 밑줄만
-    if(tx && tx!=='/' && !tx.includes('\n')) fit(d,tx,b[2]);
+    if(p.wrap&&p.wrap[i]){ d.style.whiteSpace='normal'; d.style.wordBreak='keep-all'; d.style.lineHeight='1.2'; d.style.alignItems='flex-start'; d.style.fontSize=p.wrap[i]+'px'; }   // 아주 긴 해석: 조금 작은 글씨로 두 줄
+    else if(tx && tx!=='/' && tx!=='=' && !tx.includes('\n')) fit(d,tx,b[2]);
     click(d); sh.appendChild(d); });
-  (p.hae||[]).forEach(h=>{ const b=h[0],tx=h[1]; const d=document.createElement('div'); d.className='abox hae';
+  // 가림 띠(동시통역훈련: 책을 반 접은 것처럼 한쪽 문장을 가려 두고 한 줄씩 열기) [x,y,w,h]
+  (p.masks||[]).forEach(m=>{ const d=document.createElement('div'); d.className='abox mask';
+    d.style.left=m[0]+'px'; d.style.top=m[1]+'px'; d.style.width=m[2]+'px'; d.style.height=m[3]+'px'; if(m[4]!=null) d.setAttribute('data-ord',m[4]); click(d); sh.appendChild(d); });   // m[4]=공개 순서(예문 가림 → 표시)
+  (p.hae||[]).forEach(h=>{ const b=h[0],tx=h[1]; const d=document.createElement('div'); d.className='abox hae'; if(h[2]!=null) d.setAttribute('data-ord',h[2]);   // h[2]=공개 순서(선택지 해석 ①→⑤)
     d.style.left=b[0]+'px'; d.style.top=b[1]+'px'; d.style.width=b[2]+'px'; d.style.height=b[3]+'px';
     // 2줄까지 들어가도록 박스높이 기준 폰트(한글 넘침 방지)
-    const fs=Math.max(12,Math.min(21,Math.round(b[3]*0.40)));
+    const fs=h[3]||Math.max(12,Math.min(21,Math.round(b[3]*0.40)));   // h[3]=글자 크기 지정(선택지 해석: 줄 사이 좁은 칸)
     d.textContent=tx; d.style.fontSize=fs+'px';
     // 1줄이면 간격(영어~표) 중간 센터, 2줄이면 위정렬 — canvas로 텍스트폭 측정
     _mc.font=fs+'px "Malgun Gothic","맑은 고딕",sans-serif';
@@ -392,7 +435,10 @@ function buildSheet(p, ox){
   const mkSvg=cls=>{ const s=document.createElementNS(SVG,'svg'); s.setAttribute('class',cls);
     s.setAttribute('width',p.w); s.setAttribute('height',p.h); s.setAttribute('viewBox',`0 0 ${p.w} ${p.h}`); sh.appendChild(s); return s; };
   const ml=mkSvg('ml');
-  (p.match||[]).forEach(m=>{ const ln=document.createElementNS(SVG,'line');     // 매칭 연결선
+  const _seenL=[]; const sameL=(a,b)=>Math.max(Math.abs(a[0]-b[0]),Math.abs(a[1]-b[1]),Math.abs(a[2]-b[2]),Math.abs(a[3]-b[3]))<4;
+  (p.match||[]).forEach(m=>{ const r=[m[2],m[3],m[0],m[1]];
+    if(_seenL.some(q=>sameL(q,m)||sameL(q,r))) return; _seenL.push(m);    // 같은 선이 두 번(방향만 반대) 들어간 것은 하나만 — 하나씩 볼 때 '아무것도 안 나오는 차례' 방지
+    const ln=document.createElementNS(SVG,'line');     // 매칭 연결선
     ln.setAttribute('x1',m[0]); ln.setAttribute('y1',m[1]); ln.setAttribute('x2',m[2]); ln.setAttribute('y2',m[3]);
     if(m[4]!=null) ln.setAttribute('data-ord',m[4]);              // 같은 ord=한 번에(미로 경로)
     if(m[5]) ln.setAttribute('class',m[5]);                       // 꺾쇠 < >(br 영어 / brt 한글)
@@ -401,6 +447,7 @@ function buildSheet(p, ox){
     el.setAttribute('cx',c[0]); el.setAttribute('cy',c[1]); el.setAttribute('rx',c[2]); el.setAttribute('ry',c[3]);
     if(c[4]) el.setAttribute('transform',`rotate(${c[4]} ${c[0]} ${c[1]})`);
     if(c[5]!=null) el.setAttribute('data-ord',c[5]);              // 공개순서(낱말퍼즐=단어은행 순)
+    if(c[6]) el.setAttribute('class',c[6]);                       // 'th' = 얇은 선
     ml.appendChild(el); });
   (p.rects||[]).forEach(r=>{ const el=document.createElementNS(SVG,'rect');       // 동사표시 박스
     el.setAttribute('x',r[0]); el.setAttribute('y',r[1]); el.setAttribute('width',r[2]); el.setAttribute('height',r[3]);
@@ -409,7 +456,7 @@ function buildSheet(p, ox){
     ml.appendChild(el); });
   (p.paths||[]).forEach(q=>{ const el=document.createElementNS(SVG,'path');        // 정답지에서 옮긴 기호(밑줄·화살표·괄호 등): [d, ord, cls, x, y]
     el.setAttribute('d',q[0]); if(q[1]!=null) el.setAttribute('data-ord',q[1]); if(q[2]) el.setAttribute('class',q[2]);
-    el.setAttribute('data-x',q[3]||0); el.setAttribute('data-y',q[4]||0); ml.appendChild(el); });
+    el.setAttribute('data-x',q[3]||0); el.setAttribute('data-y',q[4]||0); if(q[5]) el.style.setProperty('--ans',q[5]); ml.appendChild(el); });
   const ink=mkSvg('ink');
   board.appendChild(sh);
   return {p, ox, el:sh, ml, ink, im};
@@ -420,20 +467,30 @@ function buildCover(p, ox){
   const sh=document.createElement('div'); sh.className='sheet cv'; sh.style.left=ox+'px'; sh.style.width=p.w+'px'; sh.style.height=p.h+'px';
   sh.style.setProperty('--cc',COVER.color); 
   const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-  const cols=UNITS.length>24?3:(UNITS.length>8||(COVER.subs&&UNITS.length>5))?2:1;   // 한글 부제가 있으면 줄이 높아져 두 줄로
-  const us=UNITS.map((u,i)=>{ const t=u[0].includes(' · ')?u[0].split(' · ').slice(1).join(' · '):u[0];
-    return `<button class="cv-u" data-n="${u[1]}"><span class="cv-n">${String(i+1).padStart(2,'0')}</span><span class="cv-t">${esc(t)}${COVER.subs&&COVER.subs[i]?`<small>${esc(COVER.subs[i])}</small>`:''}</span><span class="cv-p">${u[1]}쪽</span></button>`; }).join('');
+  const resume=(n=>n>=START&&n<=LAST?n:0)(+store.get('ebook-last:'+KEY)||0);   // 마지막으로 본 쪽(본문)
+  const NU=UNITS.length+PRE.length;
+  const cols=NU>24?3:(NU>8||(COVER.subs&&NU>5))?2:1;   // 한글 부제가 있으면 줄이 높아져 두 줄로
+  const pre=PRE.map(u=>`<button class="cv-u cv-pre" data-n="${u[1]}"><span class="cv-n">기초</span><span class="cv-t"><span class="cv-tt">${esc(u[0])}</span>${u[2]?`<small>${esc(u[2])}</small>`:''}</span><span class="cv-p">${u[1]}쪽</span></button>`).join('');   // 유닛 앞 기초 단원
+  const us=pre+UNITS.map((u,i)=>{ const t=u[0].includes(' · ')?u[0].split(' · ').slice(1).join(' · '):u[0];
+    return `<button class="cv-u" data-n="${u[1]}"><span class="cv-n">${String(i+1).padStart(2,'0')}</span><span class="cv-t"><span class="cv-tt">${esc(t)}</span>${COVER.subs&&COVER.subs[i]?`<small>${esc(COVER.subs[i])}</small>`:''}</span><span class="cv-p">${u[1]}쪽</span></button>`; }).join('');
   sh.innerHTML=`<div class="cv-l"><div class="cv-se">${esc(COVER.series)}</div>
     <div class="cv-ti">${esc(document.querySelector('#top .book').textContent)}</div>${COVER.sub?`<div class="cv-su">${esc(COVER.sub)}</div>`:''}
     <img class="cv-im" src="cover.webp" onerror="this.onerror=null;this.src='${p.img}'" alt="교재 표지"></div>
     <div class="cv-r"><div class="cv-h">목차</div>
-    <div class="cv-g${UNITS.length>12?' cv-c':''}" style="grid-template-columns:repeat(${cols},minmax(0,1fr))">${us}</div>
-    <div class="cv-f"><button class="cv-go">처음부터 보기 →</button></div></div>`;
+    <div class="cv-g${NU>12?' cv-c':''}" style="grid-template-columns:repeat(${cols},minmax(0,1fr))">${us}</div>
+    <div class="cv-f">${resume?`<button class="cv-re">이어 보기 · ${resume}쪽 →</button>`:''}<button class="cv-go">처음부터 보기 →</button></div></div>`;
   const tap=(el,f)=>{ el.addEventListener('pointerdown',e=>e.stopPropagation()); el.onclick=e=>{ e.stopPropagation(); if(!tool) f(); }; };
   sh.querySelectorAll('.cv-u').forEach(b=>tap(b,()=>gotoPage(+b.dataset.n)));
   tap(sh.querySelector('.cv-go'),()=>go(1));
-  const im={complete:true};                                     // loadView의 이미지 대기용(표지 그림은 기다릴 필요 없음)
+  if(resume) tap(sh.querySelector('.cv-re'),()=>gotoPage(resume));
   board.appendChild(sh);
+  // 긴 제목은 한 줄에 들어갈 때까지 글자 줄임(19px까지). 그래도 길면 두 줄로(너무 작아지지 않게). 글꼴이 늦게 뜨면 다시 맞춤
+  const fitT=()=>sh.querySelectorAll('.cv-tt').forEach(e=>{ e.style.fontSize=''; let fs=parseFloat(getComputedStyle(e).fontSize);
+    const one=()=>e.offsetHeight < parseFloat(getComputedStyle(e).fontSize)*1.9;   // 한 줄인지(높이로 판단)
+    while(!one() && fs>19){ fs-=0.5; e.style.fontSize=fs+'px'; }
+    if(!one()) e.style.fontSize='21px'; });                       // 19px로도 안 되면 두 줄로(너무 작아지지 않게)
+  fitT(); if(document.fonts){ document.fonts.ready.then(fitT); document.fonts.addEventListener('loadingdone',fitT); }
+  const im={complete:true};                                     // loadView의 이미지 대기용(표지 그림은 기다릴 필요 없음)
   const ml=document.createElementNS(SVG,'svg'); const ink=document.createElementNS(SVG,'svg');
   for(const [s_,c] of [[ml,'ml'],[ink,'ink']]){ s_.setAttribute('class',c); s_.setAttribute('width',p.w); s_.setAttribute('height',p.h); s_.setAttribute('viewBox',`0 0 ${p.w} ${p.h}`); sh.appendChild(s_); }
   ink.style.pointerEvents='none';
@@ -458,15 +515,29 @@ function loadView(){
   // 쪽번호 표시 + 마지막 본 쪽 기억
   pgIn.value=S[0].p.n; pgIn.style.width=(String(S[0].p.n).length+0.4)+'ch';      // 숫자 폭에 맞춰 → "6–7 / 118" 붙여 보이게
   $('ptot').textContent=(S.length>1?'–'+S[S.length-1].p.n:'')+' / '+LAST;
-  store.set('ebook-last:'+KEY, S[0].p.n);
+  if(!S[0].p.cover) store.set('ebook-last:'+KEY, S[0].p.n);      // 시작 화면은 '마지막 본 쪽'으로 기억하지 않음
   $('sprev').disabled=$('pprev').disabled=vi<=0; $('snext').disabled=$('pnext').disabled=vi>=V.length-1;
   syncUnit(); syncModeBtns(); buildAudio(); $('tocbtn').classList.toggle('on',!!S[0].p.cover);
   // 스테이지가 실제 크기를 가질 때까지 기다렸다 그림(초기/리로드 축소 방지)
-  let _t=0; const redraw=()=>{ if(stage.clientWidth>100||_t>40){ drawStep(); } else { _t++; requestAnimationFrame(redraw); } };
+  let _t=0; const redraw=()=>{ if(stage.clientWidth>100||_t>40){ drawStep(); if(_pendFit!=null){ const k=_pendFit; _pendFit=null; fitSheet(k); } } else { _t++; requestAnimationFrame(redraw); } };
   const ims=S.map(s=>s.im); if(ims.every(i=>i.complete)) redraw(); else { let left=ims.length; ims.forEach(i=>{ if(i.complete){ if(--left===0) redraw(); } else i.onload=i.onerror=()=>{ if(--left===0) redraw(); }; }); }
   // 프리로드(앞뒤 보기)
   [vi-1,vi+1].forEach(j=>(V[j]||[]).forEach(k=>{ const im=new Image(); im.src=P[k].img; })); }
 function go(d){ const j=vi+d; if(j>=0&&j<V.length){ vi=j; loadView(); } }
+// 펼침(두 쪽)에서 한 쪽을 크게 보고 있으면 '다음/이전'은 옆 쪽으로 → 책 넘기듯 한 쪽씩. 두 쪽 전체를 보고 있으면 다음 펼침으로
+let _pendFit=null;
+function fitSheet(si){ if(!S[si]) si=0; const s=S[si], a=area();
+  if(Math.min(a.w/s.p.w,a.h/s.p.h) <= fitS*1.08){ step=-1; drawStep(); return; }   // 한 쪽만 맞춰도 더 커지지 않는 화면(세로로 꽉 찬 경우)은 두 쪽 그대로
+  step=-1; board.style.clipPath='none'; apply([s.ox,0,s.ox+s.p.w,s.p.h]); syncZoomBtn(); hideHL(); updCount(); }
+function curSheet(){ if(step>=0&&Z[step]) return Z[step].si;
+  const a=area(), bx=(a.x+a.w/2-T.tx)/T.s; return S.length>1&&bx>=S[1].ox?1:0; }
+function nav(d){
+  if(S.length<2 || !zoomed()) return go(d);
+  const si=curSheet();
+  if(d>0 && si===0) return fitSheet(1);
+  if(d<0 && si===1) return fitSheet(0);
+  const j=vi+d; if(j<0||j>=V.length) return;
+  vi=j; _pendFit=d>0?0:(V[j].length-1); loadView(); }      // 다음 펼침의 왼쪽(이전이면 오른쪽) 쪽을 크게(그림 다 뜬 뒤)
 
 // ── 화면 맞춤·확대: 위·아래 도구 줄과 양옆 탭을 피한 영역에 맞춤 ──
 function area(){ const w=stage.clientWidth,h=stage.clientHeight, sm=w<=720;
@@ -509,8 +580,8 @@ function hoverHL(cx,cy){ const h=$('zhl'); if(!h) return;
   stage.classList.add('zoomable'); }
 
 // ── 버튼·키보드 ──
-$('pprev').onclick=()=>go(-1); $('pnext').onclick=()=>go(1);
-$('sprev').onclick=e=>{ e.stopPropagation(); go(-1); }; $('snext').onclick=e=>{ e.stopPropagation(); go(1); };
+$('pprev').onclick=()=>nav(-1); $('pnext').onclick=()=>nav(1);
+$('sprev').onclick=e=>{ e.stopPropagation(); nav(-1); }; $('snext').onclick=e=>{ e.stopPropagation(); nav(1); };
 ['sprev','snext','tchip'].forEach(id=>$(id).addEventListener('pointerdown',e=>e.stopPropagation()));
 pgIn.onchange=()=>{ gotoPage(parseInt(pgIn.value)||1); pgIn.blur(); };
 $('zall').onclick=()=>{ step=-1; drawStep(); };
@@ -520,12 +591,13 @@ document.addEventListener('click',e=>{ const b=e.target.closest&&e.target.closes
 window.addEventListener('keydown',e=>{
   if(e.target.closest&&e.target.closest('input,select,textarea')) return;   // 쪽번호 입력 중엔 단축키 무시
   if(e.ctrlKey&&(e.key==='z'||e.key==='Z')){ e.preventDefault(); undoInk(); return; }
-  if(e.key==='ArrowRight'||e.key==='PageDown'){ e.preventDefault(); go(1); }     // 발표용 리모컨(프레젠터)도 이 키를 보냄
-  if(e.key==='ArrowLeft'||e.key==='PageUp'){ e.preventDefault(); go(-1); }
+  if(e.key==='ArrowRight'||e.key==='PageDown'){ e.preventDefault(); nav(1); }     // 발표용 리모컨(프레젠터)도 이 키를 보냄
+  if(e.key==='ArrowLeft'||e.key==='PageUp'){ e.preventDefault(); nav(-1); }
   if(e.key==='Escape'){ if(tool) setTool(null); else { step=-1; drawStep(); } closePops(); }
   if(e.key==='f'||e.key==='F') toggleFS();
   if(e.key==='Home'&&COVER){ e.preventDefault(); vi=0; loadView(); }
-  if(e.key===' '||e.key==='Enter'){ e.preventDefault(); stepReveal(true); } });   // Space=하나씩 공개, 다 끝나면 다음 활동/쪽(PPT처럼)
+  if(e.key===' '||e.key==='Enter'){ e.preventDefault(); if(e.shiftKey) stepBack(); else stepReveal(true); }
+  if(e.key==='Backspace'){ e.preventDefault(); stepBack(); } });   // Space=하나씩 공개, 다 끝나면 다음 활동/쪽(PPT처럼)
 
 // ── 자유 확대/이동 (휠 줌 · 드래그 이동 · 핀치) + 탭으로 활동 확대 ──
 stage.addEventListener('wheel',e=>{ e.preventDefault(); const r=stage.getBoundingClientRect();
@@ -553,10 +625,12 @@ window.addEventListener('pointermove',e=>{
     freeMode(); hideHL(); stage.style.cursor='grabbing';
     T.tx+=e.clientX-panLast.x; T.ty+=e.clientY-panLast.y; panLast={x:e.clientX,y:e.clientY}; setT(false); } });
 function endPtr(e){ const wasTap = ptrs.size===1 && down && !down.moved && !down.onBox && Date.now()-down.t<450 && ptrs.has(e.pointerId) && e.type==='pointerup';
+
   ptrs.delete(e.pointerId); if(ptrs.size<2) pinch=null;
   if(ptrs.size===1 && !tool){ const p=[...ptrs.values()][0]; panLast={x:p.x,y:p.y}; down=null; }
   else if(ptrs.size===0){ panLast=null; stage.style.cursor=''; syncZoomBtn(); down=null; }
   if(wasTap) onTap(e.clientX,e.clientY); }
+stage.addEventListener('dragstart',e=>e.preventDefault());   // 쪽 그림을 '그림 끌기'로 잡지 않게(끌면 화면 이동)
 window.addEventListener('pointerup',endPtr); window.addEventListener('pointercancel',endPtr);
 stage.addEventListener('pointerleave',e=>{ if(e.pointerType==='mouse') hideHL(); });
 
@@ -571,8 +645,19 @@ function buildRevQueue(){
     [...s.ml.querySelectorAll('rect')].forEach(el=>items.push({el,si,y:+el.getAttribute('y'),x:+el.getAttribute('x'),line:false}));
     [...s.ml.querySelectorAll('path')].forEach(el=>items.push({el,si,y:+el.getAttribute('data-y'),x:+el.getAttribute('data-x'),line:false}));
     const ordv=el=>{ const o=el.getAttribute('data-ord'); return (o!=null&&o!=='')?+o:null; };
+    // 활동(구역) 순서가 먼저: 위 활동 → 아래 활동. 그 안에서 명시순서·위치 순(명시순서가 있는 활동이 쪽 전체 맨 앞으로 끼어들지 않게)
+    const zs=Z.filter(z=>z.si===si).map(z=>z.l);                    // 구역 순서 = 데이터 순서(활동 번호 순, 확대 넘김과 같음)
+    // 정답이 실제로 들어 있는 범위 우선(여럿이면 작은 범위), 없으면 경계 여유(±30) 안에서 가장 가까운 범위 — 10-04: 다음 문장 슬래시가 앞 범위에 묶이던 것
+    const zk=it=>{ const inn=zs.map((l,j)=>[l,j]).filter(([l])=>it.x>=l[0]&&it.x<=l[2]&&it.y>=l[1]&&it.y<=l[3]);
+      if(inn.length) return inn.sort((a,b)=>(a[0][2]-a[0][0])*(a[0][3]-a[0][1])-(b[0][2]-b[0][0])*(b[0][3]-b[0][1]))[0][1];
+      const d=l=>Math.max(0,l[0]-it.x,it.x-l[2])+Math.max(0,l[1]-it.y,it.y-l[3]);
+      const near=zs.map((l,j)=>[d(l),j]).filter(([dd,j])=>it.x>=zs[j][0]-25&&it.x<=zs[j][2]+25&&it.y>=zs[j][1]-30&&it.y<=zs[j][3]+30).sort((a,b)=>a[0]-b[0]);
+      return near.length?near[0][1]:999; };
+    const zg=Z.map((z,gi)=>[z,gi]).filter(([z])=>z.si===si).map(([,gi])=>gi);   // 범위 번호(전체 Z 기준)
+    items.forEach(it=>{ it.z=zk(it); it.zg=it.z<999?zg[it.z]:-1; });
     // 명시순서(data-ord)>매칭 라인 열우선>나머지 행우선(위→아래,좌→우)
     items.sort((a,b)=>{
+      if(a.z!==b.z && a.z<999 && b.z<999) return a.z-b.z;
       const oa=ordv(a.el), ob=ordv(b.el);
       if(oa!=null&&ob!=null) return oa-ob || a.y-b.y;
       if(oa!=null) return -1; if(ob!=null) return 1;
@@ -584,7 +669,7 @@ function buildRevQueue(){
 // 활동 확대 중이면 그 활동 안의 답만(게임처럼 활동 하나씩)
 function curPool(){
   if(step>=0 && Z[step]){ const z=Z[step], l=z.l;
-    return revQ.filter(it=> it.si===z.si && it.x>=l[0]-25 && it.x<=l[2]+25 && it.y>=l[1]-30 && it.y<=l[3]+30); }
+    return revQ.filter(it=> it.si===z.si && (it.zg===step || (it.zg<0 && it.x>=l[0]-25 && it.x<=l[2]+25 && it.y>=l[1]-30 && it.y<=l[3]+30))); }   // 그 범위에 속한 답만
   return revQ; }
 // 진행 표시: 같은 ord(영·한 동시공개)는 한 번으로 셈
 function units(pool){ const seen=new Set(); let n=0,d=0;
@@ -592,18 +677,39 @@ function units(pool){ const seen=new Set(); let n=0,d=0;
     if(k&&seen.has(k)) return; if(k) seen.add(k);
     n++; if(it.el.classList.contains('reveal')) d++; });
   return [d,n]; }
-function updCount(){ const [d,n]=units(curPool()); $('rcnt').textContent= n? `${d}/${n}` : ''; }
+function updCount(){ const [d,n]=units(curPool()); $('rcnt').textContent= n? `${d}/${n}` : '';
+  // 다 열리면 다음에 할 일을 버튼 글자로 미리 보여 줌(모르고 눌러 쪽이 넘어가지 않게)
+  let nx='';
+  if(d>=n){ if(step>=0 && step<Z.length-1) nx='다음 활동 →';
+    else if(step>=0 && revQ.some(x=>!x.el.classList.contains('reveal'))) nx='나머지 정답 →';
+    else if(vi<V.length-1 || (S.length>1 && zoomed() && curSheet()===0)) nx='다음 쪽 →'; }
+  const L=$('steplbl'); if(L.dataset.nx!==nx){ L.dataset.nx=nx; L.innerHTML= nx? nx : '정답<span class="mh"> 하나씩</span>'; } }
 function stepReveal(advance){ const pool=curPool(); const it=pool.find(it=>!it.el.classList.contains('reveal'));
   if(!it){ if(!advance) return;
     if(step>=0 && step<Z.length-1) zoomZone(step+1);        // 활동 확대 중 → 다음 활동
     else if(step>=0 && revQ.some(x=>!x.el.classList.contains('reveal'))){ step=-1; drawStep(); }   // 활동 밖에 남은 정답 → 전체 보기로 마저 공개
-    else go(1);                                             // 전체 보기(또는 마지막 활동) → 다음 쪽
+    else nav(1);                                            // 전체 보기(또는 마지막 활동) → 다음 쪽(펼침에서 왼쪽 확대 중이면 오른쪽 쪽)
     return; }
   const o=it.el.getAttribute('data-ord');
   if(o!=null&&o!==''){ pool.forEach(x=>{ if(x.si===it.si&&x.el.getAttribute('data-ord')===o) x.el.classList.add('reveal'); }); }  // 같은 ord=한 번에(영·한 동시)
   else it.el.classList.add('reveal');
   updCount(); }
-$('stepbtn').onclick=()=>stepReveal(false);
+// 하나 되돌리기: 가장 최근에 나온 정답(같은 ord 묶음째)을 다시 가림. 직접 눌러 연 것도 포함(공개 순서상 마지막 것)
+function stepBack(){ const pool=curPool(); const shown=pool.filter(it=>it.el.classList.contains('reveal'));
+  if(!shown.length){                                       // 다 가려져 있으면 한 단계 뒤로(정답 하나씩의 반대)
+    if(step>0) zoomZone(step-1);                           // 활동 확대 중 → 이전 활동
+    else nav(-1);                                          // 첫 활동·전체 보기 → 이전 쪽(펼침에서 한 쪽 확대 중이면 옆 쪽)
+    return; }
+  let it=null; for(const x of shown) if(!it || (+x.el.dataset.rt||0) >= (+it.el.dataset.rt||0)) it=x;   // 연 시각이 가장 늦은 것
+  const o=it.el.getAttribute('data-ord');
+  if(o!=null&&o!==''){ pool.forEach(x=>{ if(x.si===it.si&&x.el.getAttribute('data-ord')===o) x.el.classList.remove('reveal'); }); }
+  else it.el.classList.remove('reveal');
+  updCount(); }
+$('stepback').onclick=()=>stepBack();
+// 정답이 열릴 때마다 시각 기록(되돌리기 순서용)
+let _rt=0; new MutationObserver(ms=>ms.forEach(m=>{ const e=m.target; if(e.classList&&e.classList.contains('reveal')&&!m.oldValue?.split(' ').includes('reveal')) e.dataset.rt=++_rt; }))
+  .observe(document.getElementById('board'),{subtree:true,attributes:true,attributeFilter:['class'],attributeOldValue:true});
+$('stepbtn').onclick=()=>stepReveal(true);     // Space와 같게: 다 열린 뒤 한 번 더 → 다음 활동/다음 쪽
 $('reveal').onclick=function(){ curPool().forEach(it=>it.el.classList.add('reveal')); updCount(); };
 $('hide').onclick=function(){ curPool().forEach(it=>it.el.classList.remove('reveal')); updCount(); };
 
@@ -621,7 +727,7 @@ function unitAudio(n){ let u=-1; UNITS.forEach((x,i)=>{ if(n>=x[1]) u=i; });
   P.forEach(p=>{ if(p.n>=lo&&p.n<hi&&p.audio){ const k=/문장/.test(p.audioLabel||'')||/_s\.mp3$/.test(p.audio)?'문장':'단어'; if(!r[k]) r[k]=p.audio; } });
   return _ua[u]=r; }
 function buildAudio(){ _aud.pause(); $('audpop').classList.remove('show'); const g=$('audgrp'); g.innerHTML='';
-  const src={}; S.forEach(s=>{ const ua=unitAudio(s.p.n); for(const k in ua) if(!src[k]) src[k]=ua[k]; });
+  const src={}; viewSheets().forEach(s=>{ const ua=unitAudio(s.p.n); for(const k in ua) if(!src[k]) src[k]=ua[k]; });
   AUDSLOTS.forEach(([lab])=>{ const a=src[lab], b=document.createElement('button');
     b.className='ib'+(a?'':' none'); b.innerHTML=SPK+lab; b.disabled=!a;
     if(a){ b.dataset.src=a;
@@ -645,13 +751,19 @@ const mmss=t=>{ t=Math.max(0,Math.floor(t||0)); return Math.floor(t/60)+':'+Stri
 const PLAY='<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>', PAUSE='<svg viewBox="0 0 24 24"><path d="M8 5v14M16 5v14"/></svg>';
 let _seeking=false;
 function syncBar(){ const d=_aud.duration||0; if(!_seeking) $('aseek').value=d?Math.round(_aud.currentTime/d*1000):0;
-  $('atime').textContent=mmss(_aud.currentTime)+' / '+mmss(d); $('aplay').innerHTML=_aud.paused?PLAY:PAUSE; }
+  $('atime').textContent=mmss(_aud.currentTime)+' / '+mmss(d);
+  const st=_aud.paused?'p':'r'; if($('aplay').dataset.st!==st){ $('aplay').dataset.st=st; $('aplay').innerHTML=_aud.paused?PLAY:PAUSE; } }   // 상태 바뀔 때만 다시 그림(계속 그리면 누르는 순간 클릭이 씹혀 멈춤이 안 됨)
 ['timeupdate','loadedmetadata','play','pause'].forEach(ev=>_aud.addEventListener(ev,syncBar));
 _aud.addEventListener('ended',()=>{ _aud.currentTime=0; syncBar(); });
 $('aseek').addEventListener('input',()=>{ _seeking=true; const d=_aud.duration||0; $('atime').textContent=mmss($('aseek').value/1000*d)+' / '+mmss(d); });
 $('aseek').addEventListener('change',()=>{ const d=_aud.duration||0; if(d) _aud.currentTime=$('aseek').value/1000*d; _seeking=false; });
 $('aplay').onclick=()=>{ if(_aud.paused) _aud.play().catch(()=>{}); else _aud.pause(); };
 $('aback').onclick=()=>{ _aud.currentTime=Math.max(0,_aud.currentTime-5); if(_aud.paused) _aud.play().catch(()=>{}); };
+// 재생 속도: 누를 때마다 1.0 → 0.8 → 0.6 → 1.2 → 1.0 (마지막 선택 기억)
+const RATES=[1,0.8,0.6,1.2]; let _rate=+store.get('ebook-rate')||1; if(!RATES.includes(_rate)) _rate=1;
+function applyRate(){ _aud.defaultPlaybackRate=_aud.playbackRate=_rate; $('arate').textContent=_rate.toFixed(1)+'×'; $('arate').classList.toggle('slow',_rate!==1); }
+_aud.addEventListener('loadedmetadata',applyRate); applyRate();
+$('arate').onclick=()=>{ _rate=RATES[(RATES.indexOf(_rate)+1)%RATES.length]; store.set('ebook-rate',_rate); applyRate(); };
 $('aclose').onclick=()=>{ _aud.pause(); _aud.currentTime=0; $('audpop').classList.remove('show'); };
 
 // ── 떠 있는 작은 카드(펜 옵션·타이머): 누른 버튼 아래에 ──
@@ -789,11 +901,11 @@ function placePens(){ const small=innerWidth<=720, home=small?$('top'):$('bot');
 placePens(); addEventListener('resize',placePens);
 buildViews();
 const lastN=+store.get('ebook-last:'+KEY)||0;
-if(lastN>1){ const k=P.findIndex(p=>p.n>=lastN); vi=viewOfPage(k<0?0:k); }
+if(lastN>1 && !COVER){ const k=P.findIndex(p=>p.n>=lastN); vi=viewOfPage(k<0?0:k); }   // 시작 화면이 있는 책은 늘 시작 화면으로 열고, 거기 '이어 보기' 버튼
 if(P.length){ loadView(); }
 function toast(msg,ms){ const h=$('hint'); h.textContent=msg; h.classList.add('show'); clearTimeout(h._t); h._t=setTimeout(()=>h.classList.remove('show'),ms||3500); }
 if(!store.get('ebook-hint')){ store.set('ebook-hint','1'); setTimeout(()=>toast('활동을 누르면 크게 보여요 · Space = 정답 하나씩',5000),600); }
-else if(lastN>1) setTimeout(()=>toast(`지난번 보던 ${lastN}쪽부터 이어서 봅니다`,2200),500);
+else if(lastN>1 && !COVER) setTimeout(()=>toast(`지난번 보던 ${lastN}쪽부터 이어서 봅니다`,2200),500);
 // 초기 레이아웃 안정 후 재맞춤(첫 로드 축소 버그 방지)
 window.addEventListener('load',()=>{ if(step<0) drawStep(); });
 setTimeout(()=>{ if(step<0) drawStep(); },150);
