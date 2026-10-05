@@ -374,22 +374,18 @@ function bookView(b){
     const chips=vids.map(r=>'<a class="orient" href="'+esc(r.url)+'" target="_blank" rel="noopener">'+esc(r.label||'영상')+' ↗</a>').join('');
     top='<div class="orientbox"><h2>'+esc(b.orient_title||'오리엔테이션 영상')+'</h2><div class="orientgrid">'+chips+'</div></div>';
   }
-  const VL=un=>(un.videos&&un.videos.length)? un.videos : (un.video? [{label:'강의 영상',url:un.video}] : []);
-  const HA=un=>(un.audio&&(un.audio.word||un.audio.sent))||(un.pages&&un.pages.length)||un.np;
-  const hasAud=b.units.some(HA), hasLec=vids.length>0||b.units.some(un=>VL(un).length);
-  const lec=(new URLSearchParams(location.search).get('tab')==='lec' && hasLec) || !hasAud;
-  if(lec) top=top; else top='';
   const cards=b.units.map(un=>{
-    if(lec){ const vl=VL(un); if(!vl.length) return '';
-      return '<div class="ucard"><div class="ut">Unit '+un.n+'</div><div class="ubtns">'+vl.map(v=>'<a class="ubtn main" href="'+esc(v.url)+'" target="_blank" rel="noopener">'+IC_PL+esc(v.label)+' ↗</a>').join('')+'</div></div>'; }
-    const a=HA(un)? '<button class="ubtn main" type="button" data-go="leaf" data-book="'+b.code+'" data-u="'+un.n+'">'+IC_HP+'음원 듣기</button>' : '<span class="ubtn off">준비 중</span>';
-    return '<div class="ucard"><div class="ut">Unit '+un.n+'</div><div class="ubtns">'+a+'</div></div>';
+    const hasA=(un.audio&&(un.audio.word||un.audio.sent))||(un.pages&&un.pages.length)||un.np;
+    const vlist=(un.videos&&un.videos.length)? un.videos : (un.video? [{label:'강의 영상',url:un.video}] : []);
+    const a=hasA? '<button class="ubtn main" type="button" data-go="leaf" data-book="'+b.code+'" data-u="'+un.n+'">'+IC_HP+'음원 듣기</button>'
+                : (vlist.length? '' : '<span class="ubtn off">준비 중</span>');
+    const vid=vlist.map(v=>'<a class="ubtn" href="'+esc(v.url)+'" target="_blank" rel="noopener">'+IC_PL+esc(v.label)+' ↗</a>').join('');
+    return '<div class="ucard"><div class="ut">Unit '+un.n+'</div><div class="ubtns">'+a+vid+'</div></div>';
   }).join('');
-  const tabs=(hasAud&&hasLec)? '<div class="btabs"><button type="button" class="'+(lec?'':'on')+'" data-go="book" data-book="'+b.code+'">'+IC_HP+'음원</button><button type="button" class="'+(lec?'on':'')+'" data-go="lec" data-book="'+b.code+'">'+IC_PL+'강의</button></div>' : '';
   const sl=slugOf(b.code);
   app.innerHTML='<nav class="crumb" aria-label="위치"><button type="button" data-go="home">음원·강의</button><span>›</span><span>'+esc(nm(b))+'</span></nav>'+
     '<div class="bhead">'+cover(b)+'<div class="tx"><h1>'+esc(nm(b))+'</h1></div>'+(sl?'<a class="btn line sm" href="/books/'+sl+'/">교재 소개 →</a>':'')+'</div>'+
-    tabs+top+'<div class="ugrid">'+cards+'</div>';
+    top+'<div class="ugrid">'+cards+'</div>';
 }
 
 const IC_HP='<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" d="M4 15v-3a8 8 0 0 1 16 0v3"/><rect x="3" y="14" width="5" height="7" rx="2" fill="currentColor"/><rect x="16" y="14" width="5" height="7" rx="2" fill="currentColor"/></svg>';
