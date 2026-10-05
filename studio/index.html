@@ -226,12 +226,12 @@ function openRec(b,u,S){
   document.body.insertAdjacentHTML('beforeend','<div class="rec" id="rec" role="dialog" aria-modal="true" aria-label="숙제 녹음"><div class="sh">'+
     '<button class="x" type="button" id="recX" aria-label="닫기">×</button><h3>숙제 녹음</h3><p class="sub2">'+esc(nm(b))+' · Unit '+u+'</p>'+
     (hasKo?'<div class="mt"><button type="button" class="on" data-m="en">영어 보고 읽기</button><button type="button" data-m="ko">한글 보고 영어로</button></div>':'')+
-    (OUT?'<div class="inapp"><b>'+OUT.app+' 안에서는 녹음 파일을 바로 보낼 수 없어요</b>'+(OUT.link?'아래 버튼으로 열면 녹음 후 카톡으로 바로 보낼 수 있어요.<a href="'+esc(OUT.link)+'">'+OUT.btn+' →</a>':'오른쪽 아래 ⋯ 메뉴에서 "다른 브라우저로 열기"를 눌러 주세요.')+'</div>':'')+
+    (OUT?'<div class="inapp"><b>먼저 아래 버튼을 눌러 주세요</b>'+(OUT.link?'지금 화면('+OUT.app+')에서는 녹음을 선생님께 보낼 수 없어요. 버튼을 누르면 보낼 수 있는 화면으로 바뀌어요.<a href="'+esc(OUT.link)+'">녹음하러 가기 →</a>':'지금 화면('+OUT.app+')에서는 녹음을 선생님께 보낼 수 없어요. 오른쪽 아래 ⋯ 를 누르고 "다른 브라우저로 열기"를 눌러 주세요.')+'</div>':'')+
     '<ol id="recList"></ol>'+
     '<label>이름 <input id="recName" maxlength="12" autocomplete="name" placeholder="선생님이 알아보도록 적어 주세요" value="'+esc(n0)+'"></label>'+
     '<div class="rb"><button class="big" type="button" id="recGo">녹음</button><div class="tm" id="recTm">버튼을 누르고 읽어요</div></div>'+
     '<div id="recDone" hidden><audio id="recAu" controls></audio><div class="acts"><button type="button" id="recRe">다시 녹음</button><button type="button" class="send" id="recSend">보내기</button></div></div>'+
-    '<p class="note" id="recMsg">보내기를 누르고 카카오톡 → 선생님 채팅방을 고르면 돼요.</p>'+
+    '<p class="note" id="recMsg">[보내기] → 카카오톡 → 선생님을 골라서 보내요.</p>'+
     '<p class="note">녹음은 이 휴대폰에만 있어요. 쏠뷰 서버로 보내지 않아요.</p></div></div>');
   const $r=id=>document.getElementById(id), list=$r('recList'), go=$r('recGo'), tm=$r('recTm'), done=$r('recDone'), rau=$r('recAu'), msg=$r('recMsg'), nameIn=$r('recName');
   const st=recState={mr:null,stream:null,tmr:null,file:null,ext:'mp3',chunks:[]};
@@ -253,7 +253,7 @@ function openRec(b,u,S){
   function stopRec(){ if(st.mr&&st.mr.state!=='inactive') st.mr.stop(); if(st.stream) st.stream.getTracks().forEach(t=>t.stop()); clearInterval(st.tmr); go.classList.remove('on'); go.textContent='녹음'; }
   async function finish(){ tm.textContent='파일 만드는 중…'; const type=(st.mr&&st.mr.mimeType)||'audio/webm', raw=new Blob(st.chunks,{type});
     let out; try{ out=await toMp3(raw); }catch(e){ out={blob:raw,ext:type.indexOf('mp4')>=0?'m4a':'webm'}; }
-    st.ext=out.ext; st.blob=out.blob; rau.src=URL.createObjectURL(out.blob); done.hidden=false; tm.textContent='들어 보고 괜찮으면 보내요'; say('보내기를 누르고 카카오톡 → 선생님 채팅방을 고르면 돼요.'); }
+    st.ext=out.ext; st.blob=out.blob; rau.src=URL.createObjectURL(out.blob); done.hidden=false; tm.textContent='들어 보고 괜찮으면 보내요'; say('[보내기] → 카카오톡 → 선생님을 골라서 보내요.'); }
   go.onclick=()=>{ if(st.mr&&st.mr.state==='recording') stopRec(); else start(); };
   $r('recRe').onclick=()=>{ rau.pause(); start(); };
   $r('recSend').onclick=async()=>{ if(!st.blob) return; try{ localStorage.setItem(NK,nameIn.value.trim()); }catch(e){}
