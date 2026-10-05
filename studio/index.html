@@ -477,12 +477,7 @@ function leaf(b,u,selP){
     if(curT==='word') listbox.querySelectorAll('.row').forEach((r,i)=>r.onclick=()=>{ if(hideMean) r.classList.toggle('rv'); if(WT) playSeg(i); });
   }
   function recGo(){ const sent=(curT==='sent'&&SENTSRC.length); const items=sent? SENTSRC.map(x=>({e:x.e,k:x.k})) : (src.words||[]).map(w=>({e:w.w,k:w.m}));
-    const ctl=(sent&&ST&&SE&&!PAGES)?{
-      start(){ if(shadowTimer){ clearTimeout(shadowTimer); shadowTimer=null; holdAfter=null; } shadowOn=true; const sh=document.getElementById('tgSh'); if(sh) sh.classList.add('on'); setHint();
-        boundEnd=null; shadowDone=-1; shadowHold=false; curIdx=-1; try{au.currentTime=0;}catch(e){} au.playbackRate=curSpd; au.play(); },
-      stop(){ if(shadowTimer){ clearTimeout(shadowTimer); shadowTimer=null; holdAfter=null; } shadowHold=false; au.pause(); },
-      hook(fn){ recHook=fn; } } : null;
-    openRec(b,u,items,sent?'문장':'단어',(PAGES&&src.p!=null)?'p.'+src.p:'',ctl); }
+    openRec(b,u,items,sent?'문장':'단어',(PAGES&&src.p!=null)?'p.'+src.p:''); }
   function renderList(){ const tb=document.getElementById('tbar'); if(tb) tb.innerHTML=ctrlBar(); setHint(); if(!listbox) return; listbox.innerHTML=((curT==='sent'&&sentHTML)?sentHTML:(wordHTML||sentHTML));
     listbox.classList.toggle('hidem', curT==='word'&&hideMean); listbox.classList.toggle('hidek', curT==='sent'&&hideKo);
     bindList(); highlight(); }
