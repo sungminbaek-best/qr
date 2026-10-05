@@ -141,6 +141,10 @@
 .lview .atog{margin:16px 0 0}
 .dock{position:fixed;left:0;right:0;bottom:0;z-index:30;background:rgba(255,255,255,.98);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line);box-shadow:0 -14px 26px -22px rgba(12,16,32,.5);padding:10px 16px calc(12px + env(safe-area-inset-bottom))}
 .dock>*{max-width:760px;margin-left:auto;margin-right:auto}
+.dock .atog{display:flex;width:100%;gap:4px;margin:0 auto 10px;padding:4px;background:var(--panel);border-radius:14px}
+.dock .atg{flex:1;padding:11px 8px;font-size:15px;font-weight:800;border-radius:11px;color:var(--sub)}
+.dock .atg small{margin-left:6px;font-family:var(--mono);font-size:12px;font-weight:700;color:var(--mute)}
+.dock .atg.on{background:#fff;color:var(--brand);box-shadow:0 1px 4px rgba(12,16,32,.14)}.dock .atg.on small{color:var(--brand)}
 .dock.stuck{border-bottom-color:var(--line);box-shadow:0 12px 20px -18px rgba(12,16,32,.45)}
 .pgrow{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;margin-bottom:10px;padding:1px}
 .pgrow::-webkit-scrollbar{display:none}
@@ -407,11 +411,12 @@ function leaf(b,u,selP){
   const wordHTML=(!isSentPage&&src.words&&src.words.length)?'<div class="rows">'+words+'</div>':'';
   const sentHead=(isSentPage?(esc(src.label||'문장읽기')+' · '):'')+'문장 '+SENTSRC.length+'개';
   const sentHTML=(SENTSRC.length)?'<div class="rows">'+sents+'</div>':'';
-  const toggle= types.length>1 ? '<div class="atog">'+types.map((t,i)=>'<button class="atg'+(i===T0?' on':'')+'" type="button" data-t="'+t.k+'">'+t.l+' 음원</button>').join('')+'</div>' : '';
+  const CNT={word:(isSentPage?0:(src.words||[]).length), sent:SENTSRC.length};
+  const toggle= types.length>1 ? '<div class="atog" role="tablist" aria-label="음원 고르기">'+types.map((t,i)=>'<button class="atg'+(i===T0?' on':'')+'" type="button" role="tab" data-t="'+t.k+'">'+t.l+' 음원'+(CNT[t.k]?'<small>'+CNT[t.k]+'</small>':'')+'</button>').join('')+'</div>' : '';
   app.innerHTML='<div class="lview"><div class="lhead">'+cover(b)+'<div><button type="button" class="bk" data-go="book" data-book="'+b.code+'">'+esc(nm(b))+'</button>'+
     '<div class="un"><button type="button" id="uprev" aria-label="이전 유닛">‹</button><h1>Unit '+u+'</h1><button type="button" id="unext" aria-label="다음 유닛">›</button></div></div></div>'+
-    toggle+'<audio id="au" preload="metadata"></audio>'+
-    '<div class="dock" id="dock">'+pgtabs+
+    '<audio id="au" preload="metadata"></audio>'+
+    '<div class="dock" id="dock">'+toggle+pgtabs+
       '<div class="tbar" id="tbar"></div><div class="lhint" id="lhint" hidden></div>'+
       '<div class="pbar"><button class="pbtn" type="button" id="play" aria-label="재생"><span id="ico">▶</span></button>'+
       '<input type="range" id="seek" min="0" max="1000" value="0" aria-label="재생 위치"><span class="say" id="lbl"></span>'+
