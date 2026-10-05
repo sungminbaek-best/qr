@@ -16,6 +16,18 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/site.css?v=71ad57ad">
 <style>
+/* E-Book · 워크북 자동 생성기 소개 */
+.tshow{display:flex;flex-direction:column;gap:22px;margin-top:40px}
+.sw{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,8fr);gap:36px;align-items:center;padding:34px;border:1px solid var(--line);border-radius:24px;background:#fff;scroll-margin-top:90px}
+.sw .sx em{display:inline-block;font-style:normal;font-size:12.5px;font-weight:800;color:var(--brand);background:var(--soft);padding:5px 12px;border-radius:999px}
+.sw h3{margin:14px 0 6px;font-size:28px;font-weight:800;letter-spacing:-.04em}
+.sw .sl{margin:0 0 18px;font-size:16px;color:var(--sub);font-weight:600}
+.sw ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:9px}
+.sw li{position:relative;padding-left:22px;font-size:15px;color:var(--sub);line-height:1.5}
+.sw li:before{content:"";position:absolute;left:2px;top:7px;width:10px;height:6px;border-left:2.5px solid var(--brand);border-bottom:2.5px solid var(--brand);transform:rotate(-45deg)}
+.sw .si img{display:block;width:100%;border-radius:14px;border:1px solid var(--line);box-shadow:0 14px 34px rgba(20,30,60,.10)}
+.sw .si img.sub{margin-top:14px;border:0;box-shadow:none}
+@media(max-width:860px){.sw{grid-template-columns:1fr;gap:20px;padding:22px}.sw h3{font-size:23px}}
 .top{padding:56px 0 24px}
 .top h1{font-size:clamp(32px,4.6vw,50px);font-weight:800;letter-spacing:-.05em;margin-top:14px}
 .top p{font-size:clamp(15px,1.7vw,17px);color:var(--sub);line-height:1.7;margin-top:12px;max-width:36em}
@@ -211,6 +223,14 @@
       <div class="tcta"><small>휴대폰 문자 인증 한 번으로 모두 열 수 있게 준비하고 있어요.</small></div>
       <div class="ok"><small>다른 기기에서도 같은 번호로 다시 들어올 수 있어요.</small><button type="button" class="relock">로그아웃</button></div>
     </div></div>
+    <div class="tshow">
+      <div class="sw rev" id="ebook"><div class="sx"><em>선생님용 · 14권</em><h3>수업용 E-Book</h3><p class="sl">교재 그대로, 전자칠판에 띄워 수업해요</p>
+        <ul><li>정답을 한 문제씩 공개</li><li>펜 · 형광펜으로 바로 판서</li><li>단어 · 문장 음원과 타이머까지</li></ul></div>
+        <div class="si"><img src="/library/img/ebook_show.webp" alt="수업용 E-Book 화면" loading="lazy"></div></div>
+      <div class="sw rev" id="workbook"><div class="sx"><em>선생님용 · 12권</em><h3>워크북 자동 생성기</h3><p class="sl">유닛만 고르면 1분, 정답지까지</p>
+        <ul><li>단어 뜻 쓰기 · 단어 쓰기 · 문장 해석 · 어순 배열 · 듣고 빈칸 쓰기</li><li>필요한 유형만 골라서</li><li>학원 이름 넣어 인쇄 · PDF 저장</li></ul></div>
+        <div class="si"><img src="/academy/img/tool_workbook_ui.webp?v=2" alt="워크북 자동 생성기 화면" loading="lazy"><img class="sub" src="/academy/img/tool_workbook_out.webp" alt="만들어진 워크북" loading="lazy"></div></div>
+    </div>
     <span id="perk"></span>
     <div class="err" id="err" role="alert"></div>
     
