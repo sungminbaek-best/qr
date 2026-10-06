@@ -229,6 +229,6 @@ var S=SOLVEU;
 S.$$(".pnum [data-count]").forEach(function(el){var to=parseFloat(el.getAttribute("data-count")),d=+(el.getAttribute("data-dec")||0),t0=null;
 function f(t){if(!t0)t0=t;var p=Math.min(1,(t-t0)/1100),e=1-Math.pow(1-p,3);el.textContent=(to*e).toFixed(d);if(p<1)requestAnimationFrame(f)}requestAnimationFrame(f)})})();
 </script>
-
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "be34a6ce385a49cfa586185de49690a5"}'></script>
 </body>
 </html>
