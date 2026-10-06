@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>브릿지 2권 불규칙동사 2 음원</title>
+<style>
+  *{box-sizing:border-box;}
+  html,body{height:100%;margin:0;}
+  body{font-family:"Pretendard","Malgun Gothic","맑은 고딕",system-ui,-apple-system,sans-serif;
+    display:flex;align-items:center;justify-content:center;color:#16233a;text-align:center;padding:24px;
+    background:radial-gradient(120% 80% at 50% -10%, #eaf1ff 0%, #f5f8ff 45%, #eef2f9 100%);
+    -webkit-tap-highlight-color:transparent;}
+  .box{max-width:440px;width:100%;}
+  .kicker{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.14em;
+    color:#3f6fe0;background:#e5edff;border-radius:999px;padding:6px 14px;margin-bottom:16px;}
+  h1{font-size:23px;font-weight:800;letter-spacing:-.02em;margin:0 0 6px;}
+  .sub{font-size:14.5px;color:#5b6b85;margin:0 0 34px;}
+  .btnwrap{position:relative;display:inline-block;}
+  .btnwrap::before{content:"";position:absolute;inset:-14px;border-radius:50%;
+    background:radial-gradient(closest-side,rgba(63,111,224,.28),transparent);filter:blur(6px);}
+  .btn{position:relative;width:184px;height:184px;border-radius:50%;border:none;cursor:pointer;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;
+    background:linear-gradient(160deg,#5b93ff 0%,#2f6bed 60%,#245ad6 100%);color:#fff;
+    box-shadow:0 18px 40px -10px rgba(47,107,237,.6),inset 0 2px 3px rgba(255,255,255,.35);
+    transition:transform .1s ease;user-select:none;-webkit-user-select:none;}
+  .btn:active{transform:scale(.96);}
+  .btn .ico{font-size:60px;line-height:1;text-shadow:0 2px 6px rgba(0,0,0,.15);}
+  .btn .lbl{font-size:16px;font-weight:700;letter-spacing:.02em;}
+  .bar{height:7px;background:#dbe4f5;border-radius:99px;margin:34px auto 0;max-width:320px;overflow:hidden;}
+  .bar > i{display:block;height:100%;width:0;background:linear-gradient(90deg,#5b93ff,#2f6bed);border-radius:99px;}
+  .brand{margin-top:30px;font-size:12.5px;font-weight:600;letter-spacing:.06em;color:#8a97ad;}
+  .brand b{color:#3f6fe0;}
+</style>
+</head>
+<body>
+<div class="box">
+  <span class="kicker">저절로리딩 브릿지 2권</span>
+  <h1>불규칙동사 2</h1>
+  <p class="sub">p.30 · 3+4구간 12개</p>
+
+  <div class="btnwrap">
+    <button class="btn" id="btn" aria-label="재생">
+      <span class="ico" id="ico">▶</span>
+      <span class="lbl" id="lbl">듣기</span>
+    </button>
+  </div>
+  <div class="bar"><i id="prog"></i></div>
+
+  <p class="brand"><b>쏠뷰</b> &nbsp;|&nbsp; 저절로리딩</p>
+
+  <audio id="au" preload="auto" src="irr2.mp3"></audio>
+  <noscript><audio controls src="irr2.mp3"></audio></noscript>
+</div>
+<script>
+  var au=document.getElementById('au'),btn=document.getElementById('btn'),
+      ico=document.getElementById('ico'),lbl=document.getElementById('lbl'),
+      prog=document.getElementById('prog');
+  function set(i,l){ico.textContent=i;lbl.textContent=l;}
+  btn.addEventListener('click',function(){
+    if(au.paused){au.play();}else{au.pause();}
+  });
+  au.addEventListener('play', function(){set('⏸','듣는 중');});
+  au.addEventListener('pause',function(){ if(!au.ended) set('▶','계속 듣기'); });
+  au.addEventListener('ended',function(){set('↺','다시 듣기');prog.style.width='100%';});
+  au.addEventListener('timeupdate',function(){
+    if(au.duration) prog.style.width=(au.currentTime/au.duration*100)+'%';
+  });
+</script>
+</body>
+</html>
