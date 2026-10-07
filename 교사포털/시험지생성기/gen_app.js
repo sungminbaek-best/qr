@@ -473,7 +473,8 @@ function itemHTML(t,it,n,ans){
     }
     default: {   // w_mean · w_spell
       const h = it.h || (t==="w_spell" && spellH() ? it.a[0] : "");
-      return `<div class="row">${N}<span class="q">${esc(it.q)}</span>${h?`<span class="hl">(${esc(h)}…)</span>`:""}</div>${line(it.a)}`;
+      // 첫 글자는 받아쓰기처럼 쓰는 줄 맨 앞에 회색으로(정답지는 정답만)
+      return `<div class="row">${N}<span class="q">${esc(it.q)}</span></div>${h&&!ans ? `<div class="ln"><span class="fh">${esc(h)}</span></div>` : line(it.a)}`;
     }
   }
 }
