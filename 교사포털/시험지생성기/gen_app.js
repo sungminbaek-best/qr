@@ -29,7 +29,7 @@ function setOMode(m){ document.querySelectorAll("#omode button").forEach(b=>b.cl
 // 단어 쓰기 첫 글자: 주기 = 모든 단어에 (b…) · 없음 = 뜻이 겹치는 단어에만(되다 = g…/t…)
 function setSpellH(v){ document.querySelectorAll("#spellh button").forEach(b=>b.classList.toggle("on", +b.dataset.h===v)); save({spellh:v}); render(); }
 function spellH(){ return !!document.querySelector('#spellh button[data-h="1"].on'); }
-function oMode(){ return (document.querySelector("#omode .on")||{dataset:{o:"all"}}).dataset.o; }
+function oMode(){ return (document.querySelector("#omode .on")||{dataset:{o:"inner"}}).dataset.o; }
 // 꼬리말 왼쪽: 홈페이지와 같은 글자 로고(쏠뷰 | SolveU, U만 파랑)
 const LOGO=`<span class="lg"><span class="ko">쏠뷰</span><span class="dv"></span><span class="en">Solve<span class="g">U</span></span></span>`;
 function setMargin(m){
@@ -252,11 +252,11 @@ function orderMix(s, mode, rnd, pn){
   const groups=ch.map(chunkWords), flat=caseWords(groups.flat(), pn);
   let k=0; const cased=groups.map(g=>g.map(()=>flat[k++]));
   if(mode==="inner"){   // 덩어리 순서는 그대로, 덩어리 안 단어만 섞기(한 낱말 덩어리는 그대로)
-    return cased.map(g=>{ let m=g; for(let t=0;t<6 && g.length>1 && m.join(" ")===g.join(" ");t++) m=shuffle(g,rnd); return "["+m.join(" ")+"]"; }).join("  ");
+    return cased.map(g=>{ let m=g; for(let t=0;t<6 && g.length>1 && m.join(" ")===g.join(" ");t++) m=shuffle(g,rnd); return "[ "+m.join(" / ")+" ]"; }).join("  ");
   }
   const txt=cased.map(g=>g.join(" ")); let m=txt;   // chunk: 덩어리째 섞기
   for(let t=0;t<6 && m.join("|")===txt.join("|");t++) m=shuffle(txt,rnd);
-  return m.join(" / ");
+  return m.map(x=>"[ "+x+" ]").join("  ");   // 표기 규칙: [ ] = 덩어리, / = 단어 사이(세 난이도 모두 같음)
 }
 // 어순 배열: 문장부호를 떼고 소문자로(고유명사·I 제외) 섞어 " / "로 잇기 — C&S 초상세2 방식
 function scramble(e, rnd, pn){

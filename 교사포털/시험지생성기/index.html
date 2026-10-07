@@ -247,11 +247,11 @@
           </div>
         </div>
         <div class="sub-opt hidden" id="orderStep">
-          <div class="lb">섞는 방법</div>
+          <div class="lb">난이도</div>
           <div class="pills" id="omode">
-            <button data-o="all" class="on" onclick="setOMode('all')" title="단어를 모두 섞기">전체</button>
-            <button data-o="inner" onclick="setOMode('inner')" title="덩어리 순서는 그대로, 안의 단어만 섞기">덩어리 안</button>
-            <button data-o="chunk" onclick="setOMode('chunk')" title="덩어리째 순서 섞기">덩어리</button>
+            <button data-o="chunk" onclick="setOMode('chunk')" title="덩어리째 섞기 — [ ] 덩어리 순서 맞추기">쉬움</button>
+            <button data-o="inner" class="on" onclick="setOMode('inner')" title="덩어리 순서는 그대로, [ ] 안의 단어만 섞기">보통</button>
+            <button data-o="all" onclick="setOMode('all')" title="문장 전체 단어 섞기">어려움</button>
           </div>
         </div>
         <div class="sub-opt hidden" id="blankStep">
