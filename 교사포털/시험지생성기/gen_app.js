@@ -92,7 +92,6 @@ function initControls(){
   if(sv.acad) $("acad").value=sv.acad;
   if(sv.spellh) document.querySelectorAll("#spellh button").forEach(b=>b.classList.toggle("on", b.dataset.h==="1"));
   if(sv.omode) document.querySelectorAll("#omode button").forEach(b=>b.classList.toggle("on", b.dataset.o===sv.omode));
-  if(sv.both) $("both").checked=true;
   const lv=sv.lvl || (sv.bank===0 ? "hard" : sv.hint ? "easy" : "");   // 예전 저장값(단어 상자·힌트)도 이어받음
   if(lv) document.querySelectorAll("#lvl button").forEach(b=>b.classList.toggle("on", b.dataset.l===lv));
   if(sv.margin && sv.margin!=="normal"){ document.querySelectorAll("#marg button").forEach(b=>b.classList.toggle("on", b.dataset.m===sv.margin)); $("preview").classList.add("m-"+sv.margin); }
@@ -370,15 +369,17 @@ function render(){
   renderTo($("preview"), TAB==="A");
 }
 // 정답지 함께 인쇄: 인쇄 직전에 문제지 + 정답지를 따로 그려 붙이고, 끝나면 지움(쪽번호는 각각 1 / N)
-function setBoth(){ save({both:$("both").checked}); }
+// '문제지 + 정답지 인쇄' 단추: 이번 인쇄만 문제지 뒤에 정답지를 붙임(Ctrl+P·인쇄 단추는 보고 있는 쪽만)
+let BOTH=false;
+function printBoth(){ if(!CUR) return; BOTH=true; window.print(); }
 function preparePrint(){
   const pa=$("printall"); pa.innerHTML="";
-  if(!CUR || !$("both").checked){ document.body.classList.remove("pa"); return; }
+  if(!CUR || !BOTH){ document.body.classList.remove("pa"); return; }
   const q=document.createElement("div"), a=document.createElement("div"); pa.appendChild(q); pa.appendChild(a);
   renderTo(q,false); renderTo(a,true); document.body.classList.add("pa");
 }
 window.addEventListener("beforeprint", preparePrint);
-window.addEventListener("afterprint", ()=>{ document.body.classList.remove("pa"); $("printall").innerHTML=""; });
+window.addEventListener("afterprint", ()=>{ BOTH=false; document.body.classList.remove("pa"); $("printall").innerHTML=""; });
 function renderTo(host, ans){
   const acad=$("acad").value.trim();
   host.innerHTML="";

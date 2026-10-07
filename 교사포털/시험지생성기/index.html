@@ -48,7 +48,7 @@
   @media(max-width:900px){.layout{grid-template-columns:1fr}}
   .layout > *{min-width:0}
   @media(max-width:600px){ .wrap{padding:16px 14px 48px} .nav .in{padding:0 14px; gap:10px} .nav .ttl{font-size:13.5px; padding-left:10px}
-    .logo .ko{font-size:17px} .logo .en{font-size:16px} .preview{padding:12px; border-radius:16px} .bar .pills{width:auto; flex:1} }
+    .logo .ko{font-size:17px} .logo .en{font-size:16px} .preview{padding:12px; border-radius:16px} .bar .pills{width:100%; flex:1 1 100%} .bar .rsh, .bar .print{flex:1 1 auto; padding:0 10px; font-size:13px; white-space:nowrap} .print.both{margin-left:0} }
   .panel{background:#fff; border:1px solid var(--line); border-radius:22px; padding:22px 20px 20px; position:sticky; top:84px; box-shadow:var(--shadow)}
   @media(max-width:900px){.panel{position:static}}
   .step{margin-bottom:22px}
@@ -106,11 +106,10 @@
   .go .ar{transition:transform .18s}.go:hover .ar{transform:translateX(3px)}
 
   /* 오른쪽 미리보기 */
-  .bar{display:flex; align-items:center; gap:10px; margin-bottom:12px}
+  .bar{display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin-bottom:12px}
   .bar .pills{width:220px; background:#fff}
   .bar.off .pills, .bar.off .print{opacity:.4; pointer-events:none}
-  .both{margin-left:auto; display:flex; align-items:center; gap:6px; font-size:13.5px; font-weight:600; color:var(--sub); cursor:pointer; user-select:none}
-  .both input{width:16px; height:16px; accent-color:var(--brand)}
+  .print.both{margin-left:auto}
   .bar.off .both, .bar.off .rsh{opacity:.4; pointer-events:none}
   .rsh{height:42px; padding:0 14px; border-radius:11px; background:#fff; border:1px solid var(--line2); font-weight:600; font-size:13.5px; color:var(--sub); transition:border-color .15s,color .15s}
   .rsh:hover{border-color:var(--ink); color:var(--ink)}
@@ -287,8 +286,8 @@
             <button id="tabA" onclick="showTab('A')">정답지</button>
           </div>
           <button class="rsh" onclick="reshuffle()" title="같은 유닛·유형으로 문제 순서와 보기를 새로 섞어요">↻ 다시 섞기</button>
-          <label class="both"><input type="checkbox" id="both" onchange="setBoth()"> 정답지 함께</label>
-          <button class="print" onclick="window.print()">인쇄 · PDF 저장</button>
+          <button class="print both" onclick="printBoth()" title="문제지 뒤에 정답지를 붙여 한 번에 인쇄해요">문제지 + 정답지 인쇄</button>
+          <button class="print" onclick="window.print()" title="지금 보고 있는 쪽(문제지 또는 정답지)만 인쇄해요">인쇄 · PDF 저장</button>
         </div>
         <div class="preview" id="preview"><div class="empty">유닛과 유형을 고르고 <b>워크북 만들기</b>를 눌러 주세요.</div></div>
       </div>
