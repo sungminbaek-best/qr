@@ -109,10 +109,12 @@ function onBook(){
   $("units").innerHTML = b.units.map(u=>`<label title="${esc(u.label||"")}"><input type="checkbox" value="${u.u}" onchange="this.parentNode.classList.toggle('on',this.checked); showEx()">${u.u}</label>`).join("");
   setUnits([b.units[0].u]);
   const chosen = sv.types && sv.types[b.kind];
+  const SUB={w_spell:$("spellStep"), s_order:$("orderStep"), s_listen:$("blankStep")};   // 세부 옵션은 그 유형 바로 아래(고르면 펼쳐짐)
   $("types").innerHTML = TYPES_R.map(([id,nm,ex,def])=>{
     const on = chosen ? chosen.includes(id) : def;
     return `<label class="ty ${on?"on":""}"><input type="checkbox" value="${id}" ${on?"checked":""} onchange="this.parentNode.classList.toggle('on',this.checked); syncListen(); showEx()">
       <span class="ck"></span><span><b>${nm}</b></span></label>`; }).join("");
+  Object.entries(SUB).forEach(([id,el])=>{ const lb=$("types").querySelector(`input[value="${id}"]`); if(el && lb) lb.parentNode.after(el); });
   syncListen();
   showEx();
 }

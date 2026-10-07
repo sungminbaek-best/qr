@@ -77,7 +77,7 @@
   .ty.on .ck::after{content:""; width:9px; height:5px; border-left:2px solid #fff; border-bottom:2px solid #fff; transform:translateY(-1px) rotate(-45deg)}
   .ty b{display:block; font-size:14.5px; font-weight:700; letter-spacing:-.03em}
   .ty small{display:block; font-size:12px; color:var(--sub); margin-top:1px}
-  .sub-opt{margin:-12px 0 22px; padding:10px 10px 10px 42px}
+  .sub-opt{margin:0 0 6px; padding:4px 10px 8px 42px}
   .sub-opt .lb{font-size:12px; font-weight:700; color:var(--sub); margin-bottom:6px}
   .sub-opt .pills button{height:30px; font-size:13px}
   .sub-opt .pills, .pset .pills{background:var(--panel)}
@@ -240,14 +240,14 @@
           <div class="types" id="types"></div>
         </div>
         <div class="sub-opt hidden" id="spellStep">
-          <div class="lb">단어 쓰기 · 첫 글자</div>
+          <div class="lb">첫 글자</div>
           <div class="pills" id="spellh">
             <button data-h="0" class="on" onclick="setSpellH(0)" title="뜻이 겹치는 단어에만 첫 글자">없음</button>
-            <button data-h="1" onclick="setSpellH(1)" title="모든 단어에 첫 글자 (b…)">주기</button>
+            <button data-h="1" onclick="setSpellH(1)" title="모든 단어에 첫 글자 (b…)">있음</button>
           </div>
         </div>
         <div class="sub-opt hidden" id="orderStep">
-          <div class="lb">어순 배열 · 섞는 방법</div>
+          <div class="lb">섞는 방법</div>
           <div class="pills" id="omode">
             <button data-o="all" class="on" onclick="setOMode('all')" title="단어를 모두 섞기">전체</button>
             <button data-o="inner" onclick="setOMode('inner')" title="덩어리 순서는 그대로, 안의 단어만 섞기">덩어리 안</button>
@@ -255,7 +255,7 @@
           </div>
         </div>
         <div class="sub-opt hidden" id="blankStep">
-          <div class="lb">듣고 빈칸 쓰기 · 난이도</div>
+          <div class="lb">난이도</div>
           <div class="pills" id="lvl">
             <button data-l="easy" onclick="setLevel('easy')" title="단어 상자 + 첫 글자">쉬움</button>
             <button data-l="normal" class="on" onclick="setLevel('normal')" title="단어 상자">보통</button>
