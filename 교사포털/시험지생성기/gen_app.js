@@ -255,7 +255,8 @@ function caseWords(raw, pn){
 function chunkWords(c){ return c.replace(/[“”"]/g,"").split(/\s+/).map(w=>w.replace(/^[^A-Za-z0-9'’]+|[^A-Za-z0-9'’]+$/g,"")).filter(Boolean); }
 function orderMix(s, mode, rnd, pn){
   const ch=(s.c||[]).filter(Boolean);
-  if(mode==="all" || ch.length<2) return scramble(s.e, rnd, pn);
+  if(mode==="all") return scramble(s.e, rnd, pn);
+  if(ch.length<2) return "[ "+scramble(s.e, rnd, pn)+" ]";   // 덩어리가 하나뿐이어도 [ ] 표기는 같게(같은 쪽 안에서 섞이지 않게)
   const groups=ch.map(chunkWords), flat=caseWords(groups.flat(), pn);
   let k=0; const cased=groups.map(g=>g.map(()=>flat[k++]));
   if(mode==="inner"){   // 덩어리 순서는 그대로, 덩어리 안 단어만 섞기(한 낱말 덩어리는 그대로)
@@ -307,10 +308,20 @@ function listenBlanks(s, n, pn){
   const uf=unitForms(s._uw||[]);
   const cands=toks.filter(t=>t.t.length>=3 && !STOP.has(t.t.toLowerCase()) && t.t!=="I" &&
       !pn.has(t.t.replace(/['’]s$/,"")) && !(/^[A-Z]/.test(t.t) && (t.i>0 || !isCommon(t.t))))   // 대문자 낱말은 문장 첫 일반 단어만(Andres 같은 이름 제외)
-    .map(t=>({...t, pri:(uf.has(t.t.toLowerCase())?100:0)+t.t.length}))
-    .sort((a,b)=>b.pri-a.pri || a.s-b.s);
-  const k=Math.min(n, cands.length, Math.max(1, Math.floor(toks.length/2)));
-  return cands.slice(0,k).sort((a,b)=>a.s-b.s);
+    .map(t=>({...t, pri:(uf.has(t.t.toLowerCase())?100:0)+t.t.length}));
+  // 두 낱말 이상인 유닛 단어(ice cream·hot dog·next to)는 통째로 한 빈칸 — 'hot'만 비우지 않게
+  const esc2=x=>x.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");
+  (s._uw||[]).map(w=>w.e.replace(/[~()]/g,"").trim()).filter(e=>/^[A-Za-z']+( [A-Za-z']+)+$/.test(e)).forEach(ph=>{
+    const m=new RegExp("\\b"+esc2(ph)+"(e?s)?\\b","i").exec(s.e); if(!m) return;
+    const st=m.index, en=st+m[0].length;
+    if(/^[A-Z]/.test(m[0]) && st>0) return;   // 문장 가운데 대문자로 시작하면 이름일 수 있어 뺌
+    for(let j=cands.length-1;j>=0;j--) if(cands[j].s<en && cands[j].e>st) cands.splice(j,1);
+    cands.push({t:m[0], s:st, e:en, i:toks.findIndex(t=>t.s===st), pri:200+m[0].length});
+  });
+  cands.sort((a,b)=>b.pri-a.pri || a.s-b.s);
+  const picked=[];   // 겹치지 않게 고름(구 둘이 겹치는 경우)
+  for(const c of cands){ if(picked.length>=Math.min(n, Math.max(1, Math.floor(toks.length/2)))) break; if(!picked.some(p=>p.s<c.e && p.e>c.s)) picked.push(c); }
+  return picked.sort((a,b)=>a.s-b.s);
 }
 // 단어 상자: 정답 + 함정(정답 수의 약 20%, 2~5개 · 같은 유닛 단어나 다른 문장의 내용어), 알파벳순
 function wordBank(items, W, S, rnd, pn){
@@ -342,12 +353,12 @@ function unitBig(us){   // 머리말 큰 숫자: 04 · 02–03 · 2, 5
 }
 // 쓰는 줄 수: 정답을 손글씨로 쓸 때의 길이(인쇄 14px 기준 우리말 1.7배·영어 1.5배)를 줄 폭으로 나눔, 1~3줄
 let MCTX=null;
-function nLines(text, ko){
+function nLines(text, ko, sc){
   MCTX=MCTX||document.createElement("canvas").getContext("2d");
   MCTX.font = ko ? "500 14px 'Wanted Sans', Pretendard, sans-serif" : "600 14px 'Wanted Sans', sans-serif";
   const mx={narrow:28, wide:58}[load().margin]||42;                // 쪽 좌우 여백(pt)
   const linePx=(595-2*mx-19)*96/72;                                   // 쓰는 줄 폭(px)
-  return Math.max(1, Math.min(3, Math.ceil(MCTX.measureText(text).width*(ko?1.7:1.5)*(isKid()?1.35:1)/linePx)));
+  return Math.max(1, Math.min(3, Math.ceil(MCTX.measureText(text).width*(ko?1.7:1.5)*(isKid()?1.35:1)*(sc||1)/linePx)));
 }
 function unitLabel(us){
   const s=us.slice().sort((a,b)=>a-b);
@@ -388,10 +399,11 @@ function renderTo(host, ans){
     // 한 장에 들어가게: 문제지 기준으로 간격을 단계별로 줄여 보고(d0~d3) 쪽 수가 가장 적은 첫 단계를 씀 — 정답지도 같은 단계
     let dens=0, cols=COLS[set.t];
     const tryPages=(d,c)=>{ const tmp=document.createElement("div"); host.appendChild(tmp); const n=paginateSet(tmp,set,false,d,title,acad,c||cols).length; tmp.remove(); return n; };
-    // 스타터·브릿지 단어 유형: 한 장에 들어가면 1단(쓰는 줄이 길고 넉넉하게), 넘치면 원래 2단
-    if(isKid() && cols>1 && tryPages(0,1)===1) cols=1;
+    // 단어 유형: 1단으로 한 장에 들어가면 1단(스타터·브릿지·저그랑 10단어 — 반쪽만 차지 않게), 넘치면 원래 2단
+    if(cols>1 && tryPages(0,1)===1) cols=1;
     let best=tryPages(0);
-    if(best>1) for(let d=1; d<=(isKid()?4:3); d++){ const n=tryPages(d); if(n<best){ best=n; dens=d; } if(n===1) break; }
+    if(best>1) for(let d=1; d<=(isKid()?3:4); d++){   // 스타터·브릿지는 넉넉한 kid 단계(d1~d3)까지만 — 글씨·쓰는 줄을 작게 만들지 않음
+      const n=tryPages(d); if(n<best){ best=n; dens=d; } if(n===1) break; }
     paginateSet(host,set,ans,dens,title,acad,cols);
   });
   // 쪽번호 = 이번에 뽑는 PDF 전체 기준(2 / 8)
@@ -480,11 +492,11 @@ function itemHTML(t,it,n,ans){
   const line=(a,k)=>ans ? `<div class="ln">${`<span class="a">${esc(a)}</span>`}</div>` : `<div class="ln"></div>`.repeat(k||1);
   switch(t){
     case "s_order":
-      return `<div class="row">${N}<span class="q">${esc(it.q)}</span></div><div class="mix">${esc(it.mix)}</div>${line(it.a, Math.max(1, nLines(it.a,false)-(DENS>=3?1:0)))}`;
+      return `<div class="row">${N}<span class="q">${esc(it.q)}</span></div><div class="mix">${esc(it.mix)}</div>${line(it.a, nLines(it.a,false,DENS>=3?0.85:1))}`;
     case "s_trans":
-      return `<div class="row">${N}<span class="q">${esc(it.q)}</span></div>${line(it.a, Math.max(1, nLines(it.a,true)-(DENS>=3?1:0)))}`;
+      return `<div class="row">${N}<span class="q">${esc(it.q)}</span></div>${line(it.a, nLines(it.a,true,DENS>=3?0.85:1))}`;
     case "s_write":
-      return `<div class="row">${N}<span class="q">${esc(it.q)}</span></div>${line(it.a, Math.max(1, nLines(it.a,false)-(DENS>=3?1:0)))}`;
+      return `<div class="row">${N}<span class="q">${esc(it.q)}</span></div>${line(it.a, nLines(it.a,false,DENS>=3?0.85:1))}`;
     case "s_listen": {   // 빈칸 폭 = 손글씨 기준(글자 수에 비례)
       let h="", pos=0;
       it.blanks.forEach(b=>{
