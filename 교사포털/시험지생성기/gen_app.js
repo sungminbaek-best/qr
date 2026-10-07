@@ -16,10 +16,12 @@ const TYPES_R = [
   ["s_listen","듣고 빈칸 쓰기", "음원 듣고 빈칸 채우기 + 단어 상자",  false],
 ];
 const TNAME = Object.fromEntries(TYPES_R.map(t=>[t[0],t[1]]));
+// 자료실 완성본 전용(생성기 화면 목록엔 없음): 단어 리스트 · 본문 해석(끊어 읽기)
+Object.assign(TNAME, {wordlist:"단어 리스트", reading:"본문 해석"});
 const TDESC = {w_mean:"영단어를 보고 우리말 뜻을 써요.", w_spell:"우리말 뜻을 보고 영단어를 써요.", s_trans:"영어 문장을 보고 우리말 뜻을 써요.", s_write:"우리말 뜻을 보고 영어 문장을 통째로 써요.",
   s_order:"끊어 읽은 우리말을 보고, 섞인 단어로 문장을 써요.", s_listen:"음원을 듣고 빈칸을 채워요. 단어 상자에서 골라 써요."};
 // 유형별 단 수(C&S 워크북처럼 짧은 것은 여러 단, 문장은 1단, 어순배열은 2단)
-const COLS = {w_mean:2, w_spell:2, s_trans:1, s_write:1, s_order:1, s_listen:1};   // 문장은 1단(손글씨 쓸 폭)
+const COLS = {w_mean:2, w_spell:2, s_trans:1, s_write:1, s_order:1, s_listen:1, wordlist:2, reading:1};   // 문장은 1단(손글씨 쓸 폭)
 
 let CUR=null, TAB="Q";
 const STUDIO_URL="https://solveu.co.kr/studio/";   // 음원 화면(유닛별 ?book=&u=) — 듣고 빈칸 쓰기 QR
@@ -29,6 +31,9 @@ function setOMode(m){ document.querySelectorAll("#omode button").forEach(b=>b.cl
 // 단어 쓰기 첫 글자: 주기 = 모든 단어에 (b…) · 없음 = 뜻이 겹치는 단어에만(되다 = g…/t…)
 function setSpellH(v){ document.querySelectorAll("#spellh button").forEach(b=>b.classList.toggle("on", +b.dataset.h===v)); save({spellh:v}); render(); }
 function spellH(){ return !!document.querySelector('#spellh button[data-h="1"].on'); }
+// 문장 쓰기 첫 글자: 있음(기본) = 단어마다 첫 글자 + 단어 길이만 한 빈칸 · 없음 = 빈 줄에 통째로
+function setSentH(v){ document.querySelectorAll("#senth button").forEach(b=>b.classList.toggle("on", +b.dataset.h===v)); save({senth:v}); render(); }
+function sentH(){ return !document.querySelector('#senth button[data-h="0"].on'); }
 function oMode(){ return (document.querySelector("#omode .on")||{dataset:{o:"inner"}}).dataset.o; }
 // 꼬리말 왼쪽: 홈페이지와 같은 글자 로고(쏠뷰 | SolveU, U만 파랑)
 const LOGO=`<span class="lg"><span class="ko">쏠뷰</span><span class="dv"></span><span class="en">Solve<span class="g">U</span></span></span>`;
@@ -90,6 +95,7 @@ function initControls(){
   const sv=load();
   if(sv.book && GEN_BOOKS.some(b=>b.code===sv.book)) $("book").value=sv.book;
   if(sv.acad) $("acad").value=sv.acad;
+  if(sv.senth===0) document.querySelectorAll("#senth button").forEach(b=>b.classList.toggle("on", b.dataset.h==="0"));
   if(sv.spellh) document.querySelectorAll("#spellh button").forEach(b=>b.classList.toggle("on", b.dataset.h==="1"));
   if(sv.omode) document.querySelectorAll("#omode button").forEach(b=>b.classList.toggle("on", b.dataset.o===sv.omode));
   const lv=sv.lvl || (sv.bank===0 ? "hard" : sv.hint ? "easy" : "");   // 예전 저장값(단어 상자·힌트)도 이어받음
@@ -108,7 +114,7 @@ function onBook(){
   $("units").innerHTML = b.units.map(u=>`<label title="${esc(u.label||"")}"><input type="checkbox" value="${u.u}" onchange="this.parentNode.classList.toggle('on',this.checked); showEx()">${u.u}</label>`).join("");
   setUnits([b.units[0].u]);
   const chosen = sv.types && sv.types[b.kind];
-  const SUB={w_spell:$("spellStep"), s_order:$("orderStep"), s_listen:$("blankStep")};   // 세부 옵션은 그 유형 바로 아래(고르면 펼쳐짐)
+  const SUB={w_spell:$("spellStep"), s_write:$("sentStep"), s_order:$("orderStep"), s_listen:$("blankStep")};   // 세부 옵션은 그 유형 바로 아래(고르면 펼쳐짐)
   $("types").innerHTML = TYPES_R.map(([id,nm,ex,def])=>{
     const on = chosen ? chosen.includes(id) : def;
     return `<label class="ty ${on?"on":""}"><input type="checkbox" value="${id}" ${on?"checked":""} onchange="this.parentNode.classList.toggle('on',this.checked); syncListen(); showEx()">
@@ -124,7 +130,7 @@ function toggleType(id){
   c.checked=!c.checked; c.parentNode.classList.toggle("on",c.checked); syncListen(); showEx();
 }
 // 고른 유형에 맞는 세부 옵션(듣고 빈칸 쓰기 난이도 · 어순 배열 섞는 방법)만 보여 줌
-function syncListen(){ $("spellStep").classList.toggle("hidden", !selTypes().includes("w_spell")); $("blankStep").classList.toggle("hidden", !selTypes().includes("s_listen")); $("orderStep").classList.toggle("hidden", !selTypes().includes("s_order")); }
+function syncListen(){ $("sentStep").classList.toggle("hidden", !selTypes().includes("s_write")); $("spellStep").classList.toggle("hidden", !selTypes().includes("w_spell")); $("blankStep").classList.toggle("hidden", !selTypes().includes("s_listen")); $("orderStep").classList.toggle("hidden", !selTypes().includes("s_order")); }
 // 듣고 빈칸 쓰기 난이도 한 줄: 쉬움 = 단어 상자 + 첫 글자 · 보통 = 단어 상자 · 어려움 = 상자 없이 받아쓰기
 function setLevel(l){
   document.querySelectorAll("#lvl button").forEach(b=>b.classList.toggle("on", b.dataset.l===l));
@@ -177,7 +183,9 @@ function buildSets(b, units, types, salt){
       items=shuffle(W.filter(w=>w.k),rnd).map(w=>({q:w.k, a:w.e, h: cnt[w.k]>1 ? w.e[0] : ""}));
     }
     if(t==="s_trans") items=SL.map(s=>({q:s.e, a:s.k}));
-    if(t==="s_write") items=SL.map(s=>({q:s.k, a:s.e}));   // 문장 쓰기(스펠링 시험): 우리말 → 영어 문장 통째로
+    if(t==="s_write") items=SL.map(s=>({q:s.k, a:s.e}));
+    if(t==="wordlist") items=W.filter(w=>w.k).map(w=>({q:w.e, a:w.k}));   // 교재 순서 그대로
+    if(t==="reading") items=S.map(s=>({e:s.e, k:s.k}));   // 본문 해석: 통문장(영어 → 우리말 한 줄 해석)   // 문장 쓰기(스펠링 시험): 우리말 → 영어 문장 통째로
     if(t==="s_order"){ const om=oMode(); items=SL.map(s=>({q:s.ck&&s.ck.length>1?s.ck.join(" / "):s.k, mix:orderMix(s,om,rnd,pn), a:s.e})); }
     if(t==="s_listen") items=listenItems(b, units, blanksN(), pn);
     if(items.length) sets.push({t, items, bank: t==="s_listen" ? wordBank(items, W, S, rnd, pn) : null,
@@ -496,6 +504,15 @@ function itemHTML(t,it,n,ans){
     case "s_trans":
       return `<div class="row">${N}<span class="q">${esc(it.q)}</span></div>${line(it.a, nLines(it.a,true,DENS>=3?0.85:1))}`;
     case "s_write":
+      if(!ans && sentH()){   // 첫 글자 힌트: 단어마다 첫 글자 + 손글씨 폭 빈칸(문장부호·숫자는 그대로)
+        const k=isKid()?11:8.5, h=it.a.replace(/[“”"]/g,"").split(/\s+/).filter(Boolean).map(w=>{
+          const m=w.match(/^([^A-Za-z0-9]*)([A-Za-z][A-Za-z'’\-]*|[0-9][0-9:,.%]*)([^A-Za-z0-9]*)$/);
+          if(!m) return esc(w);
+          if(/^[0-9]/.test(m[2])) return esc(w);
+          return esc(m[1])+`<span class="bl" style="width:${Math.max(26, m[2].length*k+10)}pt"><i>${esc(m[2][0])}</i></span>`+esc(m[3]);
+        }).join(" ");
+        return `<div class="row">${N}<span class="q">${esc(it.q)}</span></div><div class="swh">${h}</div>`;
+      }
       return `<div class="row">${N}<span class="q">${esc(it.q)}</span></div>${line(it.a, nLines(it.a,false,DENS>=3?0.85:1))}`;
     case "s_listen": {   // 빈칸 폭 = 손글씨 기준(글자 수에 비례)
       let h="", pos=0;
@@ -507,6 +524,15 @@ function itemHTML(t,it,n,ans){
         pos=b.e;
       });
       return `<div class="row">${N}<span class="q ls">${h+esc(it.sent.slice(pos))}</span></div>`;
+    }
+    case "wordlist":
+      return `<div class="row">${N}<span class="q">${esc(it.q)}</span></div><div class="wm">${esc(it.a)}</div>`;
+    case "reading": {   // 해석지: 영어 통문장 + 쓰는 줄(1번만 예시) · 답지: 영어 통문장 + 한 줄 해석
+      const en=`<div class="row">${N}<span class="q re">${esc(it.e)}</span></div>`;
+      if(ans) return en+`<div class="rk2">${esc(it.k)}</div>`;
+      const lines=nLines(it.k, true, DENS>=3?0.85:1), ex = n==1 || n==="1";
+      return en+(ex ? `<div class="ln"><span class="rex"><em>예시</em>${esc(it.k)}</span></div>`+`<div class="ln"></div>`.repeat(Math.max(0,lines-1))
+                    : `<div class="ln"></div>`.repeat(lines));
     }
     default: {   // w_mean · w_spell
       const h = it.h || (t==="w_spell" && spellH() ? it.a[0] : "");

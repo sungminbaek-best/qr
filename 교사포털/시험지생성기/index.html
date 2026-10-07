@@ -199,6 +199,22 @@
   .pg.kid.d2 .it{padding-top:6pt} .pg.kid.d2 .ln{height:25pt} .pg.kid.d2 .s_trans .ln, .pg.kid.d2 .s_write .ln, .pg.kid.d2 .s_order .ln{height:27pt} .pg.kid.d2 .q.ls{line-height:2.4}
   .pg.kid.d3 .it{padding-top:7pt} .pg.kid.d3 .ln{height:27pt} .pg.kid.d3 .s_trans .ln, .pg.kid.d3 .s_write .ln, .pg.kid.d3 .s_order .ln{height:29pt} .pg.kid.d3 .q.ls{line-height:2.5}
   .pg.kid.ans .ln{height:auto; min-height:26pt}
+  /* 자료실 완성본: 단어 리스트 · 본문 해석(끊어 읽기) */
+  .it.wordlist{padding:7pt 0 6pt; border-bottom:.5pt solid #e3e6ea}
+  .it.wordlist .q{font-family:var(--ef),sans-serif; font-weight:700; font-size:11.5pt}
+  .wm{margin:2pt 0 0 19pt; font-size:9.8pt; color:#4a5260}
+  .pg.kid .it.wordlist .q{font-size:14pt} .pg.kid .wm{font-size:12pt} .pg.kid .it.wordlist{padding:10pt 0 9pt}
+  .q.re{font-family:var(--ef),var(--kf),sans-serif; font-weight:600; font-size:11pt; letter-spacing:-.2pt}
+  .it.reading .ln{height:27pt}
+  .rk2{margin:3pt 0 0 19pt; font-size:10pt; color:var(--orange); font-weight:600; line-height:1.4; word-break:keep-all}
+  .pg.ans .it.reading{padding-bottom:4pt}
+  .rex{font-size:10pt; color:#8f95a0; line-height:1.35}
+  .rex em{font-style:normal; font-size:7.5pt; font-weight:700; color:#fff; background:#b3b9c2; border-radius:3pt; padding:1pt 4pt; margin-right:7pt; vertical-align:1pt}
+  .pg.kid .q.re{font-size:13pt} .pg.kid .it.reading .ln{height:36pt} .pg.kid .rex{font-size:12pt} .pg.kid .rk2{font-size:12pt}
+  .pg.d1 .it.reading .ln{height:24pt} .pg.d2 .it.reading .ln, .pg.d3 .it.reading .ln{height:22pt}
+  .swh{margin:2pt 0 0 19pt; font-family:var(--ef),sans-serif; font-size:10.6pt; line-height:2.35; word-break:keep-all}   /* 문장 쓰기 첫 글자 힌트 */
+  .pg.kid .swh{font-size:13pt; line-height:3}
+  .pg.d1 .swh, .pg.d2 .swh, .pg.d3 .swh{line-height:2.1}
   .mix{margin:3pt 0 0 19pt; font-family:var(--ef),sans-serif; font-size:8.8pt; color:#9aa0a8; word-break:keep-all}
 
   /* 듣고 빈칸 쓰기 */
@@ -264,6 +280,13 @@
         <div class="step">
           <div class="lb"><span class="k">03</span>유형</div>
           <div class="types" id="types"></div>
+        </div>
+        <div class="sub-opt hidden" id="sentStep">
+          <div class="lb">첫 글자</div>
+          <div class="pills" id="senth">
+            <button data-h="0" onclick="setSentH(0)" title="빈 줄에 문장을 통째로 쓰기">없음</button>
+            <button data-h="1" class="on" onclick="setSentH(1)" title="단어마다 첫 글자 + 빈칸 (S____ i_ …)">있음</button>
+          </div>
         </div>
         <div class="sub-opt hidden" id="spellStep">
           <div class="lb">첫 글자</div>
