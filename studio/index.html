@@ -99,8 +99,17 @@
 .row.cur,.srow.cur{background:var(--soft);border-radius:10px;box-shadow:inset 3px 0 0 var(--brand)}
 .row.cur .w,.srow.cur .se,.row.cur .n,.srow.cur .sn{color:var(--brand)}
 .wl.hidek .srow .sk{visibility:hidden}.wl.hidek .srow.rv .sk{visibility:visible}
-/* 받아쓰기 모드(워크북 '듣고 빈칸 쓰기' QR, ?dict=1): 글자 가림 — 번호·재생만 */
-.wl.hidee .srow .se,.wl.hidee .srow .sk{display:none}.wl.hidee .srow .sc{flex:1}.wl.hidee .srow .sc::before{content:"";display:block;width:55%;height:9px;margin:7px 0;border-radius:5px;background:var(--line2)}
+/* 받아쓰기 화면(워크북 '듣고 빈칸 쓰기' QR, ?dict=1): 글자 없이 큰 번호 + 한 문장씩 듣기 */
+.dock.dict .pbar{display:none}
+.dk{text-align:center;padding:22px 4px 10px}.dk-l{font-size:13px;color:var(--mute)}.dk-n{font-size:60px;font-weight:800;line-height:1.1;color:var(--ink);letter-spacing:-.02em}.dk-s{font-size:12.5px;color:var(--mute)}
+.dk-c{display:flex;justify-content:center;align-items:center;gap:24px;margin:20px 0 14px}
+.dk-a{width:50px;height:50px;border-radius:50%;border:1px solid var(--line2);background:#fff;font-size:26px;line-height:1;color:var(--sub)}.dk-a:disabled{opacity:.35}
+.dk-p{width:84px;height:84px;border-radius:50%;background:var(--brand);color:#fff;font-size:30px;box-shadow:0 10px 24px -10px rgba(67,97,255,.6)}
+.dk-o{display:flex;justify-content:center;gap:8px;margin-bottom:22px}
+.dk-g{display:grid;grid-template-columns:repeat(auto-fill,minmax(46px,1fr));gap:6px;max-width:440px;margin:0 auto}
+.dk-i{height:40px;border-radius:10px;border:1px solid var(--line2);background:#fff;font-weight:700;font-size:14px;color:var(--sub)}
+.dk-i.h{background:var(--soft);border-color:transparent;color:var(--brand)}.dk-i.on{border:2px solid var(--brand);color:var(--ink)}
+.dk-t{font-size:13px;color:var(--mute);margin:16px 0 0}
 .wl.hidem .row .m{visibility:hidden}.wl.hidem .row.rv .m{visibility:visible}
 .lctrl{display:flex;gap:8px;margin:0 0 10px;flex-wrap:wrap}
 .lbtn{border:1px solid var(--line2);background:#fff;color:var(--sub);font-weight:700;font-size:13px;padding:6px 12px;border-radius:9px}
@@ -447,18 +456,17 @@ function leaf(b,u,selP){
   const seek=document.getElementById('seek'), curEl={}, durEl={};   // 시간 숫자는 표시 안 함
   let curSpd=1, curT=(types.length?types[T0].k:'word');
   const listbox=document.getElementById('listbox');
-  let hideEn=DICT, hideMean=false, hideKo=false, repeatOn=false, shadowOn=false, curIdx=-1, boundEnd=null, shadowDone=-1, shadowHold=false, recHook=null;
+  let dIdx=0, dHeard=new Set(), hideMean=false, hideKo=false, repeatOn=false, shadowOn=false, curIdx=-1, boundEnd=null, shadowDone=-1, shadowHold=false, recHook=null;
   if(shadowTimer){ clearTimeout(shadowTimer); shadowTimer=null; } holdAfter=null;
   const hasKo=SENTSRC.some(s=>s.k);   // 해석/발음 있으면 토글 표시
   const koLabel=isSentPage?'발음':'해석';   // 파닉스 문장읽기는 '발음'
   function TIMES(){ return curT==='sent'?ST:(curT==='word'?WT:null); }
   function ROWSEL(){ return curT==='sent'?'.srow':'.row'; }
-  function hintText(){ if(DICT&&hideEn&&curT==='sent') return '잘 듣고 워크북 빈칸을 채워요. 번호를 누르면 그 문장만 들려요'; return (shadowOn&&curT==='sent')?'문장이 끝날 때마다 멈춰요. 그동안 소리 내어 따라 말해요':''; }
+  function hintText(){ return (shadowOn&&curT==='sent')?'문장이 끝날 때마다 멈춰요. 그동안 소리 내어 따라 말해요':''; }
   function setHint(){ const lh=document.getElementById('lhint'); if(lh){ const t=hintText(); lh.textContent=t; lh.hidden=!t; } }
   function ctrlBar(){
     if(curT==='sent' && SENTSRC.length){
       let h='';
-      if(DICT){ h+='<button class="lbtn'+(hideEn?'':' on')+'" type="button" id="tgEn">'+(hideEn?'문장 보기':'문장 숨기기')+'</button>'; if(hideEn) return h; }
       if(hasKo) h+='<button class="lbtn'+(hideKo?' on':'')+'" type="button" id="tgKo">'+(hideKo?koLabel+' 보기':koLabel+' 숨기기')+'</button>';
       if(ST&&SE) h+='<button class="lbtn'+(shadowOn?' on':'')+'" type="button" id="tgSh">따라 말하기</button>';
       h+='<button class="lbtn recb" type="button" id="recOpen"><i></i>녹음</button>';
@@ -474,7 +482,6 @@ function leaf(b,u,selP){
     if(follow && el && !au.paused){ const r=el.getBoundingClientRect(); const dh=(document.getElementById('dock')||{}).offsetHeight||0; if(r.bottom>innerHeight-dh-10 || r.top<10) el.scrollIntoView({block:'center',behavior:'smooth'}); } }
   function bindList(){
     const km=document.getElementById('tgKo'); if(km) km.onclick=()=>{ hideKo=!hideKo; km.classList.toggle('on',hideKo); km.textContent=hideKo?koLabel+' 보기':koLabel+' 숨기기'; listbox.classList.toggle('hidek',hideKo); listbox.querySelectorAll('.srow.rv').forEach(r=>r.classList.remove('rv')); };
-    const em=document.getElementById('tgEn'); if(em) em.onclick=()=>{ hideEn=!hideEn; renderList(); };
     const mm=document.getElementById('tgMean'); if(mm) mm.onclick=()=>{ hideMean=!hideMean; mm.classList.toggle('on',hideMean); mm.textContent=PAGES?(hideMean?'소리 보기':'소리 숨기기'):(hideMean?'뜻 보기':'뜻 숨기기'); listbox.classList.toggle('hidem',hideMean); listbox.querySelectorAll('.row.rv').forEach(r=>r.classList.remove('rv')); };
     const sh=document.getElementById('tgSh'); if(sh) sh.onclick=()=>{ shadowOn=!shadowOn; sh.classList.toggle('on',shadowOn); shadowDone=-1;
       if(!shadowOn && shadowTimer && shadowHold){ skipHold(); } setHint(); if(!au.paused) loopTick(); };
@@ -485,9 +492,30 @@ function leaf(b,u,selP){
   }
   function recGo(){ const sent=(curT==='sent'&&SENTSRC.length); const items=sent? SENTSRC.map(x=>({e:x.e,k:x.k})) : (src.words||[]).map(w=>({e:w.w,k:w.m}));
     openRec(b,u,items,sent?'문장':'단어',(PAGES&&src.p!=null)?'p.'+src.p:''); }
-  function renderList(){ const tb=document.getElementById('tbar'); if(tb) tb.innerHTML=ctrlBar(); setHint(); if(!listbox) return; listbox.innerHTML=((curT==='sent'&&sentHTML)?sentHTML:(wordHTML||sentHTML));
-    listbox.classList.toggle('hidem', curT==='word'&&hideMean); listbox.classList.toggle('hidek', curT==='sent'&&hideKo); listbox.classList.toggle('hidee', curT==='sent'&&hideEn);
+  function renderList(){ if(DICT&&curT==='sent'){ renderDict(); return; } const tb=document.getElementById('tbar'); if(tb) tb.innerHTML=ctrlBar(); setHint(); if(!listbox) return; listbox.innerHTML=((curT==='sent'&&sentHTML)?sentHTML:(wordHTML||sentHTML));
+    listbox.classList.toggle('hidem', curT==='word'&&hideMean); listbox.classList.toggle('hidek', curT==='sent'&&hideKo);
     bindList(); highlight(); }
+  // 받아쓰기 화면: 번호(=워크북 번호)마다 한 문장씩 듣고 멈춤 — 글자·'문장 보기' 없음(확인은 정답지로)
+  function renderDict(){
+    const tb=document.getElementById('tbar'); if(tb) tb.innerHTML=''; setHint();
+    const dk=document.getElementById('dock'); if(dk) dk.classList.add('dict');
+    if(!listbox) return; const n=SENTSRC.length;
+    listbox.innerHTML='<div class="dk"><div class="dk-l">워크북 번호</div><div class="dk-n">'+(dIdx+1)+'</div><div class="dk-s">'+n+'문장 중</div>'+
+      '<div class="dk-c"><button type="button" class="dk-a" id="dkPrev" aria-label="이전 문장"'+(dIdx<=0?' disabled':'')+'>‹</button>'+
+      '<button type="button" class="dk-p" id="dkPlay" aria-label="듣기">'+(au.paused?'▶':'❚❚')+'</button>'+
+      '<button type="button" class="dk-a" id="dkNext" aria-label="다음 문장"'+(dIdx>=n-1?' disabled':'')+'>›</button></div>'+
+      '<div class="dk-o"><button type="button" class="lbtn" id="dkAgain">한 번 더</button><button type="button" class="lbtn'+(curSpd!==1?' on':'')+'" id="dkSpd">속도 '+curSpd.toFixed(1)+'×</button></div>'+
+      '<div class="dk-g">'+SENTSRC.map((_,i)=>'<button type="button" class="dk-i'+(dHeard.has(i)?' h':'')+(i===dIdx?' on':'')+'" data-i="'+i+'">'+(i+1)+'</button>').join('')+'</div>'+
+      '<p class="dk-t">잘 듣고 워크북 빈칸을 채워요. 들은 번호는 파랗게 표시돼요</p></div>';
+    const go=i=>{ dIdx=Math.max(0,Math.min(n-1,i)); dHeard.add(dIdx); if(ST) playSeg(dIdx); else { try{au.currentTime=0;}catch(e){} au.play(); } renderDict(); };
+    document.getElementById('dkPlay').onclick=()=>{ if(!au.paused){ au.pause(); return; } go(dIdx); };
+    document.getElementById('dkAgain').onclick=()=>go(dIdx);
+    document.getElementById('dkPrev').onclick=()=>go(dIdx-1);
+    document.getElementById('dkNext').onclick=()=>go(dIdx+1);
+    document.getElementById('dkSpd').onclick=()=>{ curSpd=curSpd===1?0.8:1; au.playbackRate=curSpd; const s=document.getElementById('spd'); if(s){ s.textContent=curSpd.toFixed(1)+'×'; s.classList.toggle('on',curSpd!==1); } renderDict(); };
+    listbox.querySelectorAll('.dk-i').forEach(x=>x.onclick=()=>go(parseInt(x.dataset.i)));
+    if(!au._dk){ au._dk=1; const ico=()=>{ const p=document.getElementById('dkPlay'); if(p) p.textContent=au.paused?'▶':'❚❚'; }; au.addEventListener('play',ico); au.addEventListener('pause',ico); au.addEventListener('ended',ico); }
+  }
   function playSeg(i){ const T=TIMES(); if(!T) return; if(shadowTimer){ clearTimeout(shadowTimer); shadowTimer=null; holdAfter=null; } shadowHold=false; shadowDone=-1; curIdx=i; highlight();
     const go=()=>{ boundEnd=repeatOn?null:1; try{au.currentTime=T[i];}catch(e){} au.playbackRate=curSpd; au.play(); };
     if(au.readyState>=1) go(); else au.addEventListener('loadedmetadata',go,{once:true}); }
