@@ -148,6 +148,11 @@
   /* 타이머 표시(전자칠판 뒤에서도 보이게 크게) */
   /* 음원 막대: 재생 중 위 도구 줄 아래에 */
   #audpop{ min-width:320px; }
+  /* 아래 줄 '다음 쪽': 정답 다음으로 많이 누르는 버튼 — 크고 눈에 띄게(10-07) */
+  #pnext{ min-width:52px; padding:0 14px; background:var(--brand-soft); color:var(--brand); font-weight:700; }
+  #pnext svg{ width:24px; height:24px; stroke-width:2.4; }
+  #pnext:hover{ background:var(--brand); color:#fff; }
+  #pnext:disabled{ background:transparent; color:var(--sub); }
   /* 음원 자리는 쪽마다 폭이 같게(정답 버튼 위치가 흔들리지 않게) */
   #audgrp{ display:flex; gap:4px; justify-content:center; min-width:156px; flex:none; }   /* 파닉스 쪽 음원 버튼이 더해지면 넓어지게(고정 폭이면 타이머와 겹침, 10-06) */
   #audgrp .ib{ padding:0 8px; }
@@ -306,7 +311,7 @@
   <span class="sep"></span>
   <button class="ib" id="pprev" data-tip="이전 쪽 (←)"><svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></button>
   <span class="pill"><input id="pg" type="number" min="1" value="1" aria-label="쪽 번호"><span id="ptot">/ 0</span></span>
-  <button class="ib" id="pnext" data-tip="다음 쪽 (→)"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></button>
+  <button class="ib" id="pnext" data-tip="다음 쪽 (→)"><span class="t">다음 쪽</span><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></button>
   <span class="sep"></span>
   <button class="ib" id="stepback" data-tip="하나 되돌리기 · 다 가려지면 이전으로 (Backspace)"><svg viewBox="0 0 24 24"><path d="m18 17-5-5 5-5M11 17l-5-5 5-5"/></svg></button>
   <button class="ib primary" id="stepbtn" data-tip="Space"><svg viewBox="0 0 24 24"><path d="m6 17 5-5-5-5M13 17l5-5-5-5"/></svg><span id="steplbl">정답<span class="mh"> 하나씩</span></span><span class="cnt" id="rcnt"></span></button>
