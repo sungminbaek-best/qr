@@ -10,15 +10,16 @@ const SAVE_KEY = "solveu_wb_v1";                               // 이 기기에 
 const TYPES_R = [
   ["w_mean",  "단어 뜻 쓰기",  "brother → (뜻)",                   true],
   ["w_spell", "단어 쓰기",     "동생 → (영어)",                    true],
-  ["s_trans", "문장 해석",     "영어 문장 → (우리말)",             false],
+  ["s_trans", "문장 뜻 쓰기",  "영어 문장 → (우리말)",             false],
+  ["s_write", "문장 쓰기",     "우리말 → (영어 문장)",             false],
   ["s_order", "어순 배열",     "우리말 + 섞인 단어 → (영어 문장)", false],
   ["s_listen","듣고 빈칸 쓰기", "음원 듣고 빈칸 채우기 + 단어 상자",  false],
 ];
 const TNAME = Object.fromEntries(TYPES_R.map(t=>[t[0],t[1]]));
-const TDESC = {w_mean:"영단어를 보고 우리말 뜻을 써요.", w_spell:"우리말 뜻을 보고 영단어를 써요.", s_trans:"본문 문장을 우리말로 해석해요.",
+const TDESC = {w_mean:"영단어를 보고 우리말 뜻을 써요.", w_spell:"우리말 뜻을 보고 영단어를 써요.", s_trans:"영어 문장을 보고 우리말 뜻을 써요.", s_write:"우리말 뜻을 보고 영어 문장을 통째로 써요.",
   s_order:"끊어 읽은 우리말을 보고, 섞인 단어로 문장을 써요.", s_listen:"음원을 듣고 빈칸을 채워요. 단어 상자에서 골라 써요."};
 // 유형별 단 수(C&S 워크북처럼 짧은 것은 여러 단, 문장은 1단, 어순배열은 2단)
-const COLS = {w_mean:2, w_spell:2, s_trans:1, s_order:1, s_listen:1};   // 문장은 1단(손글씨 쓸 폭)
+const COLS = {w_mean:2, w_spell:2, s_trans:1, s_write:1, s_order:1, s_listen:1};   // 문장은 1단(손글씨 쓸 폭)
 
 let CUR=null, TAB="Q";
 const STUDIO_URL="https://solveu.co.kr/studio/";   // 음원 화면(유닛별 ?book=&u=) — 듣고 빈칸 쓰기 QR
@@ -163,6 +164,7 @@ function buildSets(b, units, types){
       items=shuffle(W.filter(w=>w.k),rnd).map(w=>({q:w.k, a:w.e, h: cnt[w.k]>1 ? w.e[0] : ""}));
     }
     if(t==="s_trans") items=S.map(s=>({q:s.e, a:s.k}));
+    if(t==="s_write") items=S.map(s=>({q:s.k, a:s.e}));   // 문장 쓰기(스펠링 시험): 우리말 → 영어 문장 통째로
     if(t==="s_order"){ const om=oMode(); items=S.map(s=>({q:s.ck&&s.ck.length>1?s.ck.join(" / "):s.k, mix:orderMix(s,om,rnd,pn), a:s.e})); }
     if(t==="s_listen") items=listenItems(b, units, blanksN(), pn);
     if(items.length) sets.push({t, items, bank: t==="s_listen" ? wordBank(items, W, S, rnd, pn) : null,
@@ -421,7 +423,7 @@ function renderExamples(){
   host.innerHTML=`<div class="exs"><div class="exhd"><b>유형 미리보기</b><span>${esc(b.name)} · Unit ${us[0]}</span><small>카드를 눌러 고르고, 왼쪽 아래 <b>워크북 만들기</b>를 누르세요.</small></div>
     <div class="exgrid">${TYPES_R.map(([id,nm])=>{
       const set=sets.find(x=>x.t===id); if(!set) return "";
-      const n = id==="s_order"||id==="s_trans"||id==="s_listen" ? 2 : 3;
+      const n = id==="s_order"||id==="s_trans"||id==="s_write"||id==="s_listen" ? 2 : 3;
       const its=set.items.slice(0,n);
       const bank = set.bank && bankOn() ? `<div class="bank">${[...new Set(its.flatMap(x=>x.blanks.map(k=>k.t.toLowerCase())))].concat(set.bank.filter(w=>!its.some(x=>x.blanks.some(k=>k.t.toLowerCase()===w.toLowerCase()))).slice(0,2)).sort().map(w=>`<span>${esc(w)}</span>`).join("")}</div>` : "";
       return `<div class="exc ${chosen.has(id)?"on":""}" onclick="toggleType('${id}')">
@@ -450,6 +452,8 @@ function itemHTML(t,it,n,ans){
       return `<div class="row">${N}<span class="q">${esc(it.q)}</span></div><div class="mix">${esc(it.mix)}</div>${line(it.a, nLines(it.a,false))}`;
     case "s_trans":
       return `<div class="row">${N}<span class="q">${esc(it.q)}</span></div>${line(it.a, nLines(it.a,true))}`;
+    case "s_write":
+      return `<div class="row">${N}<span class="q">${esc(it.q)}</span></div>${line(it.a, nLines(it.a,false))}`;
     case "s_listen": {   // 빈칸 폭 = 손글씨 기준(글자 수에 비례)
       let h="", pos=0;
       it.blanks.forEach(b=>{
