@@ -425,7 +425,7 @@ function renderExamples(){
       const its=set.items.slice(0,n);
       const bank = set.bank && bankOn() ? `<div class="bank">${[...new Set(its.flatMap(x=>x.blanks.map(k=>k.t.toLowerCase())))].concat(set.bank.filter(w=>!its.some(x=>x.blanks.some(k=>k.t.toLowerCase()===w.toLowerCase()))).slice(0,2)).sort().map(w=>`<span>${esc(w)}</span>`).join("")}</div>` : "";
       return `<div class="exc ${chosen.has(id)?"on":""}" onclick="toggleType('${id}')">
-        <div class="exh"><span class="ck"></span><b>${nm}</b></div><p>${TDESC[id]}</p>
+        <div class="exh"><span class="ck"></span><b>${nm}</b></div><p>${id==="s_listen"&&!bankOn() ? "음원을 듣고 빈칸을 채워요." : TDESC[id]}</p>
         <div class="exb">${bank}${its.map((it,i)=>`<div class="it ${id}">${itemHTML(id,it,i+1,false)}</div>`).join("")}</div></div>`;
     }).join("")}</div></div>`;
 }
