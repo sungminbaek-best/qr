@@ -527,12 +527,10 @@ function itemHTML(t,it,n,ans){
     }
     case "wordlist":
       return `<div class="row">${N}<span class="q">${esc(it.q)}</span></div><div class="wm">${esc(it.a)}</div>`;
-    case "reading": {   // 해석지: 영어 통문장 + 쓰는 줄(1번만 예시) · 답지: 영어 통문장 + 한 줄 해석
+    case "reading": {   // 해석지: 영어 통문장 + 쓰는 줄 · 답지: 영어 통문장 + 한 줄 해석
       const en=`<div class="row">${N}<span class="q re">${esc(it.e)}</span></div>`;
       if(ans) return en+`<div class="rk2">${esc(it.k)}</div>`;
-      const lines=nLines(it.k, true, DENS>=3?0.85:1), ex = n==1 || n==="1";
-      return en+(ex ? `<div class="ln"><span class="rex"><em>예시</em>${esc(it.k)}</span></div>`+`<div class="ln"></div>`.repeat(Math.max(0,lines-1))
-                    : `<div class="ln"></div>`.repeat(lines));
+      return en+`<div class="ln"></div>`.repeat(nLines(it.k, true, DENS>=3?0.85:1));
     }
     default: {   // w_mean · w_spell
       const h = it.h || (t==="w_spell" && spellH() ? it.a[0] : "");
