@@ -26,6 +26,9 @@ const STUDIO_URL="https://solveu.co.kr/studio/";   // 음원 화면(유닛별 ?b
 // 어순 배열 섞는 방법: all=전체 단어 · inner=덩어리 안 단어만 · chunk=덩어리째
 const OMODES={all:"※ 주어진 단어를 바르게 배열하여 문장을 쓰세요.", inner:"※ 덩어리 안의 단어를 바르게 배열하여 문장을 쓰세요.", chunk:"※ 주어진 덩어리를 바르게 배열하여 문장을 쓰세요."};
 function setOMode(m){ document.querySelectorAll("#omode button").forEach(b=>b.classList.toggle("on", b.dataset.o===m)); save({omode:m}); if(!CUR) render(); }
+// 단어 쓰기 첫 글자: 주기 = 모든 단어에 (b…) · 없음 = 뜻이 겹치는 단어에만(되다 = g…/t…)
+function setSpellH(v){ document.querySelectorAll("#spellh button").forEach(b=>b.classList.toggle("on", +b.dataset.h===v)); save({spellh:v}); render(); }
+function spellH(){ return !!document.querySelector('#spellh button[data-h="1"].on'); }
 function oMode(){ return (document.querySelector("#omode .on")||{dataset:{o:"all"}}).dataset.o; }
 // 꼬리말 왼쪽: 홈페이지와 같은 글자 로고(쏠뷰 | SolveU, U만 파랑)
 const LOGO=`<span class="lg"><span class="ko">쏠뷰</span><span class="dv"></span><span class="en">Solve<span class="g">U</span></span></span>`;
@@ -87,6 +90,7 @@ function initControls(){
   const sv=load();
   if(sv.book && GEN_BOOKS.some(b=>b.code===sv.book)) $("book").value=sv.book;
   if(sv.acad) $("acad").value=sv.acad;
+  if(sv.spellh) document.querySelectorAll("#spellh button").forEach(b=>b.classList.toggle("on", b.dataset.h==="1"));
   if(sv.omode) document.querySelectorAll("#omode button").forEach(b=>b.classList.toggle("on", b.dataset.o===sv.omode));
   if(sv.both) $("both").checked=true;
   const lv=sv.lvl || (sv.bank===0 ? "hard" : sv.hint ? "easy" : "");   // 예전 저장값(단어 상자·힌트)도 이어받음
@@ -119,7 +123,7 @@ function toggleType(id){
   c.checked=!c.checked; c.parentNode.classList.toggle("on",c.checked); syncListen(); showEx();
 }
 // 고른 유형에 맞는 세부 옵션(듣고 빈칸 쓰기 난이도 · 어순 배열 섞는 방법)만 보여 줌
-function syncListen(){ $("blankStep").classList.toggle("hidden", !selTypes().includes("s_listen")); $("orderStep").classList.toggle("hidden", !selTypes().includes("s_order")); }
+function syncListen(){ $("spellStep").classList.toggle("hidden", !selTypes().includes("w_spell")); $("blankStep").classList.toggle("hidden", !selTypes().includes("s_listen")); $("orderStep").classList.toggle("hidden", !selTypes().includes("s_order")); }
 // 듣고 빈칸 쓰기 난이도 한 줄: 쉬움 = 단어 상자 + 첫 글자 · 보통 = 단어 상자 · 어려움 = 상자 없이 받아쓰기
 function setLevel(l){
   document.querySelectorAll("#lvl button").forEach(b=>b.classList.toggle("on", b.dataset.l===l));
@@ -465,8 +469,10 @@ function itemHTML(t,it,n,ans){
       });
       return `<div class="row">${N}<span class="q ls">${h+esc(it.sent.slice(pos))}</span></div>`;
     }
-    default:   // w_mean · w_spell
-      return `<div class="row">${N}<span class="q">${esc(it.q)}</span>${it.h?`<span class="hl">(${esc(it.h)}…)</span>`:""}</div>${line(it.a)}`;
+    default: {   // w_mean · w_spell
+      const h = it.h || (t==="w_spell" && spellH() ? it.a[0] : "");
+      return `<div class="row">${N}<span class="q">${esc(it.q)}</span>${h?`<span class="hl">(${esc(h)}…)</span>`:""}</div>${line(it.a)}`;
+    }
   }
 }
 

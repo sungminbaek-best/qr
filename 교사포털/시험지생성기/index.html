@@ -239,6 +239,13 @@
           <div class="lb"><span class="k">03</span>유형</div>
           <div class="types" id="types"></div>
         </div>
+        <div class="sub-opt hidden" id="spellStep">
+          <div class="lb">단어 쓰기 · 첫 글자</div>
+          <div class="pills" id="spellh">
+            <button data-h="0" class="on" onclick="setSpellH(0)" title="뜻이 겹치는 단어에만 첫 글자">없음</button>
+            <button data-h="1" onclick="setSpellH(1)" title="모든 단어에 첫 글자 (b…)">주기</button>
+          </div>
+        </div>
         <div class="sub-opt hidden" id="orderStep">
           <div class="lb">어순 배열 · 섞는 방법</div>
           <div class="pills" id="omode">
