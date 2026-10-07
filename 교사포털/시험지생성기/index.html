@@ -248,7 +248,14 @@
                 <button data-h="1" onclick="setHint(1)">주기</button>
               </div></div>
           </div>
-          <div class="help">듣고 빈칸 쓰기에만 적용돼요. 짧은 문장은 빈칸 1개만 비워요.</div>
+          <div class="row2" style="margin-top:10px">
+            <div><div class="lb">단어 상자</div>
+              <div class="pills" id="bankopt">
+                <button data-b="1" class="on" onclick="setBankOpt(1)">있음</button>
+                <button data-b="0" onclick="setBankOpt(0)">없음</button>
+              </div></div>
+          </div>
+          <div class="help">듣고 빈칸 쓰기에만 적용돼요. 짧은 문장은 빈칸 1개만 비워요. 단어 상자 없음 = 순수 받아쓰기.</div>
         </div>
         <div class="step">
           <div class="lb">학원 이름<span class="opt">· 비우면 인쇄 안 됨</span></div>
