@@ -142,6 +142,11 @@ function selTypes(){ return [...document.querySelectorAll("#types input:checked"
 function showTab(t){ TAB=t; $("tabQ").classList.toggle("on",t==="Q"); $("tabA").classList.toggle("on",t==="A"); render(); }
 
 /* ===== 만들기 ===== */
+// 다시 섞기: 같은 유닛·유형으로 문제 순서·보기·함정 단어를 새로 섞음
+function reshuffle(){
+  if(!CUR) return;
+  CUR.salt++; CUR.sets=buildSets(CUR.book, CUR.units, CUR.types, CUR.salt); render();
+}
 function make(){
   const b=curBook(), units=selUnits(), types=selTypes();
   if(!units.length){ alert("유닛을 하나 이상 골라 주세요."); return; }
@@ -149,11 +154,12 @@ function make(){
   save({book:b.code, acad:$("acad").value.trim(), types:{...(load().types||{}), [b.kind]:types}});
   const sets=buildSets(b, units, types);
   if(!sets.length){ alert("고른 유닛에는 이 유형으로 만들 문제가 없어요. 유닛이나 유형을 바꿔 주세요."); return; }
-  CUR={book:b, units, sets};
+  CUR={book:b, units, sets, types, salt:0};
   render();
   if(window.innerWidth<900) document.querySelector(".bar").scrollIntoView({behavior:"smooth"});   // 휴대폰·좁은 화면: 결과로 내려가기
 }
-function buildSets(b, units, types){
+// salt: '다시 섞기' 횟수(0 = 처음 만든 그대로 — 같은 유닛·유형이면 언제나 같은 문제지)
+function buildSets(b, units, types, salt){
   const W=[], S=[], seen=new Set();
   b.units.filter(u=>units.includes(u.u)).forEach(u=>{
     u.words.forEach(w=>{ const k=w.e.toLowerCase(); if(!seen.has(k)){ seen.add(k); W.push(w); } });
@@ -162,19 +168,21 @@ function buildSets(b, units, types){
   const pn=allProper();
   const sets=[];
   types.forEach(t=>{
-    const rnd=mulberry32(seedFrom(b.code+"|"+units.join(",")+"|"+t));
+    const rnd=mulberry32(seedFrom(b.code+"|"+units.join(",")+"|"+t+(salt?"|"+salt:"")));
+    // 다시 섞으면 문장 유형도 문제 순서를 섞음(듣고 빈칸 쓰기는 음원 순서 그대로)
+    const SL = salt && (t==="s_trans"||t==="s_write"||t==="s_order") ? shuffle(S,rnd) : S;
     let items=[];
     if(t==="w_mean")  items=shuffle(W.filter(w=>w.k),rnd).map(w=>({q:w.e, a:w.k}));
     if(t==="w_spell"){   // 뜻이 같은 단어가 둘 이상(되다 = get·turn·become)이면 첫 글자를 함께 보여 줌
       const cnt={}; W.forEach(w=>{ if(w.k) cnt[w.k]=(cnt[w.k]||0)+1; });
       items=shuffle(W.filter(w=>w.k),rnd).map(w=>({q:w.k, a:w.e, h: cnt[w.k]>1 ? w.e[0] : ""}));
     }
-    if(t==="s_trans") items=S.map(s=>({q:s.e, a:s.k}));
-    if(t==="s_write") items=S.map(s=>({q:s.k, a:s.e}));   // 문장 쓰기(스펠링 시험): 우리말 → 영어 문장 통째로
-    if(t==="s_order"){ const om=oMode(); items=S.map(s=>({q:s.ck&&s.ck.length>1?s.ck.join(" / "):s.k, mix:orderMix(s,om,rnd,pn), a:s.e})); }
+    if(t==="s_trans") items=SL.map(s=>({q:s.e, a:s.k}));
+    if(t==="s_write") items=SL.map(s=>({q:s.k, a:s.e}));   // 문장 쓰기(스펠링 시험): 우리말 → 영어 문장 통째로
+    if(t==="s_order"){ const om=oMode(); items=SL.map(s=>({q:s.ck&&s.ck.length>1?s.ck.join(" / "):s.k, mix:orderMix(s,om,rnd,pn), a:s.e})); }
     if(t==="s_listen") items=listenItems(b, units, blanksN(), pn);
     if(items.length) sets.push({t, items, bank: t==="s_listen" ? wordBank(items, W, S, rnd, pn) : null,
-      ctx: t==="s_listen" ? {W, S, pn, seed:seedFrom(b.code+"|"+units.join(",")+"|bank")} : null});
+      ctx: t==="s_listen" ? {W, S, pn, seed:seedFrom(b.code+"|"+units.join(",")+"|bank"+(salt?"|"+salt:""))} : null});
   });
   return sets;
 }

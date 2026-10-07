@@ -111,7 +111,9 @@
   .bar.off .pills, .bar.off .print{opacity:.4; pointer-events:none}
   .both{margin-left:auto; display:flex; align-items:center; gap:6px; font-size:13.5px; font-weight:600; color:var(--sub); cursor:pointer; user-select:none}
   .both input{width:16px; height:16px; accent-color:var(--brand)}
-  .bar.off .both{opacity:.4; pointer-events:none}
+  .bar.off .both, .bar.off .rsh{opacity:.4; pointer-events:none}
+  .rsh{height:42px; padding:0 14px; border-radius:11px; background:#fff; border:1px solid var(--line2); font-weight:600; font-size:13.5px; color:var(--sub); transition:border-color .15s,color .15s}
+  .rsh:hover{border-color:var(--ink); color:var(--ink)}
   #printall{position:absolute; left:-99999px; top:0}
   .print{ height:42px; padding:0 18px; border-radius:11px; background:#fff; border:1px solid var(--line2); font-weight:700; font-size:14px; transition:border-color .15s}
   .print:hover{border-color:var(--ink)}
@@ -284,6 +286,7 @@
             <button id="tabQ" class="on" onclick="showTab('Q')">문제지</button>
             <button id="tabA" onclick="showTab('A')">정답지</button>
           </div>
+          <button class="rsh" onclick="reshuffle()" title="같은 유닛·유형으로 문제 순서와 보기를 새로 섞어요">↻ 다시 섞기</button>
           <label class="both"><input type="checkbox" id="both" onchange="setBoth()"> 정답지 함께</label>
           <button class="print" onclick="window.print()">인쇄 · PDF 저장</button>
         </div>
