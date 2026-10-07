@@ -14,6 +14,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <!-- ⚠ 이 파일은 _E-Book원본\viewer.html 에서 자동 생성됨. 여기서 고치지 말고 원본 수정 후 E-Book반영.py 실행 -->
 <title>저절로 E-Book · 파닉스 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@600;700;800&display=swap">   <!-- 정답 글꼴 = 본고딕(10-07: 기기마다 글꼴이 달라 칸 넘침 → 모든 기기 같은 글꼴) -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <style>
   /* 쏠뷰 홈페이지(site.css)와 같은 색: 남색 글자 · 파랑 포인트 · 밝은 회색 바탕 */
@@ -36,7 +38,7 @@
          transition:color .12s;
          display:flex; align-items:center; justify-content:center; overflow:hidden; white-space:nowrap;
          color:transparent; font-weight:600; letter-spacing:-.01em;
-         font-family:"Malgun Gothic","맑은 고딕","Apple SD Gothic Neo",system-ui,sans-serif; }
+         font-family:"Noto Sans KR","Malgun Gothic","맑은 고딕","Apple SD Gothic Neo",system-ui,sans-serif; }
   /* 정답=텍스트만(박스·테두리 없음) */
   .abox.reveal{ color:var(--ans); }
   .abox.wide{ overflow:visible; z-index:2; }   /* 칸보다 긴 답: 빈칸 바로 위 빈 공간에 빨간 글씨만(10-04 사용자: 흰 칸은 어색) */
@@ -320,7 +322,7 @@
   <button class="ib" id="zall" data-tip="원래 크기로 (Esc)" style="display:none"><svg viewBox="0 0 24 24"><path d="m15 15 6 6m-6-6v4.8m0-4.8h4.8M9 19.8V15m0 0H4.2M9 15l-6 6M15 4.2V9m0 0h4.8M15 9l6-6M9 4.2V9m0 0H4.2M9 9 3 3"/></svg><span class="t">원래 크기</span></button>
 </div>
 
-<script src="data.js?v=3134175885"></script>
+<script src="data.js?v=2122077872"></script>
 <script>
 // ── 책별 설정(E-Book반영.py가 books.json 값으로 채움) ──
 const START=9;            // 표지(1쪽) 다음 이 쪽부터 표시(앞 안내·오리엔테이션 건너뜀)
@@ -342,6 +344,7 @@ const GAP=0;                      // 펼침 두 쪽 사이(0=책처럼 붙임, �
 const ZMAX=0.85;                  // 쪽의 85% 이상 덮는 영역은 '활동'으로 안 봄(확대 의미 없음)
 const KEY=location.pathname;      // 책마다 따로 기억(마지막 쪽·판서)
 const store={ get:k=>{ try{ return localStorage.getItem(k); }catch(_){ return null; } }, set:(k,v)=>{ try{ localStorage.setItem(k,v); }catch(_){} } };
+const AF='"Noto Sans KR","Malgun Gothic","맑은 고딕",sans-serif';   // 정답 글꼴(CSS .abox와 같게)
 const _mc=document.createElement('canvas').getContext('2d');  // 해석 줄수 판정용 텍스트폭 측정
 
 // ── 보기 단위(view): 한쪽=[쪽], 펼침=[짝수쪽, 다음 홀수쪽](책 펼친 모양, 표지는 단독) ──
@@ -394,13 +397,14 @@ function buildSheet(p, ox){
     if(ix*iy > 0.6*Math.min(b[2]*b[3],c[2]*c[3])) return true; } return false; };
   // 정답 글자가 칸보다 길면 칸에 들어갈 때까지 글자 크기를 줄임(최소 11px)
   const fit=(d,tx,w)=>{ let fs=parseFloat(d.style.fontSize)||20; const pad=(parseFloat(d.style.paddingLeft)||0)+(d.classList.contains('ph')?8:0)+6;
-    _mc.font='600 '+fs+'px "Malgun Gothic","맑은 고딕",sans-serif'; const tw=_mc.measureText(tx).width;
+    _mc.font='600 '+fs+'px '+AF; const tw=_mc.measureText(tx).width;
     if(tw>w-pad){ fs=Math.max(11,Math.floor(fs*(w-pad)/tw)); d.style.fontSize=fs+'px'; }
     // 짧은 낱말 칸(가운데 정렬)에 긴 답: 글자가 너무 작아지면 → 읽히는 크기로, 칸을 오른쪽으로 넓혀 흰 바탕 위에(빈칸에 꼭 안 들어가도 됨, 10-03 · 저그랑 표 칸은 제외: 따로 다룸)
     const h=parseFloat(d.style.height)||34, tgt=Math.min(22,Math.round(h*0.62));
     if(d.classList.contains('ph') && !d.style.paddingLeft && !/^gw/.test('ph1') && fs<Math.min(15,tgt*0.72)){   // 10-07: 14px로 줄어든 SIGNAL 답도 이어 쓰기   // 회색 칸(첫모의 SIGNAL 등)에 긴 답: 같은 크기로 칸 왼쪽부터 오른쪽 빈 곳까지 이어 씀(10-04)
       d.style.fontSize=Math.min(26,Math.round(h*0.62))+'px'; d.style.overflow='visible'; d.style.justifyContent='flex-start'; d.style.paddingLeft='10px'; d.style.zIndex='2'; return; }
-    if(!d.style.paddingLeft && !d.classList.contains('ph') && !/^gw/.test('ph1') && fs<Math.min(15,tgt*0.72)){ d.dataset.fs0=fs;   // 14px로 줄어든 답도(입문1 83쪽 '6 (여섯)') 빈칸 위로(10-07) _mc.font='600 '+tgt+'px "Malgun Gothic","맑은 고딕",sans-serif';
+    if(!d.style.paddingLeft && !d.classList.contains('ph') && !/^gw/.test('ph1') && fs<Math.min(15,tgt*0.72)){ d.dataset.fs0=fs;   // 14px로 줄어든 답도(입문1 83쪽 '6 (여섯)') 빈칸 위로(10-07)
+      _mc.font='600 '+tgt+'px '+AF;   // 큰 글자 기준으로 폭 다시 잼(10-07: 주석에 묻혀 빠져 있던 줄)
       const nw=Math.ceil(_mc.measureText(tx).width)+pad+10, l=parseFloat(d.style.left)||0;
       const cx=l+w/2, top=parseFloat(d.style.top)||0, hh=Math.round(tgt*1.3);
       d.style.fontSize=tgt+'px'; d.style.width=nw+'px'; d.style.left=Math.max(0,Math.min(cx-nw/2,(p.w||1241)-nw-4))+'px';   // 빈칸 가운데 맞춰
@@ -423,7 +427,9 @@ function buildSheet(p, ox){
                  }
     else { d.classList.add('mark','ul'); }                                                      // 객관식: 밑줄만
     if(p.wrap&&p.wrap[i]){ d.style.whiteSpace='normal'; d.style.wordBreak='keep-all'; d.style.lineHeight='1.2'; d.style.alignItems='flex-start'; d.style.fontSize=p.wrap[i]+'px'; }   // 아주 긴 해석: 조금 작은 글씨로 두 줄
-    else if(tx && tx!=='/' && tx!=='=' && !tx.includes('\n')) fit(d,tx,b[2]);
+    else if(tx && tx!=='/' && tx!=='=' && !tx.includes('\n')){ const css0=d.style.cssText;
+      d._refit=()=>{ d.style.cssText=css0; d.classList.remove('wide'); delete d.dataset.fs0; fit(d,tx,b[2]); };   // 글꼴 늦게 오면 다시 맞춤
+      fit(d,tx,b[2]); }
     click(d); sh.appendChild(d); });
   // 가림 띠(동시통역훈련: 책을 반 접은 것처럼 한쪽 문장을 가려 두고 한 줄씩 열기) [x,y,w,h]
   (p.masks||[]).forEach(m=>{ const d=document.createElement('div'); d.className='abox mask';
@@ -434,8 +440,9 @@ function buildSheet(p, ox){
     const fs=h[3]||Math.max(12,Math.min(21,Math.round(b[3]*0.40)));   // h[3]=글자 크기 지정(선택지 해석: 줄 사이 좁은 칸)
     d.textContent=tx; d.style.fontSize=fs+'px';
     // 1줄이면 간격(영어~표) 중간 센터, 2줄이면 위정렬 — canvas로 텍스트폭 측정
-    _mc.font=fs+'px "Malgun Gothic","맑은 고딕",sans-serif';
-    if(_mc.measureText(tx).width < b[2]-16) d.style.alignItems='center';
+    const al=()=>{ _mc.font='700 '+fs+'px '+AF;   // 해석 글자 굵기(700)와 같게
+      d.style.alignItems=(_mc.measureText(tx).width < b[2]-16)?'center':''; };
+    al(); d._refit=al;
     click(d); sh.appendChild(d); });
   const mkSvg=cls=>{ const s=document.createElementNS(SVG,'svg'); s.setAttribute('class',cls);
     s.setAttribute('width',p.w); s.setAttribute('height',p.h); s.setAttribute('viewBox',`0 0 ${p.w} ${p.h}`); sh.appendChild(s); return s; };
@@ -502,7 +509,13 @@ function buildCover(p, ox){
   return {p, ox, el:sh, ml, ink, im};
 }
 
-function loadView(){
+// 본고딕 조각이 늦게 오면: 쪽은 바로 그리고, 글꼴이 다 온 뒤 정답 칸 크기만 다시 맞춤(공개 상태는 그대로). 다른 글꼴로 잰 폭 때문에 넘치는 것 방지
+function viewText(j){ let t=''; (V[j]||[]).forEach(k=>{ const p=P[k]; (p.atext||[]).forEach(x=>{ if(x) t+=x; }); (p.hae||[]).forEach(h=>{ t+=h[1]||''; }); }); return t.replace(/\s+/g,''); }
+function fontsFor(j){ const t=viewText(j); if(!t||!document.fonts||!document.fonts.load) return Promise.resolve();
+  return Promise.all(['600','700'].map(w=>document.fonts.load(w+' 20px "Noto Sans KR"',t))).catch(()=>{}); }
+function loadView(){ const j=vi; loadView_();   // fonts.check는 아직 안 받은 조각도 '됨'이라 답함(10-07 확인) → 받기가 끝나면 늘 한 번 다시 맞춤(이미 받았으면 바로)
+  const els=S.map(s=>s.el); fontsFor(j).then(()=>{ if(vi!==j) return; els.forEach(el=>el.querySelectorAll('.abox').forEach(d=>{ if(d._refit) d._refit(); })); }); }
+function loadView_(){
   board.innerHTML=''; S=[]; Z=[]; step=-1;
   let ox=0; BH=0;
   (V[vi]||[]).forEach(k=>{ const p=P[k]; S.push(buildSheet(p,ox)); ox+=p.w+GAP; BH=Math.max(BH,p.h); });
@@ -527,7 +540,7 @@ function loadView(){
   let _t=0; const redraw=()=>{ if(stage.clientWidth>100||_t>40){ drawStep(); if(_pendFit!=null){ const k=_pendFit; _pendFit=null; fitSheet(k); } } else { _t++; requestAnimationFrame(redraw); } };
   const ims=S.map(s=>s.im); if(ims.every(i=>i.complete)) redraw(); else { let left=ims.length; ims.forEach(i=>{ if(i.complete){ if(--left===0) redraw(); } else i.onload=i.onerror=()=>{ if(--left===0) redraw(); }; }); }
   // 프리로드(앞뒤 보기)
-  [vi-1,vi+1].forEach(j=>(V[j]||[]).forEach(k=>{ const im=new Image(); im.src=P[k].img; })); }
+  [vi-1,vi+1].forEach(j=>{ (V[j]||[]).forEach(k=>{ const im=new Image(); im.src=P[k].img; }); fontsFor(j); }); }   // 앞뒤 보기 글꼴도 미리
 function go(d){ const j=vi+d; if(j>=0&&j<V.length){ vi=j; loadView(); } }
 // 펼침(두 쪽)에서 한 쪽을 크게 보고 있으면 '다음/이전'은 옆 쪽으로 → 책 넘기듯 한 쪽씩. 두 쪽 전체를 보고 있으면 다음 펼침으로
 let _pendFit=null;
