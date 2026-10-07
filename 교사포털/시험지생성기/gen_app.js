@@ -347,7 +347,7 @@ function nLines(text, ko){
   MCTX.font = ko ? "500 14px 'Wanted Sans', Pretendard, sans-serif" : "600 14px 'Wanted Sans', sans-serif";
   const mx={narrow:28, wide:58}[load().margin]||42;                // 쪽 좌우 여백(pt)
   const linePx=(595-2*mx-19)*96/72;                                   // 쓰는 줄 폭(px)
-  return Math.max(1, Math.min(3, Math.ceil(MCTX.measureText(text).width*(ko?1.7:1.5)/linePx)));
+  return Math.max(1, Math.min(3, Math.ceil(MCTX.measureText(text).width*(ko?1.7:1.5)*(isKid()?1.35:1)/linePx)));
 }
 function unitLabel(us){
   const s=us.slice().sort((a,b)=>a-b);
@@ -389,20 +389,22 @@ function renderTo(host, ans){
     let dens=0;
     const tryPages=d=>{ const tmp=document.createElement("div"); host.appendChild(tmp); const n=paginateSet(tmp,set,false,d,title,acad).length; tmp.remove(); return n; };
     let best=tryPages(0);
-    if(best>1) for(let d=1; d<=3; d++){ const n=tryPages(d); if(n<best){ best=n; dens=d; } if(n===1) break; }
+    if(best>1) for(let d=1; d<=(isKid()?4:3); d++){ const n=tryPages(d); if(n<best){ best=n; dens=d; } if(n===1) break; }
     paginateSet(host,set,ans,dens,title,acad);
   });
   // 쪽번호 = 이번에 뽑는 PDF 전체 기준(2 / 8)
   const all=[...host.querySelectorAll(".pg")];
   all.forEach((p,k)=>p.querySelector(".ft .pn").textContent = `${k+1} / ${all.length}`);
 }
-let DENS=0;   // 지금 나누는 세트의 밀도(itemHTML에서 쓰는 줄 수 줄이기용)
+let DENS=0;
+// 스타터·브릿지(초등 저학년): 큰 글씨·큰 빈칸·넓은 줄 — 문제 수가 적어 한 장에 넉넉히 들어감
+function isKid(){ return !!(CUR && /^(starter|bridge)/.test(CUR.book.code)); }   // 지금 나누는 세트의 밀도(itemHTML에서 쓰는 줄 수 줄이기용)
 function paginateSet(host, set, ans, dens, title, acad){
     DENS=dens;
     const cols=COLS[set.t], pages=[];
     const newPage=()=>{
       const pg=document.createElement("div");
-      pg.className="pg"+(ans?" ans":"")+(dens?" d"+dens:"");
+      pg.className="pg"+(isKid()?" kid":"")+(ans?" ans":"")+(dens?" d"+dens:"");
       pg.innerHTML=`<div class="hd"><span class="bd"><small>UNIT</small>${unitBig(CUR.units)}</span><span class="tt">${title}</span>${acad?`<span class="ac">${esc(acad)}</span>`:""}</div>
         ${set.t==="s_listen" ? `<div class="note lsn"><span>${bankOn()?NOTE.s_listen:NOTE_LSN_NOBANK}</span><span class="qrs"></span></div>`
           : set.t==="s_order"&&!ans&&!pages.length ? `<div class="note">${OMODES[oMode()]}</div>`
@@ -485,7 +487,7 @@ function itemHTML(t,it,n,ans){
       let h="", pos=0;
       it.blanks.forEach(b=>{
         h+=esc(it.sent.slice(pos,b.s));
-        const w=`width:${Math.max(38, b.t.length*8.5+14)}pt`;   // 문제지·정답지 같은 폭(쪽 나눔도 같게)
+        const w = isKid() ? `width:${Math.max(56, b.t.length*12+24)}pt` : `width:${Math.max(38, b.t.length*8.5+14)}pt`;   // 문제지·정답지 같은 폭(쪽 나눔도 같게)
         h+= ans ? `<span class="bl a" style="${w}">${esc(b.t)}</span>`
                 : `<span class="bl" style="${w}">${hintOn()?`<i>${esc(b.t[0])}</i>`:""}</span>`;
         pos=b.e;
