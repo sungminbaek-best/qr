@@ -174,6 +174,12 @@
   .pg.ans .ln{height:auto; min-height:22pt}            /* 정답이 길면 줄이 늘어남(위 글자와 안 겹치게) */
   .s_trans .ln, .s_write .ln, .s_order .ln{height:27pt}
   .ln .fh{font-family:var(--ef),sans-serif; font-size:11pt; font-weight:600; color:#8f95a0; padding-left:2pt; line-height:1.35}   /* 단어 쓰기 첫 글자: 쓰는 줄 맨 앞 회색 */
+  /* 한 장에 맞추기(자동): d1·d2 = 간격·줄 높이 줄임, d3 = d2 + 긴 문장 쓰는 줄 하나 줄임 */
+  .pg.d1 .it{padding-top:5pt} .pg.d1 .ln{height:21pt} .pg.d1 .s_trans .ln, .pg.d1 .s_write .ln, .pg.d1 .s_order .ln{height:24pt} .pg.d1 .q.ls{line-height:2.15}
+  .pg.d2 .it, .pg.d3 .it{padding-top:3pt} .pg.d2 .ln, .pg.d3 .ln{height:19pt}
+  .pg.d2 .s_trans .ln, .pg.d2 .s_write .ln, .pg.d2 .s_order .ln, .pg.d3 .s_trans .ln, .pg.d3 .s_write .ln, .pg.d3 .s_order .ln{height:22pt}
+  .pg.d2 .q.ls, .pg.d3 .q.ls{line-height:2}
+  .pg.ans.d1 .ln, .pg.ans.d2 .ln, .pg.ans.d3 .ln{height:auto; min-height:18pt}
   .mix{margin:3pt 0 0 19pt; font-family:var(--ef),sans-serif; font-size:8.8pt; color:#9aa0a8; word-break:keep-all}
 
   /* 듣고 빈칸 쓰기 */

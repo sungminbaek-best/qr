@@ -385,10 +385,24 @@ function renderTo(host, ans){
   host.innerHTML="";
   CUR.sets.forEach((set,si)=>{
     const title=`<span class="bk">${esc(CUR.book.name)}</span><span class="tk">${TNAME[set.t]}</span>${ans?`<span class="tag">정답</span>`:""}`;
+    // 한 장에 들어가게: 문제지 기준으로 간격을 단계별로 줄여 보고(d0~d3) 쪽 수가 가장 적은 첫 단계를 씀 — 정답지도 같은 단계
+    let dens=0;
+    const tryPages=d=>{ const tmp=document.createElement("div"); host.appendChild(tmp); const n=paginateSet(tmp,set,false,d,title,acad).length; tmp.remove(); return n; };
+    let best=tryPages(0);
+    if(best>1) for(let d=1; d<=3; d++){ const n=tryPages(d); if(n<best){ best=n; dens=d; } if(n===1) break; }
+    paginateSet(host,set,ans,dens,title,acad);
+  });
+  // 쪽번호 = 이번에 뽑는 PDF 전체 기준(2 / 8)
+  const all=[...host.querySelectorAll(".pg")];
+  all.forEach((p,k)=>p.querySelector(".ft .pn").textContent = `${k+1} / ${all.length}`);
+}
+let DENS=0;   // 지금 나누는 세트의 밀도(itemHTML에서 쓰는 줄 수 줄이기용)
+function paginateSet(host, set, ans, dens, title, acad){
+    DENS=dens;
     const cols=COLS[set.t], pages=[];
     const newPage=()=>{
       const pg=document.createElement("div");
-      pg.className="pg"+(ans?" ans":"");
+      pg.className="pg"+(ans?" ans":"")+(dens?" d"+dens:"");
       pg.innerHTML=`<div class="hd"><span class="bd"><small>UNIT</small>${unitBig(CUR.units)}</span><span class="tt">${title}</span>${acad?`<span class="ac">${esc(acad)}</span>`:""}</div>
         ${set.t==="s_listen" ? `<div class="note lsn"><span>${bankOn()?NOTE.s_listen:NOTE_LSN_NOBANK}</span><span class="qrs"></span></div>`
           : set.t==="s_order"&&!ans&&!pages.length ? `<div class="note">${OMODES[oMode()]}</div>`
@@ -426,10 +440,8 @@ function renderTo(host, ans){
       const us=[...new Set([...p.querySelectorAll(".it[data-u]")].map(e=>+e.dataset.u))].slice(0,3);
       p.querySelector(".qrs").innerHTML=us.map(u=>`<span class="qr">${qrSVG(STUDIO_URL+"?c="+CUR.book.studio+"u"+String(u).padStart(2,"0")+"s&dict=1")}<small>${us.length>1?"U"+u+" ":""}음원</small></span>`).join("");
     });
-  });
-  // 쪽번호 = 이번에 뽑는 PDF 전체 기준(2 / 8)
-  const all=[...host.querySelectorAll(".pg")];
-  all.forEach((p,k)=>p.querySelector(".ft .pn").textContent = `${k+1} / ${all.length}`);
+    DENS=0;
+    return pages;
 }
 function renderExamples(){
   const host=$("preview"); if(!host || !$("book").value) return;
@@ -464,11 +476,11 @@ function itemHTML(t,it,n,ans){
   const line=(a,k)=>ans ? `<div class="ln">${`<span class="a">${esc(a)}</span>`}</div>` : `<div class="ln"></div>`.repeat(k||1);
   switch(t){
     case "s_order":
-      return `<div class="row">${N}<span class="q">${esc(it.q)}</span></div><div class="mix">${esc(it.mix)}</div>${line(it.a, nLines(it.a,false))}`;
+      return `<div class="row">${N}<span class="q">${esc(it.q)}</span></div><div class="mix">${esc(it.mix)}</div>${line(it.a, Math.max(1, nLines(it.a,false)-(DENS>=3?1:0)))}`;
     case "s_trans":
-      return `<div class="row">${N}<span class="q">${esc(it.q)}</span></div>${line(it.a, nLines(it.a,true))}`;
+      return `<div class="row">${N}<span class="q">${esc(it.q)}</span></div>${line(it.a, Math.max(1, nLines(it.a,true)-(DENS>=3?1:0)))}`;
     case "s_write":
-      return `<div class="row">${N}<span class="q">${esc(it.q)}</span></div>${line(it.a, nLines(it.a,false))}`;
+      return `<div class="row">${N}<span class="q">${esc(it.q)}</span></div>${line(it.a, Math.max(1, nLines(it.a,false)-(DENS>=3?1:0)))}`;
     case "s_listen": {   // 빈칸 폭 = 손글씨 기준(글자 수에 비례)
       let h="", pos=0;
       it.blanks.forEach(b=>{
