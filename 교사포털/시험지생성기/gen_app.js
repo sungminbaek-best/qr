@@ -152,7 +152,8 @@ function buildSets(b, units, types){
     if(t==="s_trans") items=S.map(s=>({q:s.e, a:s.k}));
     if(t==="s_order") items=S.map(s=>({q:s.ck&&s.ck.length>1?s.ck.join(" / "):s.k, mix:scramble(s.e,rnd,pn), a:s.e}));
     if(t==="s_listen") items=S.map(s=>({sent:s.e, blanks:listenBlanks(s, blanksN(), pn)})).filter(x=>x.blanks.length);
-    if(items.length) sets.push({t, items, bank: t==="s_listen" ? wordBank(items, W, S, rnd, pn) : null});
+    if(items.length) sets.push({t, items, bank: t==="s_listen" ? wordBank(items, W, S, rnd, pn) : null,
+      ctx: t==="s_listen" ? {W, S, pn, seed:seedFrom(b.code+"|"+units.join(",")+"|bank")} : null});
   });
   return sets;
 }
@@ -306,18 +307,26 @@ function render(){
       host.appendChild(pg); pages.push(pg); return pg;
     };
     let pg=newPage(), ci=0, col=pg.querySelector(".col");
-    if(set.bank){   // 단어 상자(첫 쪽 맨 위) — 정답지도 문제지와 같은 꼴
-      const bx=document.createElement("div"); bx.className="bank";
-      bx.innerHTML=set.bank.map(w=>`<span>${esc(w)}</span>`).join("");
-      col.appendChild(bx);
-    }
+    // 듣고 빈칸 쓰기: 쪽마다 맨 위에 '그 쪽 문장의 정답 + 함정' 단어 상자(여러 유닛을 골라도 상자가 커지지 않게).
+    // 함정은 쪽 번호로 정해지는 시드라 문제지·정답지가 같은 상자·같은 쪽 나눔이 됨
+    const byPage=!!set.ctx;
+    let bankEl=null, onPage=[];
+    const fillBank=()=>{ const ws=onPage.length ? wordBank(onPage, set.ctx.W, set.ctx.S, mulberry32(set.ctx.seed+pages.length*7919), set.ctx.pn) : [];
+      bankEl.innerHTML=ws.map(w=>`<span>${esc(w)}</span>`).join(""); };
+    const startBank=()=>{ if(!byPage) return; bankEl=document.createElement("div"); bankEl.className="bank"; col.appendChild(bankEl); onPage=[]; };
+    startBank();
     set.items.forEach((it,i)=>{
       const el=document.createElement("div"); el.className="it "+set.t; el.innerHTML=itemHTML(set.t,it,i+1,ans);
+      if(byPage){ onPage.push(it); fillBank(); }
       col.appendChild(el);
-      if(col.scrollHeight>col.clientHeight+1 && col.children.length>1){   // 넘치면 다음 단 → 다음 쪽
+      const minKids = byPage ? 2 : 1;   // 상자만 있는 쪽은 만들지 않음
+      if(col.scrollHeight>col.clientHeight+1 && col.children.length>minKids){   // 넘치면 다음 단 → 다음 쪽
         col.removeChild(el);
+        if(byPage){ onPage.pop(); fillBank(); }
         if(++ci>=cols){ pg=newPage(); ci=0; }
         col=pg.querySelectorAll(".col")[ci];
+        startBank();
+        if(byPage){ onPage.push(it); fillBank(); }
         col.appendChild(el);
       }
     });
