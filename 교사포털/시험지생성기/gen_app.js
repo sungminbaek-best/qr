@@ -402,7 +402,7 @@ function renderTo(host, ans){
     // 단어 유형: 1단으로 한 장에 들어가면 1단(스타터·브릿지·저그랑 10단어 — 반쪽만 차지 않게), 넘치면 원래 2단
     if(cols>1 && tryPages(0,1)===1) cols=1;
     let best=tryPages(0);
-    if(best>1) for(let d=1; d<=(isKid()?3:4); d++){   // 스타터·브릿지는 넉넉한 kid 단계(d1~d3)까지만 — 글씨·쓰는 줄을 작게 만들지 않음
+    if(best>1) for(let d=1; d<=3; d++){   // 간격·줄 높이만 줄임(글씨 크기는 그대로 — 한 워크북 안 글씨가 늘 같게, 2026-10-07 결정)
       const n=tryPages(d); if(n<best){ best=n; dens=d; } if(n===1) break; }
     paginateSet(host,set,ans,dens,title,acad,cols);
   });
