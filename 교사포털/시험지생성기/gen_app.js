@@ -386,11 +386,13 @@ function renderTo(host, ans){
   CUR.sets.forEach((set,si)=>{
     const title=`<span class="bk">${esc(CUR.book.name)}</span><span class="tk">${TNAME[set.t]}</span>${ans?`<span class="tag">정답</span>`:""}`;
     // 한 장에 들어가게: 문제지 기준으로 간격을 단계별로 줄여 보고(d0~d3) 쪽 수가 가장 적은 첫 단계를 씀 — 정답지도 같은 단계
-    let dens=0;
-    const tryPages=d=>{ const tmp=document.createElement("div"); host.appendChild(tmp); const n=paginateSet(tmp,set,false,d,title,acad).length; tmp.remove(); return n; };
+    let dens=0, cols=COLS[set.t];
+    const tryPages=(d,c)=>{ const tmp=document.createElement("div"); host.appendChild(tmp); const n=paginateSet(tmp,set,false,d,title,acad,c||cols).length; tmp.remove(); return n; };
+    // 스타터·브릿지 단어 유형: 한 장에 들어가면 1단(쓰는 줄이 길고 넉넉하게), 넘치면 원래 2단
+    if(isKid() && cols>1 && tryPages(0,1)===1) cols=1;
     let best=tryPages(0);
     if(best>1) for(let d=1; d<=(isKid()?4:3); d++){ const n=tryPages(d); if(n<best){ best=n; dens=d; } if(n===1) break; }
-    paginateSet(host,set,ans,dens,title,acad);
+    paginateSet(host,set,ans,dens,title,acad,cols);
   });
   // 쪽번호 = 이번에 뽑는 PDF 전체 기준(2 / 8)
   const all=[...host.querySelectorAll(".pg")];
@@ -399,9 +401,9 @@ function renderTo(host, ans){
 let DENS=0;
 // 스타터·브릿지(초등 저학년): 큰 글씨·큰 빈칸·넓은 줄 — 문제 수가 적어 한 장에 넉넉히 들어감
 function isKid(){ return !!(CUR && /^(starter|bridge)/.test(CUR.book.code)); }   // 지금 나누는 세트의 밀도(itemHTML에서 쓰는 줄 수 줄이기용)
-function paginateSet(host, set, ans, dens, title, acad){
-    DENS=dens;
-    const cols=COLS[set.t], pages=[];
+function paginateSet(host, set, ans, dens, title, acad, cols){
+    DENS=dens; cols=cols||COLS[set.t];
+    const pages=[];
     const newPage=()=>{
       const pg=document.createElement("div");
       pg.className="pg"+(isKid()?" kid":"")+(ans?" ans":"")+(dens?" d"+dens:"");
