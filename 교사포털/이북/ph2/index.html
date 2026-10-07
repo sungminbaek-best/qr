@@ -149,7 +149,7 @@
   /* 음원 막대: 재생 중 위 도구 줄 아래에 */
   #audpop{ min-width:320px; }
   /* 음원 자리는 쪽마다 폭이 같게(정답 버튼 위치가 흔들리지 않게) */
-  #audgrp{ display:flex; gap:4px; justify-content:center; width:156px; flex:none; }
+  #audgrp{ display:flex; gap:4px; justify-content:center; min-width:156px; flex:none; }   /* 파닉스 쪽 음원 버튼이 더해지면 넓어지게(고정 폭이면 타이머와 겹침, 10-06) */
   #audgrp .ib{ padding:0 8px; }
   #audgrp .none{ color:var(--mute); opacity:.55; font-weight:500; cursor:default; }
   #audgrp .none:hover{ background:transparent; color:var(--mute); }
@@ -315,7 +315,7 @@
   <button class="ib" id="zall" data-tip="원래 크기로 (Esc)" style="display:none"><svg viewBox="0 0 24 24"><path d="m15 15 6 6m-6-6v4.8m0-4.8h4.8M9 19.8V15m0 0H4.2M9 15l-6 6M15 4.2V9m0 0h4.8M15 9l6-6M9 4.2V9m0 0H4.2M9 9 3 3"/></svg><span class="t">원래 크기</span></button>
 </div>
 
-<script src="data.js?v=2683427761"></script>
+<script src="data.js?v=341154932"></script>
 <script>
 // ── 책별 설정(E-Book반영.py가 books.json 값으로 채움) ──
 const START=7;            // 표지(1쪽) 다음 이 쪽부터 표시(앞 안내·오리엔테이션 건너뜀)
@@ -561,7 +561,8 @@ function drawStep(){
   if(step<0){ const s=apply([0,0,BW,BH]); if(s) fitS=s; board.style.clipPath='none'; }
   else { const z=Z[step].r; apply(z);
     board.style.clipPath=`inset(${z[1]}px ${BW-z[2]}px ${BH-z[3]}px ${z[0]}px)`; }  // 그 활동만 보이게 잘라냄
-  syncZoomBtn(); hideHL(); updCount(); }
+  syncZoomBtn(); hideHL(); updCount(); if(S.some(x=>x.p.zaudio||x.p.paudio)||_audStep) buildAudio(); _audStep=step>=0&&S.some(x=>x.p.zaudio||x.p.paudio); }   // 활동 음원 있는 쪽: 확대/전체에 따라 음원 버튼 바꿈
+var _audStep=false;
 function zoomZone(j){ step=j; drawStep(); }
 function zoneAt(bx,by){ let best=-1,ba=1e18;   // 누른 곳을 포함하는 가장 작은 활동
   Z.forEach((z,j)=>{ const r=z.r; if(bx>=r[0]&&bx<=r[2]&&by>=r[1]&&by<=r[3]){ const a=(r[2]-r[0])*(r[3]-r[1]); if(a<ba){ba=a;best=j;} } });
@@ -737,9 +738,18 @@ function buildAudio(){ _aud.pause(); $('audpop').classList.remove('show'); const
     else b.title=`이 쪽에는 ${lab} 음원이 없어요`;
     g.appendChild(b); });
   // 쪽마다 음원(파닉스): 보이는 쪽에 있으면 '이 쪽 음원' 버튼(펼침이면 쪽 번호로 구분)
-  const pa=S.filter(s=>s.p.paudio);
-  pa.forEach(s=>{ const a=s.p.paudio, b=document.createElement('button');
-    b.className='ib'; b.innerHTML=SPK+(S.length>1? s.p.n+'쪽' : '이 쪽'); b.dataset.src=a; b.title='이 쪽 음원';
+  // 활동 확대 중이고 그 활동 음원(zaudio)이 있으면: 쪽 버튼 대신 '이 활동' 하나(그 활동 단어만, 10-06)
+  if(step>=0 && Z[step]){ const z=Z[step], sh=S[z.si], zi=(sh.p.zones||[]).indexOf(z.l), za=(sh.p.zaudio&&zi>=0?sh.p.zaudio[zi]:null)||sh.p.paudio||null;   // 활동 음원 없으면(범위 하나뿐인 쪽) 그 쪽 음원 = 이 활동(10-06: 확대하면 무조건 '이 활동' 하나)
+    if(za){ g.innerHTML='';   // 활동 확대: 유닛 '단어'(다른 쪽 단어까지 나옴)는 빼고 이 활동만(10-06)
+      const b=document.createElement('button'); b.className='ib'; b.innerHTML=SPK+'이 활동'; b.dataset.src=za; b.title='이 활동 단어 음원';
+      b.onclick=()=>{ const same=(_aud.getAttribute('src')||'').endsWith(za); if(same&&!_aud.paused){ _aud.pause(); return; }
+        if(!same) _aud.setAttribute('src',za); _aud.play().catch(()=>{}); openPop($('audpop'),b); };
+      g.appendChild(b); syncAud(); return; } }
+  const pa=S.filter(s=>s.p.paudio).filter((s,i,arr)=>arr.findIndex(t=>t.p.paudio===s.p.paudio)===i);   // 펼친 두 쪽이 같은 음원(따라 읽기·스스로 읽기)이면 버튼 하나
+  if(P.some(p=>p.paudio)) g.querySelectorAll('.none').forEach(b=>b.remove());   // 쪽 음원이 있는 책(파닉스): 없는 칸(문장) 버튼은 숨김
+  if(pa.length) g.innerHTML='';   // 쪽 음원이 있는 쪽: 유닛 전체 '단어'는 이 쪽과 상관없는 단어까지 나와서 빼고 쪽 음원만(10-06). 유닛 첫 쪽(QR)엔 그대로
+  pa.forEach(s=>{ const a=s.p.paudio, b=document.createElement('button'), sent=/_g\d+\.mp3$/.test(a);   // _g = 문장 읽기 음원
+    b.className='ib'; b.innerHTML=SPK+(sent? (pa.length>1? s.p.n+'쪽 문장' : '문장') : S.length>1? s.p.n+'쪽' : '이 쪽'); b.dataset.src=a; b.title=sent?'문장 읽기 음원':'이 쪽 음원';
     b.onclick=()=>{ const same=(_aud.getAttribute('src')||'').endsWith(a);
       if(same&&!_aud.paused){ _aud.pause(); return; }
       if(!same) _aud.setAttribute('src',a); _aud.play().catch(()=>{}); openPop($('audpop'),b); };
