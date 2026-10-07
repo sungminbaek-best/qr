@@ -21,6 +21,11 @@ const TDESC = {w_mean:"영단어를 보고 우리말 뜻을 써요.", w_spell:"�
 const COLS = {w_mean:2, w_spell:2, s_trans:1, s_order:1, s_listen:1};   // 문장은 1단(손글씨 쓸 폭)
 
 let CUR=null, TAB="Q";
+const STUDIO_URL="https://solveu.co.kr/studio/";   // 음원 화면(유닛별 ?book=&u=) — 듣고 빈칸 쓰기 QR
+// 어순 배열 섞는 방법: all=전체 단어 · inner=덩어리 안 단어만 · chunk=덩어리째
+const OMODES={all:"※ 주어진 단어를 바르게 배열하여 문장을 쓰세요.", inner:"※ 덩어리 안의 단어를 바르게 배열하여 문장을 쓰세요.", chunk:"※ 주어진 덩어리를 바르게 배열하여 문장을 쓰세요."};
+function setOMode(m){ document.querySelectorAll("#omode button").forEach(b=>b.classList.toggle("on", b.dataset.o===m)); save({omode:m}); if(!CUR) render(); }
+function oMode(){ return (document.querySelector("#omode .on")||{dataset:{o:"all"}}).dataset.o; }
 // 꼬리말 왼쪽: 홈페이지와 같은 글자 로고(쏠뷰 | SolveU, U만 파랑)
 const LOGO=`<span class="lg"><span class="ko">쏠뷰</span><span class="dv"></span><span class="en">Solve<span class="g">U</span></span></span>`;
 function setMargin(m){
@@ -75,6 +80,8 @@ function initControls(){
   const sv=load();
   if(sv.book && GEN_BOOKS.some(b=>b.code===sv.book)) $("book").value=sv.book;
   if(sv.acad) $("acad").value=sv.acad;
+  if(sv.omode) document.querySelectorAll("#omode button").forEach(b=>b.classList.toggle("on", b.dataset.o===sv.omode));
+  if(sv.both) $("both").checked=true;
   if(sv.hint) document.querySelectorAll("#hint button").forEach(b=>b.classList.toggle("on", +b.dataset.h===sv.hint));
   if(sv.blanks) document.querySelectorAll("#blanks button").forEach(b=>b.classList.toggle("on", +b.dataset.n===Math.min(2,sv.blanks)));
   if(sv.margin && sv.margin!=="normal"){ document.querySelectorAll("#marg button").forEach(b=>b.classList.toggle("on", b.dataset.m===sv.margin)); $("preview").classList.add("m-"+sv.margin); }
@@ -104,7 +111,7 @@ function toggleType(id){
   c.checked=!c.checked; c.parentNode.classList.toggle("on",c.checked); syncListen(); showEx();
 }
 // '듣고 빈칸 쓰기'를 골랐을 때만 문장당 빈칸 수 버튼을 보여 줌
-function syncListen(){ $("blankStep").classList.toggle("hidden", !selTypes().includes("s_listen")); }
+function syncListen(){ $("blankStep").classList.toggle("hidden", !selTypes().includes("s_listen")); $("orderStep").classList.toggle("hidden", !selTypes().includes("s_order")); }
 function setBlanks(n){
   document.querySelectorAll("#blanks button").forEach(b=>b.classList.toggle("on", +b.dataset.n===n));
   save({blanks:n}); if(!CUR) render();
@@ -150,8 +157,8 @@ function buildSets(b, units, types){
       items=shuffle(W.filter(w=>w.k),rnd).map(w=>({q:w.k, a:w.e, h: cnt[w.k]>1 ? w.e[0] : ""}));
     }
     if(t==="s_trans") items=S.map(s=>({q:s.e, a:s.k}));
-    if(t==="s_order") items=S.map(s=>({q:s.ck&&s.ck.length>1?s.ck.join(" / "):s.k, mix:scramble(s.e,rnd,pn), a:s.e}));
-    if(t==="s_listen") items=S.map(s=>({sent:s.e, blanks:listenBlanks(s, blanksN(), pn)})).filter(x=>x.blanks.length);
+    if(t==="s_order"){ const om=oMode(); items=S.map(s=>({q:s.ck&&s.ck.length>1?s.ck.join(" / "):s.k, mix:orderMix(s,om,rnd,pn), a:s.e})); }
+    if(t==="s_listen") items=listenItems(b, units, blanksN(), pn);
     if(items.length) sets.push({t, items, bank: t==="s_listen" ? wordBank(items, W, S, rnd, pn) : null,
       ctx: t==="s_listen" ? {W, S, pn, seed:seedFrom(b.code+"|"+units.join(",")+"|bank")} : null});
   });
@@ -192,6 +199,49 @@ function properNouns(b){
     if(/^[A-Z]/.test(x) && !isCommon(x) && !INTERJ.has(x)) set.add(x);
   })));
   return set;
+}
+// 듣고 빈칸 쓰기: 번호를 음원(스튜디오) 번호와 같게 — 음원이 여러 문장을 한 덩어리로 묶은 유닛은 ag 대로 합침.
+// 여러 유닛을 고르면 번호 앞에 유닛(3-5). 문장마다 빈칸 n개는 그대로.
+function listenItems(b, units, n, pn){
+  const out=[], multi=units.length>1;
+  b.units.filter(u=>units.includes(u.u)).forEach(u=>{
+    const groups=u.ag || u.sents.map((_,i)=>[i,i+1]);
+    groups.forEach(([a,z],gi)=>{
+      let sent="", blanks=[];
+      for(let i=a;i<z;i++){
+        const st={...u.sents[i], _uw:u.words}, off=sent ? sent.length+1 : 0;
+        listenBlanks(st, n, pn).forEach(x=>blanks.push({...x, s:x.s+off, e:x.e+off}));
+        sent = sent ? sent+" "+st.e : st.e;
+      }
+      if(blanks.length) out.push({sent, blanks, u:u.u, lab: multi ? `${u.u}-${gi+1}` : `${gi+1}`});
+    });
+  });
+  return out;
+}
+// 어순 배열 섞기 — 대소문자 규칙은 전체 단어 섞기와 같음(고유명사·I만 대문자)
+function caseWords(raw, pn){
+  const isPN=w=>{ const x=w.replace(/['’]s$/,""); return pn.has(x) || TITLES.has(x); };
+  return raw.map((w,i)=>{
+    if(/^I(['’]|$)/.test(w) || isPN(w)) return w;
+    const cap=k=>k>0 && raw[k] && /^[A-Z]/.test(raw[k]) && raw[k]!=="I" && !INTERJ.has(raw[k]);
+    if(cap(i) && (cap(i-1) || cap(i+1))) return w;
+    const nx=raw[i+1];
+    if(/^[A-Z]/.test(w) && !INTERJ.has(w) && nx && nx!=="I" && /^[A-Z]/.test(nx) && isPN(nx) && !isCommon(w)) return w;
+    return w.toLowerCase();
+  });
+}
+function chunkWords(c){ return c.replace(/[“”"]/g,"").split(/\s+/).map(w=>w.replace(/^[^A-Za-z0-9'’]+|[^A-Za-z0-9'’]+$/g,"")).filter(Boolean); }
+function orderMix(s, mode, rnd, pn){
+  const ch=(s.c||[]).filter(Boolean);
+  if(mode==="all" || ch.length<2) return scramble(s.e, rnd, pn);
+  const groups=ch.map(chunkWords), flat=caseWords(groups.flat(), pn);
+  let k=0; const cased=groups.map(g=>g.map(()=>flat[k++]));
+  if(mode==="inner"){   // 덩어리 순서는 그대로, 덩어리 안 단어만 섞기(한 낱말 덩어리는 그대로)
+    return cased.map(g=>{ let m=g; for(let t=0;t<6 && g.length>1 && m.join(" ")===g.join(" ");t++) m=shuffle(g,rnd); return "["+m.join(" ")+"]"; }).join("  ");
+  }
+  const txt=cased.map(g=>g.join(" ")); let m=txt;   // chunk: 덩어리째 섞기
+  for(let t=0;t<6 && m.join("|")===txt.join("|");t++) m=shuffle(txt,rnd);
+  return m.join(" / ");
 }
 // 어순 배열: 문장부호를 떼고 소문자로(고유명사·I 제외) 섞어 " / "로 잇기 — C&S 초상세2 방식
 function scramble(e, rnd, pn){
@@ -293,7 +343,20 @@ function render(){
   if(!CUR){ renderExamples(); return; }
   if(document.fonts && document.fonts.status!=="loaded"){ document.fonts.ready.then(render); return; }   // 글꼴이 다 온 뒤에 쪽 나누기
   fitZoom();
-  const ans=TAB==="A", acad=$("acad").value.trim(), host=$("preview");
+  renderTo($("preview"), TAB==="A");
+}
+// 정답지 함께 인쇄: 인쇄 직전에 문제지 + 정답지를 따로 그려 붙이고, 끝나면 지움(쪽번호는 각각 1 / N)
+function setBoth(){ save({both:$("both").checked}); }
+function preparePrint(){
+  const pa=$("printall"); pa.innerHTML="";
+  if(!CUR || !$("both").checked){ document.body.classList.remove("pa"); return; }
+  const q=document.createElement("div"), a=document.createElement("div"); pa.appendChild(q); pa.appendChild(a);
+  renderTo(q,false); renderTo(a,true); document.body.classList.add("pa");
+}
+window.addEventListener("beforeprint", preparePrint);
+window.addEventListener("afterprint", ()=>{ document.body.classList.remove("pa"); $("printall").innerHTML=""; });
+function renderTo(host, ans){
+  const acad=$("acad").value.trim();
   host.innerHTML="";
   CUR.sets.forEach((set,si)=>{
     const title=`<span class="bk">${esc(CUR.book.name)}</span><span class="tk">${TNAME[set.t]}</span>${ans?`<span class="tag">정답</span>`:""}`;
@@ -302,7 +365,9 @@ function render(){
       const pg=document.createElement("div");
       pg.className="pg"+(ans?" ans":"");
       pg.innerHTML=`<div class="hd"><span class="bd"><small>UNIT</small>${unitBig(CUR.units)}</span><span class="tt">${title}</span>${acad?`<span class="ac">${esc(acad)}</span>`:""}</div>
-        ${NOTE[set.t]&&!pages.length&&(!ans||set.t==="s_listen")?`<div class="note">${NOTE[set.t]}</div>`:""}
+        ${set.t==="s_listen" ? `<div class="note lsn"><span>${NOTE.s_listen}</span><span class="qrs"></span></div>`
+          : set.t==="s_order"&&!ans&&!pages.length ? `<div class="note">${OMODES[oMode()]}</div>`
+          : NOTE[set.t]&&!ans&&!pages.length ? `<div class="note">${NOTE[set.t]}</div>` : ""}
         <div class="bodyc c${cols}">${"<div class='col'></div>".repeat(cols)}</div><div class="ft">${LOGO}<span class="pn">1</span></div>`;   // 쪽번호 자리를 미리 차지(채우는 동안과 높이 같게)
       host.appendChild(pg); pages.push(pg); return pg;
     };
@@ -316,7 +381,8 @@ function render(){
     const startBank=()=>{ if(!byPage) return; bankEl=document.createElement("div"); bankEl.className="bank"; col.appendChild(bankEl); onPage=[]; };
     startBank();
     set.items.forEach((it,i)=>{
-      const el=document.createElement("div"); el.className="it "+set.t; el.innerHTML=itemHTML(set.t,it,i+1,ans);
+      const el=document.createElement("div"); el.className="it "+set.t; el.innerHTML=itemHTML(set.t,it,it.lab||i+1,ans);
+      if(it.u) el.dataset.u=it.u;
       if(byPage){ onPage.push(it); fillBank(); }
       col.appendChild(el);
       const minKids = byPage ? 2 : 1;   // 상자만 있는 쪽은 만들지 않음
@@ -331,6 +397,10 @@ function render(){
       }
     });
     if(cols>1) balance(pages[pages.length-1]);   // 마지막 쪽은 단마다 고르게(한쪽 단만 차지 않게)
+    if(set.t==="s_listen") pages.forEach(p=>{   // 듣기 쪽마다 그 쪽 유닛 음원 QR(자리는 미리 잡아 둬서 쪽 나눔에 영향 없음)
+      const us=[...new Set([...p.querySelectorAll(".it[data-u]")].map(e=>+e.dataset.u))].slice(0,3);
+      p.querySelector(".qrs").innerHTML=us.map(u=>`<span class="qr">${qrSVG(STUDIO_URL+"?book="+CUR.book.studio+"&u="+u)}<small>${us.length>1?"U"+u+" ":""}음원</small></span>`).join("");
+    });
   });
   // 쪽번호 = 이번에 뽑는 PDF 전체 기준(2 / 8)
   const all=[...host.querySelectorAll(".pg")];
@@ -350,6 +420,10 @@ function renderExamples(){
         <div class="exh"><span class="ck"></span><b>${nm}</b></div><p>${TDESC[id]}</p>
         <div class="exb">${bank}${its.map((it,i)=>`<div class="it ${id}">${itemHTML(id,it,i+1,false)}</div>`).join("")}</div></div>`;
     }).join("")}</div></div>`;
+}
+function qrSVG(url){
+  try{ const q=qrcode(0,"M"); q.addData(url); q.make(); return q.createSvgTag({cellSize:2, margin:0, scalable:true}); }
+  catch(e){ return ""; }
 }
 function balance(pg){
   const cs=[...pg.querySelectorAll(".col")], its=cs.flatMap(c=>[...c.children]);

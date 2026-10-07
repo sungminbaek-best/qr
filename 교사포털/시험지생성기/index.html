@@ -96,7 +96,11 @@
   .bar{display:flex; align-items:center; gap:10px; margin-bottom:12px}
   .bar .pills{width:220px; background:#fff}
   .bar.off .pills, .bar.off .print{opacity:.4; pointer-events:none}
-  .print{margin-left:auto; height:42px; padding:0 18px; border-radius:11px; background:#fff; border:1px solid var(--line2); font-weight:700; font-size:14px; transition:border-color .15s}
+  .both{margin-left:auto; display:flex; align-items:center; gap:6px; font-size:13.5px; font-weight:600; color:var(--sub); cursor:pointer; user-select:none}
+  .both input{width:16px; height:16px; accent-color:var(--brand)}
+  .bar.off .both{opacity:.4; pointer-events:none}
+  #printall{position:absolute; left:-99999px; top:0}
+  .print{ height:42px; padding:0 18px; border-radius:11px; background:#fff; border:1px solid var(--line2); font-weight:700; font-size:14px; transition:border-color .15s}
   .print:hover{border-color:var(--ink)}
   .preview{background:#e9ebf2; border-radius:22px; padding:24px; overflow:auto; min-height:420px}
   /* 유형 미리보기(만들기 전) */
@@ -165,6 +169,12 @@
   .q.ls{font-weight:500; font-size:10.6pt; line-height:2.35; font-family:var(--ef),var(--kf),sans-serif}
   .it.s_listen{padding-top:4pt}
   .bl{display:inline-block; height:1.15em; border-bottom:.7pt solid #333; margin:0 2pt; vertical-align:-2pt}
+  .note.lsn{display:flex; align-items:center; justify-content:space-between; gap:10pt; height:58pt}   /* QR 자리 고정(쪽 나눔 뒤에 QR을 넣어도 안 밀리게) */
+  .qrs{display:flex; gap:8pt; flex:none}
+  .qr{display:flex; flex-direction:column; align-items:center; gap:1pt}
+  .qr svg{width:15mm; height:15mm; display:block}
+  .qr small{font-size:6.8pt; font-weight:500; color:#8a9099}
+  .mix .grp{white-space:nowrap}
   .bl{text-align:left; line-height:1.15em; white-space:nowrap}
   .bl i{font-style:normal; font-weight:600; color:#8f95a0; padding-left:3pt}   /* 첫 글자 힌트: 밑줄 위 왼쪽 */
   .bl.a{color:var(--orange); font-weight:700; text-align:left; padding-left:3pt; line-height:1.15em; vertical-align:-2pt; white-space:nowrap}
@@ -174,6 +184,8 @@
     body{background:#fff}
     .wrap{max-width:none; padding:0}
     .nav,.panel,.bar{display:none !important}
+    body.pa .wrap{display:none !important}
+    body.pa #printall{position:static}
     .layout{display:block}
     .preview{background:none; padding:0; border-radius:0; overflow:visible; min-height:0}
     .preview .pg{zoom:1}
@@ -214,6 +226,15 @@
           <div class="lb"><span class="k">03</span>유형</div>
           <div class="types" id="types"></div>
         </div>
+        <div class="sub-opt hidden" id="orderStep">
+          <div class="lb">어순 배열 · 섞는 방법</div>
+          <div class="pills" id="omode">
+            <button data-o="all" class="on" onclick="setOMode('all')">전체</button>
+            <button data-o="inner" onclick="setOMode('inner')">덩어리 안</button>
+            <button data-o="chunk" onclick="setOMode('chunk')">덩어리</button>
+          </div>
+          <div class="help">전체: 단어를 모두 섞기 · 덩어리 안: 덩어리 순서는 그대로 · 덩어리: 덩어리째 섞기</div>
+        </div>
         <div class="sub-opt hidden" id="blankStep">
           <div class="row2">
             <div><div class="lb">문장당 빈칸</div>
@@ -250,6 +271,7 @@
             <button id="tabQ" class="on" onclick="showTab('Q')">문제지</button>
             <button id="tabA" onclick="showTab('A')">정답지</button>
           </div>
+          <label class="both"><input type="checkbox" id="both" onchange="setBoth()"> 정답지 함께</label>
           <button class="print" onclick="window.print()">인쇄 · PDF 저장</button>
         </div>
         <div class="preview" id="preview"><div class="empty">유닛과 유형을 고르고 <b>워크북 만들기</b>를 눌러 주세요.</div></div>
@@ -257,6 +279,8 @@
     </div>
   </section>
 </div>
+<div id="printall" aria-hidden="true"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
 <script src="gen_app.js"></script>
 </body>
 </html>
