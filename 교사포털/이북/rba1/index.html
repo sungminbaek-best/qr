@@ -320,7 +320,7 @@
   <button class="ib" id="zall" data-tip="원래 크기로 (Esc)" style="display:none"><svg viewBox="0 0 24 24"><path d="m15 15 6 6m-6-6v4.8m0-4.8h4.8M9 19.8V15m0 0H4.2M9 15l-6 6M15 4.2V9m0 0h4.8M15 9l6-6M9 4.2V9m0 0H4.2M9 9 3 3"/></svg><span class="t">원래 크기</span></button>
 </div>
 
-<script src="data.js?v=2371451854"></script>
+<script src="data.js?v=3064536078"></script>
 <script>
 // ── 책별 설정(E-Book반영.py가 books.json 값으로 채움) ──
 const START=5;            // 표지(1쪽) 다음 이 쪽부터 표시(앞 안내·오리엔테이션 건너뜀)
@@ -400,7 +400,7 @@ function buildSheet(p, ox){
     const h=parseFloat(d.style.height)||34, tgt=Math.min(22,Math.round(h*0.62));
     if(d.classList.contains('ph') && !d.style.paddingLeft && !/^gw/.test('rba1') && fs<Math.min(14,tgt*0.7)){   // 회색 칸(첫모의 SIGNAL 등)에 긴 답: 같은 크기로 칸 왼쪽부터 오른쪽 빈 곳까지 이어 씀(10-04)
       d.style.fontSize=Math.min(26,Math.round(h*0.62))+'px'; d.style.overflow='visible'; d.style.justifyContent='flex-start'; d.style.paddingLeft='10px'; d.style.zIndex='2'; return; }
-    if(!d.style.paddingLeft && !d.classList.contains('ph') && !/^gw/.test('rba1') && fs<Math.min(14,tgt*0.7)){ d.dataset.fs0=fs; _mc.font='600 '+tgt+'px "Malgun Gothic","맑은 고딕",sans-serif';
+    if(!d.style.paddingLeft && !d.classList.contains('ph') && !/^gw/.test('rba1') && fs<Math.min(15,tgt*0.72)){ d.dataset.fs0=fs;   // 14px로 줄어든 답도(입문1 83쪽 '6 (여섯)') 빈칸 위로(10-07) _mc.font='600 '+tgt+'px "Malgun Gothic","맑은 고딕",sans-serif';
       const nw=Math.ceil(_mc.measureText(tx).width)+pad+10, l=parseFloat(d.style.left)||0;
       const cx=l+w/2, top=parseFloat(d.style.top)||0, hh=Math.round(tgt*1.3);
       d.style.fontSize=tgt+'px'; d.style.width=nw+'px'; d.style.left=Math.max(0,Math.min(cx-nw/2,(p.w||1241)-nw-4))+'px';   // 빈칸 가운데 맞춰
