@@ -398,7 +398,7 @@ function buildSheet(p, ox){
     if(tw>w-pad){ fs=Math.max(11,Math.floor(fs*(w-pad)/tw)); d.style.fontSize=fs+'px'; }
     // 짧은 낱말 칸(가운데 정렬)에 긴 답: 글자가 너무 작아지면 → 읽히는 크기로, 칸을 오른쪽으로 넓혀 흰 바탕 위에(빈칸에 꼭 안 들어가도 됨, 10-03 · 저그랑 표 칸은 제외: 따로 다룸)
     const h=parseFloat(d.style.height)||34, tgt=Math.min(22,Math.round(h*0.62));
-    if(d.classList.contains('ph') && !d.style.paddingLeft && !/^gw/.test('ph1') && fs<Math.min(14,tgt*0.7)){   // 회색 칸(첫모의 SIGNAL 등)에 긴 답: 같은 크기로 칸 왼쪽부터 오른쪽 빈 곳까지 이어 씀(10-04)
+    if(d.classList.contains('ph') && !d.style.paddingLeft && !/^gw/.test('ph1') && fs<Math.min(15,tgt*0.72)){   // 10-07: 14px로 줄어든 SIGNAL 답도 이어 쓰기   // 회색 칸(첫모의 SIGNAL 등)에 긴 답: 같은 크기로 칸 왼쪽부터 오른쪽 빈 곳까지 이어 씀(10-04)
       d.style.fontSize=Math.min(26,Math.round(h*0.62))+'px'; d.style.overflow='visible'; d.style.justifyContent='flex-start'; d.style.paddingLeft='10px'; d.style.zIndex='2'; return; }
     if(!d.style.paddingLeft && !d.classList.contains('ph') && !/^gw/.test('ph1') && fs<Math.min(15,tgt*0.72)){ d.dataset.fs0=fs;   // 14px로 줄어든 답도(입문1 83쪽 '6 (여섯)') 빈칸 위로(10-07) _mc.font='600 '+tgt+'px "Malgun Gothic","맑은 고딕",sans-serif';
       const nw=Math.ceil(_mc.measureText(tx).width)+pad+10, l=parseFloat(d.style.left)||0;
