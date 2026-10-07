@@ -236,26 +236,13 @@
           <div class="help">전체: 단어를 모두 섞기 · 덩어리 안: 덩어리 순서는 그대로 · 덩어리: 덩어리째 섞기</div>
         </div>
         <div class="sub-opt hidden" id="blankStep">
-          <div class="row2">
-            <div><div class="lb">문장당 빈칸</div>
-              <div class="pills" id="blanks">
-                <button data-n="1" onclick="setBlanks(1)">1개</button>
-                <button data-n="2" class="on" onclick="setBlanks(2)">2개</button>
-              </div></div>
-            <div><div class="lb">첫 글자 힌트</div>
-              <div class="pills" id="hint">
-                <button data-h="0" class="on" onclick="setHint(0)">없음</button>
-                <button data-h="1" onclick="setHint(1)">주기</button>
-              </div></div>
+          <div class="lb">듣고 빈칸 쓰기 · 난이도</div>
+          <div class="pills" id="lvl">
+            <button data-l="easy" onclick="setLevel('easy')">쉬움</button>
+            <button data-l="normal" class="on" onclick="setLevel('normal')">보통</button>
+            <button data-l="hard" onclick="setLevel('hard')">어려움</button>
           </div>
-          <div class="row2" style="margin-top:10px">
-            <div><div class="lb">단어 상자</div>
-              <div class="pills" id="bankopt">
-                <button data-b="1" class="on" onclick="setBankOpt(1)">있음</button>
-                <button data-b="0" onclick="setBankOpt(0)">없음</button>
-              </div></div>
-          </div>
-          <div class="help">듣고 빈칸 쓰기에만 적용돼요. 짧은 문장은 빈칸 1개만 비워요. 단어 상자 없음 = 순수 받아쓰기.</div>
+          <div class="help">쉬움: 단어 상자 + 첫 글자 · 보통: 단어 상자 · 어려움: 단어 상자 없이 받아쓰기</div>
         </div>
         <div class="step">
           <div class="lb">학원 이름<span class="opt">· 비우면 인쇄 안 됨</span></div>

@@ -82,9 +82,8 @@ function initControls(){
   if(sv.acad) $("acad").value=sv.acad;
   if(sv.omode) document.querySelectorAll("#omode button").forEach(b=>b.classList.toggle("on", b.dataset.o===sv.omode));
   if(sv.both) $("both").checked=true;
-  if(sv.bank===0) document.querySelectorAll("#bankopt button").forEach(b=>b.classList.toggle("on", b.dataset.b==="0"));
-  if(sv.hint) document.querySelectorAll("#hint button").forEach(b=>b.classList.toggle("on", +b.dataset.h===sv.hint));
-  if(sv.blanks) document.querySelectorAll("#blanks button").forEach(b=>b.classList.toggle("on", +b.dataset.n===Math.min(2,sv.blanks)));
+  const lv=sv.lvl || (sv.bank===0 ? "hard" : sv.hint ? "easy" : "");   // 예전 저장값(단어 상자·힌트)도 이어받음
+  if(lv) document.querySelectorAll("#lvl button").forEach(b=>b.classList.toggle("on", b.dataset.l===lv));
   if(sv.margin && sv.margin!=="normal"){ document.querySelectorAll("#marg button").forEach(b=>b.classList.toggle("on", b.dataset.m===sv.margin)); $("preview").classList.add("m-"+sv.margin); }
   /* 주소로 책·유닛 지정(QR 음원 화면·자료실에서 옴): ?book=ph1&u=3 (음원 코드나 생성기 코드 둘 다) */
   const QS=new URLSearchParams(location.search), qb=QS.get("book"), qu=parseInt(QS.get("u"));
@@ -111,23 +110,17 @@ function toggleType(id){
   const c=document.querySelector(`#types input[value="${id}"]`); if(!c) return;
   c.checked=!c.checked; c.parentNode.classList.toggle("on",c.checked); syncListen(); showEx();
 }
-// '듣고 빈칸 쓰기'를 골랐을 때만 문장당 빈칸 수 버튼을 보여 줌
+// 고른 유형에 맞는 세부 옵션(듣고 빈칸 쓰기 난이도 · 어순 배열 섞는 방법)만 보여 줌
 function syncListen(){ $("blankStep").classList.toggle("hidden", !selTypes().includes("s_listen")); $("orderStep").classList.toggle("hidden", !selTypes().includes("s_order")); }
-function setBlanks(n){
-  document.querySelectorAll("#blanks button").forEach(b=>b.classList.toggle("on", +b.dataset.n===n));
-  save({blanks:n}); if(!CUR) render();
+// 듣고 빈칸 쓰기 난이도 한 줄: 쉬움 = 단어 상자 + 첫 글자 · 보통 = 단어 상자 · 어려움 = 상자 없이 받아쓰기
+function setLevel(l){
+  document.querySelectorAll("#lvl button").forEach(b=>b.classList.toggle("on", b.dataset.l===l));
+  save({lvl:l}); render();
 }
-function setHint(h){
-  document.querySelectorAll("#hint button").forEach(b=>b.classList.toggle("on", +b.dataset.h===h));
-  save({hint:h}); render();
-}
-function setBankOpt(v){   // 단어 상자 있음/없음(없음 = 순수 받아쓰기)
-  document.querySelectorAll("#bankopt button").forEach(b=>b.classList.toggle("on", +b.dataset.b===v));
-  save({bank:v}); render();
-}
-function bankOn(){ return !document.querySelector('#bankopt button[data-b="0"].on'); }
-function hintOn(){ return !!document.querySelector('#hint button[data-h="1"].on'); }
-function blanksN(){ return Math.min(2, +(document.querySelector("#blanks .on")||{dataset:{n:2}}).dataset.n); }   // 문장당 최대 2개(사용자 결정)
+function level(){ return (document.querySelector("#lvl .on")||{dataset:{l:"normal"}}).dataset.l; }
+function bankOn(){ return level()!=="hard"; }
+function hintOn(){ return level()==="easy"; }
+function blanksN(){ return 2; }   // 문장당 2개 고정(짧은 문장은 자동으로 1개, 사용자 결정)
 function setUnits(list){ document.querySelectorAll("#units input").forEach(c=>{ c.checked=list.includes(+c.value); c.parentNode.classList.toggle("on",c.checked); }); }
 function allUnits(on){ setUnits(on ? curBook().units.map(u=>u.u) : []); showEx(); }
 function selUnits(){ return [...document.querySelectorAll("#units input:checked")].map(c=>+c.value); }
@@ -291,7 +284,7 @@ function listenBlanks(s, n, pn){
   const toks=[...s.e.matchAll(/[A-Za-z][A-Za-z'’]*/g)].map((m,i)=>({t:m[0], s:m.index, e:m.index+m[0].length, i}));
   const uf=unitForms(s._uw||[]);
   const cands=toks.filter(t=>t.t.length>=3 && !STOP.has(t.t.toLowerCase()) && t.t!=="I" &&
-      !pn.has(t.t.replace(/['’]s$/,"")) && !(t.i>0 && /^[A-Z]/.test(t.t)))
+      !pn.has(t.t.replace(/['’]s$/,"")) && !(/^[A-Z]/.test(t.t) && (t.i>0 || !isCommon(t.t))))   // 대문자 낱말은 문장 첫 일반 단어만(Andres 같은 이름 제외)
     .map(t=>({...t, pri:(uf.has(t.t.toLowerCase())?100:0)+t.t.length}))
     .sort((a,b)=>b.pri-a.pri || a.s-b.s);
   const k=Math.min(n, cands.length, Math.max(1, Math.floor(toks.length/2)));
