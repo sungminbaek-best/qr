@@ -31,7 +31,13 @@ const LOGO=`<span class="lg"><span class="ko">쏠뷰</span><span class="dv"></sp
 function setMargin(m){
   document.querySelectorAll("#marg button").forEach(b=>b.classList.toggle("on", b.dataset.m===m));
   const pv=$("preview"); pv.classList.remove("m-narrow","m-wide"); if(m!=="normal") pv.classList.add("m-"+m);
-  save({margin:m}); render();   // 여백이 바뀌면 한 쪽에 들어가는 양이 달라져 다시 나눔
+  save({margin:m}); render(); psetCur();   // 여백이 바뀌면 한 쪽에 들어가는 양이 달라져 다시 나눔
+}
+// 접어 둔 '인쇄 설정' 옆에 지금 값을 옅게(학원 이름 · 여백)
+function psetCur(){
+  const m={narrow:"좁게",normal:"보통",wide:"넓게"}[(document.querySelector("#marg .on")||{dataset:{m:"normal"}}).dataset.m];
+  const a=$("acad").value.trim();
+  $("psetCur").textContent = (a ? a : "학원 이름 없음")+" · 여백 "+m;
 }
 
 /* ===== 게이트 ===== */
@@ -85,6 +91,7 @@ function initControls(){
   const lv=sv.lvl || (sv.bank===0 ? "hard" : sv.hint ? "easy" : "");   // 예전 저장값(단어 상자·힌트)도 이어받음
   if(lv) document.querySelectorAll("#lvl button").forEach(b=>b.classList.toggle("on", b.dataset.l===lv));
   if(sv.margin && sv.margin!=="normal"){ document.querySelectorAll("#marg button").forEach(b=>b.classList.toggle("on", b.dataset.m===sv.margin)); $("preview").classList.add("m-"+sv.margin); }
+  psetCur();
   /* 주소로 책·유닛 지정(QR 음원 화면·자료실에서 옴): ?book=ph1&u=3 (음원 코드나 생성기 코드 둘 다) */
   const QS=new URLSearchParams(location.search), qb=QS.get("book"), qu=parseInt(QS.get("u"));
   const qbook=qb && GEN_BOOKS.find(b=>b.code===qb||b.studio===qb);
@@ -400,7 +407,7 @@ function renderTo(host, ans){
     if(cols>1) balance(pages[pages.length-1]);   // 마지막 쪽은 단마다 고르게(한쪽 단만 차지 않게)
     if(set.t==="s_listen") pages.forEach(p=>{   // 듣기 쪽마다 그 쪽 유닛 음원 QR(자리는 미리 잡아 둬서 쪽 나눔에 영향 없음)
       const us=[...new Set([...p.querySelectorAll(".it[data-u]")].map(e=>+e.dataset.u))].slice(0,3);
-      p.querySelector(".qrs").innerHTML=us.map(u=>`<span class="qr">${qrSVG(STUDIO_URL+"?book="+CUR.book.studio+"&u="+u)}<small>${us.length>1?"U"+u+" ":""}음원</small></span>`).join("");
+      p.querySelector(".qrs").innerHTML=us.map(u=>`<span class="qr">${qrSVG(STUDIO_URL+"?c="+CUR.book.studio+"u"+String(u).padStart(2,"0")+"s&dict=1")}<small>${us.length>1?"U"+u+" ":""}음원</small></span>`).join("");
     });
   });
   // 쪽번호 = 이번에 뽑는 PDF 전체 기준(2 / 8)

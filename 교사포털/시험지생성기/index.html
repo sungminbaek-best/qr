@@ -67,18 +67,21 @@
   .units label:hover{border-color:var(--ink)}
   .units label.on{background:var(--ink); border-color:var(--ink); color:#fff}
   .units input{display:none}
-  .types{display:flex; flex-direction:column; gap:8px}
-  .ty{display:flex; align-items:center; gap:12px; border:1px solid var(--line2); border-radius:14px; padding:11px 14px; cursor:pointer; background:#fff; transition:all .12s}
-  .ty:hover{border-color:#c5cad8}
+  .types{display:flex; flex-direction:column; gap:2px}
+  .ty{display:flex; align-items:center; gap:12px; border:1px solid transparent; border-radius:11px; padding:9px 10px; cursor:pointer; background:#fff; transition:all .12s}
+  .ty:hover{background:var(--panel)}
   .ty input{display:none}
   .ty .ck{flex:none; width:20px; height:20px; border-radius:7px; border:1.5px solid #c9cfdc; display:grid; place-items:center; transition:all .12s}
-  .ty.on{border-color:var(--brand); background:var(--soft)}
+  .ty.on{background:var(--soft)}
   .ty.on .ck{background:var(--brand); border-color:var(--brand)}
   .ty.on .ck::after{content:""; width:9px; height:5px; border-left:2px solid #fff; border-bottom:2px solid #fff; transform:translateY(-1px) rotate(-45deg)}
   .ty b{display:block; font-size:14.5px; font-weight:700; letter-spacing:-.03em}
   .ty small{display:block; font-size:12px; color:var(--sub); margin-top:1px}
-  .sub-opt{margin:-8px 0 22px; padding:14px; border-radius:14px; background:var(--panel)}
-  .sub-opt .lb{font-size:13px; margin-bottom:8px}
+  .sub-opt{margin:-12px 0 22px; padding:10px 10px 10px 42px}
+  .sub-opt .lb{font-size:12px; font-weight:700; color:var(--sub); margin-bottom:6px}
+  .sub-opt .pills button{height:30px; font-size:13px}
+  .sub-opt .pills, .pset .pills{background:var(--panel)}
+  .sub-opt .pills button.on, .pset .pills button.on{background:#fff; color:var(--brand); box-shadow:0 1px 3px rgba(12,16,32,.12)}
   .sub-opt .row2{display:grid; grid-template-columns:1fr 1fr; gap:10px}
   .help{font-size:12px; color:var(--mute); margin-top:8px; line-height:1.5}
   /* 고르는 단추 묶음(빈칸·힌트·여백·문제지/정답지) */
@@ -87,9 +90,19 @@
   .pills button{flex:1; height:34px; border-radius:9px; font-size:13.5px; font-weight:600; color:var(--sub); transition:all .12s}
   .pills button:hover{color:var(--ink)}
   .pills button.on{background:var(--ink); color:#fff; font-weight:700}
-  .go{width:100%; height:52px; border-radius:13px; background:var(--ink); color:#fff; font-size:16px; font-weight:700; display:flex; align-items:center; justify-content:center; gap:8px;
-    box-shadow:0 10px 24px -10px rgba(12,16,32,.55); transition:background .15s}
-  .go:hover{background:var(--ink2)}
+  .pset{margin:4px 0 18px; border-top:1px solid var(--line); padding-top:12px}
+  .pset summary{list-style:none; cursor:pointer; display:flex; align-items:center; gap:6px; font-size:13px; font-weight:600; color:var(--sub); user-select:none}
+  .pset summary::-webkit-details-marker{display:none}
+  .pset summary::after{content:""; margin-left:auto; width:7px; height:7px; border-right:1.6px solid var(--mute); border-bottom:1.6px solid var(--mute); transform:rotate(45deg) translateY(-2px); transition:transform .15s}
+  .pset[open] summary::after{transform:rotate(-135deg) translate(-2px,0)}
+  .pset summary .cur{font-weight:500; color:var(--mute); white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+  .pset .in{padding-top:12px}
+  .pset .lb{font-size:12px; font-weight:700; color:var(--sub); margin-bottom:6px}
+  .pset input[type=text]{height:40px; font-size:14px}
+  .pset .pills button{height:30px; font-size:13px}
+  .go{width:100%; height:52px; border-radius:13px; background:var(--brand); color:#fff; font-size:16px; font-weight:700; display:flex; align-items:center; justify-content:center; gap:8px;
+    box-shadow:0 10px 24px -10px rgba(67,97,255,.6); transition:filter .15s}
+  .go:hover{filter:brightness(.92)}
   .go .ar{transition:transform .18s}.go:hover .ar{transform:translateX(3px)}
 
   /* 오른쪽 미리보기 */
@@ -229,33 +242,32 @@
         <div class="sub-opt hidden" id="orderStep">
           <div class="lb">어순 배열 · 섞는 방법</div>
           <div class="pills" id="omode">
-            <button data-o="all" class="on" onclick="setOMode('all')">전체</button>
-            <button data-o="inner" onclick="setOMode('inner')">덩어리 안</button>
-            <button data-o="chunk" onclick="setOMode('chunk')">덩어리</button>
+            <button data-o="all" class="on" onclick="setOMode('all')" title="단어를 모두 섞기">전체</button>
+            <button data-o="inner" onclick="setOMode('inner')" title="덩어리 순서는 그대로, 안의 단어만 섞기">덩어리 안</button>
+            <button data-o="chunk" onclick="setOMode('chunk')" title="덩어리째 순서 섞기">덩어리</button>
           </div>
-          <div class="help">전체: 단어를 모두 섞기 · 덩어리 안: 덩어리 순서는 그대로 · 덩어리: 덩어리째 섞기</div>
         </div>
         <div class="sub-opt hidden" id="blankStep">
           <div class="lb">듣고 빈칸 쓰기 · 난이도</div>
           <div class="pills" id="lvl">
-            <button data-l="easy" onclick="setLevel('easy')">쉬움</button>
-            <button data-l="normal" class="on" onclick="setLevel('normal')">보통</button>
-            <button data-l="hard" onclick="setLevel('hard')">어려움</button>
-          </div>
-          <div class="help">쉬움: 단어 상자 + 첫 글자 · 보통: 단어 상자 · 어려움: 단어 상자 없이 받아쓰기</div>
-        </div>
-        <div class="step">
-          <div class="lb">학원 이름<span class="opt">· 비우면 인쇄 안 됨</span></div>
-          <input type="text" id="acad" placeholder="예: 쏠뷰영어학원" oninput="render()">
-        </div>
-        <div class="step">
-          <div class="lb">여백</div>
-          <div class="pills" id="marg">
-            <button data-m="narrow" onclick="setMargin('narrow')">좁게</button>
-            <button data-m="normal" class="on" onclick="setMargin('normal')">보통</button>
-            <button data-m="wide" onclick="setMargin('wide')">넓게</button>
+            <button data-l="easy" onclick="setLevel('easy')" title="단어 상자 + 첫 글자">쉬움</button>
+            <button data-l="normal" class="on" onclick="setLevel('normal')" title="단어 상자">보통</button>
+            <button data-l="hard" onclick="setLevel('hard')" title="단어 상자 없이 받아쓰기">어려움</button>
           </div>
         </div>
+        <details class="pset" id="pset">
+          <summary>인쇄 설정 <span class="cur" id="psetCur"></span></summary>
+          <div class="in">
+            <div class="lb">학원 이름 <span class="opt" style="font-weight:500;color:var(--mute)">· 비우면 인쇄 안 됨</span></div>
+            <input type="text" id="acad" placeholder="예: 쏠뷰영어학원" oninput="render(); psetCur()">
+            <div class="lb" style="margin-top:12px">여백</div>
+            <div class="pills" id="marg">
+              <button data-m="narrow" onclick="setMargin('narrow')">좁게</button>
+              <button data-m="normal" class="on" onclick="setMargin('normal')">보통</button>
+              <button data-m="wide" onclick="setMargin('wide')">넓게</button>
+            </div>
+          </div>
+        </details>
         <button class="go" onclick="make()">워크북 만들기 <span class="ar">→</span></button>
       </div>
 
