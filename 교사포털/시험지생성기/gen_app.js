@@ -27,7 +27,9 @@ let CUR=null, TAB="Q";
 const STUDIO_URL="https://solveu.co.kr/studio/";   // 음원 화면(유닛별 ?book=&u=) — 듣고 빈칸 쓰기 QR
 // 어순 배열 섞는 방법: all=전체 단어 · inner=덩어리 안 단어만 · chunk=덩어리째
 const OMODES={all:"※ 주어진 단어를 바르게 배열하여 문장을 쓰세요.", inner:"※ 덩어리 안의 단어를 바르게 배열하여 문장을 쓰세요.", chunk:"※ 주어진 덩어리를 바르게 배열하여 문장을 쓰세요."};
-function setOMode(m){ document.querySelectorAll("#omode button").forEach(b=>b.classList.toggle("on", b.dataset.o===m)); save({omode:m}); if(!CUR) render(); }
+function setOMode(m){ document.querySelectorAll("#omode button").forEach(b=>b.classList.toggle("on", b.dataset.o===m)); save({omode:m});
+  if(CUR && CUR.types.includes("s_order")) CUR.sets=buildSets(CUR.book, CUR.units, CUR.types, CUR.salt);   // 섞인 단어는 만들 때 정해지므로 다시 만듦
+  render(); }
 // 단어 쓰기 첫 글자: 주기 = 모든 단어에 (b…) · 없음 = 뜻이 겹치는 단어에만(되다 = g…/t…)
 function setSpellH(v){ document.querySelectorAll("#spellh button").forEach(b=>b.classList.toggle("on", +b.dataset.h===v)); save({spellh:v}); render(); }
 function spellH(){ return !!document.querySelector('#spellh button[data-h="1"].on'); }
@@ -144,13 +146,15 @@ function setUnits(list){ document.querySelectorAll("#units input").forEach(c=>{ 
 function allUnits(on){ setUnits(on ? curBook().units.map(u=>u.u) : []); showEx(); }
 function selUnits(){ return [...document.querySelectorAll("#units input:checked")].map(c=>+c.value); }
 function selTypes(){ return [...document.querySelectorAll("#types input:checked")].map(c=>c.value); }
-function showTab(t){ TAB=t; $("tabQ").classList.toggle("on",t==="Q"); $("tabA").classList.toggle("on",t==="A"); render(); }
+// 오래 걸릴 수 있는 작업 앞에 '만드는 중…'을 먼저 그려 보이고(30ms 뒤) 실행
+function busy(fn){ const pv=$("preview"); pv.classList.add("busy"); setTimeout(()=>{ try{ fn(); } finally { pv.classList.remove("busy"); } }, 30); }
+function showTab(t){ TAB=t; $("tabQ").classList.toggle("on",t==="Q"); $("tabA").classList.toggle("on",t==="A"); if(CUR) busy(render); else render(); }
 
 /* ===== 만들기 ===== */
 // 다시 섞기: 같은 유닛·유형으로 문제 순서·보기·함정 단어를 새로 섞음
 function reshuffle(){
   if(!CUR) return;
-  CUR.salt++; CUR.sets=buildSets(CUR.book, CUR.units, CUR.types, CUR.salt); render();
+  busy(()=>{ CUR.salt++; CUR.sets=buildSets(CUR.book, CUR.units, CUR.types, CUR.salt); render(); });
 }
 function make(){
   const b=curBook(), units=selUnits(), types=selTypes();
@@ -159,9 +163,8 @@ function make(){
   save({book:b.code, acad:$("acad").value.trim(), types:{...(load().types||{}), [b.kind]:types}});
   const sets=buildSets(b, units, types);
   if(!sets.length){ alert("고른 유닛에는 이 유형으로 만들 문제가 없어요. 유닛이나 유형을 바꿔 주세요."); return; }
-  CUR={book:b, units, sets, types, salt:0};
-  render();
   if(window.innerWidth<900) document.querySelector(".bar").scrollIntoView({behavior:"smooth"});   // 휴대폰·좁은 화면: 결과로 내려가기
+  busy(()=>{ CUR={book:b, units, sets, types, salt:0}; render(); });
 }
 // salt: '다시 섞기' 횟수(0 = 처음 만든 그대로 — 같은 유닛·유형이면 언제나 같은 문제지)
 function buildSets(b, units, types, salt){
@@ -186,7 +189,7 @@ function buildSets(b, units, types, salt){
     if(t==="s_write") items=SL.map(s=>({q:s.k, a:s.e}));
     if(t==="wordlist") items=W.filter(w=>w.k).map(w=>({q:w.e, a:w.k}));   // 교재 순서 그대로
     if(t==="reading") items=S.map(s=>({e:s.e, k:s.k}));   // 본문 해석: 통문장(영어 → 우리말 한 줄 해석)   // 문장 쓰기(스펠링 시험): 우리말 → 영어 문장 통째로
-    if(t==="s_order"){ const om=oMode(); items=SL.map(s=>({q:s.ck&&s.ck.length>1?s.ck.join(" / "):s.k, mix:orderMix(s,om,rnd,pn), a:s.e})); }
+    if(t==="s_order"){ const om=oMode(); items=SL.map(s=>({q:s.ck&&s.ck.length>1?s.ck.map(c=>c.trim()==="x"?"X":c).join(" / "):s.k, mix:orderMix(s,om,rnd,pn), a:s.e})); }
     if(t==="s_listen") items=listenItems(b, units, blanksN(), pn);
     if(items.length) sets.push({t, items, bank: t==="s_listen" ? wordBank(items, W, S, rnd, pn) : null,
       ctx: t==="s_listen" ? {W, S, pn, seed:seedFrom(b.code+"|"+units.join(",")+"|bank"+(salt?"|"+salt:""))} : null});
@@ -344,10 +347,12 @@ function wordBank(items, W, S, rnd, pn){
   const stem=w=>{ w=w.toLowerCase().replace(/['’]s$/,""); return w.replace(/(ies|es|s|ed|ing|d)$/,"").replace(/e$/,""); };
   const ansStems=new Set(ans.map(stem));
   const nTrap=Math.max(2, Math.min(5, Math.round(ans.length*0.2)));
-  let traps=shuffle(pool.filter(t=>!ansStems.has(stem(t))),rnd).slice(0,nTrap);
+  // 두 낱말 정답(across from)의 한 낱말(across)도 함정에서 뺌 — 정답 일부라 헷갈림
+  const ansParts=new Set(ans.filter(x=>/\s/.test(x)).flatMap(x=>x.toLowerCase().split(/\s+/)));
+  let traps=shuffle(pool.filter(t=>!ansStems.has(stem(t)) && !ansParts.has(t.toLowerCase())),rnd).slice(0,nTrap);
   if(traps.length<nTrap){   // 고른 유닛 단어가 모두 정답이면 같은 책 다른 유닛 단어에서 채움
     const more=curBook().units.flatMap(u=>u.words.map(w=>w.e)).filter(e=>/^[A-Za-z]+$/.test(e) && e.length>=3 && !STOP.has(e.toLowerCase()))
-      .map(low).filter(t=>!used.has(t.toLowerCase()) && !ansStems.has(stem(t)) && !traps.includes(t));
+      .map(low).filter(t=>!used.has(t.toLowerCase()) && !ansStems.has(stem(t)) && !ansParts.has(t.toLowerCase()) && !traps.includes(t));
     traps=traps.concat(shuffle([...new Set(more)],rnd).slice(0,nTrap-traps.length));
   }
   return ans.concat(traps).sort((a,b)=>a.toLowerCase().localeCompare(b.toLowerCase()));
@@ -505,11 +510,11 @@ function itemHTML(t,it,n,ans){
       return `<div class="row">${N}<span class="q">${esc(it.q)}</span></div>${line(it.a, nLines(it.a,true,DENS>=3?0.85:1))}`;
     case "s_write":
       if(!ans && sentH()){   // 첫 글자 힌트: 단어마다 첫 글자 + 손글씨 폭 빈칸(문장부호·숫자는 그대로)
-        const k=isKid()?11:8.5, h=it.a.replace(/[“”"]/g,"").split(/\s+/).filter(Boolean).map(w=>{
+        const k=isKid()?11:7.2, h=it.a.replace(/[“”"]/g,"").split(/\s+/).filter(Boolean).map(w=>{
           const m=w.match(/^([^A-Za-z0-9]*)([A-Za-z][A-Za-z'’\-]*|[0-9][0-9:,.%]*)([^A-Za-z0-9]*)$/);
           if(!m) return esc(w);
           if(/^[0-9]/.test(m[2])) return esc(w);
-          return esc(m[1])+`<span class="bl" style="width:${Math.max(26, m[2].length*k+10)}pt"><i>${esc(m[2][0])}</i></span>`+esc(m[3]);
+          return esc(m[1])+`<span class="bl" style="width:${Math.max(24, m[2].length*k+9)}pt"><i>${esc(m[2][0])}</i></span>`+esc(m[3]);
         }).join(" ");
         return `<div class="row">${N}<span class="q">${esc(it.q)}</span></div><div class="swh">${h}</div>`;
       }
@@ -519,9 +524,11 @@ function itemHTML(t,it,n,ans){
       it.blanks.forEach(b=>{
         h+=esc(it.sent.slice(pos,b.s));
         const w = isKid() ? `width:${Math.max(56, b.t.length*12+24)}pt` : `width:${Math.max(38, b.t.length*8.5+14)}pt`;   // 문제지·정답지 같은 폭(쪽 나눔도 같게)
-        h+= ans ? `<span class="bl a" style="${w}">${esc(b.t)}</span>`
-                : `<span class="bl" style="${w}">${hintOn()?`<i>${esc(b.t[0])}</i>`:""}</span>`;
-        pos=b.e;
+        const tail=(it.sent.slice(b.e).match(/^[.,!?;:”’"')]+/)||[""])[0];   // 빈칸 뒤 문장부호
+        const blk = ans ? `<span class="bl a" style="${w}">${esc(b.t)}</span>`
+                        : `<span class="bl" style="${w}">${hintOn()?`<i>${esc(b.t[0])}</i>`:""}</span>`;
+        h+= tail ? `<span class="nw">${blk}${esc(tail)}</span>` : blk;
+        pos=b.e+tail.length;
       });
       return `<div class="row">${N}<span class="q ls">${h+esc(it.sent.slice(pos))}</span></div>`;
     }

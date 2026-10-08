@@ -116,6 +116,12 @@
   #printall{position:absolute; left:-99999px; top:0}
   .print{ height:42px; padding:0 18px; border-radius:11px; background:#fff; border:1px solid var(--line2); font-weight:700; font-size:14px; transition:border-color .15s}
   .print:hover{border-color:var(--ink)}
+  .bar{scroll-margin-top:76px}   /* 휴대폰: 만들기 뒤 결과로 내려갈 때 위 메뉴에 가리지 않게 */
+  .preview.busy{position:relative}
+  .preview.busy::after{content:"만드는 중…"; position:absolute; inset:0; display:flex; align-items:flex-start; justify-content:center; padding-top:120px;
+    background:rgba(233,235,242,.75); border-radius:22px; font-size:15px; font-weight:700; color:var(--sub); z-index:5}
+  .nw{white-space:nowrap}
+  @media(max-width:600px){ .lb .mini{padding:10px 6px} .pills button{height:38px} .units label{height:44px} }   /* 휴대폰: 누르는 곳 넉넉하게 */
   .preview{background:#e9ebf2; border-radius:22px; padding:24px; overflow:auto; min-height:420px}
   /* 유형 미리보기(만들기 전) */
   .exhd{display:flex; flex-wrap:wrap; align-items:baseline; gap:6px 10px; margin:2px 4px 16px}
