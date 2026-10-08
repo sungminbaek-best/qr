@@ -61,6 +61,18 @@
 .vol b{font-size:17px;font-weight:800;letter-spacing:-.03em}
 .vol .tx span{display:block;font-size:13.5px;color:var(--mute);margin-top:3px}
 .vol .acts{display:flex;gap:8px;flex-wrap:wrap}
+.trow{margin-top:26px;border:1px solid var(--line);border-radius:var(--r);background:var(--panel);padding:20px 22px}
+.trow .tr-h{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.trow .tr-h b{font-size:16px;font-weight:800}
+.trow .tr-h span{font-size:12.5px;font-weight:800;color:var(--brand);background:var(--soft);border-radius:999px;padding:4px 11px}
+.trow .tr-h .lk2{margin-left:auto;font-size:14px;font-weight:800;color:var(--brand)}.unlocked .trow .lk2{display:none}
+.trow ul{list-style:none;margin:14px 0 0;padding:0;display:grid;gap:10px}
+.trow li{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:14.5px}
+.trow li b{min-width:140px}.trow li em{font-style:normal;font-size:13px;color:var(--sub);background:#fff;border:1px solid var(--line);border-radius:999px;padding:3px 10px}
+.trow li .bt{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto}
+.trow .tbtn{display:inline-flex;border-radius:10px;padding:6px 11px;font-size:12.5px;font-weight:700;border:1px solid var(--line);color:var(--mute);background:#fff;cursor:pointer}
+.unlocked .trow .tbtn{color:var(--ink);border-color:var(--line2)}
+.trow .err{margin-top:8px;font-size:13px;color:#d33;min-height:0}
+@media(max-width:600px){.trow li b{min-width:0}.trow li .bt{margin-left:0;width:100%}}
 .tocs{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:24px}
 .tocs figure{margin:0}
 .tocs figcaption{font-size:13.5px;font-weight:700;color:var(--mute);margin-bottom:10px}
@@ -143,14 +155,14 @@
       <div class="pvbar"><a class="btn dark sm" href="/books/samples/ph2.pdf" target="_blank" rel="noopener">샘플 PDF 받기 (출력 가능)</a></div></div></div>
 </div></section>
 <section class="bk-sec" id="about"><div class="wrap">
-  <h2 class="rev">구성·자료</h2><p class="sub rev">권마다 음원·강의와 정답을 바로 열 수 있어요.</p>
+  <h2 class="rev">구성·자료</h2><p class="sub rev">권마다 음원·강의를 듣고, 정답 PDF · 인쇄 자료를 받아요.</p>
   <div class="vols"><div class="vol rev"><img src="/assets/covers/ph1.webp" alt="저절로 파닉스 1 표지">
       <div class="tx"><b>저절로 파닉스 1</b><span>8개 유닛 · 초1~2 권장 · 정가 14,000원</span></div>
-      <div class="acts"><a class="btn line sm" href="/studio/?book=ph1">음원·강의 <span class="ar">→</span></a><a class="btn line sm" href="/books/answers/ph1.pdf" target="_blank" rel="noopener">정답 PDF ↗</a></div></div><div class="vol rev"><img src="/assets/covers/ph2.webp" alt="저절로 파닉스 2 표지">
+      <div class="acts"><a class="btn line sm" href="/studio/?book=ph1">음원·강의 <span class="ar">→</span></a><a class="btn line sm" href="/books/answers/ph1.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true" style="display:inline-block;width:13px;height:13px;margin-right:5px;vertical-align:-2px"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 20h14"/></svg>정답 PDF</a><a class="btn line sm" href="/library/files/ph1/ph1_soundchart_U00.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true" style="display:inline-block;width:13px;height:13px;margin-right:5px;vertical-align:-2px"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 20h14"/></svg>음가표</a></div></div><div class="vol rev"><img src="/assets/covers/ph2.webp" alt="저절로 파닉스 2 표지">
       <div class="tx"><b>저절로 파닉스 2</b><span>8개 유닛 · 초1~2 권장 · 정가 14,000원</span></div>
-      <div class="acts"><a class="btn line sm" href="/studio/?book=ph2">음원·강의 <span class="ar">→</span></a><a class="btn line sm" href="/books/answers/ph2.pdf" target="_blank" rel="noopener">정답 PDF ↗</a></div></div></div>
+      <div class="acts"><a class="btn line sm" href="/studio/?book=ph2">음원·강의 <span class="ar">→</span></a><a class="btn line sm" href="/books/answers/ph2.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true" style="display:inline-block;width:13px;height:13px;margin-right:5px;vertical-align:-2px"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 20h14"/></svg>정답 PDF</a><a class="btn line sm" href="/library/files/ph2/ph2_soundchart_U00.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true" style="display:inline-block;width:13px;height:13px;margin-right:5px;vertical-align:-2px"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 20h14"/></svg>음가표</a></div></div></div>
   
-  <a class="b2brow rev" href="/library/#teacher"><b>선생님이세요?</b><span>이 교재 E-Book · 음가표·카드 · 수업 가이드</span><span class="ar">곧 열려요 →</span></a>
+  <div class="trow rev" id="tz"><div class="tr-h"><b>선생님 자료</b><span>곧 열려요</span></div><ul><li><b>수업가이드</b><em>수업 전 참고용</em></li><li><b>학부모 안내</b><em>상담 · 진급 때 나눠 주기</em></li><li><b>수업용 E-Book</b><em>수업 중 판서용</em></li><li><b>음가 카드 · 단어 카드</b><em>파닉스 수업 · 게임용</em></li></ul><div class="err" id="err" role="alert"></div></div>
   
 </div></section>
 
@@ -160,7 +172,7 @@
   <div class="more"><button class="btn line sm" id="moreBtn" type="button">후기 더 보기</button><a class="btn line sm" href="https://smartstore.naver.com/solveu/products/13172314678" target="_blank" rel="noopener">스마트스토어에서 후기 전체 보기 ↗</a></div>
 </div></section>
 <section class="bk-sec"><div class="wrap"><h2 class="rev">다음 단계</h2>
-  <a class="next rev" href="/books/starter/"><img src="/assets/covers/rst1.webp" alt=""><div><div class="k">2단계 · 초1~2</div><b>저절로 스타터 1·2</b><span>파닉스 다음, 첫 독해</span></div><span class="ar">→</span></a></div></section>
+  <a class="next rev" href="/books/starter/"><img src="/assets/covers/rst1.webp" alt=""><div><div class="k">2단계 · 초1~2</div><b>저절로리딩 스타터 1·2</b><span>파닉스 다음, 첫 독해</span></div><span class="ar">→</span></a></div></section>
 
 </main>
 <footer><div class="wrap">
