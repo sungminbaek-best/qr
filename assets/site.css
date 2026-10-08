@@ -172,3 +172,5 @@ footer .biz{width:100%;font-size:12.5px}
 }
 
 @media(max-width:520px){.nbtn.tlog{display:none}}   /* 2026-10-08 선생님 영역 오픈: 휴대폰 메뉴 넘침 방지(인증은 자료실·홈 입구에서) */
+
+html,body{overflow-x:clip}

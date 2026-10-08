@@ -14,7 +14,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/site.css?v=bd427c48">
+<link rel="stylesheet" href="/assets/site.css?v=c48f35ed">
 <style>
 .first{margin-top:10px;font-size:14.5px}.first a{color:var(--brand);font-weight:700}.first a:hover{text-decoration:underline}
 .st{max-width:1160px;margin:0 auto;padding:44px 24px 24px;min-height:60vh}
@@ -251,8 +251,8 @@
   <nav><a href="/home/#books">교재</a><a href="/studio/">음원·강의</a><a href="https://www.youtube.com/channel/UCoLiIPQe_U01fMFa0X1F2ng/playlists" target="_blank" rel="noopener">유튜브 강의 ↗</a><a href="https://www.instagram.com/solveu_baek/" target="_blank" rel="noopener">인스타그램 ↗</a><a href="/library/">자료실</a><a href="/contact/">문의</a><a href="/report/">오류 신고</a><a class="store">스마트스토어</a><a class="talk">톡톡</a><a href="/terms/">이용약관</a><a href="/privacy/">개인정보처리방침</a></nav>
   <span class="biz"></span>
 </div></footer>
-<script src="/assets/reviews.js?v=bd427c48"></script>
-<script src="/assets/site.js?v=bd427c48"></script>
+<script src="/assets/reviews.js?v=c48f35ed"></script>
+<script src="/assets/site.js?v=c48f35ed"></script>
 <script>
 const BOOKS = window.BOOKS||[];
 const NAME = {"ph1": "저절로 파닉스 1", "ph2": "저절로 파닉스 2", "rst1": "저절로리딩 스타터 1", "rst2": "저절로리딩 스타터 2", "rbr1": "저절로리딩 브릿지 1", "rbr2": "저절로리딩 브릿지 2", "rin1": "저절로리딩 입문 1", "rin2": "저절로리딩 입문 2", "rba1": "저절로리딩 기본 1", "rba2": "저절로리딩 기본 2", "rmo1": "저절로리딩 첫모의고사 1", "rmo2": "저절로리딩 첫모의고사 2", "gw1": "저절로그래머&라이팅 1", "gw2": "저절로그래머&라이팅 2"}, SLUG = {"ph": "phonics", "rst": "starter", "rbr": "bridge", "rin": "intro", "rba": "basic", "rmo": "mock", "gw": "grammar"}, STEPL = {"ph1": "1단계 · 파닉스", "ph2": "1단계 · 파닉스", "rst1": "2단계 · 스타터", "rst2": "2단계 · 스타터", "rbr1": "3단계 · 브릿지", "rbr2": "3단계 · 브릿지", "rin1": "4단계 · 입문", "rin2": "4단계 · 입문", "rba1": "5단계 · 기본", "rba2": "5단계 · 기본", "rmo1": "6단계 · 첫모의고사", "rmo2": "6단계 · 첫모의고사", "gw1": "문법·쓰기", "gw2": "문법·쓰기"};
@@ -374,7 +374,7 @@ function home(){
   const reading=BOOKS.filter(b=>b.track!=='grammar').map(card).join('');
   const grammar=BOOKS.filter(b=>b.track==='grammar').map(card).join('');
   app.innerHTML='<h1>음원·강의</h1><p class="lead">책의 QR로 듣던 단어·문장 음원과 강의예요. 교재를 고르면 유닛별로 열 수 있어요.</p><p class="first"><a href="/library/guide/qr.pdf" target="_blank" rel="noopener">처음이세요? <b>QR 음원 활용법</b> (PDF) ↗</a></p>'+
-    '<h2 class="gh">읽기 <span>파닉스에서 첫모의고사까지</span></h2><div class="bgrid">'+reading+'</div>'+
+    '<h2 class="gh">파닉스·리딩 <span>파닉스에서 첫모의고사까지</span></h2><div class="bgrid">'+reading+'</div>'+
     (grammar?'<h2 class="gh">문법·쓰기</h2><div class="bgrid">'+grammar+'</div>':'');
 }
 

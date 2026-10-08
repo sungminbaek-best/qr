@@ -52,6 +52,11 @@ window.SOLVEU = {
       S.api("/api/buy", { buy: b.textContent }).then(function (j) { if (j.ok) d.innerHTML = "<span>감사합니다! 🙂</span>"; }); }); });
     box.appendChild(d);
   };
+  /* 인증 전에 선생님 자료를 누르면 바로 인증 화면으로 → 끝나면 보던 자리로(2026-10-08 사용자: 눌러도 반응 없어 보임) */
+  /* 인증된 기기면 위 메뉴 '선생님 인증' → '선생님 자료' */
+  document.addEventListener("DOMContentLoaded", function () { if (S.isOK && S.isOK()) $$(".nbtn.tlog").forEach(function (a) { a.textContent = "선생님 자료"; a.href = "/library/#teacher"; }); });
+  S.toJoin = function (root) { var h = $("#teacher") ? "#teacher" : (root && root.id ? "#" + root.id : "");
+    location.href = "/library/join/?next=" + encodeURIComponent(location.pathname + location.search + h); };
   S.gate = function (root) {
     if (!root) return;
     var err = $("#err", root), who = $(".tname", root);
@@ -65,13 +70,11 @@ window.SOLVEU = {
     }
     var out = $(".relock", root); if (out) out.addEventListener("click", function () { S.api("/api/logout", {}); S.pass(null); paint(); });
     $$(".libs a,.tool[data-href],.tbtn[data-href]", root).forEach(function (a) { a.addEventListener("click", function (ev) {
-      if (!S.isOK()) { ev.preventDefault(); err.textContent = "먼저 ‘휴대폰으로 입장’을 눌러 인증해 주세요.";
-        var tt = $("#teacher"); if (tt) tt.scrollIntoView({ behavior: "smooth", block: "center" }); } }); });
+      if (!S.isOK()) { ev.preventDefault(); S.toJoin(root); } }); });
     /* 잠금 자료(자료실 완성본): 입장권으로 인증 서버에서 받아 새 창에 PDF로 띄움(주소만으로는 못 받음) */
     $$("[data-file]", root).forEach(function (a) { a.addEventListener("click", function (ev) {
       ev.preventDefault();
-      if (!S.isOK()) { err.textContent = "먼저 ‘휴대폰으로 입장’을 눌러 인증해 주세요.";
-        var g = $(".lgate", root); if (g) g.scrollIntoView({ behavior: "smooth", block: "center" }); return; }
+      if (!S.isOK()) { S.toJoin(root); return; }
       var w = window.open("", "_blank"); err.textContent = "";
       if (w) w.document.write('<p style="font-family:system-ui;text-align:center;margin-top:40vh;color:#667">자료를 여는 중이에요…</p>');
       fetch(S.AUTH + "/api/file?p=" + encodeURIComponent(a.dataset.file), { headers: { Authorization: "Bearer " + S.pass() } }).then(function (r) {
