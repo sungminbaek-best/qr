@@ -164,3 +164,9 @@ footer .biz{width:100%;font-size:12.5px}
 .askbuy .bo{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
 .askbuy .bo button{font-size:12.5px;font-weight:700;padding:6px 10px;border-radius:999px;border:1px solid var(--line2);background:#fff}
 .askbuy .bo button:hover{border-color:var(--brand);color:var(--brand)}
+/* 휴대폰: 누르는 곳 넉넉하게(2026-10-08 진단 보완) — 자료실 단추·메뉴·맨 아래 링크 */
+@media(max-width:700px){
+  .pill{min-height:40px}
+  .nav nav a{display:inline-flex;align-items:center;min-height:44px}
+  footer nav a{display:inline-block;padding:8px 0}
+}
