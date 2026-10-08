@@ -239,7 +239,7 @@
 <header class="nav" id="nav"><div class="wrap">
   <a class="logo" href="/" aria-label="쏠뷰 SolveU 홈"><span class="ko">쏠뷰</span><span class="dv"></span><span class="en">Solve<span class="g">U</span></span></a>
   <nav aria-label="주 메뉴"><a href="/home/#books">교재</a><a href="/studio/" aria-current=page>음원·강의</a><a href="/library/">자료실</a><a href="/contact/">문의</a></nav>
-  <a class="nbtn store">스토어</a>
+  <a class="nbtn tlog" href="/library/join/?next=/library/%23teacher">선생님 인증</a><a class="nbtn store">스토어</a>
 </div></header>
 <main>
 <div class="st" id="app"><p class="msg">불러오는 중…</p></div>
@@ -404,7 +404,7 @@ const IC_HP='<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" strok
 const IC_PL='<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M8 5.5v13l11-6.5z"/></svg>';
 let miniIO=null, stkIO=null, shadowTimer=null, holdAfter=null;
 /* QR 음원 화면 아래 '선생님이세요?' 한 줄 — 책 QR은 어디서 산 책이든 원장님을 만나는 곳(학생 화면은 가리지 않게 본문 맨 아래) */
-const TSOON=true;   // 선생님 영역 준비 중이면 '선생님이세요?' 줄 숨김
+const TSOON=false;   // 선생님 영역 준비 중이면 '선생님이세요?' 줄 숨김
 const GEN=['rst1','rst2','rbr1','rbr2','rin1','rin2','rba1','rba2','rmo1','rmo2','gw1','gw2'];   // 시험지 생성기에 있는 책
 const QRC=new URLSearchParams(location.search).get('c')||'';                         // 처음 들어온 QR 코드
 function teacherLine(b,u){

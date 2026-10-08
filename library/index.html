@@ -94,6 +94,7 @@
 .perkbox>b{font-size:15.5px}
 .perkbox .perks{list-style:none;display:grid;gap:5px;padding:12px 14px;border-radius:11px;background:#fff}
 .perkbox .perks li{font-size:13px;font-weight:600;padding-left:18px;position:relative;line-height:1.5}
+.perks li b{font-weight:800}.perks li span{display:block;font-size:12.5px;font-weight:500;color:var(--mute)}
 .perkbox .perks li:before{content:"✓";position:absolute;left:0;color:var(--brand);font-weight:800}
 .perkbox input{height:44px;border:1px solid var(--line2);border-radius:10px;padding:0 13px;font:inherit;font-size:14.5px;outline:none}
 .perkbox input:focus{border-color:var(--ink)}
@@ -235,32 +236,38 @@
 <header class="nav" id="nav"><div class="wrap">
   <a class="logo" href="/" aria-label="쏠뷰 SolveU 홈"><span class="ko">쏠뷰</span><span class="dv"></span><span class="en">Solve<span class="g">U</span></span></a>
   <nav aria-label="주 메뉴"><a href="/home/#books">교재</a><a href="/studio/">음원·강의</a><a href="/library/" aria-current=page>자료실</a><a href="/contact/">문의</a></nav>
-  <a class="nbtn store">스토어</a>
+  <a class="nbtn tlog" href="/library/join/?next=/library/%23teacher">선생님 인증</a><a class="nbtn store">스토어</a>
 </div></header>
 <main>
 
 <section class="top"><div class="wrap">
   <h1 class="rev">자료실</h1>
   <p class="rev">필요한 자료를 쓰임새별로 모았어요. <br class="mo">음원·강의는 위 메뉴 <a href="/studio/" style="color:var(--brand);font-weight:700">음원·강의</a>에서 바로 들어요.</p>
-  <div class="jump rev"><a href="#books">정답 · 인쇄 자료 <small>누구나</small></a><a href="#parent">학부모님 자료 <small>누구나</small></a><a href="#teacher">선생님 자료 <small>곧 열려요</small></a></div>
+  <div class="jump rev"><a href="#books">정답 · 인쇄 자료 <small>누구나</small></a><a href="#parent">학부모님 자료 <small>누구나</small></a><a href="#teacher">선생님 자료 <small>문자 인증</small></a></div>
   <div id="tz">
     <h2 class="libcap rev" id="books">정답 · 인쇄 자료</h2><p class="lsub rev">교재를 고르면 정답 PDF · 정오표 · 단어 리스트를 받을 수 있어요.</p>
     <div class="bk2s"><a class="bk2 rev" href="/books/phonics/#about"><span class="cv"><img src="/assets/covers/ph1.webp" alt="" loading="lazy"><img src="/assets/covers/ph2.webp" alt="" loading="lazy"></span><span class="tx"><b>파닉스</b><small>정답 PDF · 음가표</small></span><i>자료 보기 →</i></a><a class="bk2 rev" href="/books/starter/#about"><span class="cv"><img src="/assets/covers/rst1.webp" alt="" loading="lazy"><img src="/assets/covers/rst2.webp" alt="" loading="lazy"></span><span class="tx"><b>스타터</b><small>정답 PDF · 단어 리스트</small></span><i>자료 보기 →</i></a><a class="bk2 rev" href="/books/bridge/#about"><span class="cv"><img src="/assets/covers/rbr1.webp" alt="" loading="lazy"><img src="/assets/covers/rbr2.webp" alt="" loading="lazy"></span><span class="tx"><b>브릿지</b><small>정답 PDF · 단어 리스트</small></span><i>자료 보기 →</i></a><a class="bk2 rev" href="/books/intro/#about"><span class="cv"><img src="/assets/covers/rin1.webp" alt="" loading="lazy"><img src="/assets/covers/rin2.webp" alt="" loading="lazy"></span><span class="tx"><b>입문</b><small>정답 PDF · 단어 리스트 · 정오표</small></span><i>자료 보기 →</i></a><a class="bk2 rev" href="/books/basic/#about"><span class="cv"><img src="/assets/covers/rba1.webp" alt="" loading="lazy"><img src="/assets/covers/rba2.webp" alt="" loading="lazy"></span><span class="tx"><b>기본</b><small>정답 PDF · 단어 리스트 · 정오표</small></span><i>자료 보기 →</i></a><a class="bk2 rev" href="/books/mock/#about"><span class="cv"><img src="/assets/covers/rmo1.webp" alt="" loading="lazy"><img src="/assets/covers/rmo2.webp" alt="" loading="lazy"></span><span class="tx"><b>첫모의고사</b><small>정답 PDF · 단어 리스트 · 정오표</small></span><i>자료 보기 →</i></a><a class="bk2 rev" href="/books/grammar/#about"><span class="cv land"><img src="/assets/covers/gw1.webp" alt="" loading="lazy"><img src="/assets/covers/gw2.webp" alt="" loading="lazy"></span><span class="tx"><b>그래머&amp;라이팅</b><small>정답 PDF · 단어 리스트 · 정오표</small></span><i>자료 보기 →</i></a></div>
     <h2 class="libcap rev" id="parent" style="margin-top:56px">학부모님 자료</h2><p class="lsub rev">아이와 함께 시작할 때 보시면 좋아요.</p>
     <div class="uses"><a class="use rev" href="/library/guide/roadmap.pdf" target="_blank" rel="noopener"><em>어떤 책부터 할지 고를 때</em><b>학습 로드맵</b><span>파닉스부터 고등 모의고사까지, 단계와 권장 학년을 한 장에</span><i><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 20h14"/></svg>PDF</i></a><a class="use rev" href="/library/guide/qr.pdf" target="_blank" rel="noopener"><em>책의 QR을 처음 쓸 때</em><b>QR 음원 활용법</b><span>천천히 듣기 · 가리고 맞히기 · 따라 말하기 · 녹음</span><i><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 20h14"/></svg>PDF</i></a></div>
     <div class="tp gatebox rev" id="teacher" style="margin-top:56px"><div class="in">
-      <span class="badge"><i class="lk"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2.5" fill="currentColor"/><path d="M8 11V8a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="2.2"/></svg></i><i class="okk"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="M5 12l5 5 9-10"/></svg></i><em class="b-pre">곧 열려요</em><em class="b-post">인증됨</em></span>
+      <span class="badge"><i class="lk"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2.5" fill="currentColor"/><path d="M8 11V8a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="2.2"/></svg></i><i class="okk"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="M5 12l5 5 9-10"/></svg></i><em class="b-pre">선생님 전용</em><em class="b-post">인증됨</em></span>
       <h2 class="t-pre">선생님 자료</h2>
       <h2 class="t-post"><span class="tname">선생님</span>, 모든 자료가 열렸어요.</h2>
-      <p class="lead t-pre">휴대폰 문자 인증 한 번으로 모두 무료예요. 곧 열려요.</p>
-      <h3 class="tg3">수업 준비</h3><ul class="tl3"><li><em>수업 전 참고용</em><b>수업가이드</b><span>교재마다 한 장 · 샘플 유닛 전체와 수업 포인트</span><i class="soon">곧 열려요</i></li><li><em>수업 중 판서용</em><b>수업용 E-Book</b><span>교재 그대로 전자칠판에 띄워 판서하고, 정답을 하나씩 공개</span><i class="soon">곧 열려요</i></li><li><em>숙제 · 테스트 만들기</em><b>워크북 자동 생성기</b><span>유닛만 고르면 1분, 6가지 유형 워크북이 정답지와 함께</span><i class="soon">곧 열려요</i></li><li><em>바로 인쇄해서 숙제로</em><b>유닛별 워크북</b><span>단어 뜻 쓰기 · 본문 해석, 정답과 함께</span><i class="soon">곧 열려요</i></li><li><em>파닉스 수업 · 게임용</em><b>음가 카드 · 단어 카드</b><span>파닉스 음가 카드 · 대표 단어 카드</span><i class="soon">곧 열려요</i></li></ul>
-      <h3 class="tg3">학부모 상담</h3><ul class="tl3"><li><em>학부모 설명회용</em><b>저절로 리딩 소개</b><span>저절로 리딩이 무엇이 다른지 한 장으로</span><i class="soon">곧 열려요</i></li><li><em>상담 · 진급 때 나눠 주기</em><b>학부모 안내</b><span>교재마다 한 장 앞뒤 · 이 책을 마치면 · 자주 묻는 질문</span><i class="soon">곧 열려요</i></li><li><em>설명회 · 상담 때 함께</em><b>학습 로드맵</b><span>누구나 받을 수 있어요</span><a class="go2" href="/library/guide/roadmap.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 20h14"/></svg>PDF</a></li><li><em>첫 수업 때 나눠 주기</em><b>QR 음원 활용법</b><span>누구나 받을 수 있어요</span><a class="go2" href="/library/guide/qr.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 20h14"/></svg>PDF</a></li></ul>
-      
+      <p class="lead t-pre">휴대폰 문자 인증 한 번으로 모두 무료예요. </p>
+      <h3 class="tg3">수업 준비</h3><ul class="tl3"><li><em>수업 전 참고용</em><b>수업가이드</b><span>교재마다 한 장 · 샘플 유닛 전체와 수업 포인트</span><a class="go2" href="#books">교재 페이지에서 받기 ↑</a></li><li><em>수업 중 판서용</em><b>수업용 E-Book</b><span>교재 그대로 전자칠판에 띄워 판서하고, 정답을 하나씩 공개</span><a class="tbtn go2" data-href="/교사포털/이북/">열기 →</a></li><li><em>숙제 · 테스트 만들기</em><b>워크북 자동 생성기</b><span>유닛만 고르면 1분, 6가지 유형 워크북이 정답지와 함께</span><a class="tbtn go2" data-href="/교사포털/시험지생성기/">열기 →</a></li><li><em>바로 인쇄해서 숙제로</em><b>유닛별 워크북</b><span>단어 뜻 쓰기 · 본문 해석, 정답과 함께</span><a class="go2" href="#books">교재 페이지에서 받기 ↑</a></li><li><em>파닉스 수업 · 게임용</em><b>음가 카드 · 단어 카드</b><span>파닉스 음가 카드 · 대표 단어 카드</span><a class="go2" href="#books">교재 페이지에서 받기 ↑</a></li></ul>
+      <h3 class="tg3">학부모 상담</h3><ul class="tl3"><li><em>학부모 설명회용</em><b>저절로 리딩 소개</b><span>저절로 리딩이 무엇이 다른지 한 장으로</span><a class="tbtn go2" data-file="tparent/series.pdf" role="button" tabindex="0">받기</a></li><li><em>상담 · 진급 때 나눠 주기</em><b>학부모 안내</b><span>교재마다 한 장 앞뒤 · 이 책을 마치면 · 자주 묻는 질문</span><a class="go2" href="#books">교재 페이지에서 받기 ↑</a></li><li><em>설명회 · 상담 때 함께</em><b>학습 로드맵</b><span>누구나 받을 수 있어요</span><a class="go2" href="/library/guide/roadmap.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 20h14"/></svg>PDF</a></li><li><em>첫 수업 때 나눠 주기</em><b>QR 음원 활용법</b><span>누구나 받을 수 있어요</span><a class="go2" href="/library/guide/qr.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 20h14"/></svg>PDF</a></li></ul>
+      <div class="tcta"><a class="big gobtn" href="/library/join/?next=/library/%23teacher">휴대폰으로 입장 →</a><small>문자로 1분 · 한 번만 인증하면 계속 써요</small></div>
       <div class="ok"><small>다른 기기에서도 같은 번호로 다시 들어올 수 있어요.</small><button type="button" class="relock">로그아웃</button></div>
     </div></div>
     <span id="perk"></span>
     <div class="err" id="err" role="alert"></div>
-    
+    <div class="perkbox" hidden>
+      <b>🎁 선생님 혜택 받기</b><small style="display:block;color:var(--mute);margin-top:2px">문자로 가장 먼저 알려 드려요 · 언제든 끌 수 있어요</small>
+      <ul class="perks"><li><b>새 수업 자료, 가장 먼저</b><span>수업가이드 · 워크북 · 학부모 자료가 새로 나오면 바로 알려 드려요</span></li><li><b>저자 직강 온라인 설명회</b><span>열리면 가장 먼저 초대해요</span></li><li><b>신간 샘플 먼저 받기</b><span>출간 전에 먼저 써 보실 수 있어요</span></li><li><b>체험단 · 서평단 우선 선정</b><span>새 교재를 먼저 받아 수업해 보세요</span></li></ul>
+      <button type="button" class="btn dark sm pon">혜택 받기</button>
+      <details><summary>광고성 정보 수신 동의 · 자세히</summary><b>목적</b> 선생님 혜택 자료와 신간·샘플·체험단·설명회 등 광고성 정보 전송 · <b>방법</b> 문자 · <b>항목</b> 이름, 휴대폰 번호 · <b>보관</b> 동의를 끄거나 탈퇴할 때까지 · 동의를 거부할 권리가 있으며, 거부해도 선생님 전용 자료 이용에는 제한이 없어요(혜택 안내만 받지 않아요). 언제든 자료실 화면에서 끌 수 있어요.</details>
+    </div>
+    <p class="perkon" hidden>🎁 선생님 혜택을 받고 있어요. <button type="button" class="poff">받지 않기</button></p>
   </div>
 </div></section>
 <div style="height:96px"></div>
@@ -274,7 +281,7 @@
 </div></footer>
 <script src="/assets/reviews.js?v=cf52d634"></script>
 <script src="/assets/site.js?v=cf52d634"></script>
-<script></script>
+<script>SOLVEU.gate(SOLVEU.$("#tz"));</script>
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "be34a6ce385a49cfa586185de49690a5"}'></script>
 </body>
 </html>

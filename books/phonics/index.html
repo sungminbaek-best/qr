@@ -120,7 +120,7 @@
 <header class="nav" id="nav"><div class="wrap">
   <a class="logo" href="/" aria-label="쏠뷰 SolveU 홈"><span class="ko">쏠뷰</span><span class="dv"></span><span class="en">Solve<span class="g">U</span></span></a>
   <nav aria-label="주 메뉴"><a href="/home/#books" aria-current=page>교재</a><a href="/studio/">음원·강의</a><a href="/library/">자료실</a><a href="/contact/">문의</a></nav>
-  <a class="nbtn store">스토어</a>
+  <a class="nbtn tlog" href="/library/join/?next=/library/%23teacher">선생님 인증</a><a class="nbtn store">스토어</a>
 </div></header>
 <main>
 
@@ -162,7 +162,7 @@
       <div class="tx"><b>저절로 파닉스 2</b><span>8개 유닛 · 초1~2 권장 · 정가 14,000원</span></div>
       <div class="acts"><a class="btn line sm" href="/studio/?book=ph2">음원·강의 <span class="ar">→</span></a><a class="btn line sm" href="/books/answers/ph2.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true" style="display:inline-block;width:13px;height:13px;margin-right:5px;vertical-align:-2px"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 20h14"/></svg>정답 PDF</a><a class="btn line sm" href="/library/files/ph2/ph2_soundchart_U00.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true" style="display:inline-block;width:13px;height:13px;margin-right:5px;vertical-align:-2px"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 20h14"/></svg>음가표</a></div></div></div>
   
-  <div class="trow rev" id="tz"><div class="tr-h"><b>선생님 자료</b><span>곧 열려요</span></div><ul><li><b>수업가이드</b><em>수업 전 참고용</em></li><li><b>학부모 안내</b><em>상담 · 진급 때 나눠 주기</em></li><li><b>수업용 E-Book</b><em>수업 중 판서용</em></li><li><b>음가 카드 · 단어 카드</b><em>파닉스 수업 · 게임용</em></li></ul><div class="err" id="err" role="alert"></div></div>
+  <div class="trow rev" id="tz"><div class="tr-h"><b>선생님 자료</b><span>휴대폰 문자 인증 뒤 무료</span><a class="go lk2" href="/library/join/?next=/books/phonics/%23about">휴대폰으로 입장 →</a></div><ul><li><b>수업가이드</b><em>수업 전 참고용</em><span class="bt"><a class="tbtn" data-file="tguide/ph1.pdf" role="button" tabindex="0">수업가이드 1권</a><a class="tbtn" data-file="tguide/ph2.pdf" role="button" tabindex="0">수업가이드 2권</a></span></li><li><b>학부모 안내</b><em>상담 · 진급 때 나눠 주기</em><span class="bt"><a class="tbtn" data-file="tparent/phonics.pdf" role="button" tabindex="0">학부모 안내</a></span></li><li><b>수업용 E-Book</b><em>수업 중 판서용</em><span class="bt"><a class="tbtn" data-href="/교사포털/이북/ph1/">E-Book 1권</a><a class="tbtn" data-href="/교사포털/이북/ph2/">E-Book 2권</a></span></li><li><b>음가 카드 · 단어 카드</b><em>파닉스 수업 · 게임용</em><span class="bt"><a class="tbtn" data-href="/library/ph1/">음가 카드 · 단어 카드 1권</a><a class="tbtn" data-href="/library/ph2/">음가 카드 · 단어 카드 2권</a></span></li></ul><div class="err" id="err" role="alert"></div></div>
   
 </div></section>
 
@@ -204,7 +204,7 @@ S.$$(".buy").forEach(function(d){d.addEventListener("toggle",function(){var h=d.
 /* 이 페이지 메뉴: 지금 보고 있는 구역 표시 */
 if("IntersectionObserver" in window){var L=S.$$(".bk-nav a"),io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting)L.forEach(function(a){a.classList.toggle("on",a.getAttribute("href")==="#"+e.target.id);});});},{rootMargin:"-45% 0px -50% 0px"});
   L.forEach(function(a){var t=S.$(a.getAttribute("href"));if(t)io.observe(t);});}
-</script>
+SOLVEU.gate(SOLVEU.$("#tz"));</script>
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "be34a6ce385a49cfa586185de49690a5"}'></script>
 </body>
 </html>
