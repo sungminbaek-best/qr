@@ -215,6 +215,15 @@ a.tl4.tbtn{display:flex;align-items:stretch;gap:6px;padding:16px;border-radius:1
 .tp .t-post,.tp .b-post,.tp .badge i.okk{display:none}
 .tf .go.tbtn{border:0;border-radius:0;padding:14px 0 0;background:none;color:var(--brand);font-size:13.5px;font-weight:800}
 .libcap{font-size:20px;font-weight:800;letter-spacing:-.03em;margin-top:48px}
+.ltabs{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:26px;max-width:720px}
+.ltabs button{text-align:left;padding:18px 20px;border-radius:18px;border:1.5px solid var(--line2);background:#fff;display:flex;flex-direction:column;gap:3px;transition:border-color .15s,background .15s,transform .15s,box-shadow .15s}
+.ltabs button:hover{border-color:var(--brand);transform:translateY(-2px)}
+.ltabs b{font-size:19px;font-weight:800;letter-spacing:-.03em}.ltabs small{font-size:13px;color:var(--sub);font-weight:600}
+.ltabs [aria-selected=true]{border-color:var(--brand);background:var(--soft);box-shadow:0 12px 26px -18px rgba(67,97,255,.7)}.ltabs [aria-selected=true] b{color:var(--brand)}
+.pane>.libcap:first-child,.pane>.gatebox:first-child{margin-top:34px}
+.tjump{display:inline-flex;align-items:center;gap:8px;margin-top:20px;padding:12px 18px;border-radius:14px;background:var(--soft);color:var(--brand);font-weight:800;font-size:15px;transition:transform .15s,box-shadow .15s}.tjump small{font-size:12.5px;font-weight:700;color:var(--sub)}.tjump u{text-decoration:none}
+.tjump:hover{transform:translateY(-2px);box-shadow:0 12px 24px -16px rgba(67,97,255,.6)}
+@media(max-width:520px){.ltabs{gap:8px}.ltabs button{padding:14px}.ltabs b{font-size:17px}.ltabs small{font-size:12px}}
 /* 인증 후 */
 .unlocked .tp .in{background:radial-gradient(120% 90% at 100% 0%,#eefbf3 0%,#fff 46%),#fff}
 .unlocked .tp .t-pre,.unlocked .tp .b-pre,.unlocked .tp .lk,.unlocked .tcta{display:none}
