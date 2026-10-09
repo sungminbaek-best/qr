@@ -183,3 +183,40 @@ img[src*="/assets/covers/"]{aspect-ratio:360/509;height:auto}img[src*="/assets/c
 /* 2026-10-09 휴대폰·패드 점검 */
 .pnum a.pl span{white-space:nowrap}
 @media(max-width:420px){.pnum div{padding:4px 14px}}
+
+/* ===== 2026-10-09 세련된 효과(움직임 줄이기 설정이면 모두 꺼짐) ===== */
+/* 1 페이지 넘어갈 때 부드럽게(지원 브라우저만) */
+@view-transition{navigation:auto}
+::view-transition-old(root),::view-transition-new(root){animation-duration:.28s;animation-timing-function:cubic-bezier(.2,.8,.2,1)}
+/* 2 카드가 차례로 */
+.stg-i{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .7s cubic-bezier(.2,.8,.2,1)!important}
+.stg-i.stg-on{opacity:1;transform:none}
+/* 3 표지에 마우스를 대면 살짝 기울기 */
+@media(hover:hover){
+  .stp .cv{perspective:500px}.stp .cv img{transition:transform .45s cubic-bezier(.2,.8,.2,1),box-shadow .45s}
+  .stp:hover .cv img{transform:rotateY(-14deg) rotateX(4deg) translateY(-3px);box-shadow:10px 14px 22px -12px rgba(12,16,32,.5)}
+  .stp:hover .cv img+img{transform:rotateY(-14deg) rotateX(4deg) translateY(-6px)}
+  .covs2{perspective:900px}.covs2 img.tilt{transition:transform .12s linear,box-shadow .3s}
+}
+/* 4 그림이 다 오면 스며들 듯 */
+img.ld{opacity:0}img.fi{animation:fiIn .5s ease both}
+@keyframes fiIn{from{opacity:0}to{opacity:1}}
+/* 5 누를 때 살짝 눌리는 느낌 */
+.btn:active,.go:active,.go1:active,.cb:active,.tbtn:active,.pill:active,.nbtn:active,.big:active,.tjump:active,.gacts a:active,.howto a:active{transform:scale(.97)!important;transition-duration:.08s}
+a.ft:active,a.c3:active,.stp:active,.mix li a:active,.bq:active,.gr:active{transform:scale(.985)!important;transition-duration:.08s}
+/* 6 '풀리는'에 빛이 천천히 */
+.hero h1 .g{background:linear-gradient(110deg,var(--brand) 0%,var(--brand2) 38%,#c9b8ff 48%,#fff 50%,#c9b8ff 52%,var(--brand2) 62%,var(--brand) 100%);background-size:250% 100%;-webkit-background-clip:text;background-clip:text;animation:shine 7s ease-in-out 1.2s infinite}
+@keyframes shine{0%{background-position:100% 0}40%,100%{background-position:0 0}}
+/* 7 첫 화면 배경에 아주 옅은 색이 천천히 */
+.hero{position:relative;overflow:hidden;isolation:isolate}
+.hero:before,.hero:after{content:"";position:absolute;z-index:-1;width:46vw;height:46vw;max-width:620px;max-height:620px;border-radius:50%;pointer-events:none;will-change:transform}
+.hero:before{left:-8vw;top:-14vw;background:radial-gradient(circle,rgba(67,97,255,.13),rgba(67,97,255,0) 66%);animation:drift1 22s ease-in-out infinite alternate}
+.hero:after{right:-10vw;top:-4vw;background:radial-gradient(circle,rgba(138,92,255,.12),rgba(138,92,255,0) 66%);animation:drift2 26s ease-in-out infinite alternate}
+@keyframes drift1{to{transform:translate(9vw,6vw) scale(1.12)}}
+@keyframes drift2{to{transform:translate(-8vw,8vw) scale(1.08)}}
+@media(prefers-reduced-motion:reduce){
+  ::view-transition-old(root),::view-transition-new(root){animation:none}
+  .stg-i{opacity:1;transform:none;transition:none!important}
+  img.ld{opacity:1}img.fi,.hero h1 .g,.hero:before,.hero:after{animation:none}
+  .stp:hover .cv img,.stp:hover .cv img+img{transform:none}
+}

@@ -57,6 +57,29 @@ window.SOLVEU = {
   document.addEventListener("DOMContentLoaded", function () { if (S.isOK && S.isOK()) $$(".nbtn.tlog").forEach(function (a) { a.textContent = "선생님 자료"; a.href = "/library/#teacher"; }); });
   /* 그림을 다 불러온 뒤 #주소로 다시 맞춤(표지 그림 때문에 위치가 밀림) */
   window.addEventListener("load", function () { var h = location.hash; if (h && h.length > 1) { var t = document.getElementById(h.slice(1)); if (t) t.scrollIntoView(); } });
+  /* 2026-10-09 세련된 효과: 카드 차례로 · 그림 스며들기 · 교재 표지 기울기 (움직임 줄이기면 안 함) */
+  document.addEventListener("DOMContentLoaded", function () {
+    var calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (calm) return;
+    /* 그림: 아직 안 왔으면 숨겼다가 오면 스며들게 */
+    $$("img").forEach(function (im) { if (im.complete) return; im.classList.add("ld");
+      var on = function () { im.classList.remove("ld"); im.classList.add("fi"); }; im.addEventListener("load", on, { once: true }); im.addEventListener("error", on, { once: true }); });
+    /* 카드: 화면 아래쪽에 있는 묶음만, 0.06초씩 차례로 */
+    if ("IntersectionObserver" in window) {
+      var box = ".stps,.free,.mix ul,.c3s,.bqs,.gsteps,.groad,.cds,.rv3,.uses,.tl4s,.who";
+      var io2 = new IntersectionObserver(function (es) { es.forEach(function (e) { if (!e.isIntersecting) return; io2.unobserve(e.target);
+        [].forEach.call(e.target.children, function (c) { c.classList.add("stg-on"); });
+        setTimeout(function () { [].forEach.call(e.target.children, function (c) { c.classList.remove("stg-i", "stg-on"); c.style.transitionDelay = ""; }); }, 1400); }); }, { rootMargin: "0px 0px -8% 0px" });
+      $$(box).forEach(function (g) { if (g.getBoundingClientRect().top < innerHeight * .9) return;
+        [].forEach.call(g.children, function (c, i) { if (c.classList.contains("rev")) c.classList.remove("rev"); c.classList.add("stg-i"); c.style.transitionDelay = Math.min(i, 8) * 60 + "ms"; });
+        io2.observe(g); });
+    }
+    /* 교재 페이지 큰 표지: 마우스 따라 살짝 기울기 */
+    if (matchMedia("(hover: hover)").matches) $$(".covs2 img").forEach(function (im) {
+      im.addEventListener("mousemove", function (e) { var r = im.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5;
+        im.classList.add("tilt"); im.style.transform = "rotateY(" + (x * 16).toFixed(1) + "deg) rotateX(" + (-y * 12).toFixed(1) + "deg) translateY(-6px)"; });
+      im.addEventListener("mouseleave", function () { im.classList.remove("tilt"); im.style.transform = ""; }); });
+  });
   S.toJoin = function (root) { var h = $("#teacher") ? "#teacher" : (root && root.id ? "#" + root.id : "");
     location.href = "/library/join/?next=" + encodeURIComponent(location.pathname + location.search + h); };
   S.gate = function (root) {
