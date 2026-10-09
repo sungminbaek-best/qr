@@ -238,5 +238,7 @@ a.ft:active,a.c3:active,.stp:active,.mix li a:active,.bq:active,.gr:active{trans
   .mt tbody th a{display:inline-flex;align-items:center;min-height:44px}
   .pick a,.top .bk{min-height:40px;display:inline-flex;align-items:center}
   .rvpg .store.ext{padding:12px 0;margin:-12px 0}
-  .st .bk,footer .ext{padding:12px 0;margin:-12px 0}
+  footer .ext{padding:12px 0;margin:-12px 0}
+  header nav a:not(.nbtn):not(.logo){padding-top:11px!important;padding-bottom:11px!important}
+  .lhead .bk,p.small .talk,#news a{padding-top:12px!important;padding-bottom:12px!important;margin-top:-12px;margin-bottom:-12px}
 }
