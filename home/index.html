@@ -37,9 +37,13 @@
 .mix{margin-top:16px;border-radius:20px;background:var(--panel);padding:20px 22px}
 .mix>b{font-size:16px;font-weight:800}.mix>span{font-size:14px;color:var(--sub);margin-left:8px}
 .mix ul{list-style:none;display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
-.mix li{display:flex;flex-direction:column;gap:6px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:13px 15px}
-.mix li>span:first-child{font-size:14px;color:var(--ink2);font-weight:600}.mix .to{display:flex;gap:6px 14px;flex-wrap:wrap}
-.mix .to a{font-size:14.5px;color:var(--brand);font-weight:800;transition:opacity .15s}.mix .to a:hover{text-decoration:underline}
+.mix li{display:flex}
+.mix li a{flex:1;display:flex;flex-direction:column;gap:5px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:13px 15px;transition:border-color .15s,transform .15s,box-shadow .15s}
+.mix li a:hover{border-color:var(--brand);transform:translateY(-2px);box-shadow:0 14px 26px -20px rgba(67,97,255,.6)}
+.mix li span{font-size:14px;color:var(--ink2);font-weight:600}.mix li b{font-size:14.5px;color:var(--brand);font-weight:800}
+.mix li b u{text-decoration:none;display:inline-block;transition:transform .15s}.mix li a:hover b u{transform:translateX(3px)}
+.mix li small{font-size:12.5px;color:var(--mute);font-weight:600}
+.mixp{display:block;margin-top:6px;font-size:13px;color:var(--sub);font-weight:600}.mixp a{color:var(--brand);font-weight:800}.mixp a:hover{text-decoration:underline}
 @media(max-width:860px){.mix ul{grid-template-columns:1fr 1fr}.mix>span{display:block;margin:4px 0 0}}
 @media(max-width:480px){.mix ul{grid-template-columns:1fr}}
 #start{padding-bottom:0}
@@ -207,8 +211,8 @@
       <div class="cv land"><img src="/assets/covers/gw1.webp" alt="저절로그래머&amp;라이팅 1 표지" loading="lazy"><img src="/assets/covers/gw2.webp" alt="저절로그래머&amp;라이팅 2 표지" loading="lazy"></div></a>
 </div></div>
   </div>
-  <div class="mix rev"><b>학년과 실력이 다를 땐?</b><span>지금 실력에 맞는 단계부터, 대신 더 빠르게 나가요.</span>
-    <ul><li><span>초3인데 문장을 거의 못 읽어요</span><span class="to"><a href="/books/starter/">스타터부터 →</a></span></li><li><span>초5인데 파닉스가 아직 안 돼요</span><span class="to"><a href="/books/phonics/">파닉스부터 →</a></span></li><li><span>초6인데 문법이 약해요</span><span class="to"><a href="/books/bridge/">브릿지부터 →</a><a href="/books/grammar/">저절로그래머&amp;라이팅부터 →</a></span></li><li><span>중학생인데 해석을 감으로 해요</span><span class="to"><a href="/books/intro/">입문부터 →</a></span></li><li><span>고등학생인데 문장 구조가 약해요</span><span class="to"><a href="/books/basic/">기본부터 →</a></span></li><li><span>고등학생인데 모의고사 점수가 너무 안 나와요</span><span class="to"><a href="/books/mock/">첫모의고사부터 →</a></span></li></ul></div>
+  <div class="mix rev"><b>학년과 실력이 다를 땐?</b><span>지금 실력에 맞는 단계부터, 대신 더 빠르게 나가요.</span><small class="mixp">단어를 아직 못 읽으면 학년과 상관없이 <a href="/books/phonics/">파닉스부터 →</a></small>
+    <ul><li><a href="/books/starter/"><span>초3인데 문장을 거의 못 읽어요</span><b>스타터부터 <u>→</u></b></a></li><li><a href="/books/bridge/"><span>초5인데 품사를 잘 몰라요</span><b>브릿지부터 <u>→</u></b></a></li><li><a href="/books/grammar/"><span>초6인데 문법이 약해요</span><b>저절로그래머&amp;라이팅부터 <u>→</u></b></a></li><li><a href="/books/intro/"><span>중학생인데 해석을 감으로 해요</span><b>입문부터 <u>→</u></b></a></li><li><a href="/books/basic/"><span>고등학생인데 문장 구조에 약해요</span><b>기본부터 <u>→</u></b></a></li><li><a href="/books/mock/"><span>고등학생인데 모의고사 점수가 너무 안 나와요</span><b>첫모의고사부터 <u>→</u></b></a></li></ul></div>
 </div></section>
 
 <section class="sec" id="tools"><div class="wrap">
