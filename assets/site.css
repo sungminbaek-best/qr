@@ -220,3 +220,23 @@ a.ft:active,a.c3:active,.stp:active,.mix li a:active,.bq:active,.gr:active{trans
   img.ld{opacity:1}img.fi,.hero h1 .g,.hero:before,.hero:after{animation:none}
   .stp:hover .cv img,.stp:hover .cv img+img{transform:none}
 }
+
+/* ===== 2026-10-09 휴대폰·패드 누르는 곳 크기(손가락 기준 40~44px) — 터치 기기에서만 ===== */
+@media (pointer:coarse){
+  .cb,.tbtn,.mt .cb,.pill,.ltab td .pill{min-height:40px;padding-top:9px;padding-bottom:9px;display:inline-flex;align-items:center}
+  .nbtn{min-height:40px;display:inline-flex;align-items:center}
+  .logo{padding:8px 4px;margin:-8px -4px}
+  .btn,.btn.sm,.btn.line,.tab.ptab,.rvf button,.rvf .on,.more .mbtn a{min-height:44px}
+  .lbtn,.spdb{min-height:40px;min-width:40px}
+  .un button,.dk-a{min-width:40px;min-height:40px}
+  .go.lk2{display:inline-flex;align-items:center;min-height:40px;padding:0 14px;border-radius:12px;background:var(--soft)}
+  footer nav a{padding:10px 2px;display:inline-block}
+  .faq .a .go,.top .go{display:inline-flex;align-items:center;min-height:40px}
+  .howto a,.tjump{min-height:44px;display:inline-flex;align-items:center}
+  /* 글자 링크는 둘레를 넓혀 누르기 쉽게(모양은 그대로) */
+  .crumb a,figcaption a,.who a,.first a,.mixp a,.mmail a,.lmore a,.bc a,.next-err a{padding:12px 0;margin:-12px 0}
+  .mt tbody th a{display:inline-flex;align-items:center;min-height:44px}
+  .pick a,.top .bk{min-height:40px;display:inline-flex;align-items:center}
+  .rvpg .store.ext{padding:12px 0;margin:-12px 0}
+  .st .bk,footer .ext{padding:12px 0;margin:-12px 0}
+}
