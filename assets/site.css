@@ -205,15 +205,15 @@ img.ld{opacity:0}img.fi{animation:fiIn .5s ease both}
 .btn:active,.go:active,.go1:active,.cb:active,.tbtn:active,.pill:active,.nbtn:active,.big:active,.tjump:active,.gacts a:active,.howto a:active{transform:scale(.97)!important;transition-duration:.08s}
 a.ft:active,a.c3:active,.stp:active,.mix li a:active,.bq:active,.gr:active{transform:scale(.985)!important;transition-duration:.08s}
 /* 6 '풀리는'에 빛이 천천히 */
-.hero h1 .g{background:linear-gradient(110deg,var(--brand) 0%,var(--brand2) 38%,#c9b8ff 48%,#fff 50%,#c9b8ff 52%,var(--brand2) 62%,var(--brand) 100%);background-size:250% 100%;-webkit-background-clip:text;background-clip:text;animation:shine 7s ease-in-out 1.2s infinite}
-@keyframes shine{0%{background-position:100% 0}40%,100%{background-position:0 0}}
+.hero h1 .g{background:linear-gradient(110deg,var(--brand) 0%,var(--brand2) 34%,#e4dbff 45%,#fff 50%,#e4dbff 55%,var(--brand2) 66%,var(--brand) 100%);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;animation:shine 5s cubic-bezier(.45,0,.25,1) .8s infinite}
+@keyframes shine{0%{background-position:100% 0}55%,100%{background-position:0 0}}
 /* 7 첫 화면 배경에 아주 옅은 색이 천천히 */
 .hero{position:relative;overflow:hidden;isolation:isolate}
 .hero:before,.hero:after{content:"";position:absolute;z-index:-1;width:46vw;height:46vw;max-width:620px;max-height:620px;border-radius:50%;pointer-events:none;will-change:transform}
-.hero:before{left:-8vw;top:-14vw;background:radial-gradient(circle,rgba(67,97,255,.13),rgba(67,97,255,0) 66%);animation:drift1 22s ease-in-out infinite alternate}
-.hero:after{right:-10vw;top:-4vw;background:radial-gradient(circle,rgba(138,92,255,.12),rgba(138,92,255,0) 66%);animation:drift2 26s ease-in-out infinite alternate}
-@keyframes drift1{to{transform:translate(9vw,6vw) scale(1.12)}}
-@keyframes drift2{to{transform:translate(-8vw,8vw) scale(1.08)}}
+.hero:before{left:-8vw;top:-14vw;background:radial-gradient(circle,rgba(67,97,255,.26),rgba(67,97,255,0) 66%);animation:drift1 14s ease-in-out infinite alternate}
+.hero:after{right:-10vw;top:-4vw;background:radial-gradient(circle,rgba(138,92,255,.24),rgba(138,92,255,0) 66%);animation:drift2 17s ease-in-out infinite alternate}
+@keyframes drift1{to{transform:translate(14vw,8vw) scale(1.2)}}
+@keyframes drift2{to{transform:translate(-13vw,10vw) scale(1.15)}}
 @media(prefers-reduced-motion:reduce){
   ::view-transition-old(root),::view-transition-new(root){animation:none}
   .stg-i{opacity:1;transform:none;transition:none!important}
