@@ -89,11 +89,15 @@
 /* 미리보기 크게 보기 */
 .lb{position:fixed;inset:0;z-index:100;background:rgba(12,16,32,.86);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s}
 .lb.on{opacity:1;pointer-events:auto}
-.lb img{max-width:min(92vw,900px);max-height:88vh;border-radius:6px;background:#fff;box-shadow:0 30px 80px rgba(0,0,0,.45)}
+.lb .trk{position:absolute;inset:0;display:flex;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+.lb .trk::-webkit-scrollbar{display:none}
+.lb .sl{flex:0 0 100%;scroll-snap-align:center;scroll-snap-stop:always;display:flex;align-items:center;justify-content:center;padding:64px 70px 52px}
+.lb img{max-width:min(100%,900px);max-height:100%;border-radius:6px;background:#fff;box-shadow:0 30px 80px rgba(0,0,0,.45)}
+@media(max-width:700px){.lb .sl{padding:56px 10px 48px}.lb .p,.lb .n{display:none}}
 .lb button{position:absolute;width:48px;height:48px;border-radius:50%;border:0;background:rgba(255,255,255,.14);color:#fff;font-size:20px;cursor:pointer}
 .lb button:hover{background:rgba(255,255,255,.26)}
 .lb .x{top:18px;right:18px}.lb .p{left:18px;top:50%;margin-top:-24px}.lb .n{right:18px;top:50%;margin-top:-24px}
-.lb .c{position:absolute;bottom:18px;left:0;right:0;text-align:center;color:rgba(255,255,255,.7);font-size:13px;font-weight:600}
+.lb .c{position:absolute;bottom:18px;left:0;right:0;text-align:center;color:rgba(255,255,255,.75);font-size:13px;font-weight:600;pointer-events:none}.lb button{z-index:2}
 .pvbar{display:flex;justify-content:flex-end;margin-top:8px}
 .pvbar .btn{margin-left:auto}
 @media(max-width:600px){.pvstrip img{height:300px}.pvbar .btn{margin-left:0}}
@@ -183,15 +187,22 @@
 S=SOLVEU;
 function tabs(tabSel,panSel){S.$$(tabSel).forEach(function(t){t.onclick=function(){var i=t.dataset.i;S.$$(tabSel).forEach(function(x){x.setAttribute("aria-selected",x===t?"true":"false")});S.$$(panSel).forEach(function(d){d.hidden=d.dataset.i!==i;});};});}
 tabs("#preview .ptab",".pvp");
-/* 미리보기: 누르면 크게(←→·Esc) */
-(function(){var lb=document.createElement("div");lb.className="lb";lb.innerHTML='<img alt=""><button class="x" aria-label="닫기">✕</button><button class="p" aria-label="이전">←</button><button class="n" aria-label="다음">→</button><div class="c"></div>';document.body.appendChild(lb);
-  var im=lb.querySelector("img"),list=[],k=0;
-  function show(i){k=(i+list.length)%list.length;im.src=list[k].src;im.alt=list[k].alt;lb.querySelector(".c").textContent=(k+1)+" / "+list.length;}
-  S.$$(".pvstrip").forEach(function(st){st.addEventListener("click",function(e){if(e.target.tagName!=="IMG")return;list=[].slice.call(st.querySelectorAll("img"));show(list.indexOf(e.target));lb.classList.add("on");});});
-  function close(){lb.classList.remove("on");}
-  lb.querySelector(".x").onclick=close;lb.querySelector(".p").onclick=function(){show(k-1)};lb.querySelector(".n").onclick=function(){show(k+1)};
-  lb.addEventListener("click",function(e){if(e.target===lb)close();});
-  addEventListener("keydown",function(e){if(!lb.classList.contains("on"))return;if(e.key==="Escape")close();if(e.key==="ArrowLeft")show(k-1);if(e.key==="ArrowRight")show(k+1);});})();
+/* 미리보기: 누르면 크게, 옆으로 밀어서 다음 쪽(2026-10-09 사용자: 한 장씩 나갔다 들어와야 해서 불편) — 휴대폰은 손가락, PC는 ← → · 키보드 · 터치패드 */
+(function(){var lb=document.createElement("div");lb.className="lb";lb.innerHTML='<div class="trk"></div><button class="x" aria-label="닫기">✕</button><button class="p" aria-label="이전">←</button><button class="n" aria-label="다음">→</button><div class="c"></div>';document.body.appendChild(lb);
+  var trk=lb.querySelector(".trk"),cnt=lb.querySelector(".c"),n=0,touch=matchMedia("(hover:none)").matches;
+  function cur(){return Math.round(trk.scrollLeft/Math.max(1,trk.clientWidth));}
+  function lab(){var k=cur();cnt.textContent=(k+1)+" / "+n+(touch&&k===0&&n>1?" · 옆으로 밀어서 넘겨요":"");}
+  function go(d){trk.scrollBy({left:d*trk.clientWidth,behavior:"smooth"});}
+  S.$$(".pvstrip").forEach(function(st){st.addEventListener("click",function(e){if(e.target.tagName!=="IMG")return;
+    var list=[].slice.call(st.querySelectorAll("img")),k=list.indexOf(e.target);n=list.length;
+    trk.innerHTML=list.map(function(m){return '<div class="sl"><img src="'+m.src+'" alt="'+(m.alt||"").replace(/"/g,"&quot;")+'" loading="lazy"></div>';}).join("");
+    lb.classList.add("on");document.documentElement.style.overflow="hidden";
+    requestAnimationFrame(function(){trk.scrollLeft=k*trk.clientWidth;lab();});});});
+  function close(){lb.classList.remove("on");document.documentElement.style.overflow="";}
+  trk.addEventListener("scroll",function(){clearTimeout(trk._t);trk._t=setTimeout(lab,60);},{passive:true});
+  lb.querySelector(".x").onclick=close;lb.querySelector(".p").onclick=function(){go(-1)};lb.querySelector(".n").onclick=function(){go(1)};
+  trk.addEventListener("click",function(e){if(e.target.classList.contains("sl"))close();});
+  addEventListener("keydown",function(e){if(!lb.classList.contains("on"))return;if(e.key==="Escape")close();if(e.key==="ArrowLeft"){e.preventDefault();go(-1);}if(e.key==="ArrowRight"){e.preventDefault();go(1);}});})();
 var RV=S.REVIEWS.filter(function(v){return v.step==="bridge";}), shown=6;
 function drawRv(){var el=S.$("#rvg"); if(!el) return; S.renderReviews(el, RV.slice(0,shown)); var m=S.$("#moreBtn"); m.hidden=RV.length<=shown; m.textContent="후기 "+(RV.length-shown)+"개 더 보기";}
 var mb=S.$("#moreBtn"); if(mb) mb.onclick=function(){shown=RV.length;drawRv();}; drawRv();
