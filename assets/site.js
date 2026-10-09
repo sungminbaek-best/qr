@@ -55,6 +55,8 @@ window.SOLVEU = {
   /* 인증 전에 선생님 자료를 누르면 바로 인증 화면으로 → 끝나면 보던 자리로(2026-10-08 사용자: 눌러도 반응 없어 보임) */
   /* 인증된 기기면 위 메뉴 '선생님 인증' → '선생님 자료' */
   document.addEventListener("DOMContentLoaded", function () { if (S.isOK && S.isOK()) $$(".nbtn.tlog").forEach(function (a) { a.textContent = "선생님 자료"; a.href = "/library/#teacher"; }); });
+  /* 그림을 다 불러온 뒤 #주소로 다시 맞춤(표지 그림 때문에 위치가 밀림) */
+  window.addEventListener("load", function () { var h = location.hash; if (h && h.length > 1) { var t = document.getElementById(h.slice(1)); if (t) t.scrollIntoView(); } });
   S.toJoin = function (root) { var h = $("#teacher") ? "#teacher" : (root && root.id ? "#" + root.id : "");
     location.href = "/library/join/?next=" + encodeURIComponent(location.pathname + location.search + h); };
   S.gate = function (root) {
