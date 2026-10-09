@@ -256,7 +256,7 @@
 <script src="/assets/site.js?v=155ae0d7"></script>
 <script>
 const BOOKS = window.BOOKS||[];
-const NAME = {"ph1": "저절로 파닉스 1", "ph2": "저절로 파닉스 2", "rst1": "저절로리딩 스타터 1", "rst2": "저절로리딩 스타터 2", "rbr1": "저절로리딩 브릿지 1", "rbr2": "저절로리딩 브릿지 2", "rin1": "저절로리딩 입문 1", "rin2": "저절로리딩 입문 2", "rba1": "저절로리딩 기본 1", "rba2": "저절로리딩 기본 2", "rmo1": "저절로리딩 첫모의고사 1", "rmo2": "저절로리딩 첫모의고사 2", "gw1": "저절로그래머&라이팅 1", "gw2": "저절로그래머&라이팅 2"}, SLUG = {"ph": "phonics", "rst": "starter", "rbr": "bridge", "rin": "intro", "rba": "basic", "rmo": "mock", "gw": "grammar"}, STEPL = {"ph1": "1단계 · 파닉스", "ph2": "1단계 · 파닉스", "rst1": "2단계 · 스타터", "rst2": "2단계 · 스타터", "rbr1": "3단계 · 브릿지", "rbr2": "3단계 · 브릿지", "rin1": "4단계 · 입문", "rin2": "4단계 · 입문", "rba1": "5단계 · 기본", "rba2": "5단계 · 기본", "rmo1": "6단계 · 첫모의고사", "rmo2": "6단계 · 첫모의고사", "gw1": "문법·쓰기", "gw2": "문법·쓰기"};
+const NAME = {"ph1": "저절로 파닉스 1", "ph2": "저절로 파닉스 2", "rst1": "저절로리딩 스타터 1", "rst2": "저절로리딩 스타터 2", "rbr1": "저절로리딩 브릿지 1", "rbr2": "저절로리딩 브릿지 2", "rin1": "저절로리딩 입문 1", "rin2": "저절로리딩 입문 2", "rba1": "저절로리딩 기본 1", "rba2": "저절로리딩 기본 2", "rmo1": "저절로리딩 첫모의고사 1", "rmo2": "저절로리딩 첫모의고사 2", "gw1": "저절로그래머&라이팅 1", "gw2": "저절로그래머&라이팅 2"}, SLUG = {"ph": "phonics", "rst": "starter", "rbr": "bridge", "rin": "intro", "rba": "basic", "rmo": "mock", "gw": "grammar"}, STEPL = {"ph1": "초1~2", "ph2": "초1~2", "rst1": "초1~2", "rst2": "초1~2", "rbr1": "초3~4", "rbr2": "초3~4", "rin1": "초4~5", "rin2": "초4~5", "rba1": "초6~중1", "rba2": "초6~중1", "rmo1": "중2~중3", "rmo2": "중2~중3", "gw1": "초3~4", "gw2": "초3~4"};
 const app = document.getElementById('app');
 let curAudio=null;
 function nm(b){ return NAME[b.code]||b.short; }
@@ -375,7 +375,7 @@ function home(){
   const reading=BOOKS.filter(b=>b.track!=='grammar').map(card).join('');
   const grammar=BOOKS.filter(b=>b.track==='grammar').map(card).join('');
   app.innerHTML='<h1>음원·강의</h1><p class="lead">책의 QR로 듣던 단어·문장 음원과 강의예요. 교재를 고르면 유닛별로 열 수 있어요.</p><p class="first"><a href="/library/guide/qr/">처음이세요? <b>QR 음원 활용법</b> 보기 →</a></p>'+
-    '<h2 class="gh">파닉스·리딩 <span>파닉스에서 첫모의고사까지</span></h2><div class="bgrid">'+reading+'</div>'+
+    '<h2 class="gh">파닉스·리딩</h2><div class="bgrid">'+reading+'</div>'+
     (grammar?'<h2 class="gh">문법·쓰기</h2><div class="bgrid">'+grammar+'</div>':'');
 }
 
