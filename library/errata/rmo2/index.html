@@ -14,7 +14,7 @@
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&display=swap" media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&display=swap"></noscript>
-<link rel="stylesheet" href="/assets/site.css?v=155ae0d7">
+<link rel="stylesheet" href="/assets/site.css?v=af773526">
 <style>
 /* E-Book · 워크북 자동 생성기 소개 */
 .tshow{display:flex;flex-direction:column;gap:22px;margin-top:40px}
@@ -57,11 +57,14 @@ a.c3:hover,a.c3.tbtn:hover{transform:translateY(-6px);border-color:var(--ac);box
 .c3:hover .ci img{transform:translateY(-4px) scale(1.02)}
 .c3 .ct{display:flex;flex-direction:column;gap:6px;padding:18px 20px 20px;flex:1;border-top:1px solid var(--line)}
 .c3 em{align-self:flex-start;font-style:normal;font-size:12px;font-weight:800;color:var(--ac);background:var(--tint);border-radius:999px;padding:4px 11px}
-.c3 b{font-size:21px;font-weight:900;letter-spacing:-.04em}.c3:hover b{color:var(--ac)}.c3 .ct>span{font-size:14px;color:var(--sub);line-height:1.55}
+.c3 b{font-size:21px;font-weight:900;letter-spacing:-.04em}.c3:hover b{color:var(--ac)}.c3 .ct>span{font-size:14px;color:var(--sub);line-height:1.55;flex:1}
 .c3 .num{font-size:13px;font-weight:800;color:var(--ink);margin-top:2px;flex:1}.c3 .num:before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--ac);margin-right:6px;vertical-align:1px}
 .c3 i.go2{align-self:flex-start;font-style:normal;font-size:14px;font-weight:800;color:#fff;background:var(--ac);border-radius:11px;padding:9px 14px;margin-top:8px;transition:filter .15s}.c3:hover i.go2{filter:brightness(1.08)}
-@media(max-width:860px){.c3s{grid-template-columns:1fr}.c3 .ci{aspect-ratio:16/8}}
-.howto{margin-top:14px;font-size:14px;color:var(--sub)}.howto a{color:var(--brand);font-weight:800}.howto a:hover{text-decoration:underline}
+@media(max-width:700px){.c3s{grid-template-columns:1fr}.c3 .ci{aspect-ratio:16/8}}
+@media(min-width:701px) and (max-width:1000px){.c3s{gap:10px}.c3 .ct{padding:14px 14px 16px}.c3 b{font-size:18px}.c3 .ct>span{font-size:13px}.c3 i.go2{font-size:13px;padding:8px 11px}}
+.howto{margin-top:16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:#fff;border:1px dashed #c9d0ff;border-radius:16px;padding:12px 14px}
+.howto b{font-size:14.5px;font-weight:800;margin-right:4px}.howto a{font-size:14px;font-weight:800;color:var(--brand);background:var(--soft);border-radius:11px;padding:9px 14px;transition:background .15s,transform .15s}.howto a:hover{background:#e0e6ff;transform:translateY(-1px)}
+@media(max-width:480px){.howto a{flex:1 1 100%;text-align:center}}
 .semi{margin-top:18px;font-size:13.5px;color:var(--sub);background:var(--panel);border-radius:12px;padding:12px 16px}
 .semi:before{content:"🎁 "}
 a.c3,a.c3.tbtn{align-items:stretch;gap:0}
@@ -85,6 +88,8 @@ a.tl4.tbtn{display:flex;align-items:stretch;gap:6px;padding:16px;border-radius:1
   .mt thead{display:none}.mt table,.mt tbody,.mt tr,.mt th,.mt td{display:block}.mt tr{border-bottom:1px solid var(--line);padding:10px 4px}.mt tbody tr:last-child{border-bottom:0}
   .mt th,.mt td{border:0;padding:6px 12px}.mt td{display:flex;align-items:center;flex-wrap:wrap;gap:4px;white-space:normal}.mt td:before{content:attr(data-l);width:92px;flex:none;font-size:12.5px;font-weight:700;color:var(--sub)}}
 @media(max-width:480px){.tl4s{grid-template-columns:1fr}}
+@media(max-width:480px){.mt th,.mt td{padding:5px 10px}.mt td:before{width:76px;font-size:12px}.mt .cb{padding:6px 9px;margin-right:4px;white-space:nowrap}
+  .tp .in{padding:26px 16px 24px}}
 .bk2s{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px;margin-top:18px}
 .bk2{display:flex;align-items:center;gap:14px;border:1px solid var(--line);border-radius:var(--r);padding:14px 18px;background:#fff;transition:border-color .15s,box-shadow .2s}
 .bk2:hover{border-color:var(--line2);box-shadow:var(--shadow)}
@@ -305,6 +310,7 @@ a.tl4.tbtn{display:flex;align-items:stretch;gap:6px;padding:16px;border-radius:1
 .ltab tr:last-child td,.ltab tr:last-child th{border-bottom:0}
 .ltab td .pill{padding:6px 11px;font-size:12.5px;cursor:pointer}
 .ltab td .pill+.pill{margin-left:4px}
+@media(max-width:480px){.ltab table{min-width:0;font-size:12.5px}.ltab th,.ltab td{padding:10px 6px}.ltab td .pill{padding:5px 8px;font-size:12px}.ltab td .pill+.pill{margin-left:2px}}
 .ltab td .na{color:var(--line2)}
 .lmore{margin-top:22px;font-size:14px;color:var(--sub)}.lmore a{color:var(--brand);font-weight:700}
 @media(max-width:640px){.lbh{padding-top:32px}.lbh img{width:72px}}
@@ -335,8 +341,8 @@ a.tl4.tbtn{display:flex;align-items:stretch;gap:6px;padding:16px;border-radius:1
   <nav><a href="/home/#books">교재</a><a href="/studio/">음원·강의</a><a href="https://www.youtube.com/channel/UCoLiIPQe_U01fMFa0X1F2ng/playlists" target="_blank" rel="noopener">유튜브 강의 ↗</a><a href="https://www.instagram.com/solveu_baek/" target="_blank" rel="noopener">인스타그램 ↗</a><a href="/library/">자료실</a><a href="/contact/">문의</a><a href="/report/">오류 신고</a><a class="store">스마트스토어</a><a class="talk">톡톡</a><a href="/terms/">이용약관</a><a href="/privacy/">개인정보처리방침</a></nav>
   <span class="biz"></span>
 </div></footer>
-<script src="/assets/reviews.js?v=155ae0d7"></script>
-<script src="/assets/site.js?v=155ae0d7"></script>
+<script src="/assets/reviews.js?v=af773526"></script>
+<script src="/assets/site.js?v=af773526"></script>
 <script></script>
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "be34a6ce385a49cfa586185de49690a5"}'></script>
 </body>

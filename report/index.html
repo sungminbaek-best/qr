@@ -14,7 +14,7 @@
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&display=swap" media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&display=swap"></noscript>
-<link rel="stylesheet" href="/assets/site.css?v=155ae0d7">
+<link rel="stylesheet" href="/assets/site.css?v=af773526">
 <style>
 .top{padding:56px 0 96px}
 .top h1{font-size:clamp(30px,4.2vw,44px);font-weight:800;letter-spacing:-.05em;margin-top:14px}
@@ -28,6 +28,7 @@
 .jbox input[type=text],.jbox input[type=tel],.jbox select{width:100%;height:48px;border:1px solid var(--line2);border-radius:11px;padding:0 14px;font:inherit;font-size:15px;outline:none;background:#fff;transition:border-color .15s}
 .jbox input:focus,.jbox select:focus{border-color:var(--ink)}
 .row{display:flex;gap:8px}.row input{flex:1;min-width:0}
+@media(max-width:420px){.row{flex-direction:column}.row .go1{width:100%}}
 .go1{height:48px;padding:0 18px;border-radius:12px;background:var(--grad);color:#fff;font-weight:800;font-size:15px;white-space:nowrap;display:inline-flex;align-items:center;justify-content:center;gap:6px;box-shadow:0 12px 24px -14px rgba(67,97,255,.85);transition:filter .15s}.go1:hover{filter:brightness(1.07)}.go1 .ar{transition:transform .18s}.go1:hover .ar{transform:translateX(3px)}
 .go1:disabled{opacity:.45;cursor:default}
 .go1.full{width:100%;margin-top:22px}
@@ -112,8 +113,8 @@
   <nav><a href="/home/#books">교재</a><a href="/studio/">음원·강의</a><a href="https://www.youtube.com/channel/UCoLiIPQe_U01fMFa0X1F2ng/playlists" target="_blank" rel="noopener">유튜브 강의 ↗</a><a href="https://www.instagram.com/solveu_baek/" target="_blank" rel="noopener">인스타그램 ↗</a><a href="/library/">자료실</a><a href="/contact/">문의</a><a href="/report/">오류 신고</a><a class="store">스마트스토어</a><a class="talk">톡톡</a><a href="/terms/">이용약관</a><a href="/privacy/">개인정보처리방침</a></nav>
   <span class="biz"></span>
 </div></footer>
-<script src="/assets/reviews.js?v=155ae0d7"></script>
-<script src="/assets/site.js?v=155ae0d7"></script>
+<script src="/assets/reviews.js?v=af773526"></script>
+<script src="/assets/site.js?v=af773526"></script>
 <script>
 var S=SOLVEU,$=S.$,f=$("#rf"),q=new URLSearchParams(location.search);
 if(q.get("book"))f.book.value=q.get("book");if(q.get("page"))f.page.value=q.get("page").slice(0,30);

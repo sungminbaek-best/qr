@@ -180,3 +180,6 @@ html,body{overflow-x:clip}
 #tz:not(.unlocked) .ic-l{display:inline-flex}#tz:not(.unlocked) .ic-d{display:none}
 img[src*="/assets/covers/"]{aspect-ratio:360/509;height:auto}img[src*="/assets/covers/gw"]{aspect-ratio:520/358}
 .pnum a.pl{color:inherit;display:block;border-radius:12px;transition:background .15s}.pnum a.pl:hover{background:var(--panel)}.pnum a.pl span{color:var(--brand)}
+/* 2026-10-09 휴대폰·패드 점검 */
+.pnum a.pl span{white-space:nowrap}
+@media(max-width:420px){.pnum div{padding:4px 14px}}
