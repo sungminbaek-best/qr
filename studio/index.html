@@ -373,7 +373,7 @@ function home(){
   };
   const reading=BOOKS.filter(b=>b.track!=='grammar').map(card).join('');
   const grammar=BOOKS.filter(b=>b.track==='grammar').map(card).join('');
-  app.innerHTML='<h1>음원·강의</h1><p class="lead">책의 QR로 듣던 단어·문장 음원과 강의예요. 교재를 고르면 유닛별로 열 수 있어요.</p><p class="first"><a href="/library/guide/qr.pdf" target="_blank" rel="noopener">처음이세요? <b>QR 음원 활용법</b> (PDF) ↗</a></p>'+
+  app.innerHTML='<h1>음원·강의</h1><p class="lead">책의 QR로 듣던 단어·문장 음원과 강의예요. 교재를 고르면 유닛별로 열 수 있어요.</p><p class="first"><a href="/library/guide/qr/">처음이세요? <b>QR 음원 활용법</b> 보기 →</a></p>'+
     '<h2 class="gh">파닉스·리딩 <span>파닉스에서 첫모의고사까지</span></h2><div class="bgrid">'+reading+'</div>'+
     (grammar?'<h2 class="gh">문법·쓰기</h2><div class="bgrid">'+grammar+'</div>':'');
 }
