@@ -174,3 +174,9 @@ footer .biz{width:100%;font-size:12.5px}
 @media(max-width:520px){.nbtn.tlog{display:none}}   /* 2026-10-08 선생님 영역 오픈: 휴대폰 메뉴 넘침 방지(인증은 자료실·홈 입구에서) */
 
 html,body{overflow-x:clip}
+
+/* 2026-10-09 사용성·속도 점검 반영 */
+.ic-l{display:none;align-items:center;margin-right:3px}.ic-l svg{width:11px;height:11px;display:block}
+#tz:not(.unlocked) .ic-l{display:inline-flex}#tz:not(.unlocked) .ic-d{display:none}
+img[src*="/assets/covers/"]{aspect-ratio:360/509;height:auto}img[src*="/assets/covers/gw"]{aspect-ratio:520/358}
+.pnum a.pl{color:inherit;display:block;border-radius:12px;transition:background .15s}.pnum a.pl:hover{background:var(--panel)}.pnum a.pl span{color:var(--brand)}
