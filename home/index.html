@@ -34,6 +34,13 @@
 @media(max-width:480px){.free{gap:8px}.ft{padding:16px 14px}.ft b{font-size:15.5px}.ft u{display:none}.tban{padding:22px 20px}}
 .stp .one small{display:block;font-size:12.5px;color:var(--mute);margin-top:2px}
 /* 어디서부터 시작할까요 */
+.mix{margin-top:16px;border-radius:20px;background:var(--panel);padding:20px 22px}
+.mix>b{font-size:16px;font-weight:800}.mix>span{font-size:14px;color:var(--sub);margin-left:8px}
+.mix ul{list-style:none;display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:12px}
+.mix a{display:flex;flex-direction:column;gap:4px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:13px 15px;transition:border-color .15s,transform .15s}
+.mix a:hover{border-color:var(--brand);transform:translateY(-2px)}.mix a span{font-size:14px;color:var(--ink2);font-weight:600}.mix a b{font-size:14.5px;color:var(--brand);font-weight:800}
+@media(max-width:860px){.mix ul{grid-template-columns:1fr 1fr}.mix>span{display:block;margin:4px 0 0}}
+@media(max-width:480px){.mix ul{grid-template-columns:1fr}}
 #start{padding-bottom:0}
 .pks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:22px;max-width:980px}
 .pk{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:16px 18px;border:1px solid var(--line);border-radius:16px;background:#fff;transition:border-color .15s,transform .15s}
@@ -199,6 +206,8 @@
       <div class="cv land"><img src="/assets/covers/gw1.webp" alt="저절로그래머&amp;라이팅 1 표지" loading="lazy"><img src="/assets/covers/gw2.webp" alt="저절로그래머&amp;라이팅 2 표지" loading="lazy"></div></a>
 </div></div>
   </div>
+  <div class="mix rev"><b>학년과 실력이 다를 땐?</b><span>지금 실력에 맞는 단계부터, 대신 더 빠르게 나가요.</span>
+    <ul><li><a href="/books/starter/"><span>초3인데 문장을 거의 못 읽어요</span><b>스타터부터 →</b></a></li><li><a href="/books/phonics/"><span>초5인데 파닉스가 아직 안 돼요</span><b>파닉스부터 →</b></a></li><li><a href="/books/intro/"><span>중학생인데 해석을 감으로 해요</span><b>입문부터 →</b></a></li><li><a href="/books/basic/"><span>고등학생인데 문장 구조가 약해요</span><b>기본부터 →</b></a></li></ul></div>
 </div></section>
 
 <section class="sec" id="tools"><div class="wrap">

@@ -555,7 +555,7 @@ function leaf(b,u,selP){
     tick(); };
   au.onloadedmetadata=()=>durEl.textContent=fmt(au.duration);
   seek.oninput=()=>{ if(au.duration){ if(shadowTimer){ clearTimeout(shadowTimer); shadowTimer=null; holdAfter=null; shadowHold=false; } boundEnd=null; shadowDone=-1; curIdx=-1; au.currentTime=seek.value/1000*au.duration; } };
-  const spdB=document.getElementById('spd'); spdB.onclick=()=>{ curSpd=curSpd===1?1.2:(curSpd===1.2?0.8:1); au.playbackRate=curSpd; spdB.textContent=curSpd.toFixed(1)+'×'; spdB.classList.toggle('on',curSpd!==1); };
+  const spdB=document.getElementById('spd'); spdB.onclick=()=>{ curSpd=curSpd===1?0.8:(curSpd===0.8?1.2:1); au.playbackRate=curSpd; spdB.textContent=curSpd.toFixed(1)+'×'; spdB.classList.toggle('on',curSpd!==1); };
   document.querySelectorAll('.atg').forEach(x=>x.onclick=()=>{ curT=x.dataset.t;
     document.querySelectorAll('.atg').forEach(y=>y.classList.remove('on')); x.classList.add('on'); loadSrc(); });
   loadSrc();
