@@ -48,6 +48,12 @@
 .gqr .phone{position:relative;border-radius:40px;background:#15182a;padding:12px;box-shadow:0 30px 60px -30px rgba(12,16,32,.55)}
 .gqr .phone img{display:block;width:100%;border-radius:30px}
 .gqr .gsteps{grid-template-columns:1fr;margin-top:0}
+.ggen{display:grid;grid-template-columns:1.25fr 1fr;gap:30px;align-items:start;margin-top:34px}
+.ggen .gshot{margin-top:0;position:sticky;top:84px}.ggen .gsteps{grid-template-columns:1fr;margin-top:0;gap:10px}.ggen .gs{padding:14px 16px}
+.gtypes{margin-top:30px;border-radius:22px;background:var(--panel);padding:22px 24px}.gtypes h2{font-size:19px;font-weight:900;letter-spacing:-.03em}
+.gtypes ul{list-style:none;display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}.gtypes li{background:#fff;border-radius:14px;padding:13px 15px}
+.gtypes li b{display:block;font-size:15px;font-weight:800}.gtypes li span{font-size:13.5px;color:var(--sub)}
+@media(max-width:860px){.ggen{grid-template-columns:1fr}.ggen .gshot{position:relative;top:0}.gtypes ul{grid-template-columns:1fr 1fr}}
 .groad{margin-top:34px;display:grid;gap:12px}
 .gr{display:grid;grid-template-columns:54px 132px 1fr auto;gap:20px;align-items:center;border:1px solid var(--line);border-radius:20px;padding:18px 22px;background:#fff;transition:transform .2s,border-color .2s,box-shadow .2s}
 .gr:hover{transform:translateY(-3px);border-color:var(--brand);box-shadow:0 20px 36px -26px rgba(67,97,255,.55)}
