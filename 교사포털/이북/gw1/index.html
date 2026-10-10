@@ -195,6 +195,11 @@
     .side{ width:30px; height:70px; }
     #ttime{ font-size:28px; min-width:84px; }
     [data-tip]:hover::after{ display:none; }
+    /* 2026-10-11 전수점검: 폰에서 위 줄 단추(음원·타이머·오류 신고)가 밖으로 밀리지 않게 두 줄로, 펜 옵션도 화면 안에 */
+    #top{ flex-wrap:wrap; justify-content:center; overflow:visible; row-gap:2px; }
+    #top > .sep{ display:none; }
+    .pop{ max-width:calc(100vw - 16px); flex-wrap:wrap; justify-content:center; }
+    #audpop{ min-width:0; } #aseek{ min-width:100px; }
   }
   /* ── 시작 화면(1쪽 대신, 14권 같은 틀 · 색만 책별) ── */
   .sheet.cv{ display:flex; overflow:hidden; font-family:"Pretendard Variable",Pretendard,sans-serif; color:var(--ink); }

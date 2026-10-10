@@ -136,7 +136,7 @@ window.SOLVEU = {
     function ext(a) { a.target = "_blank"; a.rel = "noopener"; a.classList.add("ext"); a.title = "새 창에서 열려요"; }
     $$(".talk").forEach(function (a) { a.href = S.TALK; ext(a); });
     $$(".store").forEach(function (a) { if (!a.getAttribute("href")) a.href = S.STORE; ext(a); });
-    $$(".biz").forEach(function (e) { e.textContent = S.BIZ; });
+    $$(".biz").forEach(function (e) { e.innerHTML = S.BIZ.split(" · ").map(function (x) { return '<span class="nw">' + S.esc(x) + "</span>"; }).join(" · "); });
     var nav = $("#nav"); if (nav) addEventListener("scroll", function () { nav.classList.toggle("scrolled", scrollY > 8); }, { passive: true });
     /* 홈에서는 교재 구역이 화면에 있을 때 메뉴 '교재'를 파랗게 */
     var bk = location.pathname.indexOf("/home") === 0 && $("#books"), bl = $('.nav nav a[href="/home/#books"]');

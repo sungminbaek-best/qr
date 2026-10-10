@@ -14,7 +14,7 @@
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&display=swap" media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&display=swap"></noscript>
-<link rel="stylesheet" href="/assets/site.css?v=99a5df24">
+<link rel="stylesheet" href="/assets/site.css?v=2a9f349d">
 <style>
 #app{min-height:calc(100vh - 140px)}
 .first{margin-top:10px;font-size:14.5px;display:flex;gap:6px 16px;flex-wrap:wrap}.first a{color:var(--brand);font-weight:700}.first a:hover{text-decoration:underline}
@@ -35,6 +35,7 @@
 .bcard small{display:block;font-size:12px;font-weight:600;color:var(--mute);margin-top:1px}
 .bcard.off{opacity:.5;cursor:default}.bcard.off:hover{border-color:var(--line)}
 @media(max-width:860px){.bgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:430px){.bcard{gap:9px;padding:10px}.bcard img.land{width:36px}.bcard img{width:28px}.bcard b{font-size:14px}}
 .bhead{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
 .btabs{display:flex;gap:4px;margin-top:24px;padding:4px;background:var(--panel);border-radius:14px;max-width:420px}
 .btabs button{flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:11px;border-radius:11px;font-size:15px;font-weight:800;color:var(--sub)}
@@ -168,8 +169,10 @@
 .dock .atg small{margin-left:6px;font-family:var(--mono);font-size:12px;font-weight:700;color:var(--mute)}
 .dock .atg.on{background:#fff;color:var(--brand);box-shadow:0 1px 4px rgba(12,16,32,.14)}.dock .atg.on small{color:var(--brand)}
 .dock.stuck{border-bottom-color:var(--line);box-shadow:0 12px 20px -18px rgba(12,16,32,.45)}
+.ulecs{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.ulecs a{display:inline-flex;align-items:center;gap:5px;min-height:34px;padding:5px 12px;border:1px solid var(--line);border-radius:999px;background:#fff;font-size:13px;font-weight:700;color:var(--ink);text-decoration:none}.ulecs a:hover{border-color:var(--ink)}.ulecs svg{width:14px;height:14px}.ulecs .pp{color:var(--mute);font-weight:600}
 .pgrow{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;margin-bottom:10px;padding:1px}
 .pgrow::-webkit-scrollbar{display:none}
+@media(hover:hover) and (min-width:700px){.pgrow{flex-wrap:wrap;overflow:visible}}
 .pgrow .pgtab{flex:none;flex-direction:row;gap:5px;padding:6px 11px;border-radius:9px}
 .pgrow .pgtab b{font-size:13px}.pgrow .pgtab span{font-size:11px}
 .pbar{display:flex;align-items:center;gap:12px}
@@ -250,7 +253,7 @@
 </div></header>
 <main>
 <div class="st" id="app"><p class="msg">불러오는 중…</p></div>
-<script src="/studio/data_index.js?v=a1c14ec4"></script>
+<script src="/studio/data_index.js?v=584c4011"></script>
 </main>
 <footer><div class="wrap">
   <span class="fl"><span class="ko">쏠뷰</span><span class="en">Solve<span class="g">U</span></span></span>
@@ -258,8 +261,8 @@
   <nav><a href="/home/#books">교재</a><a href="/studio/">음원·강의</a><a href="https://www.youtube.com/channel/UCoLiIPQe_U01fMFa0X1F2ng/playlists" target="_blank" rel="noopener">유튜브 강의 ↗</a><a href="https://www.instagram.com/solveu_baek/" target="_blank" rel="noopener">인스타그램 ↗</a><a href="/library/">자료실</a><a href="/contact/">문의</a><a href="/report/">오류 신고</a><a class="store">스마트스토어</a><a class="talk">톡톡</a><a href="/terms/">이용약관</a><a href="/privacy/">개인정보처리방침</a></nav>
   <span class="biz"></span>
 </div></footer>
-<script src="/assets/reviews.js?v=99a5df24"></script>
-<script src="/assets/site.js?v=99a5df24"></script>
+<script src="/assets/reviews.js?v=2a9f349d"></script>
+<script src="/assets/site.js?v=2a9f349d"></script>
 <script>
 const BOOKS = window.BOOKS||[];
 const NAME = {"ph1": "저절로 파닉스 1", "ph2": "저절로 파닉스 2", "rst1": "저절로리딩 스타터 1", "rst2": "저절로리딩 스타터 2", "rbr1": "저절로리딩 브릿지 1", "rbr2": "저절로리딩 브릿지 2", "rin1": "저절로리딩 입문 1", "rin2": "저절로리딩 입문 2", "rba1": "저절로리딩 기본 1", "rba2": "저절로리딩 기본 2", "rmo1": "저절로리딩 첫모의고사 1", "rmo2": "저절로리딩 첫모의고사 2", "gw1": "저절로그래머&라이팅 1", "gw2": "저절로그래머&라이팅 2"}, SLUG = {"ph": "phonics", "rst": "starter", "rbr": "bridge", "rin": "intro", "rba": "basic", "rmo": "mock", "gw": "grammar"}, STEPL = {"ph1": "초1~2", "ph2": "초1~2", "rst1": "초1~2", "rst2": "초1~2", "rbr1": "초3~4", "rbr2": "초3~4", "rin1": "초4~5", "rin2": "초4~5", "rba1": "초6~중1", "rba2": "초6~중1", "rmo1": "중2~중3", "rmo2": "중2~중3", "gw1": "초3~4", "gw2": "초3~4"};
@@ -355,7 +358,7 @@ function closeRec(){ const m=document.getElementById('rec'); if(!m) return; cons
   recState=null; m.remove(); }
 function bookByCode(c){ return BOOKS.find(b=>b.code===c); }
 function parse(){ const q=new URLSearchParams(location.search); let book=q.get('book'), u=parseInt(q.get('u'));
-  const c=q.get('c'); if(c){ const m=c.match(/^([a-z]+\d+)u(\d+)/i); if(m){ book=book||m[1]; if(!u)u=parseInt(m[2]); } }
+  const c=(q.get('c')||'').toLowerCase(); if(c){ const m=c.match(/^([a-z]+\d+)u(\d+)/i); if(m){ book=book||m[1]; if(!u)u=parseInt(m[2]); } }
   return {book, u:(u>=1?u:null)}; }
 function go(params, push){ const qs=new URLSearchParams();
   if(params.book) qs.set('book',params.book); if(params.u) qs.set('u',params.u); if(params.tab) qs.set('tab',params.tab);
@@ -401,7 +404,7 @@ function bookView(b){
     const vlist=(un.videos&&un.videos.length)? un.videos : (un.video? [{label:'강의 영상',url:un.video}] : []);
     const a=hasA? '<button class="ubtn main" type="button" data-go="leaf" data-book="'+b.code+'" data-u="'+un.n+'">'+IC_HP+'음원 듣기'+(ap?' <span class="pp">'+ap+'</span>':'')+'</button>'
                 : (vlist.length? '' : '<span class="ubtn off">준비 중</span>');
-    const vid=vlist.map((v,i)=>{ const pp=fmtP((g.v||[])[i]); return '<a class="ubtn" href="'+esc(v.url)+'" target="_blank" rel="noopener">'+IC_PL+(pp?'강의 <span class="pp">'+pp+'</span>':esc(v.label))+' ↗</a>'; }).join('');
+    const vid=vlist.map((v,i)=>{ const pp=fmtP((g.v||[])[i]); return '<a class="ubtn" href="'+esc(v.url)+'" target="_blank" rel="noopener">'+IC_PL+(pp?(vlist.length>1?esc(v.label):'강의')+' <span class="pp">'+pp+'</span>':esc(v.label))+' ↗</a>'; }).join('');
     return '<div class="ucard"><div class="ut">Unit '+un.n+(g.r?'<span class="upg">p.'+g.r[0]+'~'+g.r[1]+'</span>':'')+'</div><div class="ubtns">'+a+vid+'</div></div>';
   }).join('');
   const sl=slugOf(b.code);
@@ -422,7 +425,7 @@ function fmtP(a){ a=[...new Set((a||[]).filter(x=>x>0))].sort((x,y)=>x-y); if(!a
   for(let i=1;i<=a.length;i++){ if(a[i]===e+1){ e=a[i]; continue; } r.push(s===e?String(s):(s+'~'+e)); s=e=a[i]; } return 'p.'+r.join(', '); }
 function audP(g){ return [].concat(g.w||[],g.s||[],g.p&&!g.set?g.p:[],...(g.set||[])); }
 const GEN=['rst1','rst2','rbr1','rbr2','rin1','rin2','rba1','rba2','rmo1','rmo2','gw1','gw2'];   // 시험지 생성기에 있는 책
-const QRC=new URLSearchParams(location.search).get('c')||'';                         // 처음 들어온 QR 코드
+const QRC=(new URLSearchParams(location.search).get('c')||'').toLowerCase();                         // 처음 들어온 QR 코드
 function teacherLine(b,u){
   if(TSOON) return '';
   const dest=GEN.indexOf(b.code)>=0 ? '/교사포털/시험지생성기/?book='+b.code+'&u='+u : '/library/#teacher';
@@ -431,6 +434,8 @@ function teacherLine(b,u){
   return '<a class="tline" href="'+href+'"><b>선생님이세요?</b><span>이 유닛 워크북 · 수업 자료 무료</span><i>→</i></a>';
 }
 function fmt(s){ s=Math.floor(s||0); return Math.floor(s/60)+':'+String(s%60).padStart(2,'0'); }
+function ulecs(un,G){ const vl=(un.videos&&un.videos.length)?un.videos:(un.video?[{label:'강의 영상',url:un.video}]:[]); if(!vl.length) return '';
+  return '<div class="ulecs">'+vl.map((v,i)=>{const pp=fmtP((G.v||[])[i]); return '<a href="'+esc(v.url)+'" target="_blank" rel="noopener">'+IC_PL+esc(vl.length>1?v.label:'강의 보기')+(pp?' <span class="pp">'+pp+'</span>':'')+' ↗</a>';}).join('')+'</div>'; }
 function leaf(b,u,selP){
   const un=b.units[u-1]; document.title=nm(b)+' Unit '+u+' · 쏠뷰';
   const PAGES=(un.pages&&un.pages.length)?un.pages:null;
@@ -460,7 +465,7 @@ function leaf(b,u,selP){
   const CNT={word:(isSentPage?0:(src.words||[]).length), sent:SENTSRC.length};
   const toggle= types.length>1 ? '<div class="atog" role="tablist" aria-label="음원 고르기">'+types.map((t,i)=>'<button class="atg'+(i===T0?' on':'')+'" type="button" role="tab" data-t="'+t.k+'">'+t.l+' 음원'+(CNT[t.k]?'<small>'+CNT[t.k]+'</small>':'')+(fmtP(G[t.k==='word'?'w':'s'])?'<em class="pp">'+fmtP(G[t.k==='word'?'w':'s'])+'</em>':'')+'</button>').join('')+'</div>' : '';
   app.innerHTML='<div class="lview"><div class="lhead">'+cover(b)+'<div><button type="button" class="bk" data-go="book" data-book="'+b.code+'">'+esc(nm(b))+'</button>'+
-    '<div class="un"><button type="button" id="uprev" aria-label="이전 유닛">‹</button><h1>Unit '+u+'</h1><button type="button" id="unext" aria-label="다음 유닛">›</button></div>'+(G.r?'<span class="upr">교재 p.'+G.r[0]+'~'+G.r[1]+'</span>':'')+'</div></div>'+
+    '<div class="un"><button type="button" id="uprev" aria-label="이전 유닛">‹</button><h1>Unit '+u+'</h1><button type="button" id="unext" aria-label="다음 유닛">›</button></div>'+(G.r?'<span class="upr">교재 p.'+G.r[0]+'~'+G.r[1]+'</span>':'')+ulecs(un,G)+'</div></div>'+
     '<audio id="au" preload="metadata"></audio>'+
     '<div class="dock" id="dock">'+toggle+pgtabs+
       '<div class="tbar" id="tbar"></div><div class="lhint" id="lhint" hidden></div>'+

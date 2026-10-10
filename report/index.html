@@ -14,7 +14,7 @@
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&display=swap" media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&display=swap"></noscript>
-<link rel="stylesheet" href="/assets/site.css?v=99a5df24">
+<link rel="stylesheet" href="/assets/site.css?v=2a9f349d">
 <style>
 .top{padding:56px 0 96px}
 .top h1{font-size:clamp(30px,4.2vw,44px);font-weight:800;letter-spacing:-.05em;margin-top:14px}
@@ -67,7 +67,8 @@
 .dev:empty{display:none}
 .okc{width:52px;height:52px;border-radius:50%;background:var(--grad);color:#fff;display:grid;place-items:center;font-size:24px;margin-bottom:16px}
 .acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:22px}
-.small{font-size:13px;color:var(--mute);margin-top:18px}.small button{text-decoration:underline;text-underline-offset:3px;color:var(--mute)}
+.small{font-size:13px;color:var(--mute);margin-top:18px}.small button{text-decoration:underline;text-underline-offset:3px;color:var(--mute);min-height:40px;padding:8px 10px}
+.small.bye{margin-top:30px}
 [hidden]{display:none!important}
 
 .jbox textarea{width:100%;min-height:130px;border:1px solid var(--line2);border-radius:11px;padding:12px 14px;font:inherit;font-size:15px;line-height:1.6;outline:none;resize:vertical}
@@ -97,7 +98,7 @@
     <label class="hp" aria-hidden="true">비워 두세요<input type="text" name="website" tabindex="-1" autocomplete="off"></label>
     <button class="go1 full" type="submit">신고 보내기</button>
     <div class="jerr" id="re" role="alert"></div>
-    <p class="small">답변이 필요한 문의는 톡톡으로 보내 주세요. <a class="talk">톡톡 열기</a></p>
+    <p class="small">답변이 필요한 문의는 톡톡으로 보내 주세요. <a class="talk" style="white-space:nowrap">톡톡 열기</a></p>
   </form>
 
   <div class="jbox" id="rdone" hidden>
@@ -113,8 +114,8 @@
   <nav><a href="/home/#books">교재</a><a href="/studio/">음원·강의</a><a href="https://www.youtube.com/channel/UCoLiIPQe_U01fMFa0X1F2ng/playlists" target="_blank" rel="noopener">유튜브 강의 ↗</a><a href="https://www.instagram.com/solveu_baek/" target="_blank" rel="noopener">인스타그램 ↗</a><a href="/library/">자료실</a><a href="/contact/">문의</a><a href="/report/">오류 신고</a><a class="store">스마트스토어</a><a class="talk">톡톡</a><a href="/terms/">이용약관</a><a href="/privacy/">개인정보처리방침</a></nav>
   <span class="biz"></span>
 </div></footer>
-<script src="/assets/reviews.js?v=99a5df24"></script>
-<script src="/assets/site.js?v=99a5df24"></script>
+<script src="/assets/reviews.js?v=2a9f349d"></script>
+<script src="/assets/site.js?v=2a9f349d"></script>
 <script>
 var S=SOLVEU,$=S.$,f=$("#rf"),q=new URLSearchParams(location.search);
 if(q.get("book"))f.book.value=q.get("book");if(q.get("page"))f.page.value=q.get("page").slice(0,30);

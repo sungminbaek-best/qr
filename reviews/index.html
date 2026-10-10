@@ -14,13 +14,14 @@
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&display=swap" media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&display=swap"></noscript>
-<link rel="stylesheet" href="/assets/site.css?v=99a5df24">
+<link rel="stylesheet" href="/assets/site.css?v=2a9f349d">
 <style>
 .rvpg{padding-top:56px}
 .rvtop{display:flex;align-items:baseline;gap:10px;margin-top:18px}.rvtop b{font-size:28px;font-weight:800}.rvtop span{color:var(--sub);font-size:14.5px;font-weight:600}
 .rvf{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
 .rvf button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 15px;font:inherit;font-size:14px;font-weight:700;color:var(--sub);cursor:pointer}
 .rvf button.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.rvm{margin-top:6px;text-align:center}
 .rvcnt{margin-top:18px;font-size:13.5px;color:var(--mute)}
 .rvall{columns:3 300px;column-gap:16px;margin-top:10px}
 .rvall figure{break-inside:avoid;margin:0 0 16px;border:1px solid var(--line);border-radius:18px;background:#fff;padding:22px 22px 18px}
@@ -45,6 +46,7 @@
   <div class="rvf rev" id="fs"><button data-s="all" class=on>전체 교재</button><button data-s="phonics">파닉스</button><button data-s="starter">스타터</button><button data-s="bridge">브릿지</button><button data-s="intro">입문</button><button data-s="basic">기본</button><button data-s="mock">첫모의고사</button><button data-s="grammar">그래머&amp;라이팅</button></div>
   <p class="rvcnt" id="cnt"></p>
   <div class="rvall" id="list"></div>
+  <p class="rvm"><button class="btn line sm" id="rvMore" type="button" hidden></button></p>
   <p class="lmore">더 많은 후기는 <a class="store">스마트스토어에서 287개 전부 보기</a></p>
 </div></section>
 <div style="height:96px"></div>
@@ -56,15 +58,17 @@
   <nav><a href="/home/#books">교재</a><a href="/studio/">음원·강의</a><a href="https://www.youtube.com/channel/UCoLiIPQe_U01fMFa0X1F2ng/playlists" target="_blank" rel="noopener">유튜브 강의 ↗</a><a href="https://www.instagram.com/solveu_baek/" target="_blank" rel="noopener">인스타그램 ↗</a><a href="/library/">자료실</a><a href="/contact/">문의</a><a href="/report/">오류 신고</a><a class="store">스마트스토어</a><a class="talk">톡톡</a><a href="/terms/">이용약관</a><a href="/privacy/">개인정보처리방침</a></nav>
   <span class="biz"></span>
 </div></footer>
-<script src="/assets/reviews.js?v=99a5df24"></script>
-<script src="/assets/site.js?v=99a5df24"></script>
-<script>(function(){var R=(window.SOLVEU_REVIEWS||[]).slice(),role="all",step=new URLSearchParams(location.search).get("step")||"all";
+<script src="/assets/reviews.js?v=2a9f349d"></script>
+<script src="/assets/site.js?v=2a9f349d"></script>
+<script>(function(){var R=(window.SOLVEU_REVIEWS||[]).slice(),role="all",step=new URLSearchParams(location.search).get("step")||"all",PER=innerWidth<700?12:1e9,lim=PER;
 var esc=function(t){return String(t).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});};
 function draw(){var L=R.filter(function(v){return(role==="all"||v.role===role)&&(step==="all"||v.step===step);});
 document.getElementById("cnt").textContent="고른 후기 "+L.length+"개";
-document.getElementById("list").innerHTML=L.map(function(v){return '<figure><span class="st">★★★★★</span><blockquote>'+esc(v.r)+'</blockquote><figcaption><b>'+esc(v.role)+'</b><a href="/books/'+v.step+'/">'+esc(v.book)+'</a></figcaption></figure>';}).join("");
+var mb=document.getElementById("rvMore");mb.hidden=L.length<=lim;mb.textContent="후기 "+(L.length-lim)+"개 더 보기";
+document.getElementById("list").innerHTML=L.slice(0,lim).map(function(v){return '<figure><span class="st">★★★★★</span><blockquote>'+esc(v.r)+'</blockquote><figcaption><b>'+esc(v.role)+'</b><a href="/books/'+v.step+'/">'+esc(v.book)+'</a></figcaption></figure>';}).join("");
 [].forEach.call(document.querySelectorAll("#fs button"),function(b){b.classList.toggle("on",b.dataset.s===step);});}
-document.getElementById("fs").addEventListener("click",function(e){if(e.target.dataset.s){step=e.target.dataset.s;draw();}});
+document.getElementById("fs").addEventListener("click",function(e){if(e.target.dataset.s){step=e.target.dataset.s;lim=PER;draw();}});
+document.getElementById("rvMore").addEventListener("click",function(){lim=1e9;draw();});
 draw();})();</script>
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "be34a6ce385a49cfa586185de49690a5"}'></script>
 </body>
