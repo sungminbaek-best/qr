@@ -35,6 +35,7 @@ window.SOLVEU = {
 
   /* 교사 게이트: 입장권이 있으면 열고, 서버에서 확인해 무효면 다시 잠금 */
   S.isOK = function () { return !!S.pass(); };
+  try { if (S.isOK()) document.documentElement.classList.add("authed"); } catch (e) {}   // 인증한 기기: "문자 인증 · 무료" 같은 안내(.na) 숨김
   var LOCK = '<span class="lock" aria-label="인증 필요"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2.5" fill="currentColor"/><path d="M8 11V8a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="2.2"/></svg></span>';
   /* 들어온 경로: ?from=qr&code=… 을 이 탭 동안 기억(선생님 신청·학원 신청 때 함께 보냄) */
   S.ss = function (k) { try { return sessionStorage.getItem(k) || ""; } catch (e) { return ""; } };
@@ -86,7 +87,7 @@ window.SOLVEU = {
     if (!root) return;
     var err = $("#err", root), who = $(".tname", root);
     function paint() {
-      var ok = S.isOK(); root.classList.toggle("unlocked", ok);
+      var ok = S.isOK(); root.classList.toggle("unlocked", ok); document.documentElement.classList.toggle("authed", ok);
       $$(".libs a", root).forEach(function (a) { ok ? a.setAttribute("href", a.dataset.lib) : a.removeAttribute("href"); });
       var ll = $(".tool.lib .lk", root); if (ll) { if (ok) ll.textContent = "노션에서 열림 →"; else ll.innerHTML = LOCK; }
       $$(".tbtn[data-href]", root).forEach(function (a) { ok ? a.setAttribute("href", a.dataset.href) : a.removeAttribute("href"); });

@@ -244,3 +244,6 @@ a.ft:active,a.c3:active,.stp:active,.mix li a:active,.bq:active,.gr:active{trans
 /* 2026-10-10 휴대폰 바닥글 줄 맞춤 */
 @media(max-width:600px){footer nav{display:grid!important;grid-template-columns:repeat(3,max-content);gap:0 24px;justify-content:start}
   footer nav a,footer nav a.ext{display:block;padding:9px 0!important;margin:0!important;line-height:1.3}}
+/* 2026-10-10 인증한 기기에서는 인증 안내 문구 숨김 */
+.authed .na{display:none!important}
+.authed .trow .lk2,.authed .lk2{display:none!important}
