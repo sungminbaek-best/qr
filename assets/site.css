@@ -230,7 +230,6 @@ a.ft:active,a.c3:active,.stp:active,.mix li a:active,.bq:active,.gr:active{trans
   .lbtn,.spdb{min-height:40px;min-width:40px}
   .un button,.dk-a{min-width:40px;min-height:40px}
   .go.lk2{display:inline-flex;align-items:center;min-height:40px;padding:0 14px;border-radius:12px;background:var(--soft)}
-  footer nav a{padding:10px 2px;display:inline-block}
   .faq .a .go,.top .go{display:inline-flex;align-items:center;min-height:40px}
   .howto a,.tjump{min-height:44px;display:inline-flex;align-items:center}
   /* 글자 링크는 둘레를 넓혀 누르기 쉽게(모양은 그대로) */
@@ -238,7 +237,10 @@ a.ft:active,a.c3:active,.stp:active,.mix li a:active,.bq:active,.gr:active{trans
   .mt tbody th a{display:inline-flex;align-items:center;min-height:44px}
   .pick a,.top .bk{min-height:40px;display:inline-flex;align-items:center}
   .rvpg .store.ext{padding:12px 0;margin:-12px 0}
-  footer .ext{padding:12px 0;margin:-12px 0}
   header nav a:not(.nbtn):not(.logo){padding-top:11px!important;padding-bottom:11px!important}
   .lhead .bk,p.small .talk,#news a{padding-top:12px!important;padding-bottom:12px!important;margin-top:-12px;margin-bottom:-12px}
 }
+
+/* 2026-10-10 휴대폰 바닥글 줄 맞춤 */
+@media(max-width:600px){footer nav{display:grid!important;grid-template-columns:repeat(3,max-content);gap:0 24px;justify-content:start}
+  footer nav a,footer nav a.ext{display:block;padding:9px 0!important;margin:0!important;line-height:1.3}}
